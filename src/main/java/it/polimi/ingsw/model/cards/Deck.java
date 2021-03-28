@@ -4,12 +4,7 @@ import it.polimi.ingsw.model.exception.EmptyDeckException;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
-/**
- * @author Lorenzo Carpaneto
- * Deck of cards.
- */
 public class Deck<T extends Card> {
     protected final ArrayList<T> cards = new ArrayList<>();
 
@@ -23,7 +18,7 @@ public class Deck<T extends Card> {
 
     /**
      * Shuffle the cards contained in the deck
-     * @throws EmptyDeckException
+     * @throws EmptyDeckException if deck is empty
      */
     public void shuffle() {
         if(isEmpty()) throw new EmptyDeckException();
@@ -32,7 +27,7 @@ public class Deck<T extends Card> {
 
     /**
      * Remove and return the card on top of the deck
-     * @throws EmptyDeckException
+     * @throws EmptyDeckException if deck is empty
      */
     public T drawCard(){
         if (isEmpty()) throw new EmptyDeckException();
@@ -41,7 +36,7 @@ public class Deck<T extends Card> {
 
     /**
      * Return the card on top of the deck WITHOUT removing it
-     * @throws EmptyDeckException
+     * @throws EmptyDeckException if deck is empty
      */
     public T topCard(){
         if (isEmpty()) throw new EmptyDeckException();
@@ -49,8 +44,11 @@ public class Deck<T extends Card> {
     }
 
     /**
-     * Return and remove from the to of the deck the number of specified cards
-     * @throws EmptyDeckException
+     * Return and remove from the to of the deck the number of specified cards.
+     *
+     * @param number cards to be retrieved and removed from the deck
+     * @return ArrayList of cards from the deck
+     * @throws EmptyDeckException if deck is empty
      */
     public ArrayList<T> distributeCards(int number){
         ArrayList<T> cToDis = new ArrayList<>();
