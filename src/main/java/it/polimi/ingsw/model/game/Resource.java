@@ -6,7 +6,6 @@ public enum Resource {
     GOLD,
     SERVANT,
     ROCK,
-    TRANSFORM,
     FAITH,
     ANYTHING
 }
