@@ -6,6 +6,11 @@ public enum Resource {
     GOLD,
     SERVANT,
     ROCK,
+    TRANSFORM,
     FAITH,
-    ANYTHING
+    ANYTHING;
+
+    public static boolean isDiscountable(Resource res) {
+        return res == SHIELD || res == GOLD || res == SERVANT || res == ROCK;
+    }
 }
