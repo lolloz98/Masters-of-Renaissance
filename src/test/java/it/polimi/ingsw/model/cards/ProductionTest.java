@@ -32,47 +32,84 @@ public class ProductionTest {
     }
 
     @Test
-    public void whatResourceToGive() {
+    public void testWhatResourceToGive() {
         assertEquals(toGive, production.whatResourceToGive());
     }
 
     @Test
-    public void whatResourceToGain() {
+    public void testWhatResourceToGain() {
         assertEquals(toGain, production.whatResourceToGain());
     }
 
     @Test
-    public void applyProduction() {
+    public void testApplyProduction() {
         // TODO: waiting for board to be implemented
     }
 
     @Test
-    public void checkResForActivation() {
-        assertTrue(production.checkResForActivation(new TreeMap<Resource, Integer>(){{
+    public void testCheckResToGiveForActivation() {
+        assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>(){{
                     put(Resource.GOLD, 3);
                     put(Resource.ROCK, 2);
                 }})
         );
 
-        assertFalse(production.checkResForActivation(new TreeMap<Resource, Integer>(){{
+        assertFalse(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>(){{
                     put(Resource.GOLD, 4);
                     put(Resource.ROCK, 2);
                 }})
         );
 
-        assertTrue(production.checkResForActivation(new TreeMap<Resource, Integer>(){{
+        assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>(){{
                     put(Resource.GOLD, 2);
                     put(Resource.ROCK, 2);
                     put(Resource.SHIELD, 1);
                 }})
         );
 
-        assertTrue(production.checkResForActivation(new TreeMap<Resource, Integer>(){{
+        assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>(){{
                     put(Resource.GOLD, 2);
                     put(Resource.ROCK, 1);
                     put(Resource.SHIELD, 1);
                     put(Resource.SERVANT, 1);
                 }})
         );
+    }
+
+    @Test
+    public void testCheckResToGainForActivation() {
+        assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>(){{
+                    put(Resource.GOLD, 3);
+                    put(Resource.ROCK, 2);
+                }})
+        );
+
+        assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>(){{
+                    put(Resource.GOLD, 4);
+                    put(Resource.ROCK, 2);
+                }})
+        );
+
+        assertTrue(production.checkResToGainForActivation(new TreeMap<Resource, Integer>(){{
+                    put(Resource.ROCK, 1);
+                    put(Resource.SHIELD, 2);
+                }})
+        );
+
+        assertTrue(production.checkResToGainForActivation(new TreeMap<Resource, Integer>(){{
+                    put(Resource.GOLD, 1);
+                    put(Resource.SHIELD, 2);
+                }})
+        );
+    }
+
+    @Test
+    public void testFlushGainedToBoard(){
+        // TODO: after implementation of board
+    }
+
+    @Test
+    public void testGetGainedResources(){
+        // TODO: after implementation of board
     }
 }
