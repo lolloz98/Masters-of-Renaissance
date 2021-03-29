@@ -81,13 +81,7 @@ public class DevelopCard implements Card, VictoryPointCalculator{
         return color;
     }
 
-    /**
-     * @param resourcesToGive resources to spend to activate the production
-     * @param resourcesToGain resources to gain after teh activation of the production
-     * @param board remove the resourcesToGive from the board
-     */
-    public void activateProduction(TreeMap<Resource, Integer> resourcesToGive, TreeMap<Resource, Integer> resourcesToGain, Board board){
-        // TODO: check this implementation after board implementation
-        production.applyProduction(resourcesToGive, resourcesToGain, board);
+    public Production getProduction() {
+        return production;
     }
 }

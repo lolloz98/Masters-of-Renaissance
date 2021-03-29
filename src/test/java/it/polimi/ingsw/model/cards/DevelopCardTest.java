@@ -68,7 +68,7 @@ public class DevelopCardTest {
     }
 
     @Test
-    public void testActivateProduction() {
+    public void testGetProduction() {
         // TODO: do this when Board implementation is completed
     }
 }
