@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.player.Player;
+
 public class TurnSingle extends Turn{
     private boolean isLorenzoPlaying;
-    // private Player player
+    private Player player;
 
     public TurnSingle(boolean isLorenzoPlaying) {
         this.isLorenzoPlaying = isLorenzoPlaying;
