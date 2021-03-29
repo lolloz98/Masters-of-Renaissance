@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
 import it.polimi.ingsw.model.exception.InvalidResourcesForProductionActivationException;
 import it.polimi.ingsw.model.exception.ProductionAlreadyActivatedException;
 import it.polimi.ingsw.model.game.Resource;
@@ -40,8 +41,9 @@ public class Production {
      * @param board board of the player
      * @throws  InvalidResourcesForProductionActivationException if resourceToGive or resourcesToGain are invalid for the activation of the production
      * @throws ProductionAlreadyActivatedException if the production has already been activated in this turn
+     * @throws InvalidResourcesByPlayerException if byPlayer contains invalid type of Resources
      */
-    public void applyProduction(TreeMap<Resource, Integer> resourcesToGive, TreeMap<Resource, Integer> resourcesToGain, Board board){
+    public void applyProduction(TreeMap<Resource, Integer> resourcesToGive, TreeMap<Resource, Integer> resourcesToGain, Board board) throws InvalidResourcesByPlayerException {
         if(!checkResToGiveForActivation(resourcesToGive)) throw new InvalidResourcesForProductionActivationException();
         if(!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesForProductionActivationException();
         if(hasProductionBeenActivated()) throw new ProductionAlreadyActivatedException();
@@ -54,8 +56,9 @@ public class Production {
      *
      * @param byPlayer resource given byPlayer to be spent for the activation of the production
      * @return true if byPlayer is ok for the activation of the production
+     * @throws InvalidResourcesByPlayerException if byPlayer contains invalid type of Resources
      */
-    public boolean checkResToGiveForActivation(TreeMap<Resource, Integer> byPlayer){
+    public boolean checkResToGiveForActivation(TreeMap<Resource, Integer> byPlayer) throws InvalidResourcesByPlayerException {
         return checkResForActivation(byPlayer, resourcesToGive);
     }
 
@@ -63,8 +66,10 @@ public class Production {
      *
      * @param byPlayer resources that the player wants to gain after the activation of the production
      * @return true if byPlayer can be gained from this production (it is comparable to resourcesToGain)
+     * @throws InvalidResourcesByPlayerException if byPlayer contains invalid type of Resources
      */
-    public boolean checkResToGainForActivation(TreeMap<Resource, Integer> byPlayer){
+    public boolean checkResToGainForActivation(TreeMap<Resource, Integer> byPlayer) throws InvalidResourcesByPlayerException {
+        // TODO: check if byPlayer can have Resource.FAITH
         return checkResForActivation(byPlayer, resourcesToGain);
     }
 
@@ -74,8 +79,11 @@ public class Production {
      * @param byPlayer resources willing to be spent (or to be gained)
      * @param toBeCompared resourcesToGive or resourcesToGain by this production
      * @return true if the resources byPlayer meet the demand of toBeCompared
+     * @throws InvalidResourcesByPlayerException if byPlayer contains invalid type of Resources
      */
-    private boolean checkResForActivation(TreeMap<Resource, Integer> byPlayer, TreeMap<Resource, Integer> toBeCompared){
+    private boolean checkResForActivation(TreeMap<Resource, Integer> byPlayer, TreeMap<Resource, Integer> toBeCompared) throws InvalidResourcesByPlayerException {
+        for(Resource r: byPlayer.keySet()){ if(!Resource.isDiscountable(r)) throw new InvalidResourcesByPlayerException(); }
+
         int surplus = getAmountForRes(Resource.ANYTHING, toBeCompared);
         for(Resource r: new Resource[]{Resource.GOLD, Resource.SERVANT, Resource.SHIELD, Resource.ROCK}){
             int diff = ((byPlayer.get(r) == null) ? 0 : byPlayer.get(r)) - getAmountForRes(r, toBeCompared);

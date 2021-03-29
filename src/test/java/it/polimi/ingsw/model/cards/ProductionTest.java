@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
 import it.polimi.ingsw.model.game.Resource;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,15 +16,15 @@ public class ProductionTest {
     Production production;
 
     @Before
-    public void setUp(){
-        toGive = new TreeMap<Resource, Integer>(){{
+    public void setUp() {
+        toGive = new TreeMap<Resource, Integer>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 1);
             put(Resource.ANYTHING, 2);
         }};
 
 
-        toGain = new TreeMap<Resource, Integer>(){{
+        toGain = new TreeMap<Resource, Integer>() {{
             put(Resource.SHIELD, 2);
             put(Resource.ANYTHING, 1);
         }};
@@ -48,68 +49,106 @@ public class ProductionTest {
 
     @Test
     public void testCheckResToGiveForActivation() {
-        assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>(){{
-                    put(Resource.GOLD, 3);
-                    put(Resource.ROCK, 2);
-                }})
-        );
+        try {
+            assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+                        put(Resource.GOLD, 3);
+                        put(Resource.ROCK, 2);
+                    }})
+            );
 
-        assertFalse(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>(){{
-                    put(Resource.GOLD, 4);
-                    put(Resource.ROCK, 2);
-                }})
-        );
+            assertFalse(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+                        put(Resource.GOLD, 4);
+                        put(Resource.ROCK, 2);
+                    }})
+            );
 
-        assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>(){{
-                    put(Resource.GOLD, 2);
-                    put(Resource.ROCK, 2);
-                    put(Resource.SHIELD, 1);
-                }})
-        );
+            assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+                        put(Resource.GOLD, 2);
+                        put(Resource.ROCK, 2);
+                        put(Resource.SHIELD, 1);
+                    }})
+            );
 
-        assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>(){{
-                    put(Resource.GOLD, 2);
-                    put(Resource.ROCK, 1);
-                    put(Resource.SHIELD, 1);
-                    put(Resource.SERVANT, 1);
-                }})
-        );
+            assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+                        put(Resource.GOLD, 2);
+                        put(Resource.ROCK, 1);
+                        put(Resource.SHIELD, 1);
+                        put(Resource.SERVANT, 1);
+                    }})
+            );
+        } catch (InvalidResourcesByPlayerException e) {
+            fail();
+        }
     }
 
     @Test
     public void testCheckResToGainForActivation() {
-        assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>(){{
-                    put(Resource.GOLD, 3);
-                    put(Resource.ROCK, 2);
-                }})
-        );
+        try {
+            assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+                        put(Resource.GOLD, 3);
+                        put(Resource.ROCK, 2);
+                    }})
+            );
 
-        assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>(){{
-                    put(Resource.GOLD, 4);
-                    put(Resource.ROCK, 2);
-                }})
-        );
+            assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+                        put(Resource.GOLD, 4);
+                        put(Resource.ROCK, 2);
+                    }})
+            );
 
-        assertTrue(production.checkResToGainForActivation(new TreeMap<Resource, Integer>(){{
-                    put(Resource.ROCK, 1);
-                    put(Resource.SHIELD, 2);
-                }})
-        );
+            assertTrue(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+                        put(Resource.ROCK, 1);
+                        put(Resource.SHIELD, 2);
+                    }})
+            );
 
-        assertTrue(production.checkResToGainForActivation(new TreeMap<Resource, Integer>(){{
-                    put(Resource.GOLD, 1);
-                    put(Resource.SHIELD, 2);
-                }})
-        );
+            assertTrue(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+                        put(Resource.GOLD, 1);
+                        put(Resource.SHIELD, 2);
+                    }})
+            );
+        } catch (InvalidResourcesByPlayerException e) {
+            fail();
+        }
     }
 
     @Test
-    public void testFlushGainedToBoard(){
+    public void testCheckResException(){
+        try{
+            production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.FAITH, 2);
+            }});
+            fail();
+        }catch (InvalidResourcesByPlayerException ignored){ }
+
+        try{
+            production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SHIELD, 2);
+                put(Resource.ANYTHING, 1);
+            }});
+            fail();
+        }catch (InvalidResourcesByPlayerException ignored){ }
+
+        try{
+            production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+                put(Resource.GOLD, 2);
+                put(Resource.ROCK, 1);
+                put(Resource.SHIELD, 1);
+                put(Resource.ANYTHING, 1);
+            }});
+            fail();
+        }catch (InvalidResourcesByPlayerException ignored){ }
+    }
+
+    @Test
+    public void testFlushGainedToBoard() {
         // TODO: after implementation of board
     }
 
     @Test
-    public void testGetGainedResources(){
+    public void testGetGainedResources() {
         // TODO: after implementation of board
     }
 }

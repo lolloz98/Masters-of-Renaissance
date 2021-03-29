@@ -7,11 +7,10 @@ import java.util.TreeMap;
 
 public class RequirementResource implements Requirement{
     private final Resource res;
-    private final int quantity;
+    private final int quantity = 5;
 
-    public RequirementResource(Resource resRequired, int quantity){
+    public RequirementResource(Resource resRequired){
         this.res = resRequired;
-        this.quantity = quantity;
     }
 
     /**

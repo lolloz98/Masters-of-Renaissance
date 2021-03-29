@@ -14,6 +14,5 @@ public class ResourceTest {
         assertTrue(Resource.isDiscountable(Resource.SHIELD));
         assertTrue(Resource.isDiscountable(Resource.GOLD));
         assertFalse(Resource.isDiscountable(Resource.FAITH));
-        assertFalse(Resource.isDiscountable(Resource.TRANSFORM));
     }
 }
