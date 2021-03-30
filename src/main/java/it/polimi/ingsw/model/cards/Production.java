@@ -59,6 +59,7 @@ public class Production {
      * @throws InvalidResourcesByPlayerException if byPlayer contains invalid type of Resources
      */
     public boolean checkResToGiveForActivation(TreeMap<Resource, Integer> byPlayer) throws InvalidResourcesByPlayerException {
+        for(Resource r: byPlayer.keySet()){ if(!Resource.isDiscountable(r)) throw new InvalidResourcesByPlayerException(); }
         return checkResForActivation(byPlayer, resourcesToGive);
     }
 
@@ -69,7 +70,7 @@ public class Production {
      * @throws InvalidResourcesByPlayerException if byPlayer contains invalid type of Resources
      */
     public boolean checkResToGainForActivation(TreeMap<Resource, Integer> byPlayer) throws InvalidResourcesByPlayerException {
-        // TODO: check if byPlayer can have Resource.FAITH
+        for(Resource r: byPlayer.keySet()){ if(!Resource.isDiscountable(r) && r != Resource.FAITH) throw new InvalidResourcesByPlayerException(); }
         return checkResForActivation(byPlayer, resourcesToGain);
     }
 
@@ -79,14 +80,13 @@ public class Production {
      * @param byPlayer resources willing to be spent (or to be gained)
      * @param toBeCompared resourcesToGive or resourcesToGain by this production
      * @return true if the resources byPlayer meet the demand of toBeCompared
-     * @throws InvalidResourcesByPlayerException if byPlayer contains invalid type of Resources
      */
-    private boolean checkResForActivation(TreeMap<Resource, Integer> byPlayer, TreeMap<Resource, Integer> toBeCompared) throws InvalidResourcesByPlayerException {
-        for(Resource r: byPlayer.keySet()){ if(!Resource.isDiscountable(r)) throw new InvalidResourcesByPlayerException(); }
+    private boolean checkResForActivation(TreeMap<Resource, Integer> byPlayer, TreeMap<Resource, Integer> toBeCompared) {
+        if(getAmountForRes(Resource.FAITH, byPlayer) != getAmountForRes(Resource.FAITH, toBeCompared)) return false;
 
         int surplus = getAmountForRes(Resource.ANYTHING, toBeCompared);
         for(Resource r: new Resource[]{Resource.GOLD, Resource.SERVANT, Resource.SHIELD, Resource.ROCK}){
-            int diff = ((byPlayer.get(r) == null) ? 0 : byPlayer.get(r)) - getAmountForRes(r, toBeCompared);
+            int diff = getAmountForRes(r, byPlayer) - getAmountForRes(r, toBeCompared);
             if(diff < 0) return false;
             surplus -= diff;
         }

@@ -115,11 +115,10 @@ public class ProductionTest {
     @Test
     public void testCheckResException(){
         try{
-            production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+            assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
                 put(Resource.GOLD, 1);
                 put(Resource.FAITH, 2);
-            }});
-            fail();
+            }}));
         }catch (InvalidResourcesByPlayerException ignored){ }
 
         try{
@@ -136,7 +135,7 @@ public class ProductionTest {
                 put(Resource.GOLD, 2);
                 put(Resource.ROCK, 1);
                 put(Resource.SHIELD, 1);
-                put(Resource.ANYTHING, 1);
+                put(Resource.FAITH, 1);
             }});
             fail();
         }catch (InvalidResourcesByPlayerException ignored){ }
