@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
 
+/**
+ * Class which represents the market tray, containing 12 marbles in a matrix and a free one
+ */
+
 public class MarketTray {
     private Marble[][] marbleMatrix;
     private Marble freeMarble;
@@ -29,12 +33,18 @@ public class MarketTray {
             }
         }
         freeMarble = marbles.get(12);
-        leaderResources = new ArrayList<Resource>();
+        leaderResources = new ArrayList<>();
     }
 
+    /**
+     * Returns a copy of the marble matrix
+     *
+     */
     public Marble[][] getMarbleMatrix() {
-        // FIXME: maybe it shoud return a copy
-        return marbleMatrix;
+        Marble[][] marbleMatrixCopy = new Marble[marbleMatrix.length][];
+        for(int i = 0; i < marbleMatrix.length; i++)
+            marbleMatrixCopy[i] = marbleMatrix[i].clone();
+        return marbleMatrixCopy;
     }
 
     public Marble getFreeMarble() {
@@ -45,7 +55,7 @@ public class MarketTray {
      * Adds a resource to the list that indicates the resources that can be replaced to the white marble when a player uses the market
      *
      * @param resource is the resource to add to the list
-     * @throws TooManyLeaderResourcesException if there are already 2 resourece in the list
+     * @throws TooManyLeaderResourcesException if there are already 2 resource in the list
      */
     public void addLeaderResource(Resource resource) {
         if (leaderResources.size() == 2) throw new TooManyLeaderResourcesException();
@@ -64,7 +74,7 @@ public class MarketTray {
      *
      * @param index index of the matrix that indicates where to push the marble
      * @param onRow if true pushes on the row (from right), if false pushes on the column (from the bottom)
-     * @return an ArrayList conaining the possible combinations of resources that the player can get, based on the leader cards he has activated
+     * @return an ArrayList containing the possible combinations of resources that the player can get, based on the leader cards he has activated
      * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
      */
     public ArrayList<TreeMap<Resource, Integer>> pushMarble(boolean onRow, int index) throws MatrixIndexOutOfBoundException {
@@ -105,7 +115,7 @@ public class MarketTray {
      * @return an ArrayList containing the possible combinations of resources that the player can get, based on the leader cards he has activated
      */
     private ArrayList<TreeMap<Resource, Integer>> computeCombinations(TreeMap<Resource, Integer> resourcesTaken) {
-        ArrayList<TreeMap<Resource, Integer>> resCombinations = new ArrayList<TreeMap<Resource, Integer>>();
+        ArrayList<TreeMap<Resource, Integer>> resCombinations = new ArrayList<>();
         if (leaderResources.size() == 0 || !resourcesTaken.containsKey(Resource.NOTHING))
             resCombinations.add(resourcesTaken);
         else{
@@ -118,7 +128,7 @@ public class MarketTray {
             else{ // case with two leader resources
                 TreeMap<Resource, Integer> tmp;
                 for(int i = 0; i<=howManyWhites; i++){ // computing all possible combinations of the two resources
-                    tmp = (TreeMap<Resource, Integer>) resourcesTaken.clone();
+                    tmp = (TreeMap<Resource, Integer>) resourcesTaken.clone(); // FIXME: not sure about that
                     for(int j = 0; j<i; j++){
                         addToResMap(tmp, leaderResources.get(0));
                     }
