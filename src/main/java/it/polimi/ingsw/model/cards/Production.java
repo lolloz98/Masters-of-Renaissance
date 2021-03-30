@@ -41,12 +41,12 @@ public class Production {
      * @param board board of the player
      * @throws  InvalidResourcesForProductionActivationException if resourceToGive or resourcesToGain are invalid for the activation of the production
      * @throws ProductionAlreadyActivatedException if the production has already been activated in this turn
-     * @throws InvalidResourcesByPlayerException if byPlayer contains invalid type of Resources
+     * @throws InvalidResourcesByPlayerException if resourcesToGive or resourcesToGain contain invalid type of Resources
      */
     public void applyProduction(TreeMap<Resource, Integer> resourcesToGive, TreeMap<Resource, Integer> resourcesToGain, Board board) throws InvalidResourcesByPlayerException {
         if(!checkResToGiveForActivation(resourcesToGive)) throw new InvalidResourcesForProductionActivationException();
         if(!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesForProductionActivationException();
-        if(hasProductionBeenActivated()) throw new ProductionAlreadyActivatedException();
+        if(hasBeenActivated()) throw new ProductionAlreadyActivatedException();
         // TODO: remove resourcesToGive from board
 
         gainedResources.putAll(resourcesToGain);
@@ -107,7 +107,7 @@ public class Production {
     /**
      * @return true if the production has been activated (and has not been flushed)
      */
-    public boolean hasProductionBeenActivated(){
+    public boolean hasBeenActivated(){
         return !gainedResources.isEmpty();
     }
 
