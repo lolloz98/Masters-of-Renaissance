@@ -1,33 +1,53 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.cards.Color;
-import it.polimi.ingsw.model.cards.DeckDevelop;
-import it.polimi.ingsw.model.cards.DevelopCard;
+import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-public class Game {
-    private boolean isEnding;
+public abstract class Game <T extends Turn> {
+    private boolean lastRound;
+    private boolean gameOver;
     private int id;
     private MarketTray marketTray;
+    private T turn;
     private TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
-
+    private Deck<LeaderCard> deckLeader;
 
     public Game(){
-        // initialization of develop card decks
-        // initialization of leader card
+        // TODO initialization of develop card decks
+        // TODO initialization of leader card
     }
 
-    public void checkEndConditions(){
-
+    public boolean isLastTurn() {
+        return lastRound;
     }
 
-    public void endGame(){
-
+    public void setLastRound(boolean lastRound) {
+        this.lastRound = lastRound;
     }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public T getTurn() {
+        return turn;
+    }
+
+    public void setTurn(T turn) {
+        this.turn = turn;
+    }
+
+    public abstract void checkEndConditions();
+    public abstract void nextTurn();
 
     /**
      * Draw a card from the deck of develop cards with a certain color and level

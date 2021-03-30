@@ -1,31 +1,22 @@
 package it.polimi.ingsw.model.game;
 
-public class Turn {
-    private boolean hasMainActionOccurred;
-    private boolean hasLeaderActivated;
+import it.polimi.ingsw.model.exception.MainActionAlreadyOccurredException;
 
-    public boolean isHasLeaderActivated() {
-        return hasLeaderActivated;
+public abstract class Turn {
+    private boolean mainActionOccurred;
+
+    public boolean isMainActionOccurred() {
+        return mainActionOccurred;
     }
 
-    public void setHasLeaderActivated(boolean hasLeaderActivated) {
-        this.hasLeaderActivated = hasLeaderActivated;
+    public void setMainActionOccurred(boolean mainActionOccurred) {
+        if (this.mainActionOccurred) throw new MainActionAlreadyOccurredException();
+        this.mainActionOccurred = mainActionOccurred;
     }
 
-    public boolean isHasMainActionOccurred() {
-        return hasMainActionOccurred;
-    }
-
-    public void setHasMainActionOccurred(boolean hasMainActionOccurred) {
-        this.hasMainActionOccurred = hasMainActionOccurred;
-    }
+    public abstract Turn nextTurn(Game game);
 
     public Turn(){
-
+        mainActionOccurred = false;
     }
-
-    public Turn nextTurn(Game game){
-        return new Turn();
-    }
-
 }
