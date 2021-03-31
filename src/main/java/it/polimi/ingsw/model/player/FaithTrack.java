@@ -37,8 +37,25 @@ public class FaithTrack implements VictoryPointCalculator {
             if(figures[i].isActive())
                 points+=figures[i].getLevel();
         }
-        //TODO: int points+=calculatePathpoints();
-        return points;
+        if(position<3)
+            return points;
+        else if(position<6)
+                return points+1;
+        else if(position<9)
+            return points+2;
+        else if(position<12)
+            return points+4;
+        else if(position<15)
+            return points+6;
+        else if(position<18)
+            return points+9;
+        else if(position<21)
+            return points+12;
+        else if(position<24)
+            return points+16;
+        else if(position==24)
+            return points+20;
+        
     }
 
 
@@ -64,7 +81,6 @@ public class FaithTrack implements VictoryPointCalculator {
     //method that activate the VaticanFigures of the player that has the rights (in a single player game)
     private void checkpointHandling(int steps, SinglePlayer game){
         int checkpointnumber = whichCheckpointIsReached(steps);
-
             if(game.getTurn().isLorenzoPlaying()){
                 //game.getLorenzo().getFaithTrack().activateVatican(checkpointnumber);
             }
@@ -88,10 +104,10 @@ public class FaithTrack implements VictoryPointCalculator {
 
 
     //method that advance the piece of n-steps
-    private void advance(int steps){
-        if(steps<=0) throw new InvalidStepsExeption();
-        if(position+steps<=24)
-            this.position+=steps;
+    private void advance(int n){
+        if(n<=0) throw new InvalidStepsExeption();
+        if(position+n<=24)
+            this.position+=n;
         else
             this.position=24;
     }

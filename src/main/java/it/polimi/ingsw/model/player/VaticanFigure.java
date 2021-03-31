@@ -19,7 +19,6 @@ public class VaticanFigure {
         return level;
     }
 
-
     public Figurestate getState() {
         return state;
     }

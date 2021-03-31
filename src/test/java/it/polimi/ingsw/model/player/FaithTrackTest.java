@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-//TO DO: everything
+//TODO: everything
 
 public class FaithTrackTest {
     private Game game;
