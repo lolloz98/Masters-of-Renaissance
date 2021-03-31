@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.TreeMap;
 
 /**
@@ -16,17 +15,10 @@ public class MarketTray {
     private Marble freeMarble;
     private ArrayList<Resource> leaderResources;
 
-    public MarketTray() {
+    public MarketTray(MarbleDispenserInterface md) {
         this.marbleMatrix = new Marble[4][3];
-        ArrayList<Marble> marbles = new ArrayList<>();
+        ArrayList<Marble> marbles = md.getMarbles();
         int i, j;
-        for (i = 0; i < 4; i++) marbles.add(new Marble(Resource.NOTHING));
-        for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.SHIELD));
-        for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.ROCK));
-        for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.SERVANT));
-        for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.GOLD));
-        marbles.add(new Marble(Resource.FAITH));
-        Collections.shuffle(marbles);
         for (j = 0; j < 3; j++) {
             for (i = 0; i < 4; i++) {
                 marbleMatrix[i][j] = marbles.get(i + j * 4);
