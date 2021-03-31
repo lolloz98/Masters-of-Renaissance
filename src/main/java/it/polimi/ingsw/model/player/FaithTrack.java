@@ -55,7 +55,8 @@ public class FaithTrack implements VictoryPointCalculator {
             return points+16;
         else if(position==24)
             return points+20;
-        
+
+        return points;//posso evitare?
     }
 
 
