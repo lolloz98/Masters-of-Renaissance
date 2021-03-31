@@ -1,11 +1,15 @@
 package it.polimi.ingsw.model.game;
 
 public class TurnSingle extends Turn{
-    private final boolean isLorenzoPlaying;
+    private final boolean lorenzoPlaying;
 
-    public TurnSingle(boolean isLorenzoPlaying) {
+    public TurnSingle(boolean lorenzoPlaying) {
         super();
-        this.isLorenzoPlaying = isLorenzoPlaying;
+        this.lorenzoPlaying = lorenzoPlaying;
+    }
+
+    public boolean isLorenzoPlaying() {
+        return lorenzoPlaying;
     }
 
     /**
@@ -19,7 +23,7 @@ public class TurnSingle extends Turn{
         singlePlayer.checkEndConditions();
         if (singlePlayer.isLastTurn()) return null;
         else {
-            if (isLorenzoPlaying) return new TurnSingle(false);
+            if (lorenzoPlaying) return new TurnSingle(false);
             else return new TurnSingle(true);
         }
     }

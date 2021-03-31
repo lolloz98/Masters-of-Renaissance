@@ -16,6 +16,9 @@ public class SinglePlayer extends Game<TurnSingle>{
         return player;
     }
 
+    public Lorenzo getLorenzo() {
+        return lorenzo;
+    }
     /**
      * Checks if end condition is met. If it is, the lastRound is set to true
      * and when the last player completes its turn, the game ends.
