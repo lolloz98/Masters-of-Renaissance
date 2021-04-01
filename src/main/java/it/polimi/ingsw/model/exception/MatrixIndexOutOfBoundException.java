@@ -1,4 +1,4 @@
 package it.polimi.ingsw.model.exception;
 
-public class MatrixIndexOutOfBoundException extends Exception {
+public class MatrixIndexOutOfBoundException extends RuntimeException {
 }

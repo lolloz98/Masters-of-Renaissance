@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.player.FaithTrack;
 import it.polimi.ingsw.model.player.Player;
 
 public class SinglePlayer extends Game<TurnSingle>{
@@ -9,7 +10,7 @@ public class SinglePlayer extends Game<TurnSingle>{
     public SinglePlayer(Player player) {
         super();
         this.player = player;
-        this.lorenzo = new Lorenzo();
+        this.lorenzo = new Lorenzo(new FaithTrack());
     }
 
     public Player getPlayer() {

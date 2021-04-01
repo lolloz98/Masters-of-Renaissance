@@ -20,6 +20,7 @@ public abstract class Game <T extends Turn> {
     public Game(){
         // TODO initialization of develop card decks
         // TODO initialization of leader card
+        this.marketTray = new MarketTray(new MarbleDispenserCollection());
     }
 
     public boolean isLastTurn() {
