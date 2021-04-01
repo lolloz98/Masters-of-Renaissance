@@ -108,9 +108,11 @@ public class MarketTray {
      */
     private ArrayList<TreeMap<Resource, Integer>> computeCombinations(TreeMap<Resource, Integer> resourcesTaken) {
         ArrayList<TreeMap<Resource, Integer>> resCombinations = new ArrayList<>();
-        if (leaderResources.size() == 0 || !resourcesTaken.containsKey(Resource.NOTHING))
+        if (leaderResources.size() == 0 || !resourcesTaken.containsKey(Resource.NOTHING)) {
+            resourcesTaken.remove(Resource.NOTHING);
             resCombinations.add(resourcesTaken);
-        else{
+        }
+        else {
             Integer howManyWhites = resourcesTaken.get(Resource.NOTHING);
             resourcesTaken.remove(Resource.NOTHING);
             if(leaderResources.size() == 1){
@@ -137,16 +139,12 @@ public class MarketTray {
     /**
      * Helper method to add a resource to a map.
      * If the resource is already present it increments the index, otherwise it adds the entry.
-     * If the resource is nothing, it isn't added.
      */
     private void addToResMap(TreeMap<Resource, Integer> resMap, Resource resource){
-        if (resource == Resource.NOTHING) return;
-        else {
-            if (resMap.containsKey(resource)) {
-                resMap.replace(resource, 1 + resMap.get(resource));
-            } else {
-                resMap.put(resource, 1);
-            }
+        if (resMap.containsKey(resource)) {
+            resMap.replace(resource, 1 + resMap.get(resource));
+        } else {
+            resMap.put(resource, 1);
         }
     }
 }
