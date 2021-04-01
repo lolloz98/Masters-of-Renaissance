@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.model.exception.InvalidResourcesToAddToStrongBoxExeption;
+import it.polimi.ingsw.model.exception.InvalidResourcesToAddToStrongBoxException;
 import it.polimi.ingsw.model.exception.NotEnoughResourcesExeption;
 import it.polimi.ingsw.model.game.Resource;
 
@@ -31,7 +31,7 @@ public class StrongBox {
     //method that add resources(discountable==GOLD,SHIELD,ROCK,SERVANT) to the strongbox
     public void addResources(TreeMap<Resource,Integer> resGained){
         for(Resource r: resGained.keySet()){
-            if(resGained.get(r)<0) throw new InvalidResourcesToAddToStrongBoxExeption();
+            if(resGained.get(r)<0) throw new InvalidResourcesToAddToStrongBoxException();
             if(Resource.isDiscountable(r))
                 resources.replace(r,resources.get(r)+resGained.get(r));
         }
@@ -41,7 +41,7 @@ public class StrongBox {
     public void spendResources(TreeMap<Resource,Integer> resToSpend){
         if(!hasResources(resToSpend)) throw new NotEnoughResourcesExeption();
         for(Resource r: resToSpend.keySet()){
-            if(resToSpend.get(r)<0) throw new InvalidResourcesToAddToStrongBoxExeption();
+            if(resToSpend.get(r)<0) throw new InvalidResourcesToAddToStrongBoxException();
             resources.replace(r,resources.get(r)-resToSpend.get(r));
         }
     }
