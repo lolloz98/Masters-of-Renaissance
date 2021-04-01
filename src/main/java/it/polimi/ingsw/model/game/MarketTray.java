@@ -16,12 +16,12 @@ public class MarketTray {
     private ArrayList<Resource> leaderResources;
 
     public MarketTray(MarbleDispenserInterface md) {
-        this.marbleMatrix = new Marble[4][3];
+        this.marbleMatrix = new Marble[3][4];
         ArrayList<Marble> marbles = md.getMarbles();
         int i, j;
         for (j = 0; j < 3; j++) {
             for (i = 0; i < 4; i++) {
-                marbleMatrix[i][j] = marbles.get(i + j * 4);
+                marbleMatrix[j][i] = marbles.get(i + j * 4);
             }
         }
         freeMarble = marbles.get(12);
@@ -69,7 +69,7 @@ public class MarketTray {
      * @return an ArrayList containing the possible combinations of resources that the player can get, based on the leader cards he has activated
      * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
      */
-    public ArrayList<TreeMap<Resource, Integer>> pushMarble(boolean onRow, int index) throws MatrixIndexOutOfBoundException {
+    public ArrayList<TreeMap<Resource, Integer>> pushMarble(boolean onRow, int index) {
         TreeMap<Resource, Integer> resourcesTaken = new TreeMap<>();
         Marble newMarble = freeMarble;
         Resource res;
@@ -77,25 +77,25 @@ public class MarketTray {
         if (onRow) { // push from right
             if (index > 2 || index < 0) throw new MatrixIndexOutOfBoundException();
             for(i=0; i<4; i++){
-                res = marbleMatrix[i][index].getResource();
-                addToResMap(resourcesTaken, res);
-            }
-            this.freeMarble = marbleMatrix[0][index];
-            for(i=0; i<3; i++){
-                marbleMatrix[i][index] = marbleMatrix[i+1][index];
-            }
-            marbleMatrix[3][index] = newMarble;
-        } else { // push from the bottom
-            if (index > 3 || index < 0) throw new MatrixIndexOutOfBoundException();
-            for(i=0; i<3; i++){
                 res = marbleMatrix[index][i].getResource();
                 addToResMap(resourcesTaken, res);
             }
             this.freeMarble = marbleMatrix[index][0];
-            for(i=0; i<2; i++){
+            for(i=0; i<3; i++){
                 marbleMatrix[index][i] = marbleMatrix[index][i+1];
             }
-            marbleMatrix[index][2] = newMarble;
+            marbleMatrix[index][3] = newMarble;
+        } else { // push from the bottom
+            if (index > 3 || index < 0) throw new MatrixIndexOutOfBoundException();
+            for(i=0; i<3; i++){
+                res = marbleMatrix[i][index].getResource();
+                addToResMap(resourcesTaken, res);
+            }
+            this.freeMarble = marbleMatrix[0][index];
+            for(i=0; i<2; i++){
+                marbleMatrix[i][index] = marbleMatrix[i+1][index];
+            }
+            marbleMatrix[2][index] = newMarble;
         }
         return computeCombinations(resourcesTaken);
     }
@@ -135,15 +135,18 @@ public class MarketTray {
     }
 
     /**
-     * helper method to add a resource to a map.
-     * if the resource is already present it increments the index, otherwise it adds the entry.
+     * Helper method to add a resource to a map.
+     * If the resource is already present it increments the index, otherwise it adds the entry.
+     * If the resource is nothing, it isn't added.
      */
     private void addToResMap(TreeMap<Resource, Integer> resMap, Resource resource){
-        if (resMap.containsKey(resource)){
-            resMap.replace(resource, 1+resMap.get(resource));
-        }
-        else{
-            resMap.put(resource, 1);
+        if (resource == Resource.NOTHING) return;
+        else {
+            if (resMap.containsKey(resource)) {
+                resMap.replace(resource, 1 + resMap.get(resource));
+            } else {
+                resMap.put(resource, 1);
+            }
         }
     }
 }
