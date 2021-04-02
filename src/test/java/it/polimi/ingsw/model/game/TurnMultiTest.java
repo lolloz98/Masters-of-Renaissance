@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.exception.MainActionAlreadyOccurredException;
+import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 import it.polimi.ingsw.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,5 +46,12 @@ public class TurnMultiTest {
         assertEquals(multiPlayer.getPlayers().get(2), turnMulti2.getCurrentPlayer());
         TurnMulti turnMulti3 = turnMulti2.nextTurn(multiPlayer);
         assertEquals(null, turnMulti3);
+    }
+
+    @Test(expected = MainActionAlreadyOccurredException.class)
+    public void TestPerformMainAction(){
+        // if i try to setMainActionOccurred twice, an exception should be thrown
+        turnMulti.setMainActionOccurred();
+        turnMulti.setMainActionOccurred();
     }
 }
