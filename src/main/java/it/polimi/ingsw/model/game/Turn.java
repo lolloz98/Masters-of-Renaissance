@@ -9,6 +9,11 @@ public abstract class Turn {
         return mainActionOccurred;
     }
 
+    /**
+     * Sets the mainActionOccurred flag.
+     *
+     * @throws MainActionAlreadyOccurredException if it's called twice, as the main action can only occur once in every turn.
+     */
     public void setMainActionOccurred(boolean mainActionOccurred) {
         if (this.mainActionOccurred) throw new MainActionAlreadyOccurredException();
         this.mainActionOccurred = mainActionOccurred;

@@ -5,6 +5,14 @@ import java.util.ArrayList;
 
 public class MultiPlayer extends Game<TurnMulti> {
     private final ArrayList<Player> players;
+    private boolean lastRound;
+    public boolean isLastRound() {
+        return lastRound;
+    }
+
+    public void setLastRound(boolean lastRound) {
+        this.lastRound = lastRound;
+    }
 
     public MultiPlayer(ArrayList<Player> players){
         super();

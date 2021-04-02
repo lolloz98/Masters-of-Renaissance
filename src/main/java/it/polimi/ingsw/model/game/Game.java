@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public abstract class Game <T extends Turn> {
-    private boolean lastRound;
     private boolean gameOver;
     private int id;
-    private MarketTray marketTray;
+    private final MarketTray marketTray;
     private T turn;
     private TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
     private Deck<LeaderCard> deckLeader;
@@ -21,14 +20,6 @@ public abstract class Game <T extends Turn> {
         // TODO initialization of develop card decks
         // TODO initialization of leader card
         this.marketTray = new MarketTray(new MarbleDispenserCollection());
-    }
-
-    public boolean isLastTurn() {
-        return lastRound;
-    }
-
-    public void setLastRound(boolean lastRound) {
-        this.lastRound = lastRound;
     }
 
     public boolean isGameOver() {

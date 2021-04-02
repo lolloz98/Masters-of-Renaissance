@@ -26,7 +26,7 @@ public class TurnMulti extends Turn {
         MultiPlayer multiPlayer = (MultiPlayer) game;
         ArrayList<Player> allPlayers = multiPlayer.getPlayers();
         multiPlayer.checkEndConditions();
-        if (multiPlayer.isLastTurn() && currentPlayer == allPlayers.get(allPlayers.size()-1)) return null;
+        if (multiPlayer.isLastRound() && currentPlayer == allPlayers.get(allPlayers.size()-1)) return null;
         else {
             int ind = allPlayers.indexOf(currentPlayer);
             return new TurnMulti(allPlayers.get((ind + 1) % allPlayers.size()));
