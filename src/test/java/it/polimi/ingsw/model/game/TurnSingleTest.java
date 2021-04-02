@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.exception.MainActionAlreadyOccurredException;
 import it.polimi.ingsw.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,5 +39,12 @@ public class TurnSingleTest {
         singlePlayer.setLastTurn(true);
         TurnSingle turnSingle2 = turnSingle1.nextTurn(singlePlayer);
         assertEquals(null, turnSingle2);
+    }
+
+    @Test(expected = MainActionAlreadyOccurredException.class)
+    public void TestPerformMainAction(){
+        // if i try to setMainActionOccurred twice, an exception should be thrown
+        turnSingle.setMainActionOccurred();
+        turnSingle.setMainActionOccurred();
     }
 }
