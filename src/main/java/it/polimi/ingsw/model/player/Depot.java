@@ -16,6 +16,11 @@ public class Depot {
         this.modifiable=modifiable;
     }
 
+    public void spendResources(int howMany){
+        if(howMany<=0||stored<howMany) throw new InvalidResourceQuantityToDepotException();
+        stored-=howMany;
+    }
+
     public boolean contains(Resource r){
         return r.equals(resource);
     }
