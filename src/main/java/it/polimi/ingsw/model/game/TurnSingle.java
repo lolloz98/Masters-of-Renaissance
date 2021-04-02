@@ -20,15 +20,20 @@ public class TurnSingle extends Turn{
     @Override
     public TurnSingle nextTurn(Game game){
         SinglePlayer singlePlayer = (SinglePlayer) game;
+        if (lorenzoPlaying) performLorenzoAction(singlePlayer);
         singlePlayer.checkEndConditions();
         if (singlePlayer.isLastTurn()) return null;
         else {
-            if (lorenzoPlaying) return new TurnSingle(false);
-            else return new TurnSingle(true);
+            if (lorenzoPlaying) {
+                return new TurnSingle(false);
+            }
+            else {
+                return new TurnSingle(true);
+            }
         }
     }
 
-    public void performLorenzoAction(SinglePlayer singlePlayer){
+    private void performLorenzoAction(SinglePlayer singlePlayer){
         //TODO when player package is completed
     }
 }
