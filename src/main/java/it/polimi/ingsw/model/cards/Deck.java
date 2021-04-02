@@ -16,6 +16,10 @@ public class Deck<T extends Card> {
         return cards.isEmpty();
     }
 
+    public int howManyCards(){
+        return cards.size();
+    }
+
     /**
      * Shuffle the cards contained in the deck
      * @throws EmptyDeckException if deck is empty
