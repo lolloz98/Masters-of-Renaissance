@@ -10,13 +10,13 @@ public class MultiPlayer extends Game<TurnMulti> {
         return lastRound;
     }
 
-    public void setLastRound(boolean lastRound) {
-        this.lastRound = lastRound;
-    }
-
     public MultiPlayer(ArrayList<Player> players){
         super();
         this.players = players;
+    }
+
+    public void setLastRound(boolean lastRound) {
+        this.lastRound = lastRound;
     }
 
     public ArrayList<Player> getPlayers() {

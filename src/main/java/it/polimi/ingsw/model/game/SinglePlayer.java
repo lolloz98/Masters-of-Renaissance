@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.player.FaithTrack;
+import it.polimi.ingsw.model.cards.lorenzo.LorenzoDeck;
 import it.polimi.ingsw.model.player.Player;
 
 public class SinglePlayer extends Game<TurnSingle>{
     private final Player player;
     private final Lorenzo lorenzo;
-    // private Deck<LorenzoCard>;
+    private LorenzoDeck lorenzoDeck; // FIXME: final
     private boolean lastTurn;
 
     public boolean isLastTurn() {
@@ -20,9 +20,14 @@ public class SinglePlayer extends Game<TurnSingle>{
     public SinglePlayer(Player player) {
         super();
         this.player = player;
-        this.lorenzo = new Lorenzo(new FaithTrack());
-
+        this.lorenzo = new Lorenzo();
+        // TODO lorenzo Deck inizialization
     }
+
+    public LorenzoDeck getLorenzoDeck() {
+        return lorenzoDeck;
+    }
+
 
     public Player getPlayer() {
         return player;
