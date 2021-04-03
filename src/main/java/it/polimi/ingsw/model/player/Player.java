@@ -2,13 +2,13 @@ package it.polimi.ingsw.model.player;
 
 public class Player {
 
-    private String playerid;
-    private int playernumber;
-    private Board board;
+    private final String playerId;
+    private final int playerNumber;
+    private final Board board;
 
     public Player(String playerid, int playerNumber) {
-        this.playerid = playerid;
-        playernumber = playerNumber;
+        this.playerId = playerid;
+        this.playerNumber = playerNumber;
         board= new Board();
     }
 

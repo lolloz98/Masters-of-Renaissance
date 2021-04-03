@@ -3,11 +3,15 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.model.exception.*;
 import it.polimi.ingsw.model.game.Resource;
 
+/**
+ *class that models a shelf of the warehouse, leaders shelfs's included
+ */
+
 public class Depot {
     private Resource resource;
     private final int maxToStore;
     private int stored;
-    private final boolean modifiable;
+    private final boolean modifiable;/** true only if the depot is not a leader depot*/
 
     public Depot(int maxToStore,boolean modifiable) {
         this.maxToStore = maxToStore;
@@ -44,13 +48,17 @@ public class Depot {
         return r.equals(resource);
     }
 
-    //modifies the type of resource that the depot contains
+    /**
+     * modifies the type of resource that the depot contains
+     */
     public void modifyTypeOfResource(Resource type){
         if(!isResModifiable()) throw new DepotResourceModificationException();
         resource=type;
     }
 
-    //method that add n resources to the depot
+    /**
+    *method that add n resources to the depot
+     */
     public void addResource(Resource r, int howMany){
         if(howMany<=0) throw new InvalidResourceQuantityToDepotException();
         if(!isResourceAppendable(r)) throw new DifferentResourceForDepotException();
@@ -64,7 +72,9 @@ public class Depot {
         }
     }
 
-    //method that checks if the depot is overfull
+    /**
+     *method that checks if the depot is overfull
+     */
     private boolean tooManyResources(int howMany){
         return stored+howMany>maxToStore;
     }
@@ -73,7 +83,10 @@ public class Depot {
         return stored==maxToStore;
     }
 
-    //method that controls if the resource r can be added at the depot
+    /**
+     *method that controls if the resource r can be added at the depot
+     */
+
     public boolean isResourceAppendable(Resource r){
         return isEmpty()||r.equals(resource);
     }

@@ -6,8 +6,9 @@ import it.polimi.ingsw.model.game.Resource;
 
 import java.util.TreeMap;
 
-//class that models the lockbox of the player
-
+/**
+ * class that models the lockbox of the player
+ */
 public class StrongBox {
     private TreeMap<Resource,Integer> resources;
 
@@ -28,7 +29,9 @@ public class StrongBox {
         return StrongBoxContent;
     }
 
-    //method that add discountableresources(==GOLD,SHIELD,ROCK,SERVANT) to the strongbox
+    /**
+     * method that add discountableresources(==GOLD,SHIELD,ROCK,SERVANT) to the strongbox
+     */
     public void addResources(TreeMap<Resource,Integer> resGained){
         for(Resource r: resGained.keySet()){
             if(resGained.get(r)<0) throw new InvalidResourcesToAddToStrongBoxException();
@@ -37,7 +40,9 @@ public class StrongBox {
         }
     }
 
-    //method that subtract the resources to the strongbox
+    /**
+     * method that subtract the resources to the strongbox
+     */
     public void spendResources(TreeMap<Resource,Integer> resToSpend){
         if(!hasResources(resToSpend)) throw new NotEnoughResourcesExeption();
         for(Resource r: resToSpend.keySet()){

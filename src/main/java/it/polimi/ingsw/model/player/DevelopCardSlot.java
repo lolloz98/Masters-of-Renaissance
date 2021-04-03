@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.game.Resource;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * class that models the three production slots of each player
+ */
 public class DevelopCardSlot {
     private ArrayList<DevelopCard> cards;
     private DevelopCard lastCard;

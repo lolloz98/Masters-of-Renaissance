@@ -1,10 +1,8 @@
 package it.polimi.ingsw.model.player;
 
 /**
- * @autor Aniello De Santis
  * class to model the Pope's Favor tiles on the Faith path
  */
-
 public class VaticanFigure {
     private Figurestate state;
     private final int level;
