@@ -68,9 +68,8 @@ public class Board  implements VictoryPointCalculator{
 
    public void activateProduction(int whichprod, TreeMap<Resource,Integer> resToGive, TreeMap<Resource,Integer> resToGain) throws InvalidResourcesByPlayerException, InvalidProductionChosenException {
         if(whichprod<0||whichprod>developCardSlots.size()+productionLeaderSlots.size()) throw new InvalidProductionChosenException();
-        /*TODO:check if restogive and restogain does not contains anything*/
-       if(containsAnything(resToGain)) throw new InvalidSelectionByPlayer();
-       if(containsAnything(resToGive)) throw new InvalidSelectionByPlayer();
+       if(resToGive.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
+       if(resToGain.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
         if(enoughResToActivate(resToGive)) {
             if (whichprod==0) {
                 normalProduction.applyProduction(resToGive,resToGain,this);
@@ -92,7 +91,7 @@ public class Board  implements VictoryPointCalculator{
     *to zero @return true
      */
     public boolean enoughResToActivate(TreeMap<Resource,Integer> resToGive){
-        if(containsAnything(resToGive)) throw new InvalidSelectionByPlayer();
+        if(resToGive.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
        TreeMap<Resource,Integer> diffMap=new TreeMap<>();
        diffMap.putAll(resToGive);
        for(Resource r: diffMap.keySet()){
@@ -116,13 +115,6 @@ public class Board  implements VictoryPointCalculator{
        return true;
     }
 
-    /**
-     * @param res
-     * @return true if the TreeMap of resources given by the player is invalid(contains resource "ANYTHING")
-     */
-    private boolean containsAnything(TreeMap<Resource,Integer> res){
-        return res.containsKey(Resource.ANYTHING);
-    }
 
     private boolean theLeaderProductionIsActivated(int whichLeader){
        if(productionLeaderSlots.get(whichLeader)!=null)
