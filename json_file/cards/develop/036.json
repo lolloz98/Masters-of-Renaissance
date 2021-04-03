@@ -4,7 +4,7 @@
   "color": "GOLD",
   "victoryPoints": 9,
   "cost": {
-    "ROCKS": 6
+    "ROCK": 6
   },
   "discountApplied": {},
   "production": {
