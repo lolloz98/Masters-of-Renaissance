@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.game;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Implementation of MarbleShufflerInferface that that can be used for testing.
@@ -11,7 +10,7 @@ import java.util.Collections;
 public class MarbleDispenserTester implements MarbleDispenserInterface {
     public ArrayList<Marble> getMarbles(){
         ArrayList<Marble> marbles = new ArrayList<>();
-        int i, j;
+        int i;
         for (i = 0; i < 4; i++) marbles.add(new Marble(Resource.NOTHING));
         for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.SHIELD));
         for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.ROCK));
