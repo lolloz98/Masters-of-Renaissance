@@ -1,7 +1,7 @@
 {
   "id": 32,
   "level": 2,
-  "color": "GOLD",
+  "color": "GREEN",
   "victoryPoints": 7,
   "cost": {
     "SHIELD": 5
