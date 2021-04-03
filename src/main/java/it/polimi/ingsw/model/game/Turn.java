@@ -19,7 +19,7 @@ public abstract class Turn {
         this.mainActionOccurred = true;
     }
 
-    public abstract Turn nextTurn(Game game);
+    public abstract Turn nextTurn(Game<? extends Turn> game);
 
     public Turn(){
         mainActionOccurred = false;

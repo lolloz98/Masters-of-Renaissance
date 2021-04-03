@@ -15,10 +15,11 @@ public class TurnSingle extends Turn{
     /**
      * Method that computes the next turn.
      *
+     * @param game
      * @return null if the game is over, otherwise returns the next turn.
      */
     @Override
-    public TurnSingle nextTurn(Game game){
+    public TurnSingle nextTurn(Game<? extends Turn> game){
         SinglePlayer singlePlayer = (SinglePlayer) game;
         if (lorenzoPlaying) performLorenzoAction(singlePlayer);
         singlePlayer.checkEndConditions();

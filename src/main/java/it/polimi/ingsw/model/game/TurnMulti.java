@@ -22,7 +22,7 @@ public class TurnMulti extends Turn {
      * @return null if the game is over, otherwise returns the next turn.
      */
     @Override
-    public TurnMulti nextTurn(Game game){
+    public TurnMulti nextTurn(Game<? extends Turn> game){
         MultiPlayer multiPlayer = (MultiPlayer) game;
         ArrayList<Player> allPlayers = multiPlayer.getPlayers();
         multiPlayer.checkEndConditions();
