@@ -1,0 +1,13 @@
+{
+  "targetRes": "ROCK",
+  "victoryPoints": 5,
+  "requirement": {
+    "requiredDevelops": {
+      "BLUE": 2,
+      "GOLD": 1
+    }
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 59
+}

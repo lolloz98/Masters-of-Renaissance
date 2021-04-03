@@ -1,0 +1,14 @@
+{
+  "res": "GOLD",
+  "quantity": 1,
+  "victoryPoints": 2,
+  "requirement": {
+    "requiredDevelops": {
+      "GOLD": 1,
+      "PURPLE": 1
+    }
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 52
+}

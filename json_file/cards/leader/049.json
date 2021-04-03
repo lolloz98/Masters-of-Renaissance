@@ -1,0 +1,14 @@
+{
+  "res": "SERVANT",
+  "quantity": 1,
+  "victoryPoints": 2,
+  "requirement": {
+    "requiredDevelops": {
+      "GOLD": 1,
+      "GREEN": 1
+    }
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 49
+}

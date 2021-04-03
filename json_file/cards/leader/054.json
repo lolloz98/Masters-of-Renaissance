@@ -1,0 +1,16 @@
+{
+  "depot": {
+    "resource": "SERVANT",
+    "maxToStore": 2,
+    "stored": 0,
+    "modifiable": false
+  },
+  "victoryPoints": 3,
+  "requirement": {
+    "res": "ROCK",
+    "quantity": 5
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 54
+}

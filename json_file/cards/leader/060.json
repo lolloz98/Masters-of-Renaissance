@@ -1,0 +1,13 @@
+{
+  "targetRes": "GOLD",
+  "victoryPoints": 5,
+  "requirement": {
+    "requiredDevelops": {
+      "PURPLE": 2,
+      "GREEN": 1
+    }
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 60
+}

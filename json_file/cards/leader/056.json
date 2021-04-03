@@ -1,0 +1,16 @@
+{
+  "depot": {
+    "resource": "GOLD",
+    "maxToStore": 2,
+    "stored": 0,
+    "modifiable": false
+  },
+  "victoryPoints": 3,
+  "requirement": {
+    "res": "SHIELD",
+    "quantity": 5
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 56
+}

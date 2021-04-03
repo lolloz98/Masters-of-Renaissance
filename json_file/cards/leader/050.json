@@ -1,0 +1,14 @@
+{
+  "res": "SHIELD",
+  "quantity": 1,
+  "victoryPoints": 2,
+  "requirement": {
+    "requiredDevelops": {
+      "PURPLE": 1,
+      "BLUE": 1
+    }
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 50
+}

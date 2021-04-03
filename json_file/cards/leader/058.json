@@ -1,0 +1,13 @@
+{
+  "targetRes": "SHIELD",
+  "victoryPoints": 5,
+  "requirement": {
+    "requiredDevelops": {
+      "GREEN": 2,
+      "PURPLE": 1
+    }
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 58
+}

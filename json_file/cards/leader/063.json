@@ -1,0 +1,20 @@
+{
+  "production": {
+    "resourcesToGive": {
+      "ROCK": 1
+    },
+    "resourcesToGain": {
+      "FAITH": 1,
+      "ANYTHING": 1
+    },
+    "gainedResources": {}
+  },
+  "victoryPoints": 4,
+  "requirement": {
+    "level": 2,
+    "color": "PURPLE"
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 63
+}

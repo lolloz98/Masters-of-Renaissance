@@ -1,0 +1,16 @@
+{
+  "depot": {
+    "resource": "ROCK",
+    "maxToStore": 2,
+    "stored": 0,
+    "modifiable": false
+  },
+  "victoryPoints": 3,
+  "requirement": {
+    "res": "GOLD",
+    "quantity": 5
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 53
+}

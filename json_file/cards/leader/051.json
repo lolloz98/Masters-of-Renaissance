@@ -1,0 +1,14 @@
+{
+  "res": "ROCK",
+  "quantity": 1,
+  "victoryPoints": 2,
+  "requirement": {
+    "requiredDevelops": {
+      "GREEN": 1,
+      "BLUE": 1
+    }
+  },
+  "isActive": false,
+  "isDiscarded": false,
+  "id": 51
+}
