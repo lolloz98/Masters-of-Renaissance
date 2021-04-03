@@ -28,7 +28,7 @@ public class StrongBox {
         return StrongBoxContent;
     }
 
-    //method that add resources(discountable==GOLD,SHIELD,ROCK,SERVANT) to the strongbox
+    //method that add discountableresources(==GOLD,SHIELD,ROCK,SERVANT) to the strongbox
     public void addResources(TreeMap<Resource,Integer> resGained){
         for(Resource r: resGained.keySet()){
             if(resGained.get(r)<0) throw new InvalidResourcesToAddToStrongBoxException();
@@ -37,7 +37,7 @@ public class StrongBox {
         }
     }
 
-    //method that subtract
+    //method that subtract the resources to the strongbox
     public void spendResources(TreeMap<Resource,Integer> resToSpend){
         if(!hasResources(resToSpend)) throw new NotEnoughResourcesExeption();
         for(Resource r: resToSpend.keySet()){

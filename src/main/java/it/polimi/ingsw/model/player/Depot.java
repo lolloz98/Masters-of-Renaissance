@@ -7,7 +7,7 @@ public class Depot {
     private Resource resource;
     private final int maxToStore;
     private int stored;
-    private boolean modifiable;
+    private final boolean modifiable;
 
     public Depot(int maxToStore,boolean modifiable) {
         this.maxToStore = maxToStore;
@@ -16,8 +16,27 @@ public class Depot {
         this.modifiable=modifiable;
     }
 
+    public int getStored() {
+        return stored;
+    }
+
+    public int getMaxToStore() {
+        return maxToStore;
+    }
+
+    public int getFreeSpace(){
+        return maxToStore-stored;
+    }
+
+    public Resource getTypeOfResource(){
+        return resource;
+    }
+
+    public boolean isResModifiable(){
+        return modifiable;
+    }
     public void spendResources(int howMany){
-        if(howMany<=0||stored<howMany) throw new InvalidResourceQuantityToDepotException();
+        if(howMany<=0||!enoughResources(howMany)) throw new InvalidResourceQuantityToDepotException();
         stored-=howMany;
     }
 
@@ -25,15 +44,11 @@ public class Depot {
         return r.equals(resource);
     }
 
-public boolean isResModifiable(){
-        return modifiable;
-}
-
-//modifies the type of resource that the depot contains
-public void modifyTypeOfResource(Resource type){
+    //modifies the type of resource that the depot contains
+    public void modifyTypeOfResource(Resource type){
         if(!isResModifiable()) throw new DepotResourceModificationException();
         resource=type;
-}
+    }
 
     //method that add n resources to the depot
     public void addResource(Resource r, int howMany){
@@ -63,22 +78,18 @@ public void modifyTypeOfResource(Resource type){
         return isEmpty()||r.equals(resource);
     }
 
-    public void clear(){
+    public int clear(){
+        int result=stored;
         resource=Resource.NOTHING;
         stored=0;
+        return result;
     }
 
     public boolean isEmpty(){
         return stored==0;
     }
 
-    public int getFreeSpace(){
-        return maxToStore-stored;
+    public boolean enoughResources(int n){
+        return stored-n>=0;
     }
-
-    public Resource getTypeOfResource(){
-        return resource;
-    }
-
-
 }
