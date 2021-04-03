@@ -1,0 +1,19 @@
+{
+  "id": 18,
+  "level": 2,
+  "color": "PURPLE",
+  "victoryPoints": 5,
+  "cost": {
+    "SERVANT": 4
+  },
+  "discountApplied": {},
+  "production": {
+    "resourcesToGive": {
+      "GOLD": 1
+    },
+    "resourcesToGain": {
+      "FAITH": 2
+    },
+    "gainedResources": {}
+  }
+}

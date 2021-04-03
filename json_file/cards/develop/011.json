@@ -1,0 +1,21 @@
+{
+  "id": 11,
+  "level": 1,
+  "color": "BLUE",
+  "victoryPoints": 3,
+  "cost": {
+    "GOLD": 3
+  },
+  "discountApplied": {},
+  "production": {
+    "resourcesToGive": {
+      "ROCK": 2
+    },
+    "resourcesToGain": {
+      "SHIELD": 1,
+      "SERVANT": 1,
+      "GOLD": 1
+    },
+    "gainedResources": {}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": 1,
+  "level": 1,
+  "color": "GREEN",
+  "victoryPoints": 1,
+  "cost": {
+    "SHIELD": 2
+  },
+  "discountApplied": {},
+  "production": {
+    "resourcesToGive": {
+      "GOLD": 1
+    },
+    "resourcesToGain": {
+      "FAITH": 1
+    },
+    "gainedResources": {}
+  }
+}
