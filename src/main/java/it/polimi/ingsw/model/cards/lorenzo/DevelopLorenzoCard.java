@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model.cards.lorenzo;
 
 import it.polimi.ingsw.model.cards.Color;
-import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.game.TurnSingle;
+import it.polimi.ingsw.model.game.SinglePlayer;
 
 public class DevelopLorenzoCard extends LorenzoCard {
     private final Color color;
@@ -17,7 +16,7 @@ public class DevelopLorenzoCard extends LorenzoCard {
      * @param game current single game player
      */
     @Override
-    public void applyEffect(Game<TurnSingle> game) {
+    public void applyEffect(SinglePlayer game) {
         // TODO: discards two cards from deck of develop
     }
 

@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.cards.lorenzo;
 
-import it.polimi.ingsw.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
-import it.polimi.ingsw.model.game.Game;
-import it.polimi.ingsw.model.game.TurnSingle;
+import it.polimi.ingsw.model.game.SinglePlayer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +20,7 @@ public class LorenzoDeckTest {
         for(int i = 0; i < N; i++){
             cards.add(new LorenzoCard(i) {
                 @Override
-                public void applyEffect(Game<TurnSingle> game) {
+                public void applyEffect(SinglePlayer game) {
                     // do nothing
                 }
             });
