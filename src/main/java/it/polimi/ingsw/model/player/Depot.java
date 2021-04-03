@@ -13,11 +13,24 @@ public class Depot {
     private int stored;
     private final boolean modifiable;/** true only if the depot is not a leader depot*/
 
+    /**
+     * normal depot constructor
+     */
     public Depot(int maxToStore,boolean modifiable) {
         this.maxToStore = maxToStore;
         resource=Resource.NOTHING;
         stored=0;
         this.modifiable=modifiable;
+    }
+
+    /**
+     * leader depot constructor
+     */
+    public Depot(Resource r) {
+        this.maxToStore = 2;
+        resource=r;
+        stored=0;
+        this.modifiable=false;
     }
 
     public int getStored() {
@@ -62,7 +75,7 @@ public class Depot {
     public void addResource(Resource r, int howMany){
         if(howMany<=0) throw new InvalidResourceQuantityToDepotException();
         if(!isResourceAppendable(r)) throw new DifferentResourceForDepotException();
-        if(tooManyResources(howMany)) throw new TooManyResourcesToAddExeption();//TODO: unire le due eccezioni volendo
+        if(tooManyResources(howMany)) throw new TooManyResourcesToAddExeption();
         if(!Resource.isDiscountable(r)) throw new InvalidTypeOfResourceToDepotExeption();
         if(stored!=0)
             stored++;
@@ -86,14 +99,16 @@ public class Depot {
     /**
      *method that controls if the resource r can be added at the depot
      */
-
     public boolean isResourceAppendable(Resource r){
-        return isEmpty()||r.equals(resource);
+        if(modifiable)
+            return isEmpty()||r.equals(resource);
+        else
+            return r.equals(resource);
     }
 
     public int clear(){
         int result=stored;
-        resource=Resource.NOTHING;
+        if(modifiable)resource=Resource.NOTHING;
         stored=0;
         return result;
     }
