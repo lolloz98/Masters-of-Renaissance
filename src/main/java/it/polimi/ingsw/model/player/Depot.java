@@ -11,7 +11,8 @@ public class Depot {
     private Resource resource;
     private final int maxToStore;
     private int stored;
-    private final boolean modifiable;/** true only if the depot is not a leader depot*/
+    /** true only if the depot is not a leader depot*/
+    private final boolean modifiable;
 
     /**
      * normal depot constructor
