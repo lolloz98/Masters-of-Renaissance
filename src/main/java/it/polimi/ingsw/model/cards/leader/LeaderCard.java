@@ -13,12 +13,19 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
     private final T requirement;
     private boolean isActive;
     private boolean isDiscarded;
+    private final int id;
 
-    public LeaderCard(int victoryPoints, T requirement){
+    public LeaderCard(int victoryPoints, T requirement, int id){
         this.isActive = false;
         this.isDiscarded = false;
         this.victoryPoints = victoryPoints;
         this.requirement = requirement;
+        this.id = id;
+    }
+
+    @Override
+    public int getId(){
+        return id;
     }
 
     public boolean isActive(){
@@ -31,7 +38,7 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
      * @param game current game, it is affected by this method
      * @param player player who activates the card, it can be affected by this method
      */
-    public void activate(Game game, Player player){
+    public void activate(Game<?> game, Player player){
         if(!checkRequirement(player)) throw new RequirementNotSatisfiedException();
         if(isActive) throw new AlreadyActiveLeaderException();
         if(isDiscarded) throw new ActivateDiscardedCardException();
@@ -49,21 +56,21 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
      *
      * @param game current game, it can be affected by this method
      */
-    public abstract void applyEffect(Game game);
+    public abstract void applyEffect(Game<?> game);
 
     /**
      * apply effect of this card without checking if it is active
      *
      * @param game current game: it is affected by this method
      */
-    protected abstract void applyEffectNoCheckOnActive(Game game);
+    protected abstract void applyEffectNoCheckOnActive(Game<?> game);
 
     /**
      * if the card isActive remove the effects of the card (or do nothing, it depends on the concrete card)
      *
      * @param game current game, it can be affected by this method
      */
-    public abstract void removeEffect(Game game);
+    public abstract void removeEffect(Game<?> game);
 
     @Override
     public int getVictoryPoints() {

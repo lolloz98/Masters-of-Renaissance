@@ -21,7 +21,7 @@ public class DeckTest {
         logger.debug("Deck preparation");
         cards = new ArrayList<>();
         for(int i = 0; i < NUMBER; i++){
-            cards.add(new Card() {});
+            cards.add(() -> 0);
         }
         deck = new Deck<>(cards);
     }

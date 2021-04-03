@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.player.Board;
 import java.util.TreeMap;
 
 public class DevelopCard implements Card, VictoryPointCalculator{
+    private final int id;
     private final int level;
     private final Color color;
     private final int victoryPoints;
@@ -15,7 +16,7 @@ public class DevelopCard implements Card, VictoryPointCalculator{
     private final TreeMap<Resource, Integer> discountApplied;
     private final Production production;
 
-    public DevelopCard(TreeMap<Resource, Integer> cost, Production production, Color color, int level, int victoryPoints){
+    public DevelopCard(TreeMap<Resource, Integer> cost, Production production, Color color, int level, int victoryPoints, int id){
         this.color = color;
         this.level = level;
         this. victoryPoints = victoryPoints;
@@ -23,11 +24,17 @@ public class DevelopCard implements Card, VictoryPointCalculator{
         this.cost = new TreeMap<>();
         this.cost.putAll(cost);
         this.production = production;
+        this.id = id;
     }
 
     @Override
     public int getVictoryPoints() {
         return victoryPoints;
+    }
+
+    @Override
+    public int getId(){
+        return id;
     }
 
     /**

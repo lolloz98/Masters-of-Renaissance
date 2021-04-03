@@ -18,24 +18,24 @@ public class DeckDevelopTest {
     public void setUp() throws Exception {
         // TODO: create files to setup the cards.
         // TODO: test more this class
-        TreeMap<Resource, Integer> toGive = new TreeMap<Resource, Integer>() {{
+        TreeMap<Resource, Integer> toGive = new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 1);
             put(Resource.ANYTHING, 2);
         }};
 
-        TreeMap<Resource, Integer> toGain = new TreeMap<Resource, Integer>() {{
+        TreeMap<Resource, Integer> toGain = new TreeMap<>() {{
             put(Resource.SHIELD, 2);
             put(Resource.ANYTHING, 1);
         }};
 
         Production production = new Production(toGive, toGain);
-        cards = new ArrayList<DevelopCard>() {
+        cards = new ArrayList<>() {
             {
-                add(new DevelopCard(new TreeMap<Resource, Integer>() {{
+                add(new DevelopCard(new TreeMap<>() {{
                     put(Resource.GOLD, 2);
                     put(Resource.ROCK, 1);
-                }}, production, Color.GREEN, 2, 4));
+                }}, production, Color.GREEN, 2, 4, 0));
             }
         };
 

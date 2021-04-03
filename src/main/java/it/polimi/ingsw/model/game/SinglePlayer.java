@@ -6,11 +6,22 @@ import it.polimi.ingsw.model.player.Player;
 public class SinglePlayer extends Game<TurnSingle>{
     private final Player player;
     private final Lorenzo lorenzo;
+    // private Deck<LorenzoCard>;
+    private boolean lastTurn;
+
+    public boolean isLastTurn() {
+        return lastTurn;
+    }
+
+    public void setLastTurn(boolean lastTurn) {
+        this.lastTurn = lastTurn;
+    }
 
     public SinglePlayer(Player player) {
         super();
         this.player = player;
         this.lorenzo = new Lorenzo(new FaithTrack());
+
     }
 
     public Player getPlayer() {
@@ -20,6 +31,7 @@ public class SinglePlayer extends Game<TurnSingle>{
     public Lorenzo getLorenzo() {
         return lorenzo;
     }
+
     /**
      * Checks if end condition is met. If it is, the lastRound is set to true
      * and when the last player completes its turn, the game ends.

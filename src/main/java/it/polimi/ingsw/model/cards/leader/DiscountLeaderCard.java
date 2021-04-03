@@ -8,8 +8,8 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
     private final Resource res;
     private final int quantity = 1;
 
-    public DiscountLeaderCard(int victoryPoints, RequirementColorsDevelop requirement, Resource res) {
-        super(victoryPoints, requirement);
+    public DiscountLeaderCard(int victoryPoints, RequirementColorsDevelop requirement, Resource res, int id) {
+        super(victoryPoints, requirement, id);
         this.res = res;
     }
 
@@ -28,17 +28,17 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
     }
 
     @Override
-    public void applyEffect(Game game) {
+    public void applyEffect(Game<?> game) {
         if(isActive()) applyEffectNoCheckOnActive(game);
     }
 
     @Override
-    protected void applyEffectNoCheckOnActive(Game game) {
+    protected void applyEffectNoCheckOnActive(Game<?> game) {
         // TODO: discount the cards in the game
     }
 
     @Override
-    public void removeEffect(Game game) {
+    public void removeEffect(Game<?> game) {
         // TODO: remove the discounts on the cards in the game
     }
 }

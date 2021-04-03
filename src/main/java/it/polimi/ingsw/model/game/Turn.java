@@ -9,9 +9,14 @@ public abstract class Turn {
         return mainActionOccurred;
     }
 
-    public void setMainActionOccurred(boolean mainActionOccurred) {
+    /**
+     * Sets the mainActionOccurred flag.
+     *
+     * @throws MainActionAlreadyOccurredException if it's called twice, as the main action can only occur once in every turn.
+     */
+    public void setMainActionOccurred() {
         if (this.mainActionOccurred) throw new MainActionAlreadyOccurredException();
-        this.mainActionOccurred = mainActionOccurred;
+        this.mainActionOccurred = true;
     }
 
     public abstract Turn nextTurn(Game game);
