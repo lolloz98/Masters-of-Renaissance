@@ -3,9 +3,8 @@ package it.polimi.ingsw.model.game;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.sun.source.tree.Tree;
 import it.polimi.ingsw.model.cards.*;
-import it.polimi.ingsw.model.cards.leader.LeaderCard;
+import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 
@@ -21,16 +20,17 @@ public abstract class Game <T extends Turn> {
     private final MarketTray marketTray;
     private T turn;
     private TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
+
     private Deck<LeaderCard> deckLeader;
 
     public Game(){
         try {
             loadDecksDevelop();
+            loadDeckLeader();
         }
         catch (FileNotFoundException e){
             // TODO
         }
-        // TODO initialization of leader card
         this.marketTray = new MarketTray(new MarbleDispenserCollection());
     }
 
@@ -54,7 +54,12 @@ public abstract class Game <T extends Turn> {
         this.turn = turn;
     }
 
+    public Deck<LeaderCard> getDeckLeader() {
+        return deckLeader;
+    }
+
     public abstract void checkEndConditions();
+
     public abstract void nextTurn();
 
     /**
@@ -86,6 +91,38 @@ public abstract class Game <T extends Turn> {
                 }});
             }
         }};
+    }
+
+    /**
+     * Setup method for the Leader Deck in the game, loading the cards from the json folder, using gson library.
+     *
+     * @throws FileNotFoundException if there the files are not present
+     */
+    private void loadDeckLeader() throws FileNotFoundException {
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        ArrayList<LeaderCard> leaderCards = new ArrayList<>();
+        String path;
+        int i;
+        for(i = 49; i < 53; i++) {
+            path = String.format("json_file/cards/leader/%03d.json", i);
+            leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DiscountLeaderCard.class));
+        }
+        for(i = 53; i < 57; i++) {
+            path = String.format("json_file/cards/leader/%03d.json", i);
+            leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DepotLeaderCard.class));
+        }
+        for(i = 57; i < 61; i++) {
+            path = String.format("json_file/cards/leader/%03d.json", i);
+            leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), MarbleLeaderCard.class));
+        }
+        for(i = 61; i < 64; i++) {
+            path = String.format("json_file/cards/leader/%03d.json", i);
+            leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), ProductionLeaderCard.class));
+        }
+        this.deckLeader = new Deck<>(leaderCards);
+        this.deckLeader.shuffle();
     }
 
     /**
