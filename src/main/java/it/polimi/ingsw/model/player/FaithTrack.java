@@ -10,8 +10,8 @@ import it.polimi.ingsw.model.game.SinglePlayer;
  *class that models the faithpath of each player(including Leonardo)
  */
 public class FaithTrack implements VictoryPointCalculator {
-    private final VaticanFigure[] figures;   //three vaticanfigures per player
-    private int position;                    //traces where the player is on the faithpath
+    private final VaticanFigure[] figures;
+    private int position;
 
 
     public FaithTrack() {
@@ -55,8 +55,7 @@ public class FaithTrack implements VictoryPointCalculator {
             return points+16;
         else if(position==24)
             return points+20;
-
-        return points;//posso evitare?
+        return points;
     }
 
     /**

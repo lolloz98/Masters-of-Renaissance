@@ -41,7 +41,7 @@ public class Board  implements VictoryPointCalculator{
         resToGain.put(Resource.ANYTHING,1);
         normalProduction= new Production(resToGive,resToGain);
         depotLeaders=new ArrayList<>();
-        /*initialization of depots*/
+        /**initialization of depots*/
         depots= new ArrayList<>();
         for(int i=0;i<3;i++)
             depots.add(new Depot(i+1,true));
