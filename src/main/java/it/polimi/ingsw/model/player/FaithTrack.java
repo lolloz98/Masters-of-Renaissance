@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.MultiPlayer;
 import it.polimi.ingsw.model.game.SinglePlayer;
 
+import java.util.ArrayList;
+
 /**
  *class that models the faithpath of each player(including Leonardo)
  */
@@ -61,45 +63,39 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * method that moves the player through the path and handle the vaticanfigures activation
      */
-    public void move(int steps, Game game){
+    public void move(int steps, Game game) {
         advance(steps);
-        if(iHaveToHandleChecks(steps)){
-            if(game instanceof MultiPlayer)
-                checkpointHandling(steps,(MultiPlayer) game);
-            else
-                checkpointHandling(steps,(SinglePlayer) game);
+        ArrayList<Integer> checkpointnumber = whichCheckpointIsReached(steps);
+        if (!checkpointnumber.isEmpty()) {
+            for (int i = 0; i < checkpointnumber.size(); i++) {
+                if (amiTheFirst( checkpointnumber.get(i))) {
+                    if (game instanceof MultiPlayer)
+                        checkpointHandling(steps, (MultiPlayer) game,checkpointnumber.get(i));
+                    else
+                        checkpointHandling(steps, (SinglePlayer) game, checkpointnumber.get(i));
+                }
+            }
+
         }
-
-    }
-
-    /**
-     * method that @returns true if i have reached a checkpoint and if i'm actually the first that has reached
-     * that checkpoint
-     */
-    private boolean iHaveToHandleChecks(int steps){
-        int checkpointnumber = whichCheckpointIsReached(steps);
-        return checkpointnumber!=-1&&amiTheFirst(checkpointnumber);
     }
 
     /**
      * method that activate the VaticanFigures of the player that has the rights (in a single player game)
      */
-    private void checkpointHandling(int steps, SinglePlayer game){
-        int checkpointnumber = whichCheckpointIsReached(steps);
-            if(game.getTurn().isLorenzoPlaying()){
+    private void checkpointHandling(int steps, SinglePlayer game, int checkpointnumber){
+            if(game.getLorenzo().getFaithTrack().hasRights(checkpointnumber)){
                 game.getLorenzo().getFaithTrack().activateVatican(checkpointnumber);
             }
-            else{
+            if(game.getPlayer().getBoard().getFaithtrack().hasRights(checkpointnumber))
                 game.getPlayer().getBoard().getFaithtrack().activateVatican(checkpointnumber);
-            }
-        }
+    }
+
 
 
     /**
      * method that activate the VaticanFigures of the player that has the rights (in a multi player game)
      */
-    private void checkpointHandling(int steps, MultiPlayer game){
-        int checkpointnumber = whichCheckpointIsReached(steps);
+    private void checkpointHandling(int steps, MultiPlayer game, int checkpointnumber){
             for (Player p:
                     game.getPlayers()) {
                 if(p.getBoard().getFaithtrack().hasRights(checkpointnumber))
@@ -107,7 +103,7 @@ public class FaithTrack implements VictoryPointCalculator {
                 else
                     p.getBoard().getFaithtrack().discardVatican(checkpointnumber);
             }
-        }
+    }
 
 
     /**
@@ -130,19 +126,17 @@ public class FaithTrack implements VictoryPointCalculator {
      * method that checks if the player has reached the checkpoint
      * @return -1 if no checkpoint is reached, or returns the number of the checkpoint reached
      */
-    private int whichCheckpointIsReached(int steps){
+    private ArrayList<Integer> whichCheckpointIsReached(int steps){
         int oldposition=position-steps;
-
-        if(oldposition<24&&position>=24)
-            return 3;
-
-        if(oldposition<16&&position>=16)
-            return 2;
-
+        ArrayList<Integer> checks;
+        checks=new ArrayList<>();
         if(oldposition<8&&position>=8)
-            return 1;
-
-        return -1;
+            checks.add(1);
+        if(oldposition<16&&position>=16)
+            checks.add(2);
+        if(oldposition<24&&position>=24)
+            checks.add(3);
+        return checks;
     }
 
     /**
