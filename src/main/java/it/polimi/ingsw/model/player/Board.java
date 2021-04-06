@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.InvalidProductionChosenException;
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
 import it.polimi.ingsw.model.exception.InvalidSelectionByPlayer;
+import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 
 import java.util.ArrayList;
@@ -45,22 +46,22 @@ public class Board implements VictoryPointCalculator {
     }
 
     public ArrayList<DevelopCardSlot> getDevelopCardSlots() {
-        return new ArrayList<>(developCardSlots);
+        ArrayList<DevelopCardSlot> copy = new ArrayList<>();
+        copy.addAll(developCardSlots);
+        return copy;
     }
 
     public FaithTrack getFaithtrack() {
         return faithtrack;
     }
 
-    public void addLeaderCards(ArrayList<LeaderCard<? extends Requirement>> l) {
-
-    }
-
     /**
-     * method that adds a LeaderProduction to the board
+     * method that add a list of leadercard to the board
+     *
+     * @param l list of leadercards
      */
-    public void addProductionLeader(ProductionLeaderCard c) {
-        productionLeaderSlots.add(c);
+    public void addLeaderCards(ArrayList<LeaderCard<? extends Requirement>> l) {
+        leaderCards.addAll(l);
     }
 
     /**
@@ -70,7 +71,6 @@ public class Board implements VictoryPointCalculator {
      * @param whichprod if zero it refers to the normalProduction, if 1,2 or 3 it refers to which productionSlot,
      *                  if 4 or 5 it refers to the leaderCardProductionSlot.
      */
-
     public void activateProduction(int whichprod, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) throws InvalidResourcesByPlayerException, InvalidProductionChosenException {
         if (whichprod < 0 || whichprod > developCardSlots.size() + productionLeaderSlots.size())
             throw new InvalidProductionChosenException();
