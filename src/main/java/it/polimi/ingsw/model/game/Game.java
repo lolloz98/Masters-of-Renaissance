@@ -8,12 +8,15 @@ import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+
+/**
+ * Class which represents the state of the game. It's abstract as the game mus be either SinglePlayer or MultiPlayer.
+ */
 
 public abstract class Game <T extends Turn> {
     private boolean gameOver;
@@ -21,7 +24,6 @@ public abstract class Game <T extends Turn> {
     private final MarketTray marketTray;
     private T turn;
     private TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
-
     private Deck<LeaderCard> deckLeader;
 
     public Game(){
@@ -33,6 +35,7 @@ public abstract class Game <T extends Turn> {
             // TODO
         }
         this.marketTray = new MarketTray(new MarbleDispenserCollection());
+        this.gameOver = false;
     }
 
     public TreeMap<Color, TreeMap<Integer, DeckDevelop>> getDecksDevelop() {
@@ -167,5 +170,13 @@ public abstract class Game <T extends Turn> {
         marketTray.removeLeaderResources();
     }
 
-
+    /**
+     * Checks if one of the develop decks is empty
+     */
+    public boolean isADeckDevelopEmpty(){
+        for(Color color : Color.values())
+            for(int level = 1; level < 4; level++)
+                if (decksDevelop.get(color).get(level).isEmpty()) return true;
+        return false;
+    }
 }
