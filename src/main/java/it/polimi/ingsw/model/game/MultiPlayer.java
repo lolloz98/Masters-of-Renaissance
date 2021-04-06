@@ -2,15 +2,25 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.player.Player;
 import java.util.ArrayList;
+import java.util.TreeMap;
+
+/**
+ * Concrete extension of the class Game. It has all the variables and methods needed to represent the state of a MultiPlayer game.
+ */
 
 public class MultiPlayer extends Game<TurnMulti> {
     private final ArrayList<Player> players;
     private boolean lastRound;
+    private TreeMap<Player, Integer> leaderBoard;
 
     public MultiPlayer(ArrayList<Player> players){
         super();
         this.players = players;
         this.lastRound = false;
+    }
+
+    public TreeMap<Player, Integer> getLeaderBoard() {
+        return leaderBoard;
     }
 
     public boolean isLastRound() {
@@ -31,8 +41,9 @@ public class MultiPlayer extends Game<TurnMulti> {
     @Override
     public void checkEndConditions(){
         for(Player p : players) {
-            if (p.getBoard().getFaithtrack().isEndReached()) setLastRound(true);
-            if (p.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 6) setLastRound(true);
+            if (p.getBoard().getFaithtrack().isEndReached() ||
+                    p.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 6)
+                setLastRound(true);
         }
     }
 
@@ -44,9 +55,21 @@ public class MultiPlayer extends Game<TurnMulti> {
         TurnMulti turn = getTurn().nextTurn(this);
         if (turn == null){
             setGameOver(true);
-            // TODO: points computation
+            computeLeaderBoard();
         }
         else setTurn(turn);
     }
+
+    /**
+     * Computes the points of all the players
+     */
+    private void computeLeaderBoard(){
+        leaderBoard = new TreeMap<>(){{
+            for (Player p : players){
+                put(p, p.getBoard().getVictoryPoints());
+            }
+        }};
+    }
+
 
 }

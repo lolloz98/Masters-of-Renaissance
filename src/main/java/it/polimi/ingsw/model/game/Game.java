@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+/**
+ * Class which represents the state of the game. It's abstract as the game mus be either SinglePlayer or MultiPlayer.
+ */
+
 public abstract class Game <T extends Turn> {
     private boolean gameOver;
     private int id;

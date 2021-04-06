@@ -5,12 +5,17 @@ import it.polimi.ingsw.model.cards.lorenzo.*;
 import it.polimi.ingsw.model.player.Player;
 import java.util.ArrayList;
 
+/**
+ * Concrete extension of the class Game. It has all the variables and methods needed to represent the state of a SinglePlayer game.
+ */
+
 public class SinglePlayer extends Game<TurnSingle>{
     private final Player player;
     private final Lorenzo lorenzo;
     private LorenzoDeck lorenzoDeck;
     private boolean lastTurn;
     private boolean hasPlayerWon;
+    private int playerPoints;
 
     public boolean isLastTurn() {
         return lastTurn;
@@ -33,6 +38,7 @@ public class SinglePlayer extends Game<TurnSingle>{
         this.player = player;
         this.lorenzo = new Lorenzo();
         this.hasPlayerWon = false;
+        this.playerPoints = 0;
         createLorenzoDeck();
     }
 
@@ -48,7 +54,9 @@ public class SinglePlayer extends Game<TurnSingle>{
         return lorenzo;
     }
 
-
+    /**
+     * Setup method for the Lorenzo Deck.
+     */
     public void createLorenzoDeck(){
         ArrayList<LorenzoCard> lorenzoCards = new ArrayList<>();
         lorenzoCards.add(new DevelopLorenzoCard(65, Color.GOLD));
@@ -84,7 +92,7 @@ public class SinglePlayer extends Game<TurnSingle>{
         TurnSingle turn = getTurn().nextTurn(this);
         if (turn == null){
             setGameOver(true);
-            // TODO: points computation
+            this.playerPoints = player.getBoard().getVictoryPoints();
         }
         else setTurn(turn);
     }
