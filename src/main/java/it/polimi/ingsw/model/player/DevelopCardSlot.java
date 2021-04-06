@@ -16,11 +16,15 @@ import java.util.TreeMap;
  */
 public class DevelopCardSlot {
     private ArrayList<DevelopCard> cards;
-    private DevelopCard lastCard;
 
     public DevelopCardSlot() {
         this.cards = new ArrayList<>();
-        lastCard=null;
+    }
+
+    public ArrayList<DevelopCard> getCards() {
+        ArrayList<DevelopCard> copy=new ArrayList<>();
+        copy.addAll(cards);
+        return copy;
     }
 
     public void addDevelopCard(DevelopCard card){
@@ -28,17 +32,14 @@ public class DevelopCardSlot {
         switch (howmanycards){
             case 0:{
                 if(card.getLevel()!=1)throw new InvalidDevelopCardToSlotException();
-                lastCard=card;
                 cards.add(card);
             }
             case 1:{
                 if(card.getLevel()!=2)throw new InvalidDevelopCardToSlotException();
-                lastCard=card;
                 cards.add(card);
             }
             case 2:{
                 if(card.getLevel()!=3)throw new InvalidDevelopCardToSlotException();
-                lastCard=card;
                 cards.add(card);
             }
             case 3:{
@@ -49,11 +50,11 @@ public class DevelopCardSlot {
     }
 
     public void applyProduction(TreeMap<Resource,Integer> resToGive, TreeMap<Resource,Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionChosenException {
-        if(lastCard==null) throw new InvalidProductionChosenException();
-        lastCard.getProduction().applyProduction(resToGive,resToGain,board);
+        if(isEmpty()) throw new InvalidProductionChosenException();
+        cards.get(cards.size()-1).getProduction().applyProduction(resToGive,resToGain,board);
     }
 
-    public boolean emptySlot(){
-        return lastCard==null;
+    public boolean isEmpty(){
+        return cards.size()==0;
     }
 }

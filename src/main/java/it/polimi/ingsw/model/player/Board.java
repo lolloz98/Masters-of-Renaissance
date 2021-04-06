@@ -3,9 +3,7 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.cards.Production;
 import it.polimi.ingsw.model.cards.VictoryPointCalculator;
-import it.polimi.ingsw.model.cards.leader.DepotLeaderCard;
-import it.polimi.ingsw.model.cards.leader.ProductionLeaderCard;
-import it.polimi.ingsw.model.cards.leader.RequirementLevelDevelop;
+import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.InvalidProductionChosenException;
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
 import it.polimi.ingsw.model.exception.InvalidSelectionByPlayer;
@@ -20,6 +18,7 @@ import java.util.TreeMap;
 public class Board  implements VictoryPointCalculator{
     private final FaithTrack faithtrack;
     private final StrongBox strongbox;
+    private final ArrayList<LeaderCard<? extends Requirement>> leaderCards;
     private final ArrayList<DevelopCardSlot> developCardSlots;
     private ArrayList<ProductionLeaderCard> productionLeaderSlots;
     private final Production normalProduction;
@@ -29,34 +28,41 @@ public class Board  implements VictoryPointCalculator{
     public Board() {
         this.faithtrack = new FaithTrack();
         this.strongbox=new StrongBox();
-        /*initialization developcardslots*/
+        leaderCards=new ArrayList<>();
         developCardSlots=new ArrayList<>();
         for(int i=0;i<3;i++)
             developCardSlots.add(new DevelopCardSlot());
         productionLeaderSlots=new ArrayList<>();
-        /*initialization normal production*/
         TreeMap<Resource,Integer> resToGive=new TreeMap<>();
         TreeMap<Resource,Integer> resToGain=new TreeMap<>();
         resToGive.put(Resource.ANYTHING,2);
         resToGain.put(Resource.ANYTHING,1);
         normalProduction= new Production(resToGive,resToGain);
         depotLeaders=new ArrayList<>();
-        /**initialization of depots*/
         depots= new ArrayList<>();
         for(int i=0;i<3;i++)
             depots.add(new Depot(i+1,true));
+    }
+
+    public ArrayList<DevelopCardSlot> getDevelopCardSlots() {
+        ArrayList<DevelopCardSlot> copy=new ArrayList<>();
+        copy.addAll(developCardSlots);
+        return copy;
     }
 
     public FaithTrack getFaithtrack() {
         return faithtrack;
     }
 
+    public void addLeaderCards(ArrayList<LeaderCard> l) {
+
+    }
+
     /**
      * method that adds a LeaderProduction to the board
      */
-    public void addProductionLeader(int victoryPoints, RequirementLevelDevelop requirement, Production production, int id){
-        ProductionLeaderCard newProd= new ProductionLeaderCard( victoryPoints,  requirement,  production,  id);
-        productionLeaderSlots.add(newProd);
+    public void addProductionLeader(ProductionLeaderCard c){
+        productionLeaderSlots.add(c);
     }
 
     /**
@@ -117,7 +123,7 @@ public class Board  implements VictoryPointCalculator{
 
 
     private boolean theLeaderProductionIsActivated(int whichLeader){
-       if(productionLeaderSlots.get(whichLeader)!=null)
+       if(productionLeaderSlots.size()<whichLeader)
        return productionLeaderSlots.get(whichLeader).isActive();
        return false;
     }
