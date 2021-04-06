@@ -64,7 +64,7 @@ public class SinglePlayer extends Game<TurnSingle>{
         lorenzoCards.add(new DevelopLorenzoCard(67, Color.BLUE));
         lorenzoCards.add(new DevelopLorenzoCard(68, Color.GREEN));
         lorenzoCards.add(new FaithLorenzoCard(69));
-        lorenzoCards.add(new ReshuffleLorenzoCard(69));
+        lorenzoCards.add(new ReshuffleLorenzoCard(70));
         this.lorenzoDeck = new LorenzoDeck(lorenzoCards);
     }
 
