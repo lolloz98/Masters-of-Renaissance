@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
-
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -122,7 +121,7 @@ public class MarketTray {
             else{ // case with two leader resources
                 TreeMap<Resource, Integer> tmp;
                 for(int i = 0; i<=howManyWhites; i++){ // computing all possible combinations of the two resources
-                    tmp = (TreeMap<Resource, Integer>) resourcesTaken.clone(); // FIXME: not sure about that
+                    tmp = new TreeMap<>(resourcesTaken);
                     for(int j = 0; j<i; j++){
                         addToResMap(tmp, leaderResources.get(0));
                     }
