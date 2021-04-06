@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
+import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -148,4 +149,23 @@ public abstract class Game <T extends Turn> {
     public ArrayList<TreeMap<Resource, Integer>> useMarketTray(boolean onRow, int index) throws MatrixIndexOutOfBoundException {
         return marketTray.pushMarble(onRow, index);
     }
+
+    /**
+     * Adds a resource to the leaderResources in marketTray
+     *
+     * @param resource is the resource to add
+     * @throws TooManyLeaderResourcesException if there are already 2 resource in the list
+     */
+    public void updateMarketWithLeader(Resource resource) {
+        marketTray.addLeaderResource(resource);
+    }
+
+    /**
+     * Removes all leaderResources from the marketTray
+     */
+    public void removeLeaderResFromMarket() {
+        marketTray.removeLeaderResources();
+    }
+
+
 }
