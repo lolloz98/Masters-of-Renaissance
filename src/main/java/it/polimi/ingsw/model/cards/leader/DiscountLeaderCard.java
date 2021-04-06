@@ -1,8 +1,12 @@
 package it.polimi.ingsw.model.cards.leader;
 
+import it.polimi.ingsw.model.cards.Color;
+import it.polimi.ingsw.model.cards.DeckDevelop;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.player.Player;
+
+import java.util.TreeMap;
 
 public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelop> {
     private final Resource res;
@@ -29,16 +33,36 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
 
     @Override
     public void applyEffect(Game<?> game) {
-        if(isActive()) applyEffectNoCheckOnActive(game);
+        if (isActive()) applyEffectNoCheckOnActive(game);
     }
 
+    /**
+     * Apply discounts to the develop cards still to be sold in the game
+     *
+     * @param game current game: it is affected by this method
+     */
     @Override
     protected void applyEffectNoCheckOnActive(Game<?> game) {
-        // TODO: discount the cards in the game
+        // TODO: check
+        TreeMap<Color, TreeMap<Integer, DeckDevelop>> decks = game.getDecksDevelop();
+        for (Color c : decks.keySet()) {
+            decks.get(c).forEach((i, d) -> d.applyDiscount(res, quantity));
+        }
     }
 
+    /**
+     * If any, remove discounts from the cards still to be sold in the game
+     *
+     * @param game current game, it is affected by this method
+     */
     @Override
     public void removeEffect(Game<?> game) {
-        // TODO: remove the discounts on the cards in the game
+        // TODO: check
+        if (isActive()) {
+            TreeMap<Color, TreeMap<Integer, DeckDevelop>> decks = game.getDecksDevelop();
+            for (Color c : decks.keySet()) {
+                decks.get(c).forEach((i, d) -> d.removeDiscounts());
+            }
+        }
     }
 }

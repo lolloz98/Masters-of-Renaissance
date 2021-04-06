@@ -27,9 +27,15 @@ public class RequirementResource implements Requirement{
         return quantity;
     }
 
+    /**
+     * @param player player owning the object with this requirement
+     * @return true, if the player has enough resources to spend for this requirement
+     */
     @Override
     public boolean checkRequirement(Player player) {
-        // TODO: check if in the board of the player there are the necessary resources
-        return false;
+        // TODO: check
+        return player.getBoard().enoughResToActivate(new TreeMap<>(){{
+            put(res, quantity);
+        }});
     }
 }

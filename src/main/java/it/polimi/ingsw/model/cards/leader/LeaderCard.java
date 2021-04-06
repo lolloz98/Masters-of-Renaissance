@@ -88,4 +88,9 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
     public boolean checkRequirement(Player player){
         return requirement.checkRequirement(player);
     }
+
+    /**
+     * @return requirement for the activation of this card
+     */
+    protected T getRequirement(){return requirement;}
 }

@@ -2,8 +2,10 @@ package it.polimi.ingsw.model.cards.leader;
 
 import it.polimi.ingsw.model.cards.Production;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.MultiPlayer;
+import it.polimi.ingsw.model.game.SinglePlayer;
 
-public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevelop>{
+public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevelop> {
     private final Production production;
 
     public ProductionLeaderCard(int victoryPoints, RequirementLevelDevelop requirement, Production production, int id) {
@@ -11,16 +13,36 @@ public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevel
         this.production = production;
     }
 
+    /**
+     * This method does nothing on this Leader
+     *
+     * @param game current game
+     */
     @Override
     public void applyEffect(Game<?> game) {
         // the effect of this card is applied only on activation. this method does nothing
     }
 
+    /**
+     * Add this Leader to the board productionLeaders
+     *
+     * @param game current game: it is affected by this method
+     */
     @Override
     protected void applyEffectNoCheckOnActive(Game<?> game) {
-        // TODO: add a new production on the player board
+        // TODO: check
+        if ((game instanceof SinglePlayer)) {
+            ((SinglePlayer) game).getPlayer().getBoard().discoverProductionLeader(this);
+        } else {
+            ((MultiPlayer) game).getTurn().getCurrentPlayer().getBoard().discoverProductionLeader(this);
+        }
     }
 
+    /**
+     * This method does nothing on this Leader
+     *
+     * @param game current game
+     */
     @Override
     public void removeEffect(Game<?> game) {
         // On this type of leader removeEffect does nothing

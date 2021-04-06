@@ -39,7 +39,7 @@ public class Production {
      * @param resourcesToGive resource that the player wants to give to apply the production
      * @param resourcesToGain resource that the player wants to gain after the application production
      * @param board board of the player
-     * @throws  InvalidResourcesForProductionActivationException if resourceToGive or resourcesToGain are invalid for the activation of the production
+     * @throws InvalidResourcesForProductionActivationException if resourceToGive or resourcesToGain are invalid for the activation of the production
      * @throws ProductionAlreadyActivatedException if the production has already been activated in this turn
      * @throws InvalidResourcesByPlayerException if resourcesToGive or resourcesToGain contain invalid type of Resources
      */
@@ -47,8 +47,7 @@ public class Production {
         if(!checkResToGiveForActivation(resourcesToGive)) throw new InvalidResourcesForProductionActivationException();
         if(!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesForProductionActivationException();
         if(hasBeenActivated()) throw new ProductionAlreadyActivatedException();
-        // TODO: remove resourcesToGive from board
-
+        board.removeResources(resourcesToGive);
         gainedResources.putAll(resourcesToGain);
     }
 
@@ -125,8 +124,8 @@ public class Production {
      * @param board board of the player
      */
     public void flushGainedToBoard(Board board){
-        // TODO: call somethings like board.flush(gainedResources) after board implementation
-
+        // TODO: check
+        board.flushGainedResources(gainedResources);
         gainedResources.clear();
     }
 }

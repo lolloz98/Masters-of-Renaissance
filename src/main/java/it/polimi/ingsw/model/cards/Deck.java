@@ -16,6 +16,9 @@ public class Deck<T extends Card> {
         return cards.isEmpty();
     }
 
+    /**
+     * @return number of cards still in this deck
+     */
     public int howManyCards(){
         return cards.size();
     }

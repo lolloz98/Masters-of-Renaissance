@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.cards.leader;
 
 import it.polimi.ingsw.model.cards.Color;
+import it.polimi.ingsw.model.cards.DevelopCard;
+import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
 
 public class RequirementLevelDevelop implements Requirement {
@@ -26,9 +28,16 @@ public class RequirementLevelDevelop implements Requirement {
         return color;
     }
 
+    /**
+     * @param player player owning the object with this requirement
+     * @return true, if the player has at least a DevelopCard of level 2 of color this.color
+     */
     @Override
     public boolean checkRequirement(Player player) {
-        // TODO: check if in player there is the requiredDevelop by color and level
+        // TODO: check
+        for(DevelopCardSlot ds: player.getBoard().getDevelopCardSlots())
+            for(DevelopCard c: ds.getCards())
+                if(c.getLevel() == level && c.getColor() == color) return true;
         return false;
     }
 }
