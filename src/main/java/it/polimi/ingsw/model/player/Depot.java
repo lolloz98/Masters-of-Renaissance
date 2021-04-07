@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.model.exception.*;
 import it.polimi.ingsw.model.game.Resource;
 
+import java.util.TreeMap;
+
 /**
  *class that models a shelf of the warehouse, leaders shelfs's included
  */
@@ -34,8 +36,18 @@ public class Depot {
         this.modifiable=false;
     }
 
+
     public int getStored() {
         return stored;
+    }
+
+    /**
+     * @return resources contained in this depot
+     */
+    public TreeMap<Resource, Integer> getStoredResources(){
+        return new TreeMap<>(){{
+            put(resource, stored);
+        }};
     }
 
     public int getMaxToStore() {
@@ -64,9 +76,13 @@ public class Depot {
 
     /**
      * modifies the type of resource that the depot contains
+     *
+     * @param type new type of resources that the depot can contain
+     * @throws DepotResourceModificationException if the Depot is not modifiable, or it is not empty
      */
     public void modifyTypeOfResource(Resource type){
         if(!isResModifiable()) throw new DepotResourceModificationException();
+        if(stored != 0) throw new DepotResourceModificationException();
         resource=type;
     }
 

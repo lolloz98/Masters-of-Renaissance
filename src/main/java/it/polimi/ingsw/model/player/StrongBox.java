@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.model.exception.InvalidResourcesToAddToStrongBoxException;
-import it.polimi.ingsw.model.exception.NotEnoughResourcesExeption;
+import it.polimi.ingsw.model.exception.NotEnoughResourcesException;
+import it.polimi.ingsw.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.model.game.Resource;
 
 import java.util.TreeMap;
@@ -10,7 +10,7 @@ import java.util.TreeMap;
  * class that models the lockbox of the player
  */
 public class StrongBox {
-    private TreeMap<Resource,Integer> resources;
+    private final TreeMap<Resource,Integer> resources;
 
     public StrongBox() {
         resources = new TreeMap<>();
@@ -24,35 +24,51 @@ public class StrongBox {
     }
 
     public TreeMap<Resource, Integer> getResources() {
-        TreeMap<Resource, Integer> StrongBoxContent=new TreeMap<>();
-        StrongBoxContent.putAll(resources);
-        return StrongBoxContent;
+        return new TreeMap<>(resources);
     }
 
     /**
-     * method that add discountableresources(==GOLD,SHIELD,ROCK,SERVANT) to the strongbox
+     * Add resGained to the strongBox
+     *
+     * @param resGained gained resources, to add to the strongBox
+     * @throws IllegalArgumentException if there is any negative integer in resGained
+     * @throws ResourceNotDiscountableException if there is any resource notDiscountable in resGained
      */
-    public void addResources(TreeMap<Resource,Integer> resGained){
-        for(Resource r: resGained.keySet()){
-            if(resGained.get(r)<0) throw new InvalidResourcesToAddToStrongBoxException();
-            if(Resource.isDiscountable(r))
-                resources.replace(r,resources.get(r)+resGained.get(r));
+    public void addResources(TreeMap<Resource, Integer> resGained) {
+        for (Resource r : resGained.keySet()) {
+            if (resGained.get(r) < 0) throw new IllegalArgumentException();
+            if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+            if (resources.containsKey(r)) {
+                resources.replace(r, resources.get(r) + resGained.get(r));
+            } else {
+                resources.put(r, resGained.get(r));
+            }
         }
     }
 
     /**
-     * method that subtract the resources to the strongbox
+     * Subtract resources in resToSpend from the strongBox
+     *
+     * @param resToSpend resources to subtract from the strongBox
+     * @throws NotEnoughResourcesException if there are not enough resources in the strongBox
+     * @throws IllegalArgumentException if there is a negative Integer in resToSpend
      */
-    public void spendResources(TreeMap<Resource,Integer> resToSpend){
-        if(!hasResources(resToSpend)) throw new NotEnoughResourcesExeption();
-        for(Resource r: resToSpend.keySet()){
-            if(resToSpend.get(r)<0) throw new InvalidResourcesToAddToStrongBoxException();
-            resources.replace(r,resources.get(r)-resToSpend.get(r));
+    public void spendResources(TreeMap<Resource, Integer> resToSpend) {
+        if (!hasResources(resToSpend)) throw new NotEnoughResourcesException();
+        for (Resource r : resToSpend.keySet()) {
+            if (resToSpend.get(r) < 0) throw new IllegalArgumentException();
+            resources.replace(r, resources.get(r) - resToSpend.get(r));
         }
     }
 
-    private boolean hasResources(TreeMap<Resource,Integer> resToSpend){
+    /**
+     * @param resToSpend check if the strongBox has this amount of resources
+     * @return true, if there are at least resToSpend resources in the strongBox, false otherwise
+     */
+    public boolean hasResources(TreeMap<Resource,Integer> resToSpend){
         for(Resource r: resToSpend.keySet()) {
+            if(resources.get(r) == null && resToSpend.get(r) > 0)
+                return false;
             if (resources.get(r) < resToSpend.get(r))
                 return false;
         }

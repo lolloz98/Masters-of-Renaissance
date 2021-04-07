@@ -4,10 +4,7 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.model.cards.Production;
 import it.polimi.ingsw.model.cards.VictoryPointCalculator;
 import it.polimi.ingsw.model.cards.leader.*;
-import it.polimi.ingsw.model.exception.InvalidProductionChosenException;
-import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
-import it.polimi.ingsw.model.exception.InvalidSelectionByPlayer;
-import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.exception.*;
 import it.polimi.ingsw.model.game.Resource;
 
 import java.util.ArrayList;
@@ -46,9 +43,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     public ArrayList<DevelopCardSlot> getDevelopCardSlots() {
-        ArrayList<DevelopCardSlot> copy = new ArrayList<>();
-        copy.addAll(developCardSlots);
-        return copy;
+        return new ArrayList<>(developCardSlots);
     }
 
     public FaithTrack getFaithtrack() {
@@ -90,17 +85,17 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * @requires a TreeMap with only discountable resources
-     * method that checks if i have enough resources to activate the production
-     * the idea is to copy @param resToGive into diffMap and foreach resource of that type that i have in the Depot/LeaderDepot/StrongBox
-     * subtract to diff map the value associated to the resource r. if at the end every value of the diffmap is less or equal
-     * to zero @return true
+     * checks if i have enough resources compared to resToGive
+     *
+     * @param resToGive to be checked if in board there are at least this amount of resources
+     * @return true if there are enough resources on the board, false otherwise
+     * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
     public boolean enoughResToActivate(TreeMap<Resource, Integer> resToGive) {
-        if (resToGive.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
         TreeMap<Resource, Integer> diffMap = new TreeMap<>();
         diffMap.putAll(resToGive);
         for (Resource r : diffMap.keySet()) {
+            if(!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
             for (Depot d : depots) {
                 if (d.contains(r))
                     diffMap.replace(r, diffMap.get(r) - d.getStored());
@@ -129,16 +124,20 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * @requires the board has enough resToGive
-     * method that takes in input a @param TreeMap of resources to give and remove these from the board.
-     * it gives the priority to the normal Depots, than it removes resources from LeaderDepots and at the end it removes the res
-     * from the strongbox
+     * remove resToGive from the board.
+     * It removes the resources in this order: from the normal Depots, from LeaderDepots (if any) and from the strongbox
+     *
+     * @param resToGive resources to be removed from the board
+     * @throws NotEnoughResourcesException if there are not enough resources on the board
+     * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
      */
     public void removeResources(TreeMap<Resource, Integer> resToGive) {
+        if(!enoughResToActivate(resToGive)) throw new NotEnoughResourcesException();
         int tmp;
         TreeMap<Resource, Integer> resToSpend = new TreeMap<>();
         resToSpend.putAll(resToGive);
         for (Resource r : resToSpend.keySet()) {
+            if(!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
             for (Depot d : depots) {
                 if (d.contains(r)) {
                     if (!d.enoughResources(resToSpend.get(r))) {
@@ -201,6 +200,52 @@ public class Board implements VictoryPointCalculator {
      */
     public void flushGainedResources(TreeMap<Resource, Integer> gainedResources) {
         strongbox.addResources(gainedResources);
+    }
+
+    public TreeMap<Resource, Integer> getResourcesInStrongBox(){
+        return strongbox.getResources();
+    }
+
+    /**
+     * @param whichDepot number of depot to get
+     * @return the resources in the specified depot
+     * @throws IllegalArgumentException if whichDepot is lower than 0 or greater than 2
+     */
+    public TreeMap<Resource, Integer> getResInDepot(int whichDepot){
+        if(whichDepot < 0 || whichDepot > 2) throw new IllegalArgumentException();
+        return depots.get(whichDepot).getStoredResources();
+    }
+
+    /**
+     * @return list of leaderCards of the player
+     */
+    public ArrayList<LeaderCard<? extends Requirement>> getLeaderCards(){
+        return new ArrayList<>(leaderCards);
+    }
+
+    /**
+     * @return active productionLeaderCards on the board
+     */
+    public ArrayList<ProductionLeaderCard> getProductionLeaders(){
+        return new ArrayList<>(productionLeaderSlots);
+    }
+
+    /**
+     * @return active depotLeaderCards on the board
+     */
+    public ArrayList<DepotLeaderCard> getDepotLeaders(){
+        return new ArrayList<>(depotLeaders);
+    }
+
+    /**
+     * definitely removes card from the leaderCards of the board
+     *
+     * @param card card to be removed from the board
+     * @throws IllegalArgumentException if the cards was not contained in leaderCards of the board
+     */
+    public void removeLeaderCard(LeaderCard<? extends Requirement> card){
+        if(!leaderCards.contains(card)) throw new IllegalArgumentException();
+        leaderCards.remove(card);
     }
 }
 

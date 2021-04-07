@@ -15,18 +15,22 @@ import java.util.TreeMap;
  * class that models the three production slots of each player
  */
 public class DevelopCardSlot {
-    private ArrayList<DevelopCard> cards;
+    private final ArrayList<DevelopCard> cards;
 
     public DevelopCardSlot() {
         this.cards = new ArrayList<>();
     }
 
     public ArrayList<DevelopCard> getCards() {
-        ArrayList<DevelopCard> copy=new ArrayList<>();
-        copy.addAll(cards);
-        return copy;
+        return new ArrayList<>(cards);
     }
 
+    /**
+     * Add card to this
+     *
+     * @param card card to be added
+     * @throws InvalidDevelopCardToSlotException if the level of the card to be added is not right
+     */
     public void addDevelopCard(DevelopCard card){
         int howmanycards=cards.size();
         switch (howmanycards){
@@ -49,6 +53,15 @@ public class DevelopCardSlot {
 
     }
 
+    /**
+     * Apply the production of the develop card on top of this slot
+     *
+     * @param resToGive resource to give to apply the production
+     * @param resToGain resource to gain after the application of the production
+     * @param board board of the player who is applying the production
+     * @throws InvalidResourcesByPlayerException if resToGive or resToGain contains invalid resources
+     * @throws InvalidProductionChosenException if this does not contain any develop card
+     */
     public void applyProduction(TreeMap<Resource,Integer> resToGive, TreeMap<Resource,Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionChosenException {
         if(isEmpty()) throw new InvalidProductionChosenException();
         cards.get(cards.size()-1).getProduction().applyProduction(resToGive,resToGain,board);
