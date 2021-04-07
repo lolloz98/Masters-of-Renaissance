@@ -1,18 +1,31 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
 import it.polimi.ingsw.model.exception.NotEnoughResourcesException;
+import it.polimi.ingsw.model.exception.ProductionAlreadyActivatedException;
+import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.MultiPlayer;
 import it.polimi.ingsw.model.game.Resource;
+import it.polimi.ingsw.model.game.SinglePlayer;
 import it.polimi.ingsw.model.player.Board;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.utility.Utility;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.internal.TextListener;
+import org.junit.runner.JUnitCore;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import static org.junit.Assert.*;
 
 public class ProductionTest {
+    private static final Logger logger = LogManager.getLogger(ProductionTest.class);
 
     TreeMap<Resource, Integer> toGive;
     TreeMap<Resource, Integer> toGain;
@@ -20,6 +33,19 @@ public class ProductionTest {
     TreeMap<Resource, Integer> chosenByPlayerGain;
     Production production;
     Board board;
+    static boolean isSinglePlayer = true;
+    Game<?> game;
+    SinglePlayer singlePlayer;
+    MultiPlayer multiPlayer;
+
+    @BeforeClass
+    public static void infoOnGame(){
+        if(isSinglePlayer){
+            logger.info("testing with singlePlayer game");
+        }else{
+            logger.info("testing with MultiPlayer game");
+        }
+    }
 
     @Before
     public void setUp() {
@@ -49,6 +75,15 @@ public class ProductionTest {
             put(Resource.GOLD, 1);
         }};
 
+        singlePlayer = new SinglePlayer(new Player("john", 0));
+
+        multiPlayer = new MultiPlayer(new ArrayList<>(){{
+            add(new Player("marco", 0));
+            add(new Player("lollo", 1));
+        }});
+
+        game = (isSinglePlayer)? singlePlayer: multiPlayer;
+
         board = new Board();
         for(int i = 0; i < 3; i++)
             assertTrue(board.getResInDepot(i).isEmpty());
@@ -74,6 +109,84 @@ public class ProductionTest {
         } catch (InvalidResourcesByPlayerException e) {
             fail();
         } catch(NotEnoughResourcesException ignore){}
+
+        // put in the strongBox
+        board.flushGainedResources(chosenByPlayerGive, game);
+        try {
+            production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
+            assertTrue(Utility.checkTreeMapEquality(new TreeMap<>(), board.getResourcesInStrongBox()));
+            production.flushGainedToBoard(board, singlePlayer);
+            assertTrue(Utility.checkTreeMapEquality(chosenByPlayerGain, board.getResourcesInStrongBox()));
+        } catch (InvalidResourcesByPlayerException e) {
+            fail();
+        }
+
+        // put in the strongBox
+        board.flushGainedResources(chosenByPlayerGive, game);
+        try {
+            production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
+            // reapply production before flushing
+            board.flushGainedResources(chosenByPlayerGive, game);
+            production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
+            fail();
+        } catch (InvalidResourcesByPlayerException e) {
+            fail();
+        } catch(ProductionAlreadyActivatedException ignored){}
+
+
+        board = new Board();
+
+        chosenByPlayerGive = new TreeMap<>() {{
+            put(Resource.GOLD, 2);
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT, 2);
+        }};
+
+        // Faith can't take the place of ANYTHING
+        chosenByPlayerGain = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.FAITH, 1);
+        }};
+
+        board.flushGainedResources(chosenByPlayerGive, game);
+        try {
+            production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
+            fail();
+        } catch (InvalidResourcesByPlayerException ignored) {}
+
+
+        board = new Board();
+
+        toGain = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.FAITH, 1);
+        }};
+
+        production = new Production(toGive, toGain);
+
+        chosenByPlayerGive = new TreeMap<>() {{
+            put(Resource.GOLD, 2);
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT, 2);
+        }};
+
+        chosenByPlayerGain = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.FAITH, 1);
+        }};
+
+        board.flushGainedResources(chosenByPlayerGive, game);
+        try {
+            production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
+            assertTrue(Utility.checkTreeMapEquality(new TreeMap<>(), board.getResourcesInStrongBox()));
+            production.flushGainedToBoard(board, game);
+
+            chosenByPlayerGain.remove(Resource.FAITH);
+            assertTrue(Utility.checkTreeMapEquality(chosenByPlayerGain, board.getResourcesInStrongBox()));
+        } catch (InvalidResourcesByPlayerException e) {
+            fail();
+        }
+
         // todo: more testing. and test also when done board.gainRes first
     }
 
@@ -173,11 +286,58 @@ public class ProductionTest {
 
     @Test
     public void testFlushGainedToBoard() {
-        // TODO: after implementation of board
+        // Check out testApplyProduction
     }
 
     @Test
     public void testGetGainedResources() {
-        // TODO: after implementation of board
+        // put in the strongBox
+        board.flushGainedResources(chosenByPlayerGive, game);
+        try {
+            production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
+            assertTrue(Utility.checkTreeMapEquality(production.getGainedResources(), chosenByPlayerGain));
+        } catch (InvalidResourcesByPlayerException e) {
+            fail();
+        }
+
+
+        board = new Board();
+
+        toGain = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.FAITH, 1);
+        }};
+
+        production = new Production(toGive, toGain);
+
+        chosenByPlayerGive = new TreeMap<>() {{
+            put(Resource.GOLD, 2);
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT, 2);
+        }};
+
+        chosenByPlayerGain = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.FAITH, 1);
+        }};
+
+        board.flushGainedResources(chosenByPlayerGive, game);
+        try {
+            production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
+            assertTrue(Utility.checkTreeMapEquality(new TreeMap<>(), board.getResourcesInStrongBox()));
+            assertTrue(Utility.checkTreeMapEquality(production.getGainedResources(), chosenByPlayerGain));
+        } catch (InvalidResourcesByPlayerException e) {
+            fail();
+        }
+    }
+
+    @After
+    public void afterSingle(){
+        if(isSinglePlayer){
+            isSinglePlayer = false;
+            JUnitCore junit = new JUnitCore();
+            junit.addListener(new TextListener(System.out));
+            junit.run(ProductionTest.class);
+        }
     }
 }

@@ -196,12 +196,17 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * flush resources to the strongbox
+     * flush resources to the strongbox. If there is FAITH in gainedResources, move on the faithTrack
      *
      * @param gainedResources are put in the strongbox
+     * @param game current game
      */
-    public void flushGainedResources(TreeMap<Resource, Integer> gainedResources) {
-        strongbox.addResources(gainedResources);
+    public void flushGainedResources(TreeMap<Resource, Integer> gainedResources, Game<?> game) {
+        if(gainedResources.getOrDefault(Resource.FAITH, 0) > 0)
+            this.faithtrack.move(1, game);
+        TreeMap<Resource, Integer> c = new TreeMap<>(gainedResources);
+        c.remove(Resource.FAITH);
+        strongbox.addResources(c);
     }
 
     public TreeMap<Resource, Integer> getResourcesInStrongBox(){

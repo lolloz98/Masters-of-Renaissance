@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
 import it.polimi.ingsw.model.exception.InvalidResourcesForProductionActivationException;
 import it.polimi.ingsw.model.exception.ProductionAlreadyActivatedException;
+import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.player.Board;
 
@@ -33,13 +34,12 @@ public class Production {
      * @param resourcesToGive resource that the player wants to give to apply the production
      * @param resourcesToGain resource that the player wants to gain after the application production
      * @param board board of the player
-     * @throws InvalidResourcesForProductionActivationException if resourceToGive or resourcesToGain are invalid for the activation of the production
      * @throws ProductionAlreadyActivatedException if the production has already been activated in this turn
      * @throws InvalidResourcesByPlayerException if resourcesToGive or resourcesToGain contain invalid type of Resources
      */
     public void applyProduction(TreeMap<Resource, Integer> resourcesToGive, TreeMap<Resource, Integer> resourcesToGain, Board board) throws InvalidResourcesByPlayerException {
-        if(!checkResToGiveForActivation(resourcesToGive)) throw new InvalidResourcesForProductionActivationException();
-        if(!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesForProductionActivationException();
+        if(!checkResToGiveForActivation(resourcesToGive)) throw new InvalidResourcesByPlayerException();
+        if(!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesByPlayerException();
         if(hasBeenActivated()) throw new ProductionAlreadyActivatedException();
         board.removeResources(resourcesToGive);
         gainedResources.putAll(resourcesToGain);
@@ -112,12 +112,15 @@ public class Production {
     }
 
     /**
-     * Put in the board the resources gained from this production
+     * Put in the board the resources gained from this production.
+     * If in the gained resources there is FAITH points, then move on the faith track.
+     *
      * @param board board of the player
+     * @param game current game
      */
-    public void flushGainedToBoard(Board board){
+    public void flushGainedToBoard(Board board, Game<?> game){
         // TODO: check
-        board.flushGainedResources(gainedResources);
+        board.flushGainedResources(gainedResources, game);
         gainedResources.clear();
     }
 }
