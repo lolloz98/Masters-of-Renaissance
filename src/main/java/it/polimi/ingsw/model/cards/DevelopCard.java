@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.exception.AlreadyAppliedDiscountForResException;
 import it.polimi.ingsw.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.model.game.Resource;
-import it.polimi.ingsw.model.player.Board;
 
 import java.util.TreeMap;
 

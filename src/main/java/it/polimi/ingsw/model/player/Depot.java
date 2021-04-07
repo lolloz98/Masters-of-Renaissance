@@ -45,9 +45,9 @@ public class Depot {
      * @return resources contained in this depot
      */
     public TreeMap<Resource, Integer> getStoredResources(){
-        return new TreeMap<>(){{
+        return (isEmpty()? new TreeMap<>() : new TreeMap<>(){{
             put(resource, stored);
-        }};
+        }});
     }
 
     public int getMaxToStore() {

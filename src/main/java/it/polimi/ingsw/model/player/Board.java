@@ -5,8 +5,10 @@ import it.polimi.ingsw.model.cards.Production;
 import it.polimi.ingsw.model.cards.VictoryPointCalculator;
 import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.*;
+import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 
+import javax.lang.model.type.ArrayType;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -246,6 +248,51 @@ public class Board implements VictoryPointCalculator {
     public void removeLeaderCard(LeaderCard<? extends Requirement> card){
         if(!leaderCards.contains(card)) throw new IllegalArgumentException();
         leaderCards.remove(card);
+    }
+
+    public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game){
+        TreeMap<Resource, Integer> toGain = new TreeMap<>(resGained);
+        storeInDepotLeader(toGain);
+        storeInNormalDepots(toGain, toKeep);
+        distributeFaithPoints(game, toGain);
+    }
+
+    /**
+     * give one point for each resource in extraResource to each player (apart from the current player)
+     *
+     * @param game current game
+     * @param extraResources resources that cannot be stored in depots
+     */
+    private void distributeFaithPoints(Game<?> game, TreeMap<Resource, Integer> extraResources) {
+        // todo
+    }
+
+    /**
+     *
+     * @param toGain resource that we want to gain. The values in the TreeMap gets changed.
+     * @param toKeep resources that we want to keep in the normal depots.
+     */
+    private void storeInNormalDepots(TreeMap<Resource, Integer> toGain, TreeMap<Resource, Integer> toKeep) {
+        // todo
+    }
+
+    /**
+     * If possible, put some resources in depotLeader from gained. Change gained accordingly
+     *
+     * @param gained resource that we want to store. The values in the TreeMap gets changed.
+     */
+    private void storeInDepotLeader(TreeMap<Resource, Integer> gained){
+        for(Resource r: gained.keySet()){
+            for(DepotLeaderCard dl: depotLeaders){
+                Depot d = dl.getDepot();
+                if(!d.isFull() && d.getTypeOfResource() == r){
+                    while(!d.isFull() || gained.get(r) == 0){
+                        d.addResource(r, 1);
+                        gained.replace(r, gained.get(r) - 1);
+                    }
+                }
+            }
+        }
     }
 }
 

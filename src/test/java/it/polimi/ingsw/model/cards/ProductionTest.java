@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
+import it.polimi.ingsw.model.exception.NotEnoughResourcesException;
 import it.polimi.ingsw.model.game.Resource;
+import it.polimi.ingsw.model.player.Board;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,23 +16,44 @@ public class ProductionTest {
 
     TreeMap<Resource, Integer> toGive;
     TreeMap<Resource, Integer> toGain;
+    TreeMap<Resource, Integer> chosenByPlayerGive;
+    TreeMap<Resource, Integer> chosenByPlayerGain;
     Production production;
+    Board board;
 
     @Before
     public void setUp() {
-        toGive = new TreeMap<Resource, Integer>() {{
+        toGive = new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 1);
             put(Resource.ANYTHING, 2);
         }};
 
 
-        toGain = new TreeMap<Resource, Integer>() {{
+        toGain = new TreeMap<>() {{
             put(Resource.SHIELD, 2);
             put(Resource.ANYTHING, 1);
         }};
 
         production = new Production(toGive, toGain);
+
+        chosenByPlayerGive = new TreeMap<>() {{
+            put(Resource.GOLD, 2);
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT, 2);
+        }};
+
+
+        chosenByPlayerGain = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.GOLD, 1);
+        }};
+
+        board = new Board();
+        for(int i = 0; i < 3; i++)
+            assertTrue(board.getResInDepot(i).isEmpty());
+        assertTrue(board.getResourcesInStrongBox().isEmpty());
+        assertTrue(board.getDepotLeaders().isEmpty());
     }
 
     @Test
@@ -44,32 +68,38 @@ public class ProductionTest {
 
     @Test
     public void testApplyProduction() {
-        // TODO: waiting for board to be implemented
+        try {
+            production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
+            fail();
+        } catch (InvalidResourcesByPlayerException e) {
+            fail();
+        } catch(NotEnoughResourcesException ignore){}
+        // todo: more testing. and test also when done board.gainRes first
     }
 
     @Test
     public void testCheckResToGiveForActivation() {
         try {
-            assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+            assertTrue(production.checkResToGiveForActivation(new TreeMap<>() {{
                         put(Resource.GOLD, 3);
                         put(Resource.ROCK, 2);
                     }})
             );
 
-            assertFalse(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+            assertFalse(production.checkResToGiveForActivation(new TreeMap<>() {{
                         put(Resource.GOLD, 4);
                         put(Resource.ROCK, 2);
                     }})
             );
 
-            assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+            assertTrue(production.checkResToGiveForActivation(new TreeMap<>() {{
                         put(Resource.GOLD, 2);
                         put(Resource.ROCK, 2);
                         put(Resource.SHIELD, 1);
                     }})
             );
 
-            assertTrue(production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+            assertTrue(production.checkResToGiveForActivation(new TreeMap<>() {{
                         put(Resource.GOLD, 2);
                         put(Resource.ROCK, 1);
                         put(Resource.SHIELD, 1);
@@ -84,25 +114,25 @@ public class ProductionTest {
     @Test
     public void testCheckResToGainForActivation() {
         try {
-            assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+            assertFalse(production.checkResToGainForActivation(new TreeMap<>() {{
                         put(Resource.GOLD, 3);
                         put(Resource.ROCK, 2);
                     }})
             );
 
-            assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+            assertFalse(production.checkResToGainForActivation(new TreeMap<>() {{
                         put(Resource.GOLD, 4);
                         put(Resource.ROCK, 2);
                     }})
             );
 
-            assertTrue(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+            assertTrue(production.checkResToGainForActivation(new TreeMap<>() {{
                         put(Resource.ROCK, 1);
                         put(Resource.SHIELD, 2);
                     }})
             );
 
-            assertTrue(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+            assertTrue(production.checkResToGainForActivation(new TreeMap<>() {{
                         put(Resource.GOLD, 1);
                         put(Resource.SHIELD, 2);
                     }})
@@ -115,14 +145,14 @@ public class ProductionTest {
     @Test
     public void testCheckResException(){
         try{
-            assertFalse(production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+            assertFalse(production.checkResToGainForActivation(new TreeMap<>() {{
                 put(Resource.GOLD, 1);
                 put(Resource.FAITH, 2);
             }}));
         }catch (InvalidResourcesByPlayerException ignored){ }
 
         try{
-            production.checkResToGainForActivation(new TreeMap<Resource, Integer>() {{
+            production.checkResToGainForActivation(new TreeMap<>() {{
                 put(Resource.GOLD, 1);
                 put(Resource.SHIELD, 2);
                 put(Resource.ANYTHING, 1);
@@ -131,7 +161,7 @@ public class ProductionTest {
         }catch (InvalidResourcesByPlayerException ignored){ }
 
         try{
-            production.checkResToGiveForActivation(new TreeMap<Resource, Integer>() {{
+            production.checkResToGiveForActivation(new TreeMap<>() {{
                 put(Resource.GOLD, 2);
                 put(Resource.ROCK, 1);
                 put(Resource.SHIELD, 1);
