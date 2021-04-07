@@ -14,23 +14,17 @@ public class Production {
     private final TreeMap<Resource, Integer> gainedResources;
 
     public Production(TreeMap<Resource, Integer> resourcesToGive, TreeMap<Resource, Integer> resourcesToGain){
-        this.resourcesToGain = new TreeMap<>();
-        this.resourcesToGive = new TreeMap<>();
+        this.resourcesToGain = new TreeMap<>(resourcesToGain);
+        this.resourcesToGive = new TreeMap<>(resourcesToGive);
         this.gainedResources = new TreeMap<>();
-        this.resourcesToGain.putAll(resourcesToGain);
-        this.resourcesToGive.putAll(resourcesToGive);
     }
 
     public TreeMap<Resource, Integer> whatResourceToGive(){
-        TreeMap<Resource, Integer> copyToGive = new TreeMap<>();
-        copyToGive.putAll(resourcesToGive);
-        return copyToGive;
+        return new TreeMap<>(resourcesToGive);
     }
 
     public TreeMap<Resource, Integer> whatResourceToGain(){
-        TreeMap<Resource, Integer> copyToGain = new TreeMap<>();
-        copyToGain.putAll(resourcesToGain);
-        return copyToGain;
+        return new TreeMap<>(resourcesToGain);
     }
 
     /**
@@ -114,9 +108,7 @@ public class Production {
      * @return gainedResources (empty TreeMap if the production has not been activated)
      */
     public TreeMap<Resource, Integer> getGainedResources(){
-        TreeMap<Resource, Integer> copy = new TreeMap<>();
-        copy.putAll(gainedResources);
-        return copy;
+        return new TreeMap<>(gainedResources);
     }
 
     /**

@@ -21,8 +21,7 @@ public class DevelopCard implements Card, VictoryPointCalculator{
         this.level = level;
         this. victoryPoints = victoryPoints;
         this.discountApplied = new TreeMap<>();
-        this.cost = new TreeMap<>();
-        this.cost.putAll(cost);
+        this.cost = new TreeMap<>(cost);
         this.production = production;
         this.id = id;
     }
@@ -58,9 +57,7 @@ public class DevelopCard implements Card, VictoryPointCalculator{
      * @return cost of the card (if discounted get the discounted cost)
      */
     public TreeMap<Resource, Integer> getCurrentCost(){
-        TreeMap<Resource, Integer> copyCost = new TreeMap<>();
-        copyCost.putAll(cost);
-        return copyCost;
+        return new TreeMap<>(cost);
     }
 
     /**
@@ -75,6 +72,7 @@ public class DevelopCard implements Card, VictoryPointCalculator{
      */
     public void removeDiscounts(){
         for(Resource r: discountApplied.keySet()){
+            // no check on cost.get(r): if I have applied the discount -> cost.get(r) != null
             cost.replace(r, discountApplied.get(r) + cost.get(r));
         }
         discountApplied.clear();
