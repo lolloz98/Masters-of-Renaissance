@@ -68,6 +68,13 @@ public class MarketTray {
     }
 
     /**
+     * @return if there are active MarbleLeaders
+     */
+    public boolean isLeaderApplied() {
+        return !(leaderResources.size()==0);
+    }
+
+    /**
      * Pushes the freeMarble into the marbleMatrix, and returns the resources
      *
      * @param index index of the matrix that indicates where to push the marble
