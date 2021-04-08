@@ -204,8 +204,6 @@ public abstract class Game <T extends Turn> {
         marketTray.removeLeaderResources();
     }
 
-
-
     /**
      * Checks if one of the develop decks is empty
      */
@@ -227,8 +225,6 @@ public abstract class Game <T extends Turn> {
      * Helper method to distribute
      */
     protected void distributeLeaderToPlayer(Player player){
-        for(int i=0; i<4; i++){
-            player.getBoard().addLeaderCards(deckLeader.distributeCards(4));
-        }
+        player.getBoard().addLeaderCards(deckLeader.distributeCards(4));
     }
 }
