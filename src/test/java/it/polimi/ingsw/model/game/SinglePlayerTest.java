@@ -93,4 +93,11 @@ public class SinglePlayerTest {
         // if i try to call nextTurn when the game is over i get an exception
         singlePlayer.nextTurn();
     }
+
+    @Test
+    public void testDistributeLeader(){
+        singlePlayer.distributeLeader();
+        assertEquals(singlePlayer.getPlayer().getBoard().getLeaderCards().size(), 4);
+
+    }
 }

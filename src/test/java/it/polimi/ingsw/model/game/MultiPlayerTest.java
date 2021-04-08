@@ -47,7 +47,6 @@ public class MultiPlayerTest {
 
     @Test
     public void testDeckLeader(){ // maybe should be modified to exclude shuffle method
-        // TODO test more
         Deck<LeaderCard<? extends Requirement>> dl = multiPlayer.getDeckLeader();
         for(int i=0; i<12; i++){
             dl.drawCard();
@@ -63,14 +62,14 @@ public class MultiPlayerTest {
     @Test
     public void testIsADeckDevelopEmptyTrue(){
         for(int i = 0; i <4; i++)
-            multiPlayer.drawDevelopCard(Color.BLUE, 2);
+            multiPlayer.drawDevelopCard(Color.GREEN, 1);
         assertTrue(multiPlayer.isADeckDevelopEmpty());
     }
 
     @Test
     public void testIsADeckDevelopEmptyFalse(){
         for(int i = 0; i <3; i++)
-            multiPlayer.drawDevelopCard(Color.BLUE, 2);
+            multiPlayer.drawDevelopCard(Color.PURPLE, 3);
         assertTrue(!multiPlayer.isADeckDevelopEmpty());
     }
 
@@ -179,6 +178,14 @@ public class MultiPlayerTest {
         assertTrue(multiPlayer.isGameOver());
         // if i try to call nextTurn when the game is over i get an exception
         multiPlayer.nextTurn();
+    }
+
+    @Test
+    public void testDistributeLeader(){
+        multiPlayer.distributeLeader();
+        for(Player p : multiPlayer.getPlayers()){
+            assertEquals(p.getBoard().getLeaderCards().size(), 4);
+        }
     }
 
 }

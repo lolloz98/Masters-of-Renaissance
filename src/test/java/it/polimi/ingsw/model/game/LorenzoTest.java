@@ -14,7 +14,8 @@ public class LorenzoTest {
         singlePlayer = new SinglePlayer(new Player("play", 1));
     }
 
-
-
-
+    @Test
+    public void testPerformLorenzoAction(){
+        singlePlayer.getLorenzo().performLorenzoAction(singlePlayer);
+    }
 }
