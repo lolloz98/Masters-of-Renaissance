@@ -34,14 +34,8 @@ public class SinglePlayer extends Game<TurnSingle>{
         this.hasPlayerWon = playerWon;
     }
 
-    public SinglePlayer(Player player) {
-        super();
-        this.turn = new TurnSingle(false);
-        this.player = player;
-        this.lorenzo = new Lorenzo();
-        this.hasPlayerWon = false;
-        this.playerPoints = 0;
-        createLorenzoDeck();
+    public int getPlayerPoints() {
+        return playerPoints;
     }
 
     public LorenzoDeck getLorenzoDeck() {
@@ -54,6 +48,16 @@ public class SinglePlayer extends Game<TurnSingle>{
 
     public Lorenzo getLorenzo() {
         return lorenzo;
+    }
+
+    public SinglePlayer(Player player) {
+        super();
+        this.turn = new TurnSingle(false);
+        this.player = player;
+        this.lorenzo = new Lorenzo();
+        this.hasPlayerWon = false;
+        this.playerPoints = 0;
+        createLorenzoDeck();
     }
 
     /**

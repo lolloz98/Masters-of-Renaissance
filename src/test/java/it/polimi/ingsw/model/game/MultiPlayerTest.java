@@ -118,7 +118,7 @@ public class MultiPlayerTest {
         assertTrue(multiPlayer.isGameOver());
     }
 
-    @Test  (expected = GameIsOverException.class)
+    @Test (expected = GameIsOverException.class)
     public void testNextTurnException(){
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());

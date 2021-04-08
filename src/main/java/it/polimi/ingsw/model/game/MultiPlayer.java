@@ -85,8 +85,25 @@ public class MultiPlayer extends Game<TurnMulti> {
      *
      * @throws GameNotOverException if i call getWinner on an ongoing game
      */
-    public void getWinner(){
+    public ArrayList<Player> getWinner(){
         if(!isGameOver()) throw new GameNotOverException();
-        // TODO get points, if it's a tie check the resources
+        int max = 0;
+        ArrayList<Player> winners = new ArrayList<>();
+        for(int i=0; i<players.size(); i++) {
+            if (playerPoints.get(i) == max) {
+                winners.add(players.get(i));
+            }
+            else if(playerPoints.get(i) > max) {
+                winners.clear();
+                winners.add(players.get(i));
+                max = playerPoints.get(i);
+            }
+        }
+        if (winners.size() == 1) return winners;
+        else {
+            // TODO check which one has the most resources
+            // player.getBoard().howManyResources()
+            return winners;
+        }
     }
 }
