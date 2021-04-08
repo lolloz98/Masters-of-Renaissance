@@ -101,9 +101,19 @@ public class MultiPlayer extends Game<TurnMulti> {
         }
         if (winners.size() == 1) return winners;
         else {
-            // TODO check which one has the most resources
-            // player.getBoard().howManyResources()
-            return winners;
+            int maxRes = 0;
+            ArrayList<Player> winnersRes = new ArrayList<>();
+            for(int i=0; i<winners.size(); i++) {
+                if (winners.get(i).getBoard().howManyResources() == maxRes) {
+                    winnersRes.add(winners.get(i));
+                }
+                else if(winners.get(i).getBoard().howManyResources() > maxRes) {
+                    winnersRes.clear();
+                    winnersRes.add(winners.get(i));
+                    maxRes = winners.get(i).getBoard().howManyResources();
+                }
+            }
+            return winnersRes;
         }
     }
 }
