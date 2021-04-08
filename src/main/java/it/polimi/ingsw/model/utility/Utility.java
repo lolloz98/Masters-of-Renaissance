@@ -24,4 +24,12 @@ public class Utility {
         }
         return true;
     }
+
+    public static int sumOfValues(TreeMap<Resource,Integer> treeMap){
+        int sum=0;
+        for(Resource r: treeMap.keySet()){
+            sum+=treeMap.get(r);
+        }
+        return sum;
+    }
 }

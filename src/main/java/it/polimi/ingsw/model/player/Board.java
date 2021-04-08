@@ -8,9 +8,11 @@ import it.polimi.ingsw.model.cards.VictoryPointCalculator;
 import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.*;
 import it.polimi.ingsw.model.game.Game;
+import it.polimi.ingsw.model.game.MultiPlayer;
 import it.polimi.ingsw.model.game.Resource;
+import it.polimi.ingsw.model.game.SinglePlayer;
+import it.polimi.ingsw.model.utility.Utility;
 
-import javax.lang.model.type.ArrayType;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -99,7 +101,7 @@ public class Board implements VictoryPointCalculator {
         TreeMap<Resource, Integer> diffMap = new TreeMap<>();
         diffMap.putAll(resToGive);
         for (Resource r : diffMap.keySet()) {
-            if(!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+            if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
             for (Depot d : depots) {
                 if (d.contains(r))
                     diffMap.replace(r, diffMap.get(r) - d.getStored());
@@ -132,16 +134,16 @@ public class Board implements VictoryPointCalculator {
      * It removes the resources in this order: from the normal Depots, from LeaderDepots (if any) and from the strongbox
      *
      * @param resToGive resources to be removed from the board
-     * @throws NotEnoughResourcesException if there are not enough resources on the board
+     * @throws NotEnoughResourcesException      if there are not enough resources on the board
      * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
      */
     public void removeResources(TreeMap<Resource, Integer> resToGive) {
-        if(!enoughResToActivate(resToGive)) throw new NotEnoughResourcesException();
+        if (!enoughResToActivate(resToGive)) throw new NotEnoughResourcesException();
         int tmp;
         TreeMap<Resource, Integer> resToSpend = new TreeMap<>();
         resToSpend.putAll(resToGive);
         for (Resource r : resToSpend.keySet()) {
-            if(!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+            if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
             for (Depot d : depots) {
                 if (d.contains(r)) {
                     if (!d.enoughResources(resToSpend.get(r))) {
@@ -170,8 +172,9 @@ public class Board implements VictoryPointCalculator {
         strongbox.spendResources(resToSpend);
     }
 
-    //TODO:
-    //public void moveOnFaithPath(){}
+    public void moveOnFaithPath(int steps,Game<?> game) {
+        this.faithtrack.move(steps,game);
+    }
 
     //TODO:
     @Override
@@ -201,17 +204,17 @@ public class Board implements VictoryPointCalculator {
      * flush resources to the strongbox. If there is FAITH in gainedResources, move on the faithTrack
      *
      * @param gainedResources are put in the strongbox
-     * @param game current game
+     * @param game            current game
      */
     public void flushGainedResources(TreeMap<Resource, Integer> gainedResources, Game<?> game) {
-        if(gainedResources.getOrDefault(Resource.FAITH, 0) > 0)
-            this.faithtrack.move(1, game);
+        if (gainedResources.getOrDefault(Resource.FAITH, 0) > 0)
+            this.faithtrack.move(gainedResources.get(Resource.FAITH), game);
         TreeMap<Resource, Integer> c = new TreeMap<>(gainedResources);
         c.remove(Resource.FAITH);
         strongbox.addResources(c);
     }
 
-    public TreeMap<Resource, Integer> getResourcesInStrongBox(){
+    public TreeMap<Resource, Integer> getResourcesInStrongBox() {
         return strongbox.getResources();
     }
 
@@ -220,29 +223,29 @@ public class Board implements VictoryPointCalculator {
      * @return the resources in the specified depot
      * @throws IllegalArgumentException if whichDepot is lower than 0 or greater than 2
      */
-    public TreeMap<Resource, Integer> getResInDepot(int whichDepot){
-        if(whichDepot < 0 || whichDepot > 2) throw new IllegalArgumentException();
+    public TreeMap<Resource, Integer> getResInDepot(int whichDepot) {
+        if (whichDepot < 0 || whichDepot > 2) throw new IllegalArgumentException();
         return depots.get(whichDepot).getStoredResources();
     }
 
     /**
      * @return list of leaderCards of the player
      */
-    public ArrayList<LeaderCard<? extends Requirement>> getLeaderCards(){
+    public ArrayList<LeaderCard<? extends Requirement>> getLeaderCards() {
         return new ArrayList<>(leaderCards);
     }
 
     /**
      * @return active productionLeaderCards on the board
      */
-    public ArrayList<ProductionLeaderCard> getProductionLeaders(){
+    public ArrayList<ProductionLeaderCard> getProductionLeaders() {
         return new ArrayList<>(productionLeaderSlots);
     }
 
     /**
      * @return active depotLeaderCards on the board
      */
-    public ArrayList<DepotLeaderCard> getDepotLeaders(){
+    public ArrayList<DepotLeaderCard> getDepotLeaders() {
         return new ArrayList<>(depotLeaders);
     }
 
@@ -252,16 +255,103 @@ public class Board implements VictoryPointCalculator {
      * @param card card to be removed from the board
      * @throws IllegalArgumentException if the cards was not contained in leaderCards of the board
      */
-    public void removeLeaderCard(LeaderCard<? extends Requirement> card){
-        if(!leaderCards.contains(card)) throw new IllegalArgumentException();
+    public void removeLeaderCard(LeaderCard<? extends Requirement> card) {
+        if (!leaderCards.contains(card)) throw new IllegalArgumentException();
         leaderCards.remove(card);
     }
 
-    public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game){
-        TreeMap<Resource, Integer> toGain = new TreeMap<>(resGained);
+    /**
+     * @param resGained
+     * @param toKeep
+     * @param game
+     * @throws InvalidResourcesToKeepByPlayerException
+     * @throws IllegalArgumentException
+     */
+    public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException {
+        for (Resource r : toKeep.keySet()) {
+            if (!Resource.isDiscountable(r) && r != Resource.FAITH)
+                throw new IllegalArgumentException();
+        }
+        for (Resource r : resGained.keySet()) {
+            if ((resGained.getOrDefault(r, 0) < toKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
+                throw new IllegalArgumentException();
+        }
+        if (cannotAppend( toKeep)) throw new InvalidResourcesToKeepByPlayerException();
+        TreeMap<Resource, Integer> toGain = new TreeMap<>(toKeep);
         storeInDepotLeader(toGain);
-        storeInNormalDepots(toGain, toKeep);
-        distributeFaithPoints(game, toGain);
+        storeInNormalDepots(toGain, this.depots);
+        moveOnFaithPath(toKeep.get(Resource.FAITH),game);
+        TreeMap<Resource,Integer> toDiscard= new TreeMap<>(){{
+            for(Resource r: resGained.keySet()){
+                put(r,resGained.get(r)- toKeep.getOrDefault(r,0));
+            }
+        }};
+        distributeFaithPoints(game, toDiscard);
+    }
+
+    /**
+     * method that checks if the treemap toKeep is valid (it can be added to the depots without any gap of resources)
+     * @param toKeep a Treemap chosen by the player
+     * @return true if the TreeMap passed by the player is not valid
+     */
+    private boolean cannotAppend( TreeMap<Resource, Integer> toKeep) {
+        TreeMap<Resource, Integer> toGain = new TreeMap<>(toKeep);
+        toGain.remove(Resource.ANYTHING);
+        for (Resource r : toGain.keySet()) {
+            for (DepotLeaderCard dl : depotLeaders) {
+                Depot d = dl.getDepot();
+                if (d.getTypeOfResource() == r) {
+                    if (toGain.get(r) - d.getFreeSpace() >= 0)
+                        toGain.replace(r, toGain.get(r) - d.getFreeSpace());
+                    else
+                        toGain.remove(r);
+                }
+            }
+        }
+        ArrayList<Depot> copyOfDepots = new ArrayList<>() {{
+            Depot d;
+            for (int i = 0; i < 3; i++) {
+                d = depots.get(i);
+                add(new Depot(i + 1, true));
+                get(i).addResource(d.getTypeOfResource(), d.getStored());
+            }
+        }};
+        storeInNormalDepots(toGain, copyOfDepots);
+        if (toGain.isEmpty())
+            return false;
+        else
+            return true;
+    }
+
+    /**
+     * method that search a depot which can be substituted with the depot passed
+     * @param depotToSwitchFrom depot that i want to substitute
+     * @param depotArrayList
+     * @param howMany resources must be added to the depot
+     * @return the depot to substitute
+     */
+    private Depot lookForADepotToSwitch(Depot depotToSwitchFrom, ArrayList<Depot> depotArrayList, int howMany) {
+        for (Depot d : depotArrayList) {
+            if (!depotToSwitchFrom.equals(d)) {
+                if ((d.getMaxToStore() >= depotToSwitchFrom.getStored() + howMany) && (d.getStored() <= depotToSwitchFrom.getMaxToStore()))
+                    return d;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * method that checks if there is a depot that contains r
+     * @param r resource
+     * @param depotArrayList arraylist of depots to analyze
+     * @return true if there isn't a depot which contains r
+     */
+    private boolean otherDepotsNotContains(Resource r, ArrayList<Depot> depotArrayList) {
+        for (Depot d : depotArrayList) {
+            if (d.contains(r))
+                return false;
+        }
+        return true;
     }
 
     /**
@@ -271,31 +361,68 @@ public class Board implements VictoryPointCalculator {
      * @param extraResources resources that cannot be stored in depots
      */
     private void distributeFaithPoints(Game<?> game, TreeMap<Resource, Integer> extraResources) {
-        // todo
+        int steps;
+        steps= Utility.sumOfValues(extraResources);
+        if(game instanceof MultiPlayer){
+            MultiPlayer gamemp=(MultiPlayer)game;
+            Player currentPlayer=gamemp.getTurn().getCurrentPlayer();
+            for(Player p:gamemp.getPlayers()){
+                if(!p.equals(currentPlayer))
+                    p.getBoard().moveOnFaithPath(steps,game);
+            }
+        }
+        if(game instanceof SinglePlayer){//only the player could call this method
+            SinglePlayer gamesp=(SinglePlayer) game;
+            if(!gamesp.getTurn().isLorenzoPlaying()){
+                gamesp.getLorenzo().getFaithTrack().move(steps,game);
+            }
+            else
+                gamesp.getPlayer().getBoard().moveOnFaithPath(steps,game);
+        }
     }
 
     /**
-     *
      * @param toGain resource that we want to gain. The values in the TreeMap gets changed.
-     * @param toKeep resources that we want to keep in the normal depots.
+     * @param depotArrayList list of depots in which i want to store the resources
      */
-    private void storeInNormalDepots(TreeMap<Resource, Integer> toGain, TreeMap<Resource, Integer> toKeep) {
-        // todo
+    private void storeInNormalDepots(TreeMap<Resource, Integer> toGain, ArrayList<Depot> depotArrayList) {
+        for (Resource r : toGain.keySet()) {
+            for (Depot d : depotArrayList) {
+                if ((d.isEmpty() && (d.getFreeSpace() >= toGain.get(r)) && otherDepotsNotContains(r, depotArrayList)) ||
+                        (d.contains(r) && (d.getFreeSpace() >= toGain.get(r)))) {
+                    d.addResource(r, toGain.get(r));
+                    toGain.remove(r);
+                }
+                if (d.contains(r) && d.getFreeSpace() < toGain.get(r)) {
+                    Depot toSwitch = lookForADepotToSwitch(d, depotArrayList, toGain.get(r));
+                    if (toSwitch != null) {
+                        Depot tmp = new Depot(toSwitch.getMaxToStore(), true) {{
+                            addResource(toSwitch.getTypeOfResource(), toSwitch.getStored());
+                        }};
+                        toSwitch.clear();
+                        toSwitch.addResource(d.getTypeOfResource(), d.getStored() + toGain.get(r));
+                        d.addResource(tmp.getTypeOfResource(), tmp.getStored());
+                        toGain.remove(r);
+                    }
+                }
+            }
+        }
     }
+
 
     /**
      * If possible, put some resources in depotLeader from gained. Change gained accordingly
      *
-     * @param gained resource that we want to store. The values in the TreeMap gets changed.
+     * @param toGain resource that we want to store. The values in the TreeMap gets changed.
      */
-    private void storeInDepotLeader(TreeMap<Resource, Integer> gained){
-        for(Resource r: gained.keySet()){
-            for(DepotLeaderCard dl: depotLeaders){
+    private void storeInDepotLeader(TreeMap<Resource, Integer> toGain) {
+        for (Resource r : toGain.keySet()) {
+            for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();
-                if(!d.isFull() && d.getTypeOfResource() == r){
-                    while(!d.isFull() || gained.get(r) == 0){
+                if (!d.isFull() && d.getTypeOfResource() == r) {
+                    while (!d.isFull() || toGain.get(r) == 0) {
                         d.addResource(r, 1);
-                        gained.replace(r, gained.get(r) - 1);
+                        toGain.replace(r, toGain.get(r) - 1);
                     }
                 }
             }
@@ -305,28 +432,41 @@ public class Board implements VictoryPointCalculator {
     /**
      * buy the develop card on top of the deck of whichColor and whichLevel and put it in the slot indexed by slotToStore
      *
-     * @param game current game
-     * @param whichColor color of the develop card to buy
-     * @param whichLevel level of the develop card to buy
+     * @param game        current game
+     * @param whichColor  color of the develop card to buy
+     * @param whichLevel  level of the develop card to buy
      * @param slotToStore slot in which to store the develop card
-     * @throws EmptyDeckException if the deckDevelop with whichColor and whichLevel in game is empty
-     * @throws NotEnoughResourcesException if this does not have enoughResources to buy the card
+     * @throws EmptyDeckException                if the deckDevelop with whichColor and whichLevel in game is empty
+     * @throws NotEnoughResourcesException       if this does not have enoughResources to buy the card
      * @throws InvalidDevelopCardToSlotException if the card to buy cannot go in the chosen slot
-     * @throws IllegalArgumentException if whichLevel or slotToStore are out of bound
+     * @throws IllegalArgumentException          if whichLevel or slotToStore are out of bound
      */
-    public void buyDevelopCard(Game<?> game, Color whichColor, int whichLevel, int slotToStore){
-        if(slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3) throw new IllegalArgumentException();
+    public void buyDevelopCard(Game<?> game, Color whichColor, int whichLevel, int slotToStore) {
+        if (slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3)
+            throw new IllegalArgumentException();
 
         // think about checking for the color in the method below
         DeckDevelop deck = game.getDecksDevelop().get(whichColor).get(whichLevel);
-        if(deck.isEmpty()) throw new EmptyDeckException();
+        if (deck.isEmpty()) throw new EmptyDeckException();
 
         TreeMap<Resource, Integer> resToGive = deck.topCard().getCurrentCost();
-        if(!enoughResToActivate(resToGive)) throw new NotEnoughResourcesException();
+        if (!enoughResToActivate(resToGive)) throw new NotEnoughResourcesException();
 
         developCardSlots.get(slotToStore).addDevelopCard(deck.drawCard()); // it can throw InvalidDevelopCardToSlotException
 
         removeResources(resToGive);
+    }
+
+    public int howManyResources(){
+        int count=0;
+        for(Depot d: depots){
+            count+=d.getStored();
+        }
+        for(DepotLeaderCard dl:depotLeaders){
+            count+=dl.getDepot().getStored();
+        }
+        count+=Utility.sumOfValues(strongbox.getResources());
+        return count;
     }
 }
 

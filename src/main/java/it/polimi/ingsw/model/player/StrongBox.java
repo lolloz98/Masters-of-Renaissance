@@ -14,13 +14,6 @@ public class StrongBox {
 
     public StrongBox() {
         resources = new TreeMap<>();
-        /* superflui??
-        resources.put(Resource.SHIELD, 0);
-        resources.put(Resource.GOLD, 0);
-        resources.put(Resource.ROCK, 0);
-        resources.put(Resource.SERVANT, 0);
-        */
-
     }
 
     public TreeMap<Resource, Integer> getResources() {

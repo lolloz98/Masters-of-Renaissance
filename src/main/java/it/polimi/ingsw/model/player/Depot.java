@@ -65,8 +65,10 @@ public class Depot {
     public boolean isResModifiable(){
         return modifiable;
     }
+
     public void spendResources(int howMany){
         if(howMany<=0||!enoughResources(howMany)) throw new InvalidResourceQuantityToDepotException();
+        if(stored==howMany) clear();
         stored-=howMany;
     }
 
@@ -129,6 +131,7 @@ public class Depot {
         stored=0;
         return result;
     }
+
 
     public boolean isEmpty(){
         return stored==0;
