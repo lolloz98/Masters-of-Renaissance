@@ -61,6 +61,13 @@ public class MarketTray {
     }
 
     /**
+     * Removes the effect of a MarbleLeader from the market
+     */
+    public void removeLeaderResource(Resource res) {
+        leaderResources.remove(res);
+    }
+
+    /**
      * Pushes the freeMarble into the marbleMatrix, and returns the resources
      *
      * @param index index of the matrix that indicates where to push the marble
