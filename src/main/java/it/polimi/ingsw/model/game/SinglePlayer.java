@@ -63,7 +63,7 @@ public class SinglePlayer extends Game<TurnSingle>{
     /**
      * Setup method for the Lorenzo Deck.
      */
-    public void createLorenzoDeck(){
+    private void createLorenzoDeck(){
         ArrayList<LorenzoCard> lorenzoCards = new ArrayList<>();
         lorenzoCards.add(new DevelopLorenzoCard(65, Color.GOLD));
         lorenzoCards.add(new DevelopLorenzoCard(66, Color.PURPLE));

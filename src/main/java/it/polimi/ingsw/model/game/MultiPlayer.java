@@ -85,7 +85,7 @@ public class MultiPlayer extends Game<TurnMulti> {
      *
      * @throws GameNotOverException if i call getWinner on an ongoing game
      */
-    public ArrayList<Player> getWinner(){
+    public ArrayList<Player> getWinners(){
         if(!isGameOver()) throw new GameNotOverException();
         int max = 0;
         ArrayList<Player> winners = new ArrayList<>();
