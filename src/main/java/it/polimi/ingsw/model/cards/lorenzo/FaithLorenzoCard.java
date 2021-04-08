@@ -15,7 +15,6 @@ public class FaithLorenzoCard extends LorenzoCard {
      */
     @Override
     public void applyEffect(SinglePlayer game) {
-        // TODO: check
         game.getLorenzo().getFaithTrack().move(2, game);
     }
 }

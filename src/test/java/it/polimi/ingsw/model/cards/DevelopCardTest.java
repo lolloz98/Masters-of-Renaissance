@@ -1,15 +1,9 @@
 package it.polimi.ingsw.model.cards;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.model.game.Resource;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.TreeMap;
 
 import static org.junit.Assert.*;
@@ -18,6 +12,7 @@ public class DevelopCardTest {
 
     DevelopCard developCard;
     TreeMap<Resource, Integer> cost;
+    Production production;
 
     @Before
     public void setUp(){
@@ -32,7 +27,7 @@ public class DevelopCardTest {
             put(Resource.ANYTHING, 1);
         }};
 
-        Production production = new Production(toGive, toGain);
+        production = new Production(toGive, toGain);
 
         cost = new TreeMap<>(){{
             put(Resource.GOLD, 2);
@@ -73,26 +68,6 @@ public class DevelopCardTest {
 
     @Test
     public void testGetProduction() {
-        // TODO: do this when Board implementation is completed
-    }
-
-    @Test
-    public void testGson() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-
-        Gson gson = builder.create();
-        System.out.println(gson.toJson(developCard));
-
-        try {
-            DevelopCard t = gson.fromJson(new JsonReader(new FileReader("json_file/cards/develop/002.json")), DevelopCard.class);
-            System.out.println(t);
-            System.out.println(t.getColor());
-            System.out.println(t.getCurrentCost());
-            System.out.println(t.getId());
-            System.out.println(t.getLevel());
-        } catch (FileNotFoundException e) {
-            fail();
-        }
+        assertEquals(production, developCard.getProduction());
     }
 }

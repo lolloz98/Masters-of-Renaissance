@@ -21,7 +21,6 @@ public class DevelopLorenzoCard extends LorenzoCard {
      */
     @Override
     public void applyEffect(SinglePlayer game) {
-        // TODO: check
         TreeMap<Integer, DeckDevelop> decks = game.getDecksDevelop().get(color);
         for(int i = 0; i < 2; i++) removeCardFromDevelop(decks);
     }

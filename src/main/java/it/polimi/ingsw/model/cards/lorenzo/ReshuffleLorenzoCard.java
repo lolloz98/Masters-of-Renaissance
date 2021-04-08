@@ -13,7 +13,6 @@ public class ReshuffleLorenzoCard extends LorenzoCard {
      */
     @Override
     public void applyEffect(SinglePlayer game) {
-        // TODO: check
         game.getLorenzo().getFaithTrack().move(1, game);
         game.getLorenzoDeck().backToOriginalAndShuffle();
     }

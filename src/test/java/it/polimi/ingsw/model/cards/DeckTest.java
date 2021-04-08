@@ -11,14 +11,12 @@ import java.util.ArrayList;
 
 public class DeckTest {
 
-    private static final Logger logger = LogManager.getLogger(DeckTest.class);
     Deck<Card> deck;
     ArrayList<Card> cards;
     final int NUMBER = 15;
 
     @Before
     public void setUp(){
-        logger.debug("Deck preparation");
         cards = new ArrayList<>();
         for(int i = 0; i < NUMBER; i++){
             cards.add(() -> 0);

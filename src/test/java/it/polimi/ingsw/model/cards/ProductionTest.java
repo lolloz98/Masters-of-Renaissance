@@ -13,8 +13,6 @@ import it.polimi.ingsw.model.utility.Utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.*;
-import org.junit.internal.TextListener;
-import org.junit.runner.JUnitCore;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -76,7 +74,7 @@ public class ProductionTest {
 
         multiPlayer = new MultiPlayer(new ArrayList<>(){{
             add(new Player("marco", 0));
-            add(new Player("lollo", 1));
+            add(new Player("lorenzo", 1));
         }});
 
         game = (isSinglePlayer)? singlePlayer: multiPlayer;
