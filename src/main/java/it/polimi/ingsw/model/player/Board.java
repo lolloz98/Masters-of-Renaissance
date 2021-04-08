@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 
-import it.polimi.ingsw.model.cards.Color;
-import it.polimi.ingsw.model.cards.DeckDevelop;
-import it.polimi.ingsw.model.cards.Production;
-import it.polimi.ingsw.model.cards.VictoryPointCalculator;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.*;
 import it.polimi.ingsw.model.game.Game;
@@ -176,10 +173,21 @@ public class Board implements VictoryPointCalculator {
         this.faithtrack.move(steps,game);
     }
 
-    //TODO:
     @Override
     public int getVictoryPoints() {
-        return 0;
+        int points=0;
+        points+=faithtrack.getVictoryPoints();
+        int res=howManyResources();
+        points+=Math.floorDiv(res,5);
+        for(LeaderCard lc: leaderCards){
+            points+=lc.getVictoryPoints();
+        }
+        for(DevelopCardSlot dcs: developCardSlots){
+            for(DevelopCard dc:dcs.getCards()){
+                points+=dc.getVictoryPoints();
+            }
+        }
+        return points;
     }
 
     /**
