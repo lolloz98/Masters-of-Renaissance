@@ -19,7 +19,7 @@ public class MarketTrayTest {
 
     @Test
     public void TestPushMarbleRowNoLeader() {
-        // given the arrangement of the marble matrix, pushing index 1 onRow true shoud result in:
+        // given the arrangement of the marble matrix, pushing index 1 onRow true should result in:
         Marble[][] mat = new Marble[3][4];
         mat[0][0] = new Marble(Resource.NOTHING); mat[0][1] = new Marble(Resource.NOTHING); mat[0][2] = new Marble(Resource.NOTHING); mat[0][3] = new Marble(Resource.NOTHING);
         mat[1][0] = new Marble(Resource.SHIELD); mat[1][1] = new Marble(Resource.ROCK); mat[1][2] = new Marble(Resource.ROCK); mat[1][3] = new Marble(Resource.FAITH);

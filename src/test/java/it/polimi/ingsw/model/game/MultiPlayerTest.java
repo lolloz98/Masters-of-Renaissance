@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.DevelopCard;
 import it.polimi.ingsw.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.model.cards.leader.Requirement;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
+import it.polimi.ingsw.model.exception.GameIsOverException;
 import it.polimi.ingsw.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void testDecksDevelop(){ // FIXME should be modified to exclude shuffle method
+    public void testDecksDevelop(){ // maybe should be modified to exclude shuffle method
         DeckDevelop dd;
         DevelopCard dc;
         for(Color color : Color.values()) {
@@ -44,7 +45,7 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void testDeckLeader(){ // FIXME should be modified to exclude shuffle method
+    public void testDeckLeader(){ // maybe should be modified to exclude shuffle method
         // TODO test more
         Deck<LeaderCard<? extends Requirement>> dl = multiPlayer.getDeckLeader();
         for(int i=0; i<12; i++){
@@ -91,5 +92,34 @@ public class MultiPlayerTest {
         multiPlayer2.destroy();
     }
 
+    @Test  (expected = GameIsOverException.class)
+    public void testNextTurn(){
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        System.out.println(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        System.out.println(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        System.out.println(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
+        System.out.println(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        System.out.println(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        System.out.println(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        System.out.println(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        System.out.println(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+    }
 
 }

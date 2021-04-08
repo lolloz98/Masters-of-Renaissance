@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.lorenzo.*;
+import it.polimi.ingsw.model.exception.GameIsOverException;
 import it.polimi.ingsw.model.player.Player;
 import java.util.ArrayList;
 
@@ -89,6 +90,7 @@ public class SinglePlayer extends Game<TurnSingle>{
      */
     @Override
     public void nextTurn(){
+        if (isGameOver()) throw new GameIsOverException();
         TurnSingle turn = getTurn().nextTurn(this);
         if (turn == null){
             setGameOver(true);

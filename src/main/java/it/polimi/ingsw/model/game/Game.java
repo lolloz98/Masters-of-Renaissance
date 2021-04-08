@@ -64,8 +64,13 @@ public abstract class Game <T extends Turn> {
     public Deck<LeaderCard<? extends Requirement>> getDeckLeader() {
         return deckLeader;
     }
+
     public int getId() {
         return id;
+    }
+
+    public MarketTray getMarketTray() {
+        return marketTray;
     }
 
     public abstract void checkEndConditions();
@@ -75,7 +80,7 @@ public abstract class Game <T extends Turn> {
     public abstract void distributeLeader();
 
     /**
-     * @returns the value of an id that doesn't correspond to any of the currently ongoing games
+     * @return the value of an id that doesn't correspond to any of the currently ongoing games
      */
     private synchronized static int getNewId(){
         int i = 0;
@@ -197,6 +202,8 @@ public abstract class Game <T extends Turn> {
         marketTray.removeLeaderResources();
     }
 
+
+
     /**
      * Checks if one of the develop decks is empty
      */
@@ -214,7 +221,10 @@ public abstract class Game <T extends Turn> {
         removeId(this.id);
     }
 
-    public void distributeLeaderToPlayer(Player player){
+    /**
+     * Helper method to distribute
+     */
+    protected void distributeLeaderToPlayer(Player player){
         for(int i=0; i<4; i++){
             player.getBoard().addLeaderCards(deckLeader.distributeCards(4));
         }

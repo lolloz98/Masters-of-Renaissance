@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.exception.GameIsOverException;
 import it.polimi.ingsw.model.player.Player;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.TreeMap;
 
 /**
@@ -11,17 +13,13 @@ import java.util.TreeMap;
 public class MultiPlayer extends Game<TurnMulti> {
     private final ArrayList<Player> players;
     private boolean lastRound;
-    private TreeMap<Player, Integer> leaderBoard;
+    private ArrayList<Integer> playerPoints;
 
     public MultiPlayer(ArrayList<Player> players){
         super();
         this.turn = new TurnMulti(players.get(0));
         this.players = players;
         this.lastRound = false;
-    }
-
-    public TreeMap<Player, Integer> getLeaderBoard() {
-        return leaderBoard;
     }
 
     public boolean isLastRound() {
@@ -53,6 +51,7 @@ public class MultiPlayer extends Game<TurnMulti> {
      */
     @Override
     public void nextTurn(){
+        if (isGameOver()) throw new GameIsOverException();
         TurnMulti turn = getTurn().nextTurn(this);
         if (turn == null){
             setGameOver(true);
@@ -65,11 +64,11 @@ public class MultiPlayer extends Game<TurnMulti> {
      * Computes the points of all the players
      */
     private void computeLeaderBoard(){
-        leaderBoard = new TreeMap<>(){{
-            for (Player p : players){
-                put(p, p.getBoard().getVictoryPoints());
-            }
-        }};
+        playerPoints = new ArrayList<>();
+        for (Player p : players){
+            playerPoints.add(p.getBoard().getVictoryPoints());
+        }
+
     }
 
     /**
@@ -78,5 +77,13 @@ public class MultiPlayer extends Game<TurnMulti> {
     @Override
     public void distributeLeader(){
         for(Player p : players) distributeLeaderToPlayer(p);
+    }
+
+    /**
+     * @return the winner if the game is over
+     */
+    public void getWinner(){
+        if(!isGameOver()) throw new GameNotOverException();
+        // TODO
     }
 }
