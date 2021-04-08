@@ -2,9 +2,12 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.exception.GameIsOverException;
+import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -56,7 +59,23 @@ public class SinglePlayerTest {
 
     @Test
     public void testNextTurnPlayerWinsDevelop(){
-        // TODO
+        assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.nextTurn();
+        assertTrue(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.nextTurn();
+        assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
+        // player buys 7 develop cards
+        ArrayList<DevelopCardSlot> slots = singlePlayer.getPlayer().getBoard().getDevelopCardSlots();
+        slots.get(0).addDevelopCard(singlePlayer.drawDevelopCard(Color.BLUE,1));
+        slots.get(0).addDevelopCard(singlePlayer.drawDevelopCard(Color.GREEN,2));
+        slots.get(0).addDevelopCard(singlePlayer.drawDevelopCard(Color.GREEN,3));
+        slots.get(1).addDevelopCard(singlePlayer.drawDevelopCard(Color.GOLD,1));
+        slots.get(1).addDevelopCard(singlePlayer.drawDevelopCard(Color.GOLD,2));
+        slots.get(1).addDevelopCard(singlePlayer.drawDevelopCard(Color.GOLD,3));
+        slots.get(2).addDevelopCard(singlePlayer.drawDevelopCard(Color.PURPLE,1));
+        singlePlayer.nextTurn();
+        assertTrue(singlePlayer.isGameOver());
+        assertTrue(singlePlayer.getHasPlayerWon());
     }
 
     @Test (expected = GameIsOverException.class)

@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
+import it.polimi.ingsw.model.exception.LevelOutOfBoundException;
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
 import it.polimi.ingsw.model.player.Player;
@@ -170,6 +171,7 @@ public abstract class Game <T extends Turn> {
      * @throws EmptyDeckException if deck is empty
      */
     public DevelopCard drawDevelopCard(Color color, int level){
+        if(level<1 || level>3) throw new LevelOutOfBoundException();
         return decksDevelop.get(color).get(level).drawCard();
     }
 

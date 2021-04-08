@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.model.cards.leader.Requirement;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
 import it.polimi.ingsw.model.exception.GameIsOverException;
+import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,20 +57,20 @@ public class MultiPlayerTest {
     @Test (expected = EmptyDeckException.class)
     public void testIsADeckDevelopEmptyTooManyCalls(){
         for(int i = 0; i <5; i++)
-            multiPlayer.getDecksDevelop().get(Color.BLUE).get(2).drawCard();
+            multiPlayer.drawDevelopCard(Color.BLUE, 2);
     }
 
     @Test
     public void testIsADeckDevelopEmptyTrue(){
         for(int i = 0; i <4; i++)
-            multiPlayer.getDecksDevelop().get(Color.BLUE).get(2).drawCard();
+            multiPlayer.drawDevelopCard(Color.BLUE, 2);
         assertTrue(multiPlayer.isADeckDevelopEmpty());
     }
 
     @Test
     public void testIsADeckDevelopEmptyFalse(){
         for(int i = 0; i <3; i++)
-            multiPlayer.getDecksDevelop().get(Color.BLUE).get(2).drawCard();
+            multiPlayer.drawDevelopCard(Color.BLUE, 2);
         assertTrue(!multiPlayer.isADeckDevelopEmpty());
     }
 
@@ -106,6 +107,40 @@ public class MultiPlayerTest {
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         // player 0 gets to the end of the faith track
+        multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
+        // end of game is triggered
+        assertTrue(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertTrue(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        assertTrue(multiPlayer.isGameOver());
+    }
+
+    @Test
+    public void testNextTurnDevelop(){
+        assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        // player 0 buys 7 develop cards
+        ArrayList<DevelopCardSlot> slots = multiPlayer.getPlayers().get(0).getBoard().getDevelopCardSlots();
+        slots.get(0).addDevelopCard(multiPlayer.drawDevelopCard(Color.BLUE,1));
+        slots.get(0).addDevelopCard(multiPlayer.drawDevelopCard(Color.GREEN,2));
+        slots.get(0).addDevelopCard(multiPlayer.drawDevelopCard(Color.GREEN,3));
+        slots.get(1).addDevelopCard(multiPlayer.drawDevelopCard(Color.GOLD,1));
+        slots.get(1).addDevelopCard(multiPlayer.drawDevelopCard(Color.GOLD,2));
+        slots.get(1).addDevelopCard(multiPlayer.drawDevelopCard(Color.GOLD,3));
+        slots.get(2).addDevelopCard(multiPlayer.drawDevelopCard(Color.PURPLE,1));
         multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
