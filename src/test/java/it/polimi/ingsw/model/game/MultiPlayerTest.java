@@ -92,34 +92,58 @@ public class MultiPlayerTest {
         multiPlayer2.destroy();
     }
 
-    @Test  (expected = GameIsOverException.class)
-    public void testNextTurn(){
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
-        System.out.println(multiPlayer.isLastRound());
+    @Test
+    public void testNextTurnEndOfFaithTrack(){
+        assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
         multiPlayer.nextTurn();
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
-        System.out.println(multiPlayer.isLastRound());
+        assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
         multiPlayer.nextTurn();
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
-        System.out.println(multiPlayer.isLastRound());
+        assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
         multiPlayer.nextTurn();
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        // player 0 gets to the end of the faith track
         multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
-        System.out.println(multiPlayer.isLastRound());
         multiPlayer.nextTurn();
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
-        System.out.println(multiPlayer.isLastRound());
+        assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
+        // end of game is triggered
+        assertTrue(multiPlayer.isLastRound());
         multiPlayer.nextTurn();
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
-        System.out.println(multiPlayer.isLastRound());
+        assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertTrue(multiPlayer.isLastRound());
         multiPlayer.nextTurn();
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
-        System.out.println(multiPlayer.isLastRound());
+        assertTrue(multiPlayer.isGameOver());
+    }
+
+    @Test  (expected = GameIsOverException.class)
+    public void testNextTurnException(){
+        assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
         multiPlayer.nextTurn();
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
-        System.out.println(multiPlayer.isLastRound());
+        assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
         multiPlayer.nextTurn();
-        System.out.println(multiPlayer.getTurn().getCurrentPlayer());
+        assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        // player 0 gets to the end of the faith track
+        multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
+        // end of game is triggered
+        assertTrue(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertTrue(multiPlayer.isLastRound());
+        multiPlayer.nextTurn();
+        assertTrue(multiPlayer.isGameOver());
+        // if i try to call nextTurn when the game is over i get an exception
+        multiPlayer.nextTurn();
     }
 
 }

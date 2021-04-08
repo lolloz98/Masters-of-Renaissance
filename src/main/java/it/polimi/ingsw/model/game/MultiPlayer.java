@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.GameIsOverException;
+import it.polimi.ingsw.model.exception.GameNotOverException;
 import it.polimi.ingsw.model.player.Player;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.TreeMap;
 
 /**
  * Concrete extension of the class Game. It has all the variables and methods needed to represent the state of a MultiPlayer game.
@@ -48,6 +47,8 @@ public class MultiPlayer extends Game<TurnMulti> {
 
     /**
      * Method that changes the turn. If the next turn is null, it means that the game is over.
+     *
+     * @throws GameIsOverException if i call nextTurn on an game that is already terminated
      */
     @Override
     public void nextTurn(){
@@ -81,9 +82,11 @@ public class MultiPlayer extends Game<TurnMulti> {
 
     /**
      * @return the winner if the game is over
+     *
+     * @throws GameNotOverException if i call getWinner on an ongoing game
      */
     public void getWinner(){
         if(!isGameOver()) throw new GameNotOverException();
-        // TODO
+        // TODO get points, if it's a tie check the resources
     }
 }
