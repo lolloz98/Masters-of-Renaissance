@@ -15,6 +15,7 @@ public class MultiPlayer extends Game<TurnMulti> {
 
     public MultiPlayer(ArrayList<Player> players){
         super();
+        this.turn = new TurnMulti(players.get(0));
         this.players = players;
         this.lastRound = false;
     }
@@ -71,5 +72,11 @@ public class MultiPlayer extends Game<TurnMulti> {
         }};
     }
 
-
+    /**
+     * Distribute 4 cards to the players
+     */
+    @Override
+    public void distributeLeader(){
+        for(Player p : players) distributeLeaderToPlayer(p);
+    }
 }

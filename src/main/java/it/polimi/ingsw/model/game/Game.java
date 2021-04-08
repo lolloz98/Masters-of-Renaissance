@@ -8,23 +8,25 @@ import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
+import it.polimi.ingsw.model.player.Player;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Class which represents the state of the game. It's abstract as the game mus be either SinglePlayer or MultiPlayer.
+ * Class which represents the state of the game. It's abstract as the game must be either SinglePlayer or MultiPlayer.
  */
 
 public abstract class Game <T extends Turn> {
+    private static Set<Integer> usedId = Collections.synchronizedSet(new TreeSet<>());
     private boolean gameOver;
-    private int id;
+    private final int id;
     private final MarketTray marketTray;
-    private T turn;
+    protected T turn;
     private TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
-    private Deck<LeaderCard> deckLeader;
+    private Deck<LeaderCard<? extends Requirement>> deckLeader;
 
     public Game(){
         try {
@@ -36,6 +38,7 @@ public abstract class Game <T extends Turn> {
         }
         this.marketTray = new MarketTray(new MarbleDispenserCollection());
         this.gameOver = false;
+        this.id = getNewId();
     }
 
     public TreeMap<Color, TreeMap<Integer, DeckDevelop>> getDecksDevelop() {
@@ -58,13 +61,37 @@ public abstract class Game <T extends Turn> {
         this.turn = turn;
     }
 
-    public Deck<LeaderCard> getDeckLeader() {
+    public Deck<LeaderCard<? extends Requirement>> getDeckLeader() {
         return deckLeader;
+    }
+    public int getId() {
+        return id;
     }
 
     public abstract void checkEndConditions();
 
     public abstract void nextTurn();
+
+    public abstract void distributeLeader();
+
+    /**
+     * @returns the value of an id that doesn't correspond to any of the currently ongoing games
+     */
+    private synchronized static int getNewId(){
+        int i = 0;
+        while (usedId.contains(i)) {
+            i++;
+        }
+        usedId.add(i);
+        return i;
+    }
+
+    /**
+     * Removes the id from the list of used ids
+     */
+    private synchronized static void removeId(int id){
+        usedId.remove(id);
+    }
 
     /**
      * Setup method for the 12 DeckDevelop in the game, loading the cards from the json folder, using gson library.
@@ -106,7 +133,7 @@ public abstract class Game <T extends Turn> {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
-        ArrayList<LeaderCard> leaderCards = new ArrayList<>();
+        ArrayList<LeaderCard<? extends Requirement>> leaderCards = new ArrayList<>();
         String path;
         int i;
         for(i = 49; i < 53; i++) {
@@ -125,7 +152,7 @@ public abstract class Game <T extends Turn> {
             path = String.format("json_file/cards/leader/%03d.json", i);
             leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), ProductionLeaderCard.class));
         }
-        this.deckLeader = new Deck<>(leaderCards);
+        this.deckLeader = new Deck<LeaderCard<? extends Requirement>>(leaderCards);
         this.deckLeader.shuffle();
     }
 
@@ -178,5 +205,18 @@ public abstract class Game <T extends Turn> {
             for(int level = 1; level < 4; level++)
                 if (decksDevelop.get(color).get(level).isEmpty()) return true;
         return false;
+    }
+
+    /**
+     * Destroy method
+     */
+    public void destroy() {
+        removeId(this.id);
+    }
+
+    public void distributeLeaderToPlayer(Player player){
+        for(int i=0; i<4; i++){
+            player.getBoard().addLeaderCards(deckLeader.distributeCards(4));
+        }
     }
 }

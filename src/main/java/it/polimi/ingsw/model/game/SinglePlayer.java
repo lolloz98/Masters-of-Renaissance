@@ -35,6 +35,7 @@ public class SinglePlayer extends Game<TurnSingle>{
 
     public SinglePlayer(Player player) {
         super();
+        this.turn = new TurnSingle(false);
         this.player = player;
         this.lorenzo = new Lorenzo();
         this.hasPlayerWon = false;
@@ -69,13 +70,12 @@ public class SinglePlayer extends Game<TurnSingle>{
     }
 
     /**
-     * Checks if end condition is met. If it is, the lastTurn is set to true,
-     * nextTurn() in Turn will return null and the Game will end.
+     * Checks if end condition is met. If it is, the lastTurn is set to true, nextTurn() in Turn will return null and the Game will end.
      */
     @Override
     public void checkEndConditions(){
         if((player.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 6)
-            || player.getBoard().getFaithtrack().isEndReached()){
+                || player.getBoard().getFaithtrack().isEndReached()){
             setLastTurn(true);
             setHasPlayerWon(true);
         }
@@ -95,5 +95,13 @@ public class SinglePlayer extends Game<TurnSingle>{
             this.playerPoints = player.getBoard().getVictoryPoints();
         }
         else setTurn(turn);
+    }
+
+    /**
+     * Distribute 4 cards to the players
+     */
+    @Override
+    public void distributeLeader(){
+        distributeLeaderToPlayer(player);
     }
 }
