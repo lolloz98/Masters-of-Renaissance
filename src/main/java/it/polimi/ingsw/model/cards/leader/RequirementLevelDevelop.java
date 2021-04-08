@@ -34,7 +34,6 @@ public class RequirementLevelDevelop implements Requirement {
      */
     @Override
     public boolean checkRequirement(Player player) {
-        // TODO: check
         for(DevelopCardSlot ds: player.getBoard().getDevelopCardSlots())
             for(DevelopCard c: ds.getCards())
                 if(c.getLevel() == level && c.getColor() == color) return true;

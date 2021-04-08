@@ -33,7 +33,6 @@ public class RequirementResource implements Requirement{
      */
     @Override
     public boolean checkRequirement(Player player) {
-        // TODO: check
         return player.getBoard().enoughResToActivate(new TreeMap<>(){{
             put(res, quantity);
         }});
