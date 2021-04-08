@@ -88,4 +88,14 @@ public class DevelopCard implements Card, VictoryPointCalculator{
     public Production getProduction() {
         return production;
     }
+
+    /**
+     * remove the discount on a specific res if present
+     * @param res resource on which to remove the discount
+     */
+    public void removeDiscount(Resource res) {
+        if(discountApplied.getOrDefault(res, 0) != 0)
+            cost.replace(res, discountApplied.get(res) + cost.get(res));
+        discountApplied.remove(res);
+    }
 }
