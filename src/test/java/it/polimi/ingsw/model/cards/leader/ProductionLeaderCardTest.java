@@ -32,18 +32,19 @@ public class ProductionLeaderCardTest {
     }
 
     @Test
-    public void testApplyEffect() {
-        // todo: after game implementation
+    public void testActivate() {
     }
 
     @Test
-    public void testApplyEffectNoCheckOnActive() {
-        // todo: after game implementation
+    public void testDiscard() {
+    }
+
+    @Test
+    public void testApplyEffect() {
     }
 
     @Test
     public void testRemoveEffect() {
-        // todo: after game implementation
     }
 
     @Test

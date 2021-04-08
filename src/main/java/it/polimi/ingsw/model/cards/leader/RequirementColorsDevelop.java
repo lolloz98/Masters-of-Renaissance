@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.cards.leader;
 
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DevelopCard;
-import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
 
@@ -21,8 +20,7 @@ public class RequirementColorsDevelop implements Requirement {
     }
 
     public RequirementColorsDevelop(TreeMap<Color, Integer> requiredDevelops){
-        this.requiredDevelops = new TreeMap<>();
-        this.requiredDevelops.putAll(requiredDevelops);
+        this.requiredDevelops = new TreeMap<>(requiredDevelops);
     }
 
     /**

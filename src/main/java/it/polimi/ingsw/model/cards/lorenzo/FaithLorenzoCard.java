@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.cards.lorenzo;
 
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.SinglePlayer;
-import it.polimi.ingsw.model.game.TurnSingle;
 
 public class FaithLorenzoCard extends LorenzoCard {
     public FaithLorenzoCard(int id) {
