@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.cards.leader;
 
+import it.polimi.ingsw.model.exception.AlreadyAppliedLeaderCardException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 
 public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop>{
     private final Resource targetRes;
+    private boolean hasBeenApplied = false;
 
     public MarbleLeaderCard(int victoryPoints, RequirementColorsDevelop requirement, Resource targetRes, int id) {
         super(victoryPoints, requirement, id);
@@ -15,9 +17,11 @@ public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop>
      * if active, call this.applyEffectNoCheckOnActive
      *
      * @param game current game, it can be affected by this method
+     * @throws AlreadyAppliedLeaderCardException if the effect of this card has been applied and yet not removed
      */
     @Override
     public void applyEffect(Game<?> game) {
+        if(hasBeenApplied) throw new AlreadyAppliedLeaderCardException();
         if(isActive()) applyEffectNoCheckOnActive(game);
     }
 
@@ -28,8 +32,8 @@ public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop>
      */
     @Override
     protected void applyEffectNoCheckOnActive(Game<?> game) {
-        // TODO: check
-        game.updateMarketWithLeader(targetRes);
+        hasBeenApplied = true;
+        game.getMarketTray().addLeaderResource(targetRes);
     }
 
     /**
@@ -39,8 +43,8 @@ public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop>
      */
     @Override
     public void removeEffect(Game<?> game) {
-        // TODO: check
+        hasBeenApplied = false;
         if (isActive())
-            game.removeLeaderResFromMarket();
+            game.getMarketTray().removeLeaderResource(targetRes);
     }
 }

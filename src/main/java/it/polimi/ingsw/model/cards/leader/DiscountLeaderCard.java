@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards.leader;
 
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DeckDevelop;
+import it.polimi.ingsw.model.exception.AlreadyAppliedLeaderCardException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 
@@ -10,6 +11,7 @@ import java.util.TreeMap;
 public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelop> {
     private final Resource res;
     private final int quantity = 1;
+    private boolean hasBeenApplied = false;
 
     public DiscountLeaderCard(int victoryPoints, RequirementColorsDevelop requirement, Resource res, int id) {
         super(victoryPoints, requirement, id);
@@ -30,8 +32,14 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
         return quantity;
     }
 
+    /**
+     *
+     * @param game current game, it can be affected by this method
+     * @throws AlreadyAppliedLeaderCardException if the effect of this card has been applied and yet not removed
+     */
     @Override
     public void applyEffect(Game<?> game) {
+        if(hasBeenApplied) throw new AlreadyAppliedLeaderCardException();
         if (isActive()) applyEffectNoCheckOnActive(game);
     }
 
@@ -42,7 +50,7 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
      */
     @Override
     protected void applyEffectNoCheckOnActive(Game<?> game) {
-        // TODO: check
+        hasBeenApplied = true;
         TreeMap<Color, TreeMap<Integer, DeckDevelop>> decks = game.getDecksDevelop();
         for (Color c : decks.keySet()) {
             decks.get(c).forEach((i, d) -> d.applyDiscount(res, quantity));
@@ -56,11 +64,11 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
      */
     @Override
     public void removeEffect(Game<?> game) {
-        // TODO: check
+        hasBeenApplied = false;
         if (isActive()) {
             TreeMap<Color, TreeMap<Integer, DeckDevelop>> decks = game.getDecksDevelop();
             for (Color c : decks.keySet()) {
-                decks.get(c).forEach((i, d) -> d.removeDiscounts());
+                decks.get(c).forEach((i, d) -> d.removeDiscount(res));
             }
         }
     }

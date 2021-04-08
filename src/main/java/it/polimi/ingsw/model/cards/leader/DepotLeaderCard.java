@@ -33,7 +33,6 @@ public final class DepotLeaderCard extends LeaderCard<RequirementResource> {
      */
     @Override
     protected void applyEffectNoCheckOnActive(Game<?> game) {
-        // TODO: check
         Board board =
                 ((game instanceof SinglePlayer) ?
                         ((SinglePlayer) game).getPlayer() : ((MultiPlayer) game).getTurn().getCurrentPlayer())

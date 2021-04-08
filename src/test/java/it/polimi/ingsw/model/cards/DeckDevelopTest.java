@@ -56,10 +56,29 @@ public class DeckDevelopTest {
     @Test
     public void testRemoveDiscounts() {
         deck.removeDiscounts(); // nothing happens: no discounts applied
+        assertFalse(deck.isDiscounted());
         deck.applyDiscount(Resource.GOLD, 1);
+        assertTrue(deck.isDiscounted());
         deck.removeDiscounts();
+        assertFalse(deck.isDiscounted());
         while(!deck.isEmpty()){
             assertFalse(deck.drawCard().isDiscounted());
         }
+    }
+
+    @Test
+    public void testRemoveDiscount() {
+        assertFalse(deck.isDiscounted());
+        deck.removeDiscount(Resource.GOLD); // nothing happens: no discounts applied
+        assertFalse(deck.isDiscounted());
+
+        deck.applyDiscount(Resource.GOLD, 1);
+        assertTrue(deck.isDiscounted());
+
+        deck.removeDiscount(Resource.ROCK);
+        assertTrue(deck.isDiscounted());
+
+        deck.removeDiscount(Resource.GOLD);
+        assertFalse(deck.isDiscounted());
     }
 }

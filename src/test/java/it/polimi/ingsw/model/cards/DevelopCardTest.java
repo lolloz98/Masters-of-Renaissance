@@ -37,16 +37,21 @@ public class DevelopCardTest {
         developCard = new DevelopCard(cost, production, Color.BLUE, 2, 4, 0);
     }
 
-    @Test
-    public void testApplyDiscount() {
+    private void applyDiscount(){
         assertFalse(developCard.isDiscounted());
         assertEquals(cost, developCard.getCurrentCost());
         developCard.applyDiscount(Resource.ROCK, 1);
     }
 
+
+    @Test
+    public void testApplyDiscount() {
+        applyDiscount();
+    }
+
     @Test
     public void testGetCurrentCost() {
-        testApplyDiscount();
+        applyDiscount();
         assertTrue(developCard.isDiscounted());
         assertEquals((cost.get(Resource.ROCK) - 1), (int) developCard.getCurrentCost().get(Resource.ROCK));
     }
@@ -60,7 +65,7 @@ public class DevelopCardTest {
     public void testRemoveDiscounts() {
         developCard.removeDiscounts();
         assertFalse(developCard.isDiscounted());
-        testApplyDiscount();
+        applyDiscount();
         developCard.removeDiscounts();
         assertFalse(developCard.isDiscounted());
         assertEquals(cost, developCard.getCurrentCost());
@@ -69,5 +74,18 @@ public class DevelopCardTest {
     @Test
     public void testGetProduction() {
         assertEquals(production, developCard.getProduction());
+    }
+
+    @Test
+    public void testRemoveDiscount() {
+        assertFalse(developCard.isDiscounted());
+        applyDiscount();
+        assertTrue(developCard.isDiscounted());
+        developCard.removeDiscount(Resource.GOLD);
+        assertTrue(developCard.isDiscounted());
+
+        developCard.removeDiscount(Resource.ROCK);
+        assertFalse(developCard.isDiscounted());
+        assertEquals(cost, developCard.getCurrentCost());
     }
 }

@@ -30,7 +30,6 @@ public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevel
      */
     @Override
     protected void applyEffectNoCheckOnActive(Game<?> game) {
-        // TODO: check
         if ((game instanceof SinglePlayer)) {
             ((SinglePlayer) game).getPlayer().getBoard().discoverProductionLeader(this);
         } else {
