@@ -2,11 +2,9 @@ package it.polimi.ingsw.model.cards.leader;
 
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.MultiPlayer;
-import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.game.SinglePlayer;
 import it.polimi.ingsw.model.player.Board;
 import it.polimi.ingsw.model.player.Depot;
-import it.polimi.ingsw.model.player.Player;
 
 import java.util.TreeMap;
 

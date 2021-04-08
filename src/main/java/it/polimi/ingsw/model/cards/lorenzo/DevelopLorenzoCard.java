@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.cards.lorenzo;
 
 import it.polimi.ingsw.model.cards.Color;
-import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DeckDevelop;
 import it.polimi.ingsw.model.game.SinglePlayer;
 

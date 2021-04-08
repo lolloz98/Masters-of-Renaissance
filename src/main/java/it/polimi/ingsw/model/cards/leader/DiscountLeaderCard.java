@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DeckDevelop;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
-import it.polimi.ingsw.model.player.Player;
 
 import java.util.TreeMap;
 
