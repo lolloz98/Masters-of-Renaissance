@@ -37,20 +37,21 @@ public class DevelopCardSlot {
             case 0:{
                 if(card.getLevel()!=1)throw new InvalidDevelopCardToSlotException();
                 cards.add(card);
+                break;
             }
             case 1:{
                 if(card.getLevel()!=2)throw new InvalidDevelopCardToSlotException();
                 cards.add(card);
+                break;
             }
             case 2:{
                 if(card.getLevel()!=3)throw new InvalidDevelopCardToSlotException();
                 cards.add(card);
+                break;
             }
-            case 3:{
-                throw new FullDevelopSlotException();
-            }
+            default:
+                throw new IllegalArgumentException();
         }
-
     }
 
     /**

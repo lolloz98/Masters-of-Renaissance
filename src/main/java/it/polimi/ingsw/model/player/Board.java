@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.player;
 
 
+import it.polimi.ingsw.model.cards.Color;
+import it.polimi.ingsw.model.cards.DeckDevelop;
 import it.polimi.ingsw.model.cards.Production;
 import it.polimi.ingsw.model.cards.VictoryPointCalculator;
 import it.polimi.ingsw.model.cards.leader.*;
@@ -298,6 +300,33 @@ public class Board implements VictoryPointCalculator {
                 }
             }
         }
+    }
+
+    /**
+     * buy the develop card on top of the deck of whichColor and whichLevel and put it in the slot indexed by slotToStore
+     *
+     * @param game current game
+     * @param whichColor color of the develop card to buy
+     * @param whichLevel level of the develop card to buy
+     * @param slotToStore slot in which to store the develop card
+     * @throws EmptyDeckException if the deckDevelop with whichColor and whichLevel in game is empty
+     * @throws NotEnoughResourcesException if this does not have enoughResources to buy the card
+     * @throws InvalidDevelopCardToSlotException if the card to buy cannot go in the chosen slot
+     * @throws IllegalArgumentException if whichLevel or slotToStore are out of bound
+     */
+    public void buyDevelopCard(Game<?> game, Color whichColor, int whichLevel, int slotToStore){
+        if(slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3) throw new IllegalArgumentException();
+
+        // think about checking for the color in the method below
+        DeckDevelop deck = game.getDecksDevelop().get(whichColor).get(whichLevel);
+        if(deck.isEmpty()) throw new EmptyDeckException();
+
+        TreeMap<Resource, Integer> resToGive = deck.topCard().getCurrentCost();
+        if(!enoughResToActivate(resToGive)) throw new NotEnoughResourcesException();
+
+        developCardSlots.get(slotToStore).addDevelopCard(deck.drawCard()); // it can throw InvalidDevelopCardToSlotException
+
+        removeResources(resToGive);
     }
 }
 

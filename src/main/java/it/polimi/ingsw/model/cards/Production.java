@@ -119,7 +119,6 @@ public class Production {
      * @param game current game
      */
     public void flushGainedToBoard(Board board, Game<?> game){
-        // TODO: check
         board.flushGainedResources(gainedResources, game);
         gainedResources.clear();
     }
