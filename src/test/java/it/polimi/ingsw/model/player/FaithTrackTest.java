@@ -94,6 +94,7 @@ public class FaithTrackTest {
         }
         ft.get(2).move(illegalStep, multiPlayer);
     }
+
     @Test(expected = EndAlreadyReachedException.class)
     public void moveTest1(){
         int i;
@@ -110,7 +111,7 @@ public class FaithTrackTest {
         ft.get(0).move(s1,multiPlayer);
     }
 
-    @Test(expected = InvalidStepsException.class)
+    @Test
     public void moveTestSingle() {
         FaithTrack lorenzoFt=singlePLayer.getLorenzo().getFaithTrack();
         FaithTrack playerFt=ft.get(0);
@@ -157,7 +158,6 @@ public class FaithTrackTest {
         assertEquals(Figurestate.ACTIVE,lorenzoFt.getFigures()[1].getState());
         assertEquals(Figurestate.DISCARDED,playerFt.getFigures()[2].getState());
         assertEquals(Figurestate.ACTIVE,lorenzoFt.getFigures()[2].getState());
-        lorenzoFt.move(illegalStep,singlePLayer);
     }
 
     @Test
