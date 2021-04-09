@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.game.Resource;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+/**
+ * Deck for DevelopCards.
+ */
 public final class DeckDevelop extends Deck<DevelopCard> {
     private final int level;
     private final Color color;

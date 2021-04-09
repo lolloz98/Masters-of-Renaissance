@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.game;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DeckDevelop;
@@ -8,12 +11,16 @@ import it.polimi.ingsw.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.model.cards.leader.Requirement;
 import it.polimi.ingsw.model.exception.EmptyDeckException;
 import it.polimi.ingsw.model.exception.GameIsOverException;
+import it.polimi.ingsw.model.exception.InvalidResourcesToKeepByPlayerException;
 import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import static org.junit.Assert.*;
 
@@ -188,4 +195,38 @@ public class MultiPlayerTest {
         }
     }
 
+    /*
+    @Test
+    public void testGetWinnersSingle() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        multiPlayer.distributeLeader();
+        DevelopCard dc;
+        try {
+            dc = (gson.fromJson(new JsonReader(new FileReader("json_file/cards/develop/005.json")), DevelopCard.class));
+        } catch (FileNotFoundException e) {
+            dc = multiPlayer.drawDevelopCard(Color.BLUE, 1);
+        }
+        multiPlayer.getTurn().getCurrentPlayer().getBoard().getDevelopCardSlots().get(0).addDevelopCard(dc);
+        multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(2,multiPlayer);
+        try {
+            multiPlayer.getTurn().getCurrentPlayer().getBoard().gainResources(
+                    new TreeMap<Resource, Integer>(){{
+                        put(Resource.GOLD, 1);
+                    }},
+                    new TreeMap<Resource, Integer>(){{
+                        put(Resource.GOLD, 1);
+                    }},
+                    multiPlayer
+            );
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            e.printStackTrace();
+        }
+        multiPlayer.nextTurn();
+        multiPlayer.nextTurn();
+        multiPlayer.nextTurn();
+        assertEquals(new ArrayList<>(){{add(multiPlayer.getPlayers().get(0));}}, multiPlayer.getWinners());
+    }
+    */
 }

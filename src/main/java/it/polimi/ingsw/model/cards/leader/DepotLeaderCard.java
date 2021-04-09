@@ -8,6 +8,10 @@ import it.polimi.ingsw.model.player.Depot;
 
 import java.util.TreeMap;
 
+/**
+ * LeaderCard with effect of creating a new Depot in the board of the player.
+ * To be activated, it requires the fulfillment (and payment) of RequirementResource.
+ */
 public final class DepotLeaderCard extends LeaderCard<RequirementResource> {
     private final Depot depot;
 

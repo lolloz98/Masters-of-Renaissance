@@ -8,6 +8,10 @@ import it.polimi.ingsw.model.game.Resource;
 
 import java.util.TreeMap;
 
+/**
+ * LeaderCard with effect of discounting the cost of Develop Cards.
+ * To be activated, it requires the fulfillment of RequirementColorsDevelop.
+ */
 public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelop> {
     private final Resource res;
     private final int quantity = 1;
@@ -58,7 +62,7 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
     }
 
     /**
-     * If any, remove discounts from the cards still to be sold in the game
+     * Remove discount for this.res from the cards still to be sold in the game
      *
      * @param game current game, it is affected by this method
      */
