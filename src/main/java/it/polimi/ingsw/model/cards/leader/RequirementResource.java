@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.player.Player;
 
 import java.util.TreeMap;
 
+/**
+ * To be fulfilled, the player needs to have 5 resources of a specific type.
+ */
 public class RequirementResource implements Requirement{
     private final Resource res;
     private final int quantity = 5;

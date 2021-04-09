@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.player.Player;
 
 import java.util.TreeMap;
 
+/**
+ * To be fulfilled, the player needs to have a certain amount of developCards of specific colors.
+ */
 public class RequirementColorsDevelop implements Requirement {
     private final TreeMap<Color, Integer> requiredDevelops;
 

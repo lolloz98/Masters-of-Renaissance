@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.cards.lorenzo;
 
 import it.polimi.ingsw.model.game.SinglePlayer;
 
+/**
+ * LorenzoCard with effect of moving Lorenzo of 1 step on the faithTrack and restoring LorenzoDeck.
+ */
 public class ReshuffleLorenzoCard extends LorenzoCard {
     public ReshuffleLorenzoCard(int id) {
         super(id);

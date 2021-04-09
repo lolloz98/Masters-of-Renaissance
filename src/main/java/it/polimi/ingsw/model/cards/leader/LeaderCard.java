@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.VictoryPointCalculator;
 import it.polimi.ingsw.model.exception.ActivateDiscardedCardException;
 import it.polimi.ingsw.model.exception.AlreadyActiveLeaderException;
-import it.polimi.ingsw.model.exception.AlreadyAppliedLeaderCardException;
 import it.polimi.ingsw.model.exception.RequirementNotSatisfiedException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.player.Player;
