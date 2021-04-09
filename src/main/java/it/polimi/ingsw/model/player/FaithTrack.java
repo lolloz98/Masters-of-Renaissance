@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.cards.VictoryPointCalculator;
+import it.polimi.ingsw.model.exception.EndAlreadyReachedException;
 import it.polimi.ingsw.model.exception.InvalidStepsException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.MultiPlayer;
@@ -64,6 +65,7 @@ public class FaithTrack implements VictoryPointCalculator {
      * method that moves the player through the path and handle the vaticanfigures activation
      */
     public void move(int steps, Game game) {
+        if(isEndReached()) throw new EndAlreadyReachedException();
         advance(steps);
         ArrayList<Integer> checkpointnumber = whichCheckpointIsReached(steps);
         if (!checkpointnumber.isEmpty()) {
@@ -83,11 +85,14 @@ public class FaithTrack implements VictoryPointCalculator {
      * method that activate the VaticanFigures of the player that has the rights (in a single player game)
      */
     private void checkpointHandling(int steps, SinglePlayer game, int checkpointnumber) {
-        if (game.getLorenzo().getFaithTrack().hasRights(checkpointnumber)) {
+        if (game.getLorenzo().getFaithTrack().hasRights(checkpointnumber))
             game.getLorenzo().getFaithTrack().activateVatican(checkpointnumber);
-        }
+        else
+            game.getLorenzo().getFaithTrack().discardVatican(checkpointnumber);
         if (game.getPlayer().getBoard().getFaithtrack().hasRights(checkpointnumber))
             game.getPlayer().getBoard().getFaithtrack().activateVatican(checkpointnumber);
+        else
+            game.getPlayer().getBoard().getFaithtrack().discardVatican(checkpointnumber);
     }
 
 
