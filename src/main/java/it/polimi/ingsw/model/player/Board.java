@@ -169,22 +169,22 @@ public class Board implements VictoryPointCalculator {
         strongbox.spendResources(resToSpend);
     }
 
-    public void moveOnFaithPath(int steps,Game<?> game) {
-        this.faithtrack.move(steps,game);
+    public void moveOnFaithPath(int steps, Game<?> game) {
+        this.faithtrack.move(steps, game);
     }
 
     @Override
     public int getVictoryPoints() {
-        int points=0;
-        points+=faithtrack.getVictoryPoints();
-        int res=howManyResources();
-        points+=Math.floorDiv(res,5);
-        for(LeaderCard lc: leaderCards){
-            points+=lc.getVictoryPoints();
+        int points = 0;
+        points += faithtrack.getVictoryPoints();
+        int res = howManyResources();
+        points += Math.floorDiv(res, 5);
+        for (LeaderCard lc : leaderCards) {
+            points += lc.getVictoryPoints();
         }
-        for(DevelopCardSlot dcs: developCardSlots){
-            for(DevelopCard dc:dcs.getCards()){
-                points+=dc.getVictoryPoints();
+        for (DevelopCardSlot dcs : developCardSlots) {
+            for (DevelopCard dc : dcs.getCards()) {
+                points += dc.getVictoryPoints();
             }
         }
         return points;
@@ -284,14 +284,14 @@ public class Board implements VictoryPointCalculator {
             if ((resGained.getOrDefault(r, 0) < toKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
                 throw new IllegalArgumentException();
         }
-        if (cannotAppend( toKeep)) throw new InvalidResourcesToKeepByPlayerException();
+        if (cannotAppend(toKeep)) throw new InvalidResourcesToKeepByPlayerException();
         TreeMap<Resource, Integer> toGain = new TreeMap<>(toKeep);
         storeInDepotLeader(toGain);
         storeInNormalDepots(toGain, this.depots);
-        moveOnFaithPath(toKeep.get(Resource.FAITH),game);
-        TreeMap<Resource,Integer> toDiscard= new TreeMap<>(){{
-            for(Resource r: resGained.keySet()){
-                put(r,resGained.get(r)- toKeep.getOrDefault(r,0));
+        moveOnFaithPath(toKeep.get(Resource.FAITH), game);
+        TreeMap<Resource, Integer> toDiscard = new TreeMap<>() {{
+            for (Resource r : resGained.keySet()) {
+                put(r, resGained.get(r) - toKeep.getOrDefault(r, 0));
             }
         }};
         distributeFaithPoints(game, toDiscard);
@@ -299,17 +299,18 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * method that checks if the treemap toKeep is valid (it can be added to the depots without any gap of resources)
+     *
      * @param toKeep a Treemap chosen by the player
      * @return true if the TreeMap passed by the player is not valid
      */
-    private boolean cannotAppend( TreeMap<Resource, Integer> toKeep) {
+    private boolean cannotAppend(TreeMap<Resource, Integer> toKeep) {
         TreeMap<Resource, Integer> toGain = new TreeMap<>(toKeep);
         toGain.remove(Resource.ANYTHING);
         for (Resource r : toGain.keySet()) {
             for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();
                 if (d.getTypeOfResource() == r) {
-                    if (toGain.get(r) - d.getFreeSpace() >= 0)
+                    if (toGain.get(r) - d.getFreeSpace() > 0)
                         toGain.replace(r, toGain.get(r) - d.getFreeSpace());
                     else
                         toGain.remove(r);
@@ -333,9 +334,10 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * method that search a depot which can be substituted with the depot passed
+     *
      * @param depotToSwitchFrom depot that i want to substitute
      * @param depotArrayList
-     * @param howMany resources must be added to the depot
+     * @param howMany           resources must be added to the depot
      * @return the depot to substitute
      */
     private Depot lookForADepotToSwitch(Depot depotToSwitchFrom, ArrayList<Depot> depotArrayList, int howMany) {
@@ -350,7 +352,8 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * method that checks if there is a depot that contains r
-     * @param r resource
+     *
+     * @param r              resource
      * @param depotArrayList arraylist of depots to analyze
      * @return true if there isn't a depot which contains r
      */
@@ -365,32 +368,31 @@ public class Board implements VictoryPointCalculator {
     /**
      * give one point for each resource in extraResource to each player (apart from the current player)
      *
-     * @param game current game
+     * @param game           current game
      * @param extraResources resources that cannot be stored in depots
      */
     private void distributeFaithPoints(Game<?> game, TreeMap<Resource, Integer> extraResources) {
         int steps;
-        steps= Utility.sumOfValues(extraResources);
-        if(game instanceof MultiPlayer){
-            MultiPlayer gamemp=(MultiPlayer)game;
-            Player currentPlayer=gamemp.getTurn().getCurrentPlayer();
-            for(Player p:gamemp.getPlayers()){
-                if(!p.equals(currentPlayer))
-                    p.getBoard().moveOnFaithPath(steps,game);
+        steps = Utility.sumOfValues(extraResources);
+        if (game instanceof MultiPlayer) {
+            MultiPlayer gamemp = (MultiPlayer) game;
+            Player currentPlayer = gamemp.getTurn().getCurrentPlayer();
+            for (Player p : gamemp.getPlayers()) {
+                if (!p.equals(currentPlayer))
+                    p.getBoard().moveOnFaithPath(steps, game);
             }
         }
-        if(game instanceof SinglePlayer){//only the player could call this method
-            SinglePlayer gamesp=(SinglePlayer) game;
-            if(!gamesp.getTurn().isLorenzoPlaying()){
-                gamesp.getLorenzo().getFaithTrack().move(steps,game);
-            }
-            else
-                gamesp.getPlayer().getBoard().moveOnFaithPath(steps,game);
+        if (game instanceof SinglePlayer) {//only the player could call this method
+            SinglePlayer gamesp = (SinglePlayer) game;
+            if (!gamesp.getTurn().isLorenzoPlaying()) {
+                gamesp.getLorenzo().getFaithTrack().move(steps, game);
+            } else
+                gamesp.getPlayer().getBoard().moveOnFaithPath(steps, game);
         }
     }
 
     /**
-     * @param toGain resource that we want to gain. The values in the TreeMap gets changed.
+     * @param toGain         resource that we want to gain. The values in the TreeMap gets changed.
      * @param depotArrayList list of depots in which i want to store the resources
      */
     private void storeInNormalDepots(TreeMap<Resource, Integer> toGain, ArrayList<Depot> depotArrayList) {
@@ -400,17 +402,18 @@ public class Board implements VictoryPointCalculator {
                         (d.contains(r) && (d.getFreeSpace() >= toGain.get(r)))) {
                     d.addResource(r, toGain.get(r));
                     toGain.remove(r);
-                }
-                if (d.contains(r) && d.getFreeSpace() < toGain.get(r)) {
-                    Depot toSwitch = lookForADepotToSwitch(d, depotArrayList, toGain.get(r));
-                    if (toSwitch != null) {
-                        Depot tmp = new Depot(toSwitch.getMaxToStore(), true) {{
-                            addResource(toSwitch.getTypeOfResource(), toSwitch.getStored());
-                        }};
-                        toSwitch.clear();
-                        toSwitch.addResource(d.getTypeOfResource(), d.getStored() + toGain.get(r));
-                        d.addResource(tmp.getTypeOfResource(), tmp.getStored());
-                        toGain.remove(r);
+                } else {
+                    if (d.contains(r) && d.getFreeSpace() < toGain.get(r)) {
+                        Depot toSwitch = lookForADepotToSwitch(d, depotArrayList, toGain.get(r));
+                        if (toSwitch != null) {
+                            Depot tmp = new Depot(toSwitch.getMaxToStore(), true) {{
+                                addResource(toSwitch.getTypeOfResource(), toSwitch.getStored());
+                            }};
+                            toSwitch.clear();
+                            toSwitch.addResource(d.getTypeOfResource(), d.getStored() + toGain.get(r));
+                            d.addResource(tmp.getTypeOfResource(), tmp.getStored());
+                            toGain.remove(r);
+                        }
                     }
                 }
             }
@@ -465,15 +468,15 @@ public class Board implements VictoryPointCalculator {
         removeResources(resToGive);
     }
 
-    public int howManyResources(){
-        int count=0;
-        for(Depot d: depots){
-            count+=d.getStored();
+    public int howManyResources() {
+        int count = 0;
+        for (Depot d : depots) {
+            count += d.getStored();
         }
-        for(DepotLeaderCard dl:depotLeaders){
-            count+=dl.getDepot().getStored();
+        for (DepotLeaderCard dl : depotLeaders) {
+            count += dl.getDepot().getStored();
         }
-        count+=Utility.sumOfValues(strongbox.getResources());
+        count += Utility.sumOfValues(strongbox.getResources());
         return count;
     }
 }

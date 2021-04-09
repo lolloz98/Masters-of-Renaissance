@@ -21,24 +21,25 @@ public class VaticanFigure {
         return state;
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return state.equals(Figurestate.ACTIVE);
     }
 
-    public boolean isInactive(){
+    public boolean isInactive() {
         return state.equals(Figurestate.INACTIVE);
     }
+
     /**
      * method that changes the state of the figure when a player reaches a checkpoint on the faithpath
      */
-    public void activate(){
-        this.state=Figurestate.ACTIVE;
+    public void activate() {
+        this.state = Figurestate.ACTIVE;
     }
 
     /**
      * method that changes the state of the figure when a player reaches a checkpoint on the faithpath.
      */
-    public void discard(){
-        this.state=Figurestate.DISCARDED;
+    public void discard() {
+        this.state = Figurestate.DISCARDED;
     }
 }

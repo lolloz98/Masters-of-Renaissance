@@ -10,7 +10,7 @@ import java.util.TreeMap;
  * class that models the lockbox of the player
  */
 public class StrongBox {
-    private final TreeMap<Resource,Integer> resources;
+    private final TreeMap<Resource, Integer> resources;
 
     public StrongBox() {
         resources = new TreeMap<>();
@@ -24,7 +24,7 @@ public class StrongBox {
      * Add resGained to the strongBox
      *
      * @param resGained gained resources, to add to the strongBox
-     * @throws IllegalArgumentException if there is any negative integer in resGained
+     * @throws IllegalArgumentException         if there is any negative integer in resGained
      * @throws ResourceNotDiscountableException if there is any resource notDiscountable in resGained
      */
     public void addResources(TreeMap<Resource, Integer> resGained) {
@@ -44,7 +44,7 @@ public class StrongBox {
      *
      * @param resToSpend resources to subtract from the strongBox
      * @throws NotEnoughResourcesException if there are not enough resources in the strongBox
-     * @throws IllegalArgumentException if there is a negative Integer in resToSpend
+     * @throws IllegalArgumentException    if there is a negative Integer in resToSpend
      */
     public void spendResources(TreeMap<Resource, Integer> resToSpend) {
         if (!hasResources(resToSpend)) throw new NotEnoughResourcesException();
@@ -58,9 +58,9 @@ public class StrongBox {
      * @param resToSpend check if the strongBox has this amount of resources
      * @return true, if there are at least resToSpend resources in the strongBox, false otherwise
      */
-    public boolean hasResources(TreeMap<Resource,Integer> resToSpend){
-        for(Resource r: resToSpend.keySet()) {
-            if(resources.get(r) == null && resToSpend.get(r) > 0)
+    public boolean hasResources(TreeMap<Resource, Integer> resToSpend) {
+        for (Resource r : resToSpend.keySet()) {
+            if (resources.get(r) == null && resToSpend.get(r) > 0)
                 return false;
             if (resources.get(r) < resToSpend.get(r))
                 return false;

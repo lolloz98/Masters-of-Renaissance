@@ -16,64 +16,81 @@ import static org.junit.Assert.*;
 public class FaithTrackTest {
     private SinglePlayer singlePLayer;
     private MultiPlayer multiPlayer;
-    private FaithTrack ft;
+    private ArrayList<FaithTrack> ft;
 
     @Before
     public void setUp() {
         ArrayList<Player> players = new ArrayList<>();
+        ft = new ArrayList<>();
         players.add(new Player("first", 1));
         players.add(new Player("second", 2));
         players.add(new Player("third", 3));
         players.add(new Player("fourth", 4));
+        for (int i = 0; i < players.size(); i++) {
+            ft.add(players.get(i).getBoard().getFaithtrack());
+        }
         multiPlayer = new MultiPlayer(players);
-        singlePLayer=new SinglePlayer(players.get(0));
+        singlePLayer = new SinglePlayer(players.get(0));
         int i;
-        for(i=0;i<4;i++){
+        for (i = 0; i < 4; i++) {
             assertEquals(0, players.get(i).getBoard().getFaithtrack().getPosition());
             assertEquals(2, players.get(i).getBoard().getFaithtrack().getFigures()[0].getLevel());
             assertEquals(3, players.get(i).getBoard().getFaithtrack().getFigures()[1].getLevel());
             assertEquals(4, players.get(i).getBoard().getFaithtrack().getFigures()[2].getLevel());
         }
-        ft=players.get(0).getBoard().getFaithtrack();
     }
 
     @Test
-    public void moveTestMulti(){
-        int s1=1, s2=2, s3=3, s4=5;
+    public void moveTestMulti() {
+        int s1 = 1, s2 = 2, s3 = 3, s4 = 5, s5 = 15;
         int i;
-        multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().move(s1,multiPlayer);
-       assertEquals(1,multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().getPosition());
-        for(i=0;i<4;i++)
-            assertEquals(Figurestate.INACTIVE, multiPlayer.getPlayers().get(i).getBoard().getFaithtrack().getFigures()[0].getState());
-        multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().move(s2,multiPlayer);
-        assertEquals(3,multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().getPosition());
-        multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().move(s3,multiPlayer);
-        assertEquals(6,multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().getPosition());
-        for(i=0;i<4;i++){
-            assertEquals(Figurestate.INACTIVE, multiPlayer.getPlayers().get(i).getBoard().getFaithtrack().getFigures()[0].getState());
+        ft.get(0).move(s1, multiPlayer);
+        assertEquals(1, ft.get(0).getPosition());
+        for (i = 0; i < 4; i++) {
+            assertEquals(Figurestate.INACTIVE, ft.get(i).getFigures()[0].getState());
         }
-        multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().move(s4,multiPlayer);
-        assertEquals(11,multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().getPosition());
-        assertEquals(Figurestate.ACTIVE, multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().getFigures()[0].getState());
-        for(i=1;i<4;i++){
-            assertEquals(Figurestate.DISCARDED, multiPlayer.getPlayers().get(i).getBoard().getFaithtrack().getFigures()[0].getState());
+
+        ft.get(0).move(s2, multiPlayer);
+        assertEquals(3, ft.get(0).getPosition());
+        ft.get(0).move(s3, multiPlayer);
+        assertEquals(6, ft.get(0).getPosition());
+        for (i = 0; i < 4; i++) {
+            assertEquals(Figurestate.INACTIVE, ft.get(i).getFigures()[0].getState());
         }
-        //fare controllo andando avanti con il ft di un altro player
-
-
-
-
+        ft.get(0).move(s4, multiPlayer);
+        assertEquals(11, ft.get(0).getPosition());
+        assertEquals(Figurestate.ACTIVE, ft.get(0).getFigures()[0].getState());
+        for (i = 1; i < 4; i++) {
+            assertEquals(Figurestate.DISCARDED, ft.get(i).getFigures()[0].getState());
+            assertEquals(0, ft.get(i).getPosition());
+        }
+        ft.get(1).move(9, multiPlayer);
+        assertEquals(9, ft.get(1).getPosition());
+        assertEquals(Figurestate.ACTIVE, ft.get(0).getFigures()[0].getState());
+        for (i = 1; i < 4; i++) {
+            assertEquals(Figurestate.DISCARDED, ft.get(i).getFigures()[0].getState());
+        }
+        for (i = 0; i < 4; i++) {
+            for (int j = 1; j < 3; j++) {
+                assertEquals(Figurestate.INACTIVE, ft.get(i).getFigures()[j].getState());
+            }
+        }
+        ft.get(0).move(s1, multiPlayer);
+        assertEquals(12, ft.get(0).getPosition());
+        ft.get(1).move(s5, multiPlayer);
+        assertEquals(24, ft.get(1).getPosition());
+        assertTrue(ft.get(1).isEndReached());
     }
 
     @Test
-    public void moveTestSingle(){
+    public void moveTestSingle() {
 
     }
 
 
     @After
-    public void tearDown(){}
+    public void tearDown() {
+    }
 
 
-
-   }
+}

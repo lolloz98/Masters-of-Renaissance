@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.cards.VictoryPointCalculator;
-import it.polimi.ingsw.model.exception.InvalidStepsExeption;
+import it.polimi.ingsw.model.exception.InvalidStepsException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.MultiPlayer;
 import it.polimi.ingsw.model.game.SinglePlayer;
@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.game.SinglePlayer;
 import java.util.ArrayList;
 
 /**
- *class that models the faithpath of each player(including Leonardo)
+ * class that models the faithpath of each player(including Leonardo)
  */
 public class FaithTrack implements VictoryPointCalculator {
     private final VaticanFigure[] figures;
@@ -17,11 +17,11 @@ public class FaithTrack implements VictoryPointCalculator {
 
 
     public FaithTrack() {
-        this.position=0;
-        this.figures= new VaticanFigure[3];
-        this.figures[0]=new VaticanFigure(2);
-        this.figures[1]=new VaticanFigure(3);
-        this.figures[2]=new VaticanFigure(4);
+        this.position = 0;
+        this.figures = new VaticanFigure[3];
+        this.figures[0] = new VaticanFigure(2);
+        this.figures[1] = new VaticanFigure(3);
+        this.figures[2] = new VaticanFigure(4);
     }
 
     public int getPosition() {
@@ -33,30 +33,30 @@ public class FaithTrack implements VictoryPointCalculator {
     }
 
     @Override
-    public int getVictoryPoints(){
-        int points=0;
-        for(int i=0;i<3;i++){
-            if(figures[i].isActive())
-                points+=figures[i].getLevel();
+    public int getVictoryPoints() {
+        int points = 0;
+        for (int i = 0; i < 3; i++) {
+            if (figures[i].isActive())
+                points += figures[i].getLevel();
         }
-        if(position<3)
+        if (position < 3)
             return points;
-        else if(position<6)
-                return points+1;
-        else if(position<9)
-            return points+2;
-        else if(position<12)
-            return points+4;
-        else if(position<15)
-            return points+6;
-        else if(position<18)
-            return points+9;
-        else if(position<21)
-            return points+12;
-        else if(position<24)
-            return points+16;
-        else if(position==24)
-            return points+20;
+        else if (position < 6)
+            return points + 1;
+        else if (position < 9)
+            return points + 2;
+        else if (position < 12)
+            return points + 4;
+        else if (position < 15)
+            return points + 6;
+        else if (position < 18)
+            return points + 9;
+        else if (position < 21)
+            return points + 12;
+        else if (position < 24)
+            return points + 16;
+        else if (position == 24)
+            return points + 20;
         return points;
     }
 
@@ -68,9 +68,9 @@ public class FaithTrack implements VictoryPointCalculator {
         ArrayList<Integer> checkpointnumber = whichCheckpointIsReached(steps);
         if (!checkpointnumber.isEmpty()) {
             for (int i = 0; i < checkpointnumber.size(); i++) {
-                if (amiTheFirst( checkpointnumber.get(i))) {
+                if (amiTheFirst(checkpointnumber.get(i))) {
                     if (game instanceof MultiPlayer)
-                        checkpointHandling(steps, (MultiPlayer) game,checkpointnumber.get(i));
+                        checkpointHandling(steps, (MultiPlayer) game, checkpointnumber.get(i));
                     else
                         checkpointHandling(steps, (SinglePlayer) game, checkpointnumber.get(i));
                 }
@@ -82,81 +82,82 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * method that activate the VaticanFigures of the player that has the rights (in a single player game)
      */
-    private void checkpointHandling(int steps, SinglePlayer game, int checkpointnumber){
-            if(game.getLorenzo().getFaithTrack().hasRights(checkpointnumber)){
-                game.getLorenzo().getFaithTrack().activateVatican(checkpointnumber);
-            }
-            if(game.getPlayer().getBoard().getFaithtrack().hasRights(checkpointnumber))
-                game.getPlayer().getBoard().getFaithtrack().activateVatican(checkpointnumber);
+    private void checkpointHandling(int steps, SinglePlayer game, int checkpointnumber) {
+        if (game.getLorenzo().getFaithTrack().hasRights(checkpointnumber)) {
+            game.getLorenzo().getFaithTrack().activateVatican(checkpointnumber);
+        }
+        if (game.getPlayer().getBoard().getFaithtrack().hasRights(checkpointnumber))
+            game.getPlayer().getBoard().getFaithtrack().activateVatican(checkpointnumber);
     }
-
 
 
     /**
      * method that activate the VaticanFigures of the player that has the rights (in a multi player game)
      */
-    private void checkpointHandling(int steps, MultiPlayer game, int checkpointnumber){
-            for (Player p:
-                    game.getPlayers()) {
-                if(p.getBoard().getFaithtrack().hasRights(checkpointnumber))
-                    p.getBoard().getFaithtrack().activateVatican(checkpointnumber);
-                else
-                    p.getBoard().getFaithtrack().discardVatican(checkpointnumber);
-            }
+    private void checkpointHandling(int steps, MultiPlayer game, int checkpointnumber) {
+        for (Player p :
+                game.getPlayers()) {
+            if (p.getBoard().getFaithtrack().hasRights(checkpointnumber))
+                p.getBoard().getFaithtrack().activateVatican(checkpointnumber);
+            else
+                p.getBoard().getFaithtrack().discardVatican(checkpointnumber);
+        }
     }
 
 
     /**
      * method that advance the piece of n-steps
      */
-    private void advance(int n){
-        if(n<=0) throw new InvalidStepsExeption();
-        if(position+n<=24)
-            this.position+=n;
+    private void advance(int n) {
+        if (n <= 0) throw new InvalidStepsException();
+        if (position + n <= 24)
+            this.position += n;
         else
-            this.position=24;
+            this.position = 24;
     }
 
-    public boolean isEndReached(){
+    public boolean isEndReached() {
         return position == 24;
     }
 
 
     /**
      * method that checks if the player has reached the checkpoint
+     *
      * @return -1 if no checkpoint is reached, or returns the number of the checkpoint reached
      */
-    private ArrayList<Integer> whichCheckpointIsReached(int steps){
-        int oldposition=position-steps;
+    private ArrayList<Integer> whichCheckpointIsReached(int steps) {
+        int oldposition = position - steps;
         ArrayList<Integer> checks;
-        checks=new ArrayList<>();
-        if(oldposition<8&&position>=8)
+        checks = new ArrayList<>();
+        if (oldposition < 8 && position >= 8)
             checks.add(1);
-        if(oldposition<16&&position>=16)
+        if (oldposition < 16 && position >= 16)
             checks.add(2);
-        if(oldposition<24&&position>=24)
+        if (oldposition < 24 && position >= 24)
             checks.add(3);
         return checks;
     }
 
     /**
      * method that checks if the player has the rights to activate the vaticanfigure
+     *
      * @param checkpointnumber is the number of the checkpoint which i'm analyzing
      */
     private boolean hasRights(int checkpointnumber) {
         switch (checkpointnumber) {
             case 1: {
-                if (this.position>=5)
-                return true;
-            }
-
-            case 2:{
-                if (this.position>=12)
+                if (this.position >= 5)
                     return true;
             }
 
-            case 3 :{
-                if (this.position>=19)
+            case 2: {
+                if (this.position >= 12)
+                    return true;
+            }
+
+            case 3: {
+                if (this.position >= 19)
                     return true;
             }
 
@@ -166,19 +167,25 @@ public class FaithTrack implements VictoryPointCalculator {
     }
 
 
-    /**method that checks if the current player is the first that has reached the checkpoint
-    * @param whichcheckpoint is the number of the checkpoint to control
-    */
-    private boolean amiTheFirst(int whichcheckpoint){
-        return figures[whichcheckpoint-1].isInactive();
+    /**
+     * method that checks if the current player is the first that has reached the checkpoint
+     *
+     * @param whichcheckpoint is the number of the checkpoint to control
+     */
+    private boolean amiTheFirst(int whichcheckpoint) {
+        return figures[whichcheckpoint - 1].isInactive();
     }
 
-    /**method that activates the vatican figure*/
-    private void activateVatican( int whichvf){
-        this.figures[whichvf-1].activate();
+    /**
+     * method that activates the vatican figure
+     */
+    private void activateVatican(int whichvf) {
+        this.figures[whichvf - 1].activate();
     }
 
-    /**method that discards the vatican figure*/
+    /**
+     * method that discards the vatican figure
+     */
     private void discardVatican(int whichvf) {
         this.figures[whichvf - 1].discard();
     }

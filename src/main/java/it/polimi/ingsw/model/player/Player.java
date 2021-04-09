@@ -13,7 +13,7 @@ public class Player {
     public Player(String playerid, int playerNumber) {
         this.playerId = playerid;
         this.playerNumber = playerNumber;
-        board= new Board();
+        board = new Board();
     }
 
     public Board getBoard() {

@@ -31,21 +31,21 @@ public class DevelopCardSlot {
      * @param card card to be added
      * @throws InvalidDevelopCardToSlotException if the level of the card to be added is not right
      */
-    public void addDevelopCard(DevelopCard card){
-        int howmanycards=cards.size();
-        switch (howmanycards){
-            case 0:{
-                if(card.getLevel()!=1)throw new InvalidDevelopCardToSlotException();
+    public void addDevelopCard(DevelopCard card) {
+        int howmanycards = cards.size();
+        switch (howmanycards) {
+            case 0: {
+                if (card.getLevel() != 1) throw new InvalidDevelopCardToSlotException();
                 cards.add(card);
                 break;
             }
-            case 1:{
-                if(card.getLevel()!=2)throw new InvalidDevelopCardToSlotException();
+            case 1: {
+                if (card.getLevel() != 2) throw new InvalidDevelopCardToSlotException();
                 cards.add(card);
                 break;
             }
-            case 2:{
-                if(card.getLevel()!=3)throw new InvalidDevelopCardToSlotException();
+            case 2: {
+                if (card.getLevel() != 3) throw new InvalidDevelopCardToSlotException();
                 cards.add(card);
                 break;
             }
@@ -59,16 +59,16 @@ public class DevelopCardSlot {
      *
      * @param resToGive resource to give to apply the production
      * @param resToGain resource to gain after the application of the production
-     * @param board board of the player who is applying the production
+     * @param board     board of the player who is applying the production
      * @throws InvalidResourcesByPlayerException if resToGive or resToGain contains invalid resources
-     * @throws InvalidProductionChosenException if this does not contain any develop card
+     * @throws InvalidProductionChosenException  if this does not contain any develop card
      */
-    public void applyProduction(TreeMap<Resource,Integer> resToGive, TreeMap<Resource,Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionChosenException {
-        if(isEmpty()) throw new InvalidProductionChosenException();
-        cards.get(cards.size()-1).getProduction().applyProduction(resToGive,resToGain,board);
+    public void applyProduction(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionChosenException {
+        if (isEmpty()) throw new InvalidProductionChosenException();
+        cards.get(cards.size() - 1).getProduction().applyProduction(resToGive, resToGain, board);
     }
 
-    public boolean isEmpty(){
-        return cards.size()==0;
+    public boolean isEmpty() {
+        return cards.size() == 0;
     }
 }
