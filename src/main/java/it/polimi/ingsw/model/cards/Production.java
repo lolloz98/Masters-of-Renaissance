@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
-import it.polimi.ingsw.model.exception.InvalidResourcesForProductionActivationException;
 import it.polimi.ingsw.model.exception.ProductionAlreadyActivatedException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;

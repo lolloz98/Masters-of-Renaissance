@@ -29,7 +29,6 @@ public class RequirementColorsDevelop implements Requirement {
      */
     @Override
     public boolean checkRequirement(Player player) {
-        // TODO: check
         TreeMap<Color, Integer> req = new TreeMap<>(requiredDevelops);
         for(DevelopCardSlot ds: player.getBoard().getDevelopCardSlots())
             for(DevelopCard c: ds.getCards())
