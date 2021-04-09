@@ -5,6 +5,10 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.MultiPlayer;
 import it.polimi.ingsw.model.game.SinglePlayer;
 
+/**
+ * LeaderCard with effect of creating a new Production in the board of the player.
+ * To be activated, it requires the fulfillment (and payment) of RequirementLevelDevelop.
+ */
 public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevelop> {
     private final Production production;
 

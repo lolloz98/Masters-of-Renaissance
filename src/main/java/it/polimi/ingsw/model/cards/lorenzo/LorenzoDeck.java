@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.exception.EmptyDeckException;
 
 import java.util.ArrayList;
 
+/**
+ * Handle the deck of LorenzoCard.
+ */
 public class LorenzoDeck {
     private final ArrayList<LorenzoCard> original;
     private Deck<LorenzoCard> inUse;

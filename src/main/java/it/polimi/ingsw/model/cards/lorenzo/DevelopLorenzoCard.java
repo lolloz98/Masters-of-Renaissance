@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.game.SinglePlayer;
 
 import java.util.TreeMap;
 
+/**
+ * LorenzoCard with effect of discarding 2 developCards of a certain color from the game.
+ */
 public class DevelopLorenzoCard extends LorenzoCard {
     private final Color color;
 

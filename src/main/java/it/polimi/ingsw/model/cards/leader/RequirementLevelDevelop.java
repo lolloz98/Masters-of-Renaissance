@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.cards.DevelopCard;
 import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
 
+/**
+ * To be fulfilled, the player needs to have one developCards of a specific color of level 2.
+ */
 public class RequirementLevelDevelop implements Requirement {
     // in all the cards that have this requirement, the level is 2
     private final int level = 2;
