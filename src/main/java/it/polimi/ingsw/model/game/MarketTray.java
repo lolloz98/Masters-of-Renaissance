@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
+import it.polimi.ingsw.model.exception.ResCombinationsNotEmptyException;
 import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -13,6 +14,7 @@ public class MarketTray {
     private Marble[][] marbleMatrix;
     private Marble freeMarble;
     private ArrayList<Resource> leaderResources;
+    private ArrayList<TreeMap<Resource, Integer>> resCombinations;
 
     public MarketTray(MarbleDispenserInterface md) {
         this.marbleMatrix = new Marble[3][4];
@@ -28,8 +30,32 @@ public class MarketTray {
     }
 
     /**
-     * Returns a copy of the marble matrix
-     *
+     * @return a copy resCombinations
+     */
+    public ArrayList<TreeMap<Resource, Integer>> getResCombinations() {
+        if(resCombinations == null) return null;
+        else {
+            ArrayList<TreeMap<Resource, Integer>> resCopy = new ArrayList<>(resCombinations);
+            return resCopy;
+        }
+    }
+
+    /**
+     * Resets resCombinations
+     */
+    public void removeResources(){
+        resCombinations = null;
+    }
+
+    /**
+     * Checks if a combination of resources is contained in resCombinations
+     */
+    public boolean checkResources(TreeMap<Resource, Integer> res){
+        return resCombinations.contains(res);
+    }
+
+    /**
+     * @return a copy of the marble matrix
      */
     public Marble[][] getMarbleMatrix() {
         Marble[][] marbleMatrixCopy = new Marble[marbleMatrix.length][];
@@ -75,14 +101,14 @@ public class MarketTray {
     }
 
     /**
-     * Pushes the freeMarble into the marbleMatrix, and returns the resources
+     * Pushes the freeMarble into the marbleMatrix, and stores an ArrayList containing the possible combinations of resources that the player can get, based on the leader cards he has activated.
      *
      * @param index index of the matrix that indicates where to push the marble
      * @param onRow if true pushes on the row (from right), if false pushes on the column (from the bottom)
-     * @return an ArrayList containing the possible combinations of resources that the player can get, based on the leader cards he has activated
      * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
      */
-    public ArrayList<TreeMap<Resource, Integer>> pushMarble(boolean onRow, int index) {
+    public void pushMarble(boolean onRow, int index) {
+        if (resCombinations!=null) throw new ResCombinationsNotEmptyException();
         TreeMap<Resource, Integer> resourcesTaken = new TreeMap<>();
         Marble newMarble = freeMarble;
         Resource res;
@@ -110,7 +136,7 @@ public class MarketTray {
             }
             marbleMatrix[2][index] = newMarble;
         }
-        return computeCombinations(resourcesTaken);
+        resCombinations = computeCombinations(resourcesTaken);
     }
 
     /**

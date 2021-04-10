@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
+import it.polimi.ingsw.model.exception.ResCombinationsNotEmptyException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void TestPushMarbleRowNoLeader() {
+    public void testPushMarbleRowNoLeader() {
         // given the arrangement of the marble matrix, pushing index 1 onRow true should result in:
         Marble[][] mat = new Marble[3][4];
         mat[0][0] = new Marble(Resource.NOTHING); mat[0][1] = new Marble(Resource.NOTHING); mat[0][2] = new Marble(Resource.NOTHING); mat[0][3] = new Marble(Resource.NOTHING);
@@ -31,7 +32,8 @@ public class MarketTrayTest {
             put(Resource.ROCK, 2);
             put(Resource.SHIELD, 2);
         }});
-        ArrayList<TreeMap<Resource, Integer>> result = marketTray.pushMarble(true, 1);
+        marketTray.pushMarble(true, 1);
+        ArrayList<TreeMap<Resource, Integer>> result = marketTray.getResCombinations();
         Marble[][] marbleMatrix = marketTray.getMarbleMatrix();
         // test the correct disposition of marbles at the end of the method
         for (int i = 0; i<3; i++) {
@@ -46,14 +48,15 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void TestPushMarbleColumnNoLeader() {
+    public void testPushMarbleColumnNoLeader() {
         // given the arrangement of the marble matrix, pushing index 1 onRow true shoud result in:
         Marble[][] mat = new Marble[3][4];
         mat[0][0] = new Marble(Resource.NOTHING); mat[0][1] = new Marble(Resource.NOTHING); mat[0][2] = new Marble(Resource.ROCK); mat[0][3] = new Marble(Resource.NOTHING);
         mat[1][0] = new Marble(Resource.SHIELD); mat[1][1] = new Marble(Resource.SHIELD); mat[1][2] = new Marble(Resource.GOLD); mat[1][3] = new Marble(Resource.ROCK);
         mat[2][0] = new Marble(Resource.SERVANT); mat[2][1] = new Marble(Resource.SERVANT); mat[2][2] = new Marble(Resource.FAITH); mat[2][3] = new Marble(Resource.GOLD);
         Marble freeMarble = new Marble(Resource.NOTHING);
-        ArrayList<TreeMap<Resource, Integer>> result = marketTray.pushMarble(false, 2);
+        marketTray.pushMarble(false, 2);
+        ArrayList<TreeMap<Resource, Integer>> result = marketTray.getResCombinations();
         Marble[][] marbleMatrix = marketTray.getMarbleMatrix();
         // the return should be
         ArrayList<TreeMap<Resource, Integer>> resComb = new ArrayList<>();
@@ -74,7 +77,7 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void TestPushMarbleOneLeader() {
+    public void testPushMarbleOneLeader() {
         marketTray.addLeaderResource(Resource.SHIELD);
         // given the arrangement of the marble matrix, pushing index 1 onRow true shoud result in:
         Marble[][] mat = new Marble[3][4];
@@ -82,7 +85,8 @@ public class MarketTrayTest {
         mat[1][0] = new Marble(Resource.SHIELD); mat[1][1] = new Marble(Resource.SHIELD); mat[1][2] = new Marble(Resource.ROCK); mat[1][3] = new Marble(Resource.GOLD);
         mat[2][0] = new Marble(Resource.SERVANT); mat[2][1] = new Marble(Resource.SERVANT); mat[2][2] = new Marble(Resource.GOLD); mat[2][3] = new Marble(Resource.FAITH);
         Marble freeMarble = new Marble(Resource.NOTHING);
-        ArrayList<TreeMap<Resource, Integer>> result = marketTray.pushMarble(false, 3);
+        marketTray.pushMarble(false, 3);
+        ArrayList<TreeMap<Resource, Integer>> result = marketTray.getResCombinations();
         // the return should be
         ArrayList<TreeMap<Resource, Integer>> resComb = new ArrayList<>();
         resComb.add(new TreeMap<>(){{
@@ -104,7 +108,7 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void TestPushMarbleTwoLeaders() {
+    public void testPushMarbleTwoLeaders() {
         // worst case scenario, two leader resources and 4 white marbles in line
         marketTray.addLeaderResource(Resource.SHIELD);
         marketTray.addLeaderResource(Resource.SERVANT);
@@ -114,7 +118,8 @@ public class MarketTrayTest {
         mat[1][0] = new Marble(Resource.SHIELD); mat[1][1] = new Marble(Resource.SHIELD); mat[1][2] = new Marble(Resource.ROCK); mat[1][3] = new Marble(Resource.ROCK);
         mat[2][0] = new Marble(Resource.SERVANT); mat[2][1] = new Marble(Resource.SERVANT); mat[2][2] = new Marble(Resource.GOLD); mat[2][3] = new Marble(Resource.GOLD);
         Marble freeMarble = new Marble(Resource.NOTHING);
-        ArrayList<TreeMap<Resource, Integer>> result = marketTray.pushMarble(true, 0);
+        marketTray.pushMarble(true, 0);
+        ArrayList<TreeMap<Resource, Integer>> result = marketTray.getResCombinations();
         // the return should be
         ArrayList<TreeMap<Resource, Integer>> resComb = new ArrayList<>();
         resComb.add(new TreeMap<>(){{
@@ -149,13 +154,58 @@ public class MarketTrayTest {
     }
 
     @Test(expected = MatrixIndexOutOfBoundException.class)
-    public void TestPushMarbleMinusOne() {
-        ArrayList<TreeMap<Resource, Integer>> result = marketTray.pushMarble(true, -1);
+    public void testPushMarbleMinusOne() {
+        marketTray.pushMarble(true, -1);
     }
 
     @Test(expected = MatrixIndexOutOfBoundException.class)
-    public void TestPushMarbleOutOfBound() {
-        ArrayList<TreeMap<Resource, Integer>> result = marketTray.pushMarble(false, 4);
+    public void testPushMarbleOutOfBound() {
+        marketTray.pushMarble(false, 4);
     }
 
+    @Test(expected = ResCombinationsNotEmptyException.class)
+    public void testPushMarbleTwice() {
+        marketTray.pushMarble(false, 2);
+        marketTray.pushMarble(false, 2);
+    }
+
+    @Test
+    public void testCheckResources() {
+        // worst case scenario, two leader resources and 4 white marbles in line
+        marketTray.addLeaderResource(Resource.SHIELD);
+        marketTray.addLeaderResource(Resource.SERVANT);
+        // given the arrangement of the marble matrix, pushing index 1 onRow true shoud result in:
+        Marble[][] mat = new Marble[3][4];
+        mat[0][0] = new Marble(Resource.NOTHING); mat[0][1] = new Marble(Resource.NOTHING); mat[0][2] = new Marble(Resource.NOTHING); mat[0][3] = new Marble(Resource.FAITH);
+        mat[1][0] = new Marble(Resource.SHIELD); mat[1][1] = new Marble(Resource.SHIELD); mat[1][2] = new Marble(Resource.ROCK); mat[1][3] = new Marble(Resource.ROCK);
+        mat[2][0] = new Marble(Resource.SERVANT); mat[2][1] = new Marble(Resource.SERVANT); mat[2][2] = new Marble(Resource.GOLD); mat[2][3] = new Marble(Resource.GOLD);
+        Marble freeMarble = new Marble(Resource.NOTHING);
+        marketTray.pushMarble(true, 0);
+        ArrayList<TreeMap<Resource, Integer>> result = marketTray.getResCombinations();
+        TreeMap<Resource, Integer> res = new TreeMap<>(){{
+            put(Resource.SHIELD, 4);
+        }};
+        TreeMap<Resource, Integer> resWrong = new TreeMap<>(){{
+            put(Resource.GOLD, 4);
+        }};
+        assertTrue(marketTray.checkResources(res));
+        assertFalse(marketTray.checkResources(resWrong));
+    }
+
+    @Test
+    public void testRemoveResources() {
+        // worst case scenario, two leader resources and 4 white marbles in line
+        marketTray.addLeaderResource(Resource.SHIELD);
+        marketTray.addLeaderResource(Resource.SERVANT);
+        // given the arrangement of the marble matrix, pushing index 1 onRow true shoud result in:
+        Marble[][] mat = new Marble[3][4];
+        mat[0][0] = new Marble(Resource.NOTHING); mat[0][1] = new Marble(Resource.NOTHING); mat[0][2] = new Marble(Resource.NOTHING); mat[0][3] = new Marble(Resource.FAITH);
+        mat[1][0] = new Marble(Resource.SHIELD); mat[1][1] = new Marble(Resource.SHIELD); mat[1][2] = new Marble(Resource.ROCK); mat[1][3] = new Marble(Resource.ROCK);
+        mat[2][0] = new Marble(Resource.SERVANT); mat[2][1] = new Marble(Resource.SERVANT); mat[2][2] = new Marble(Resource.GOLD); mat[2][3] = new Marble(Resource.GOLD);
+        Marble freeMarble = new Marble(Resource.NOTHING);
+        marketTray.pushMarble(true, 0);
+        ArrayList<TreeMap<Resource, Integer>> result = marketTray.getResCombinations();
+        marketTray.removeResources();
+        assertTrue(marketTray.getResCombinations()==null);
+    }
 }

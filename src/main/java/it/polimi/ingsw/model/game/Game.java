@@ -184,7 +184,8 @@ public abstract class Game <T extends Turn> {
      * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
      */
     public ArrayList<TreeMap<Resource, Integer>> useMarketTray(boolean onRow, int index) throws MatrixIndexOutOfBoundException {
-        return marketTray.pushMarble(onRow, index);
+        marketTray.pushMarble(onRow, index);
+        return getMarketTray().getResCombinations();
     }
 
     /**
