@@ -22,10 +22,12 @@ public class SinglePlayerTest {
     @Test
     public void testNextTurnLorenzoWinsDevelop(){
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.getTurn().isLorenzoPlaying());
         // draw all cards from a develop deck
         singlePlayer.getDecksDevelop().get(Color.BLUE).get(2).distributeCards(4);
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.isGameOver());
         assertFalse(singlePlayer.getHasPlayerWon());
@@ -34,10 +36,12 @@ public class SinglePlayerTest {
     @Test
     public void testNextTurnLorenzoWinsFaith(){
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.getTurn().isLorenzoPlaying());
         // lorenzo gets to the end of the track
         singlePlayer.getLorenzo().getFaithTrack().move(24, singlePlayer);
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.isGameOver());
         assertFalse(singlePlayer.getHasPlayerWon());
@@ -46,12 +50,15 @@ public class SinglePlayerTest {
     @Test
     public void testNextTurnPlayerWinsFaith(){
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
         // player gets to the end of the faith track
         singlePlayer.getPlayer().getBoard().getFaithtrack().move(24, singlePlayer);
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.isGameOver());
         assertTrue(singlePlayer.getHasPlayerWon());
@@ -60,8 +67,10 @@ public class SinglePlayerTest {
     @Test
     public void testNextTurnPlayerWinsDevelop(){
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
         // player buys 7 develop cards
@@ -73,6 +82,7 @@ public class SinglePlayerTest {
         slots.get(1).addDevelopCard(singlePlayer.drawDevelopCard(Color.GOLD,2));
         slots.get(1).addDevelopCard(singlePlayer.drawDevelopCard(Color.GOLD,3));
         slots.get(2).addDevelopCard(singlePlayer.drawDevelopCard(Color.PURPLE,1));
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.isGameOver());
         assertTrue(singlePlayer.getHasPlayerWon());
@@ -81,12 +91,15 @@ public class SinglePlayerTest {
     @Test (expected = GameIsOverException.class)
     public void testNextTurnException(){
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
         // player gets to the end of the faith track
         singlePlayer.getPlayer().getBoard().getFaithtrack().move(24, singlePlayer);
+        singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.isGameOver());
         assertTrue(singlePlayer.getHasPlayerWon());
@@ -98,6 +111,5 @@ public class SinglePlayerTest {
     public void testDistributeLeader(){
         singlePlayer.distributeLeader();
         assertEquals(singlePlayer.getPlayer().getBoard().getLeaderCards().size(), 4);
-
     }
 }

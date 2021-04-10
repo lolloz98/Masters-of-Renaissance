@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
-import it.polimi.ingsw.model.exception.ResCombinationsNotEmptyException;
+import it.polimi.ingsw.model.exception.MarketTrayNotEmptyException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -163,7 +163,7 @@ public class MarketTrayTest {
         marketTray.pushMarble(false, 4);
     }
 
-    @Test(expected = ResCombinationsNotEmptyException.class)
+    @Test(expected = MarketTrayNotEmptyException.class)
     public void testPushMarbleTwice() {
         marketTray.pushMarble(false, 2);
         marketTray.pushMarble(false, 2);

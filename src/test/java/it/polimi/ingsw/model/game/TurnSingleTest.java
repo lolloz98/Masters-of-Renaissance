@@ -24,8 +24,10 @@ public class TurnSingleTest {
     public void TestNextTurnNoEnd() {
         // test the normal cycle of player and lorenzo
         assertEquals(false, turnSingle.isLorenzoPlaying());
+        turnSingle.setMainActionOccurred();
         TurnSingle turnSingle1 = turnSingle.nextTurn(singlePlayer);
         assertEquals(true, turnSingle1.isLorenzoPlaying());
+        turnSingle1.setMainActionOccurred();
         TurnSingle turnSingle2 = turnSingle1.nextTurn(singlePlayer);
         assertEquals(false, turnSingle2.isLorenzoPlaying());
     }
@@ -34,8 +36,10 @@ public class TurnSingleTest {
     public void TestNextTurnEnd() {
         // test the end of the game
         assertEquals(false, turnSingle.isLorenzoPlaying());
+        turnSingle.setMainActionOccurred();
         TurnSingle turnSingle1 = turnSingle.nextTurn(singlePlayer);
         assertEquals(true, turnSingle1.isLorenzoPlaying());
+        turnSingle1.setMainActionOccurred();
         singlePlayer.setLastTurn(true);
         TurnSingle turnSingle2 = turnSingle1.nextTurn(singlePlayer);
         assertEquals(null, turnSingle2);

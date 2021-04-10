@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
-import it.polimi.ingsw.model.exception.ResCombinationsNotEmptyException;
+import it.polimi.ingsw.model.exception.MarketTrayNotEmptyException;
 import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -108,7 +108,7 @@ public class MarketTray {
      * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
      */
     public void pushMarble(boolean onRow, int index) {
-        if (resCombinations!=null) throw new ResCombinationsNotEmptyException();
+        if (resCombinations!=null) throw new MarketTrayNotEmptyException();
         TreeMap<Resource, Integer> resourcesTaken = new TreeMap<>();
         Marble newMarble = freeMarble;
         Resource res;

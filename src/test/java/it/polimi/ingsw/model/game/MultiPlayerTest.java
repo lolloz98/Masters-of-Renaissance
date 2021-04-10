@@ -103,24 +103,30 @@ public class MultiPlayerTest {
     public void testNextTurnEndOfFaithTrack(){
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         // player 0 gets to the end of the faith track
         multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
         // end of game is triggered
         assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
         assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertTrue(multiPlayer.isGameOver());
     }
@@ -129,12 +135,15 @@ public class MultiPlayerTest {
     public void testNextTurnDevelop(){
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
@@ -148,13 +157,16 @@ public class MultiPlayerTest {
         slots.get(1).addDevelopCard(multiPlayer.drawDevelopCard(Color.GOLD,3));
         slots.get(2).addDevelopCard(multiPlayer.drawDevelopCard(Color.PURPLE,1));
         multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
         // end of game is triggered
         assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
         assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertTrue(multiPlayer.isGameOver());
     }
@@ -163,24 +175,30 @@ public class MultiPlayerTest {
     public void testNextTurnException(){
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         // player 0 gets to the end of the faith track
         multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(1), multiPlayer.getTurn().getCurrentPlayer());
         // end of game is triggered
         assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
         assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertTrue(multiPlayer.isGameOver());
         // if i try to call nextTurn when the game is over i get an exception
