@@ -8,44 +8,47 @@ import java.util.Collections;
 public class Deck<T extends Card> {
     protected final ArrayList<T> cards = new ArrayList<>();
 
-    public Deck(ArrayList<T> cards){
+    public Deck(ArrayList<T> cards) {
         this.cards.addAll(cards);
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return cards.isEmpty();
     }
 
     /**
      * @return number of cards still in this deck
      */
-    public int howManyCards(){
+    public int howManyCards() {
         return cards.size();
     }
 
     /**
      * Shuffle the cards contained in the deck
+     *
      * @throws EmptyDeckException if deck is empty
      */
-    public void shuffle() {
-        if(isEmpty()) throw new EmptyDeckException();
+    public void shuffle() throws EmptyDeckException {
+        if (isEmpty()) throw new EmptyDeckException();
         Collections.shuffle(cards);
     }
 
     /**
      * Remove and return the card on top of the deck
+     *
      * @throws EmptyDeckException if deck is empty
      */
-    public T drawCard(){
+    public T drawCard() throws EmptyDeckException {
         if (isEmpty()) throw new EmptyDeckException();
         return cards.remove(0);
     }
 
     /**
      * Return the card on top of the deck WITHOUT removing it
+     *
      * @throws EmptyDeckException if deck is empty
      */
-    public T topCard(){
+    public T topCard() throws EmptyDeckException {
         if (isEmpty()) throw new EmptyDeckException();
         return cards.get(0);
     }
@@ -57,9 +60,9 @@ public class Deck<T extends Card> {
      * @return ArrayList of cards from the deck
      * @throws EmptyDeckException if deck is empty
      */
-    public ArrayList<T> distributeCards(int number){
+    public ArrayList<T> distributeCards(int number) throws EmptyDeckException {
         ArrayList<T> cToDis = new ArrayList<>();
-        for(int i = 0; i < number; i++) {
+        for (int i = 0; i < number; i++) {
             cToDis.add(drawCard());
         }
         return cToDis;

@@ -12,6 +12,7 @@ public class FaithLorenzoCard extends LorenzoCard {
 
     /**
      * Add 2 faith points to Lorenzo.
+     *
      * @param game current single game player
      */
     @Override

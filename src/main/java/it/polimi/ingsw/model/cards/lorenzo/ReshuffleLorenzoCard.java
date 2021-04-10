@@ -12,6 +12,7 @@ public class ReshuffleLorenzoCard extends LorenzoCard {
 
     /**
      * Add one faith points to Lorenzo. Then it restores the original state of LorenzoDeck and it shuffles it.
+     *
      * @param game current single game player
      */
     @Override

@@ -13,7 +13,7 @@ public class RequirementLevelDevelop implements Requirement {
     private final int level = 2;
     private final Color color;
 
-    public RequirementLevelDevelop(Color color){
+    public RequirementLevelDevelop(Color color) {
         this.color = color;
     }
 
@@ -37,9 +37,9 @@ public class RequirementLevelDevelop implements Requirement {
      */
     @Override
     public boolean checkRequirement(Player player) {
-        for(DevelopCardSlot ds: player.getBoard().getDevelopCardSlots())
-            for(DevelopCard c: ds.getCards())
-                if(c.getLevel() == level && c.getColor() == color) return true;
+        for (DevelopCardSlot ds : player.getBoard().getDevelopCardSlots())
+            for (DevelopCard c : ds.getCards())
+                if (c.getLevel() == level && c.getColor() == color) return true;
         return false;
     }
 }

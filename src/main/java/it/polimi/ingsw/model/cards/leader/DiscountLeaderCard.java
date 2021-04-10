@@ -37,13 +37,12 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
     }
 
     /**
-     *
      * @param game current game, it can be affected by this method
      * @throws AlreadyAppliedLeaderCardException if the effect of this card has been applied and yet not removed
      */
     @Override
     public void applyEffect(Game<?> game) {
-        if(hasBeenApplied) throw new AlreadyAppliedLeaderCardException();
+        if (hasBeenApplied) throw new AlreadyAppliedLeaderCardException();
         if (isActive()) applyEffectNoCheckOnActive(game);
     }
 

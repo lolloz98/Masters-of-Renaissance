@@ -8,11 +8,11 @@ import java.util.TreeMap;
 /**
  * To be fulfilled, the player needs to have 5 resources of a specific type.
  */
-public class RequirementResource implements Requirement{
+public class RequirementResource implements Requirement {
     private final Resource res;
     private final int quantity = 5;
 
-    public RequirementResource(Resource resRequired){
+    public RequirementResource(Resource resRequired) {
         this.res = resRequired;
     }
 
@@ -36,7 +36,7 @@ public class RequirementResource implements Requirement{
      */
     @Override
     public boolean checkRequirement(Player player) {
-        return player.getBoard().enoughResToActivate(new TreeMap<>(){{
+        return player.getBoard().enoughResToActivate(new TreeMap<>() {{
             put(res, quantity);
         }});
     }

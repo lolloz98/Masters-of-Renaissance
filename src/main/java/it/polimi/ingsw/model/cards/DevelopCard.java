@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.game.Resource;
 
 import java.util.TreeMap;
 
-public class DevelopCard implements Card, VictoryPointCalculator{
+public class DevelopCard implements Card, VictoryPointCalculator {
     private final int id;
     private final int level;
     private final Color color;
@@ -15,10 +15,10 @@ public class DevelopCard implements Card, VictoryPointCalculator{
     private final TreeMap<Resource, Integer> discountApplied;
     private final Production production;
 
-    public DevelopCard(TreeMap<Resource, Integer> cost, Production production, Color color, int level, int victoryPoints, int id){
+    public DevelopCard(TreeMap<Resource, Integer> cost, Production production, Color color, int level, int victoryPoints, int id) {
         this.color = color;
         this.level = level;
-        this. victoryPoints = victoryPoints;
+        this.victoryPoints = victoryPoints;
         this.discountApplied = new TreeMap<>();
         this.cost = new TreeMap<>(cost);
         this.production = production;
@@ -31,22 +31,22 @@ public class DevelopCard implements Card, VictoryPointCalculator{
     }
 
     @Override
-    public int getId(){
+    public int getId() {
         return id;
     }
 
     /**
      * Reduce the cost of the card
      *
-     * @param r resource to discount
+     * @param r        resource to discount
      * @param quantity how many r to discount
-     * @throws ResourceNotDiscountableException if r is notDiscountable
+     * @throws ResourceNotDiscountableException      if r is notDiscountable
      * @throws AlreadyAppliedDiscountForResException if a discount has already been applied on that resource
      */
-    public void applyDiscount(Resource r, int quantity) {
-        if(!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
-        if(cost.containsKey(r)){
-            if(discountApplied.containsKey(r)) throw new AlreadyAppliedDiscountForResException();
+    public void applyDiscount(Resource r, int quantity) throws AlreadyAppliedDiscountForResException {
+        if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+        if (cost.containsKey(r)) {
+            if (discountApplied.containsKey(r)) throw new AlreadyAppliedDiscountForResException();
             cost.replace(r, cost.get(r) - quantity);
             discountApplied.put(r, quantity);
         }
@@ -55,22 +55,22 @@ public class DevelopCard implements Card, VictoryPointCalculator{
     /**
      * @return cost of the card (if discounted get the discounted cost)
      */
-    public TreeMap<Resource, Integer> getCurrentCost(){
+    public TreeMap<Resource, Integer> getCurrentCost() {
         return new TreeMap<>(cost);
     }
 
     /**
      * @return true if any discount is now applied
      */
-    public boolean isDiscounted(){
+    public boolean isDiscounted() {
         return !discountApplied.isEmpty();
     }
 
     /**
      * remove all discounts and restore the original cost of the card
      */
-    public void removeDiscounts(){
-        for(Resource r: discountApplied.keySet()){
+    public void removeDiscounts() {
+        for (Resource r : discountApplied.keySet()) {
             // no check on cost.get(r): if I have applied the discount -> cost.get(r) != null
             cost.replace(r, discountApplied.get(r) + cost.get(r));
         }
@@ -91,10 +91,11 @@ public class DevelopCard implements Card, VictoryPointCalculator{
 
     /**
      * remove the discount on a specific res if present
+     *
      * @param res resource on which to remove the discount
      */
     public void removeDiscount(Resource res) {
-        if(discountApplied.getOrDefault(res, 0) != 0)
+        if (discountApplied.getOrDefault(res, 0) != 0)
             cost.replace(res, discountApplied.get(res) + cost.get(res));
         discountApplied.remove(res);
     }

@@ -22,7 +22,7 @@ public class RequirementColorsDevelop implements Requirement {
         return copy;
     }
 
-    public RequirementColorsDevelop(TreeMap<Color, Integer> requiredDevelops){
+    public RequirementColorsDevelop(TreeMap<Color, Integer> requiredDevelops) {
         this.requiredDevelops = new TreeMap<>(requiredDevelops);
     }
 
@@ -33,14 +33,14 @@ public class RequirementColorsDevelop implements Requirement {
     @Override
     public boolean checkRequirement(Player player) {
         TreeMap<Color, Integer> req = new TreeMap<>(requiredDevelops);
-        for(DevelopCardSlot ds: player.getBoard().getDevelopCardSlots())
-            for(DevelopCard c: ds.getCards())
-                if(req.containsKey(c.getColor())) {
+        for (DevelopCardSlot ds : player.getBoard().getDevelopCardSlots())
+            for (DevelopCard c : ds.getCards())
+                if (req.containsKey(c.getColor())) {
                     req.replace(c.getColor(), req.get(c.getColor()) - 1);
                 }
 
-        for(Color c: req.keySet()){
-            if(req.get(c) > 0) return false;
+        for (Color c : req.keySet()) {
+            if (req.get(c) > 0) return false;
         }
         return true;
     }

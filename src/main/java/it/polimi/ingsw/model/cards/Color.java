@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
-public enum Color{
+public enum Color {
     PURPLE,
     GREEN,
     GOLD,

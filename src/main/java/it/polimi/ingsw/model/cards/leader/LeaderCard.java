@@ -15,7 +15,7 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
     private boolean isDiscarded;
     private final int id;
 
-    public LeaderCard(int victoryPoints, T requirement, int id){
+    public LeaderCard(int victoryPoints, T requirement, int id) {
         this.isActive = false;
         this.isDiscarded = false;
         this.victoryPoints = victoryPoints;
@@ -24,35 +24,35 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
     }
 
     @Override
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return isActive;
     }
 
     /**
      * set isActive to true and use the effect of the card
      *
-     * @param game current game, it is affected by this method
+     * @param game   current game, it is affected by this method
      * @param player player who activates the card, it can be affected by this method
      * @throws RequirementNotSatisfiedException if the requirement for this card was not satisfied
-     * @throws AlreadyActiveLeaderException if the card was already active
-     * @throws ActivateDiscardedCardException if the card was discarded
-     * @throws IllegalArgumentException if this is not owned by the player (-> not contained in the board of the player)
+     * @throws AlreadyActiveLeaderException     if the card was already active
+     * @throws ActivateDiscardedCardException   if the card was discarded
+     * @throws IllegalArgumentException         if this is not owned by the player (-> not contained in the board of the player)
      */
-    public void activate(Game<?> game, Player player){
-        if(!checkRequirement(player)) throw new RequirementNotSatisfiedException();
-        if(isActive) throw new AlreadyActiveLeaderException();
-        if(isDiscarded) throw new ActivateDiscardedCardException();
-        if(!player.getBoard().getLeaderCards().contains(this)) throw new IllegalArgumentException();
+    public void activate(Game<?> game, Player player) throws RequirementNotSatisfiedException, AlreadyActiveLeaderException, ActivateDiscardedCardException, IllegalArgumentException {
+        if (!checkRequirement(player)) throw new RequirementNotSatisfiedException();
+        if (isActive) throw new AlreadyActiveLeaderException();
+        if (isDiscarded) throw new ActivateDiscardedCardException();
+        if (!player.getBoard().getLeaderCards().contains(this)) throw new IllegalArgumentException();
 
         isActive = true;
         applyEffectNoCheckOnActive(game);
     }
 
-    public void discard(){
+    public void discard() {
         isDiscarded = true;
     }
 
@@ -90,12 +90,14 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
      * @param player player on whom to check the requirements
      * @return true if the player can activate the card
      */
-    public boolean checkRequirement(Player player){
+    public boolean checkRequirement(Player player) {
         return requirement.checkRequirement(player);
     }
 
     /**
      * @return requirement for the activation of this card
      */
-    protected T getRequirement(){return requirement;}
+    protected T getRequirement() {
+        return requirement;
+    }
 }

@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.game.Resource;
  * LeaderCard with effect of transforming the Marbles of type Resource.NOTHING in the market.
  * To be activated, it requires the fulfillment of RequirementColorsDevelop.
  */
-public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop>{
+public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop> {
     private final Resource targetRes;
     private boolean hasBeenApplied = false;
 
@@ -25,8 +25,8 @@ public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop>
      */
     @Override
     public void applyEffect(Game<?> game) {
-        if(hasBeenApplied) throw new AlreadyAppliedLeaderCardException();
-        if(isActive()) applyEffectNoCheckOnActive(game);
+        if (hasBeenApplied) throw new AlreadyAppliedLeaderCardException();
+        if (isActive()) applyEffectNoCheckOnActive(game);
     }
 
     /**

@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.game.SinglePlayer;
 public abstract class LorenzoCard implements Card {
     private final int id;
 
-    public LorenzoCard(int id){
+    public LorenzoCard(int id) {
         this.id = id;
     }
 
@@ -17,6 +17,7 @@ public abstract class LorenzoCard implements Card {
 
     /**
      * apply the effect of LorenzoCard
+     *
      * @param game current single game player
      */
     public abstract void applyEffect(SinglePlayer game);
