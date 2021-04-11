@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.cards.DevelopCard;
-import it.polimi.ingsw.model.exception.FullDevelopSlotException;
 import it.polimi.ingsw.model.exception.InvalidDevelopCardToSlotException;
-import it.polimi.ingsw.model.exception.InvalidProductionChosenException;
+import it.polimi.ingsw.model.exception.InvalidProductionSlotChosenException;
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
-import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 
 import java.util.ArrayList;
@@ -60,11 +58,11 @@ public class DevelopCardSlot {
      * @param resToGive resource to give to apply the production
      * @param resToGain resource to gain after the application of the production
      * @param board     board of the player who is applying the production
-     * @throws InvalidResourcesByPlayerException if resToGive or resToGain contains invalid resources
-     * @throws InvalidProductionChosenException  if this does not contain any develop card
+     * @throws InvalidResourcesByPlayerException    if resToGive or resToGain contains invalid resources
+     * @throws InvalidProductionSlotChosenException if this does not contain any develop card
      */
-    public void applyProduction(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionChosenException {
-        if (isEmpty()) throw new InvalidProductionChosenException();
+    public void applyProduction(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
+        if (isEmpty()) throw new InvalidProductionSlotChosenException();
         cards.get(cards.size() - 1).getProduction().applyProduction(resToGive, resToGain, board);
     }
 

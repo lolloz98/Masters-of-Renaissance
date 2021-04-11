@@ -11,7 +11,9 @@ import it.polimi.ingsw.model.game.SinglePlayer;
 import it.polimi.ingsw.model.utility.Utility;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * class that models the board of each player
@@ -69,9 +71,9 @@ public class Board implements VictoryPointCalculator {
      * @param whichprod if zero it refers to the normalProduction, if 1,2 or 3 it refers to which productionSlot,
      *                  if 4 or 5 it refers to the leaderCardProductionSlot.
      */
-    public void activateProduction(int whichprod, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) throws InvalidResourcesByPlayerException, InvalidProductionChosenException {
+    public void activateProduction(int whichprod, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
         if (whichprod < 0 || whichprod > developCardSlots.size() + productionLeaderSlots.size())
-            throw new InvalidProductionChosenException();
+            throw new InvalidProductionSlotChosenException();
         if (resToGive.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
         if (resToGain.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
         if (enoughResToActivate(resToGive)) {
@@ -81,7 +83,7 @@ public class Board implements VictoryPointCalculator {
             if (whichprod > 0 && whichprod <= 3)
                 developCardSlots.get(whichprod - 1).applyProduction(resToGive, resToGain, this);
             if (whichprod >= 4) { //branch taken if the production choosen is a LeaderProduction
-                if (!theLeaderProductionIsActivated(whichprod - 4)) throw new InvalidProductionChosenException();
+                if (!theLeaderProductionIsActivated(whichprod - 4)) throw new InvalidProductionSlotChosenException();
                 productionLeaderSlots.get(whichprod - 4).getProduction().applyProduction(resToGive, resToGain, this);
             }
         }
@@ -139,8 +141,10 @@ public class Board implements VictoryPointCalculator {
         int tmp;
         TreeMap<Resource, Integer> resToSpend = new TreeMap<>();
         resToSpend.putAll(resToGive);
-        for (Resource r : resToSpend.keySet()) {
+        for (Resource r : resToGive.keySet()) {
+
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+
             for (Depot d : depots) {
                 if (d.contains(r)) {
                     if (!d.enoughResources(resToSpend.get(r))) {
@@ -148,11 +152,12 @@ public class Board implements VictoryPointCalculator {
                         resToSpend.replace(r, resToSpend.get(r) - tmp);
                     } else {
                         d.spendResources(resToSpend.get(r));
-                        resToSpend.replace(r, 0);
+                        resToSpend.remove(r);
                     }
                 }
             }
-            if (resToSpend.get(r) != 0) {
+
+            if (resToSpend.containsKey(r)) {//if i have other resources r to spend
                 for (DepotLeaderCard dl : depotLeaders) {
                     if (dl.getDepot().contains(r)) {
                         if (!dl.getDepot().enoughResources(resToSpend.get(r))) {
@@ -169,6 +174,12 @@ public class Board implements VictoryPointCalculator {
         strongbox.spendResources(resToSpend);
     }
 
+    /**
+     * advance on the faithpath of the current player
+     *
+     * @param steps
+     * @param game
+     */
     public void moveOnFaithPath(int steps, Game<?> game) {
         this.faithtrack.move(steps, game);
     }
@@ -179,7 +190,7 @@ public class Board implements VictoryPointCalculator {
         points += faithtrack.getVictoryPoints();
         int res = howManyResources();
         points += Math.floorDiv(res, 5);
-        for (LeaderCard lc : leaderCards) {
+        for (LeaderCard<? extends Requirement> lc : leaderCards) {
             points += lc.getVictoryPoints();
         }
         for (DevelopCardSlot dcs : developCardSlots) {
@@ -269,32 +280,45 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * @param resGained
-     * @param toKeep
+     * method that put the resources gained by the market in the depots
+     *
+     * @param resGained res gained by the market
+     * @param toKeep    choice made by the player of the resources to store in the depots
      * @param game
-     * @throws InvalidResourcesToKeepByPlayerException
-     * @throws IllegalArgumentException
+     * @throws InvalidResourcesToKeepByPlayerException if the player made an invalid decision regarding the resources to keep,
+     *                                                 the resources given must be enough to not overload the depots
+     * @throws IllegalArgumentException                if the treemaps toKeep and resGained contain an irregular type of resource
+     *                                                 or if the amount of resources in the toKeep are greater that un the resGained
      */
     public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException {
+
         for (Resource r : toKeep.keySet()) {
             if (!Resource.isDiscountable(r) && r != Resource.FAITH)
                 throw new IllegalArgumentException();
         }
+
         for (Resource r : resGained.keySet()) {
             if ((resGained.getOrDefault(r, 0) < toKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
                 throw new IllegalArgumentException();
         }
+
         if (cannotAppend(toKeep)) throw new InvalidResourcesToKeepByPlayerException();
+
         TreeMap<Resource, Integer> toGain = new TreeMap<>(toKeep);
         storeInDepotLeader(toGain);
         storeInNormalDepots(toGain, this.depots);
-        moveOnFaithPath(toKeep.get(Resource.FAITH), game);
+        if (toKeep.containsKey(Resource.FAITH))
+            moveOnFaithPath(toKeep.get(Resource.FAITH), game);
         TreeMap<Resource, Integer> toDiscard = new TreeMap<>() {{
             for (Resource r : resGained.keySet()) {
-                put(r, resGained.get(r) - toKeep.getOrDefault(r, 0));
+
+                if (resGained.get(r) - toKeep.getOrDefault(r, 0) > 0)
+                    put(r, resGained.get(r) - toKeep.getOrDefault(r, 0));
+
             }
         }};
-        distributeFaithPoints(game, toDiscard);
+        if (!toDiscard.isEmpty())
+            distributeFaithPoints(game, toDiscard);
     }
 
     /**
@@ -322,14 +346,12 @@ public class Board implements VictoryPointCalculator {
             for (int i = 0; i < 3; i++) {
                 d = depots.get(i);
                 add(new Depot(i + 1, true));
-                get(i).addResource(d.getTypeOfResource(), d.getStored());
+                if (!d.isEmpty())
+                    get(i).addResource(d.getTypeOfResource(), d.getStored());
             }
         }};
         storeInNormalDepots(toGain, copyOfDepots);
-        if (toGain.isEmpty())
-            return false;
-        else
-            return true;
+        return !toGain.isEmpty();
     }
 
     /**
@@ -396,15 +418,22 @@ public class Board implements VictoryPointCalculator {
      * @param depotArrayList list of depots in which i want to store the resources
      */
     private void storeInNormalDepots(TreeMap<Resource, Integer> toGain, ArrayList<Depot> depotArrayList) {
-        for (Resource r : toGain.keySet()) {
+
+        Set<Resource> resInToGain = new TreeSet<>(toGain.keySet());
+        for (Resource r : resInToGain) {
             for (Depot d : depotArrayList) {
+
                 if ((d.isEmpty() && (d.getFreeSpace() >= toGain.get(r)) && otherDepotsNotContains(r, depotArrayList)) ||
                         (d.contains(r) && (d.getFreeSpace() >= toGain.get(r)))) {
                     d.addResource(r, toGain.get(r));
                     toGain.remove(r);
+                    break;
+
                 } else {
+
                     if (d.contains(r) && d.getFreeSpace() < toGain.get(r)) {
                         Depot toSwitch = lookForADepotToSwitch(d, depotArrayList, toGain.get(r));
+
                         if (toSwitch != null) {
                             Depot tmp = new Depot(toSwitch.getMaxToStore(), true) {{
                                 addResource(toSwitch.getTypeOfResource(), toSwitch.getStored());
@@ -413,6 +442,8 @@ public class Board implements VictoryPointCalculator {
                             toSwitch.addResource(d.getTypeOfResource(), d.getStored() + toGain.get(r));
                             d.addResource(tmp.getTypeOfResource(), tmp.getStored());
                             toGain.remove(r);
+                            break;
+
                         }
                     }
                 }

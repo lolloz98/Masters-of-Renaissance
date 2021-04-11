@@ -50,7 +50,7 @@ public class StrongBox {
         if (!hasResources(resToSpend)) throw new NotEnoughResourcesException();
         for (Resource r : resToSpend.keySet()) {
             resources.replace(r, resources.get(r) - resToSpend.get(r));
-            if(resources.get(r)==0)
+            if (resources.get(r) == 0)
                 resources.remove(r);
         }
     }
@@ -62,7 +62,7 @@ public class StrongBox {
     public boolean hasResources(TreeMap<Resource, Integer> resToSpend) {
         for (Resource r : resToSpend.keySet()) {
             if (resToSpend.get(r) < 0) throw new IllegalArgumentException();
-            if (!resources.containsKey(r)||resources.get(r)<resToSpend.get(r))
+            if (!resources.containsKey(r) || resources.get(r) < resToSpend.get(r))
                 return false;
         }
         return true;

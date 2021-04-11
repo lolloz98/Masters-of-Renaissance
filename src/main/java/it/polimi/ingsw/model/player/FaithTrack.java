@@ -64,17 +64,17 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * method that moves the player through the path and handle the vaticanfigures activation
      */
-    public void move(int steps, Game game) {
-        if(isEndReached()) throw new EndAlreadyReachedException();
+    public void move(int steps, Game<?> game) {
+        if (isEndReached()) throw new EndAlreadyReachedException();
         advance(steps);
         ArrayList<Integer> checkpointnumber = whichCheckpointIsReached(steps);
         if (!checkpointnumber.isEmpty()) {
-            for (int i = 0; i < checkpointnumber.size(); i++) {
-                if (amiTheFirst(checkpointnumber.get(i))) {
+            for (Integer integer : checkpointnumber) {
+                if (amiTheFirst(integer)) {
                     if (game instanceof MultiPlayer)
-                        checkpointHandling(steps, (MultiPlayer) game, checkpointnumber.get(i));
+                        checkpointHandling((MultiPlayer) game, integer);
                     else
-                        checkpointHandling(steps, (SinglePlayer) game, checkpointnumber.get(i));
+                        checkpointHandling((SinglePlayer) game, integer);
                 }
             }
 
@@ -84,7 +84,7 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * method that activate the VaticanFigures of the player that has the rights (in a single player game)
      */
-    private void checkpointHandling(int steps, SinglePlayer game, int checkpointnumber) {
+    private void checkpointHandling( SinglePlayer game, int checkpointnumber) {
         if (game.getLorenzo().getFaithTrack().hasRights(checkpointnumber))
             game.getLorenzo().getFaithTrack().activateVatican(checkpointnumber);
         else
@@ -99,7 +99,7 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * method that activate the VaticanFigures of the player that has the rights (in a multi player game)
      */
-    private void checkpointHandling(int steps, MultiPlayer game, int checkpointnumber) {
+    private void checkpointHandling( MultiPlayer game, int checkpointnumber) {
         for (Player p :
                 game.getPlayers()) {
             if (p.getBoard().getFaithtrack().hasRights(checkpointnumber))
