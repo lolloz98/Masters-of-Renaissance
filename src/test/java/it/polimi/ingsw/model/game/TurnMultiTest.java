@@ -132,4 +132,10 @@ public class TurnMultiTest {
         turnMulti.setProductionsActivated(true);
         turnMulti.setMarketActivated(true);
     }
+
+    @Test(expected = MainActionAlreadyOccurredException.class)
+    public void testSetMarketActivated6(){
+        turnMulti.setMarketActivated(true);
+        turnMulti.setMarketActivated(true);
+    }
 }

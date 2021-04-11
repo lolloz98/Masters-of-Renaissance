@@ -28,7 +28,7 @@ public abstract class Turn {
      * @throws MainActionAlreadyOccurredException if it's called twice, if a main action already occurred, or if there are resources not flushed in a production.
      */
     public void setMarketActivated(boolean marketActivated) {
-        if (mainActionOccurred || productionsActivated || this.marketActivated) throw new MainActionAlreadyOccurredException();
+        if (mainActionOccurred || productionsActivated || (this.marketActivated && marketActivated)) throw new MainActionAlreadyOccurredException();
         else {
             if (this.marketActivated && !marketActivated) {
                 this.marketActivated = false;
