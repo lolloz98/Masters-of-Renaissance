@@ -22,6 +22,7 @@ public class Depot {
      * normal depot constructor
      */
     public Depot(int maxToStore, boolean modifiable) {
+        if(maxToStore<=0) throw new IllegalArgumentException();
         this.maxToStore = maxToStore;
         resource = Resource.NOTHING;
         stored = 0;
@@ -33,6 +34,7 @@ public class Depot {
      */
     public Depot(Resource r) {
         this.maxToStore = 2;
+        if(!Resource.isDiscountable(r)) throw new IllegalArgumentException();
         resource = r;
         stored = 0;
         this.modifiable = false;
@@ -78,17 +80,19 @@ public class Depot {
         return r.equals(resource);
     }
 
+    //unuseful
     /**
      * modifies the type of resource that the depot contains
      *
      * @param type new type of resources that the depot can contain
      * @throws DepotResourceModificationException if the Depot is not modifiable, or it is not empty
-     */
+
     public void modifyTypeOfResource(Resource type) {
         if (!isResModifiable()) throw new DepotResourceModificationException();
-        if (stored != 0) throw new DepotResourceModificationException();
+        if (!isEmpty()) throw new DepotResourceModificationException();
         resource = type;
     }
+    */
 
     /**
      * method that add n resources to the depot
@@ -120,7 +124,7 @@ public class Depot {
     /**
      * method that controls if the resource r can be added at the depot
      */
-    public boolean isResourceAppendable(Resource r) {
+    private boolean isResourceAppendable(Resource r) {
         if (modifiable)
             return isEmpty() || r.equals(resource);
         else
