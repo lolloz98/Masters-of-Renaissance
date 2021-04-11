@@ -94,7 +94,7 @@ public class Depot {
      * method that add n resources to the depot
      */
     public void addResource(Resource r, int howMany) {
-        if (howMany <= 0) throw new InvalidResourceQuantityToDepotException();
+        if (howMany < 0) throw new InvalidResourceQuantityToDepotException();
         if (!isResourceAppendable(r)) throw new DifferentResourceForDepotException();
         if (tooManyResources(howMany)) throw new TooManyResourcesToAddExeption();
         if (!Resource.isDiscountable(r)) throw new InvalidTypeOfResourceToDepotExeption();
