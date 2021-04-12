@@ -82,7 +82,7 @@ public class Board implements VictoryPointCalculator {
             }
             if (whichprod > 0 && whichprod <= 3)
                 developCardSlots.get(whichprod - 1).applyProduction(resToGive, resToGain, this);
-            if (whichprod >= 4) { //branch taken if the production choosen is a LeaderProduction
+            if (whichprod >= 4) { //branch taken if the production chosen is a LeaderProduction
                 if (!theLeaderProductionIsActivated(whichprod - 4)) throw new InvalidProductionSlotChosenException();
                 productionLeaderSlots.get(whichprod - 4).getProduction().applyProduction(resToGive, resToGain, this);
             }
@@ -120,7 +120,6 @@ public class Board implements VictoryPointCalculator {
         }
         return true;
     }
-
 
     private boolean theLeaderProductionIsActivated(int whichLeader) {
         if (whichLeader < productionLeaderSlots.size() && whichLeader >= 0)
