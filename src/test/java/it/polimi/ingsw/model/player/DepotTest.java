@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.exception.DifferentResourceForDepotException;
+import it.polimi.ingsw.model.exception.InvalidResourceQuantityToDepotException;
+import it.polimi.ingsw.model.exception.InvalidTypeOfResourceToDepotExeption;
 import it.polimi.ingsw.model.exception.TooManyResourcesToAddExeption;
 import it.polimi.ingsw.model.game.Resource;
 import org.junit.Before;
@@ -11,14 +13,19 @@ import java.util.TreeMap;
 import static org.junit.Assert.*;
 
 public class DepotTest {
-    private Depot normalDepot, leaderDepot;
+    private Depot normalDepot1, normalDepot2, leaderDepot;
 
     @Before
     public void setUp(){
-        normalDepot=new Depot(2, true);
-        assertEquals(2,normalDepot.getMaxToStore());
-        assertEquals(Resource.NOTHING, normalDepot.getTypeOfResource());
-        assertTrue(normalDepot.isEmpty());
+        normalDepot1 =new Depot(2, true);
+        assertEquals(2, normalDepot1.getMaxToStore());
+        assertEquals(Resource.NOTHING, normalDepot1.getTypeOfResource());
+        assertTrue(normalDepot1.isEmpty());
+
+        normalDepot2=new Depot(3, true);
+        assertEquals(3, normalDepot2.getMaxToStore());
+        assertEquals(Resource.NOTHING, normalDepot2.getTypeOfResource());
+        assertTrue(normalDepot2.isEmpty());
 
         leaderDepot=new Depot(Resource.GOLD);
         assertEquals(2,leaderDepot.getMaxToStore());
@@ -26,72 +33,128 @@ public class DepotTest {
         assertTrue(leaderDepot.isEmpty());
     }
 
-    @Test
+    @Test(expected = InvalidResourceQuantityToDepotException.class)
     public void addResourceExceptionTest1(){
-        //howmany<0
+        normalDepot1.addResource(Resource.SHIELD, 0);
     }
 
-    @Test
+    @Test(expected = InvalidResourceQuantityToDepotException.class)
+    public void addResourceExceptionTest1_1(){
+        normalDepot1.addResource(Resource.SHIELD, -1);
+    }
+
+    @Test(expected = DifferentResourceForDepotException.class)
     public void addResourceExceptionTest2(){
-        //different resource to the depot
+        normalDepot1.addResource(Resource.ROCK,1);
+        normalDepot1.addResource(Resource.GOLD,1);
     }
 
-    @Test
+    @Test(expected = InvalidResourceQuantityToDepotException.class)
     public void addResourceExceptionTest3(){
-        //overload of the depot
+        normalDepot1.addResource(Resource.ROCK,1);
+        normalDepot1.addResource(Resource.ROCK,1);
+        normalDepot1.addResource(Resource.ROCK,1);
     }
 
-    @Test
+    @Test(expected = InvalidTypeOfResourceToDepotExeption.class)
     public void addResourceExceptionTest4(){
-        //resource not discountable
+        normalDepot1.addResource(Resource.NOTHING,1);
     }
 
     @Test
     public void addResourceNormalDepotTest1() {
-        normalDepot.addResource(Resource.GOLD, 1);
-        assertFalse(normalDepot.isEmpty());
-        assertTrue(normalDepot.contains(Resource.GOLD));
-        assertEquals(1, normalDepot.getStored());
-        assertEquals(1, normalDepot.getFreeSpace());
-        assertEquals(Resource.GOLD, normalDepot.getTypeOfResource());
-        assertFalse(normalDepot.isFull());
+        normalDepot1.addResource(Resource.GOLD, 1);
+        assertFalse(normalDepot1.isEmpty());
+        assertTrue(normalDepot1.contains(Resource.GOLD));
+        assertEquals(1, normalDepot1.getStored());
+        assertEquals(1, normalDepot1.getFreeSpace());
+        assertEquals(Resource.GOLD, normalDepot1.getTypeOfResource());
+        assertFalse(normalDepot1.isFull());
         assertEquals(new TreeMap<Resource, Integer>() {{
                          put(Resource.GOLD, 1);
                      }},
-                normalDepot.getStoredResources());
+                normalDepot1.getStoredResources());
 
-        normalDepot.addResource(Resource.GOLD,1);
-        assertFalse(normalDepot.isEmpty());
-        assertTrue(normalDepot.contains(Resource.GOLD));
-        assertEquals(2, normalDepot.getStored());
-        assertEquals(0, normalDepot.getFreeSpace());
-        assertEquals(Resource.GOLD, normalDepot.getTypeOfResource());
-        assertTrue(normalDepot.isFull());
+        normalDepot1.addResource(Resource.GOLD,1);
+        assertFalse(normalDepot1.isEmpty());
+        assertTrue(normalDepot1.contains(Resource.GOLD));
+        assertEquals(2, normalDepot1.getStored());
+        assertEquals(0, normalDepot1.getFreeSpace());
+        assertEquals(Resource.GOLD, normalDepot1.getTypeOfResource());
+        assertTrue(normalDepot1.isFull());
         assertEquals(new TreeMap<Resource, Integer>() {{
                          put(Resource.GOLD, 2);
                      }},
-                normalDepot.getStoredResources());
+                normalDepot1.getStoredResources());
 
-        int oldstored=normalDepot.clear();
+        int oldstored= normalDepot1.clear();
         assertEquals(2, oldstored);
-        assertTrue(normalDepot.isEmpty());
+        assertTrue(normalDepot1.isEmpty());
 
-        normalDepot.addResource(Resource.ROCK,2);
-        assertFalse(normalDepot.isEmpty());
-        assertTrue(normalDepot.contains(Resource.ROCK));
-        assertEquals(2, normalDepot.getStored());
-        assertEquals(0, normalDepot.getFreeSpace());
-        assertEquals(Resource.ROCK, normalDepot.getTypeOfResource());
-        assertTrue(normalDepot.isFull());
+        normalDepot1.addResource(Resource.ROCK,2);
+        assertFalse(normalDepot1.isEmpty());
+        assertTrue(normalDepot1.contains(Resource.ROCK));
+        assertEquals(2, normalDepot1.getStored());
+        assertEquals(0, normalDepot1.getFreeSpace());
+        assertEquals(Resource.ROCK, normalDepot1.getTypeOfResource());
+        assertTrue(normalDepot1.isFull());
         assertEquals(new TreeMap<Resource, Integer>() {{
                          put(Resource.ROCK, 2);
                      }},
-                normalDepot.getStoredResources());
+                normalDepot1.getStoredResources());
+    }
+
+    @Test
+    public void addResourceNormalDepotTest2(){
+        normalDepot2.addResource(Resource.GOLD, 1);
+        assertFalse(normalDepot2.isEmpty());
+        assertTrue(normalDepot2.contains(Resource.GOLD));
+        assertEquals(1, normalDepot2.getStored());
+        assertEquals(2, normalDepot2.getFreeSpace());
+        assertEquals(Resource.GOLD, normalDepot2.getTypeOfResource());
+        assertFalse(normalDepot2.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() {{
+                         put(Resource.GOLD, 1);
+                     }},
+                normalDepot2.getStoredResources());
+
+        normalDepot2.addResource(Resource.GOLD,2);
+        assertFalse(normalDepot2.isEmpty());
+        assertTrue(normalDepot2.contains(Resource.GOLD));
+        assertEquals(3, normalDepot2.getStored());
+        assertEquals(0, normalDepot2.getFreeSpace());
+        assertEquals(Resource.GOLD, normalDepot2.getTypeOfResource());
+        assertTrue(normalDepot2.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() {{
+                         put(Resource.GOLD, 3);
+                     }},
+                normalDepot2.getStoredResources());
+
+        int oldstored= normalDepot2.clear();
+        assertEquals(3, oldstored);
+        assertTrue(normalDepot2.isEmpty());
+
+        normalDepot2.addResource(Resource.ROCK,2);
+        assertFalse(normalDepot2.isEmpty());
+        assertTrue(normalDepot2.contains(Resource.ROCK));
+        assertEquals(2, normalDepot2.getStored());
+        assertEquals(1, normalDepot2.getFreeSpace());
+        assertEquals(Resource.ROCK, normalDepot2.getTypeOfResource());
+        assertFalse(normalDepot2.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() {{
+                         put(Resource.ROCK, 2);
+                     }},
+                normalDepot2.getStoredResources());
     }
 
     @Test(expected = DifferentResourceForDepotException.class)
     public void addResourceLeaderDepotExceptionTest1(){
         leaderDepot.addResource(Resource.ROCK, 1);
+    }
+
+    @Test(expected = InvalidResourceQuantityToDepotException.class)
+    public void addResourceLeaderDepotExceptionTest2(){
+        leaderDepot.addResource(Resource.GOLD,3);
     }
 
     @Test(expected = DifferentResourceForDepotException.class)
@@ -111,7 +174,83 @@ public class DepotTest {
         int oldstored=leaderDepot.clear();
         assertEquals(1, oldstored);
 
-        leaderDepot.addResource(Resource.SERVANT,2);//should throw exception
+        leaderDepot.addResource(Resource.SERVANT,2);//should throws exception
+    }
+
+    @Test(expected = InvalidResourceQuantityToDepotException.class)
+    public void spendResourcesNormalDepot1(){
+        normalDepot1.addResource(Resource.SERVANT,2);
+        normalDepot1.spendResources(2);
+        assertTrue(normalDepot1.isEmpty());
+        assertFalse(normalDepot1.contains(Resource.SERVANT));
+        assertTrue(normalDepot1.contains(Resource.NOTHING));
+        assertEquals(0, normalDepot1.getStored());
+        assertEquals(2, normalDepot1.getFreeSpace());
+        assertEquals(Resource.NOTHING, normalDepot1.getTypeOfResource());
+        assertFalse(normalDepot1.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() ,
+                normalDepot1.getStoredResources());
+
+        normalDepot1.addResource(Resource.SHIELD,1);
+        normalDepot1.spendResources(1);
+        assertTrue(normalDepot1.isEmpty());
+        assertFalse(normalDepot1.contains(Resource.SERVANT));
+        assertTrue(normalDepot1.contains(Resource.NOTHING));
+        assertEquals(0, normalDepot1.getStored());
+        assertEquals(2, normalDepot1.getFreeSpace());
+        assertEquals(Resource.NOTHING, normalDepot1.getTypeOfResource());
+        assertFalse(normalDepot1.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() ,
+                normalDepot1.getStoredResources());
+
+        normalDepot1.addResource(Resource.GOLD,2);
+        normalDepot1.spendResources(1);
+        assertFalse(normalDepot1.isEmpty());
+        assertTrue(normalDepot1.contains(Resource.GOLD));
+        assertEquals(1, normalDepot1.getStored());
+        assertEquals(1, normalDepot1.getFreeSpace());
+        assertEquals(Resource.GOLD, normalDepot1.getTypeOfResource());
+        assertFalse(normalDepot1.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() {{
+            put(Resource.GOLD,1);
+                     }} ,
+                normalDepot1.getStoredResources());
+
+        normalDepot1.spendResources(2);
+    }
+
+    @Test(expected = InvalidResourceQuantityToDepotException.class)
+    public void spendResourcesNormalDepot2(){
+        normalDepot2.addResource(Resource.SERVANT,3);
+        normalDepot2.spendResources(3);
+        assertTrue(normalDepot2.isEmpty());
+        assertFalse(normalDepot2.contains(Resource.SERVANT));
+        assertEquals(0, normalDepot2.getStored());
+        assertEquals(3, normalDepot2.getFreeSpace());
+        assertEquals(Resource.NOTHING, normalDepot2.getTypeOfResource());
+        assertFalse(normalDepot2.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() ,
+                normalDepot2.getStoredResources());
+
+        normalDepot2.addResource(Resource.GOLD, 2);
+        normalDepot2.spendResources(1);
+        assertFalse(normalDepot2.isEmpty());
+        assertTrue(normalDepot2.contains(Resource.GOLD));
+        assertEquals(1, normalDepot2.getStored());
+        assertEquals(2, normalDepot2.getFreeSpace());
+        assertEquals(Resource.GOLD, normalDepot2.getTypeOfResource());
+        assertFalse(normalDepot2.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() {{
+                         put(Resource.GOLD, 1);
+                     }},
+                normalDepot2.getStoredResources());
+
+        normalDepot2.spendResources(0);//should throws exception
+    }
+
+    @Test
+    public void spendResourcesLeaderDepot1(){
+
     }
 
 }
