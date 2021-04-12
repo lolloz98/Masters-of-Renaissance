@@ -248,9 +248,20 @@ public class DepotTest {
         normalDepot2.spendResources(0);//should throws exception
     }
 
-    @Test
+    @Test(expected = InvalidResourceQuantityToDepotException.class)
     public void spendResourcesLeaderDepot1(){
+        leaderDepot.addResource(Resource.GOLD,1);
+        leaderDepot.spendResources(1);
+        assertTrue(leaderDepot.isEmpty());
+        assertEquals(0, leaderDepot.getStored());
+        assertEquals(2, leaderDepot.getFreeSpace());
+        assertEquals(Resource.GOLD, leaderDepot.getTypeOfResource());
+        assertFalse(leaderDepot.isFull());
+        assertEquals(new TreeMap<Resource, Integer>() ,
+                leaderDepot.getStoredResources());
 
+        leaderDepot.addResource(Resource.GOLD,2);
+        leaderDepot.spendResources(3);
     }
 
 }
