@@ -309,6 +309,7 @@ public class Board implements VictoryPointCalculator {
         storeInNormalDepots(toGain, this.depots);
         if (toKeep.containsKey(Resource.FAITH))
             moveOnFaithPath(toKeep.get(Resource.FAITH), game);
+
         TreeMap<Resource, Integer> toDiscard = new TreeMap<>() {{
             for (Resource r : resGained.keySet()) {
 
