@@ -688,6 +688,7 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * buy the develop card on top of the deck of whichColor and whichLevel and put it in the slot indexed by slotToStore
+     * it removes the resources from the board in a smart way.
      *
      * @param game        current game
      * @param whichColor  color of the develop card to buy
@@ -698,7 +699,7 @@ public class Board implements VictoryPointCalculator {
      * @throws InvalidDevelopCardToSlotException if the card to buy cannot go in the chosen slot
      * @throws IllegalArgumentException          if whichLevel or slotToStore are out of bound
      */
-    public void buyDevelopCard(Game<?> game, Color whichColor, int whichLevel, int slotToStore) {
+    public void buyDevelopCardSmart(Game<?> game, Color whichColor, int whichLevel, int slotToStore) {
         if (slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3)
             throw new IllegalArgumentException();
 
@@ -711,8 +712,84 @@ public class Board implements VictoryPointCalculator {
 
         developCardSlots.get(slotToStore).addDevelopCard(deck.drawCard()); // it can throw InvalidDevelopCardToSlotException
 
-        // todo: change this. the player must decide where to take the resources to spend. It must be done by the controller
         removeResourcesSmart(resToGive);
+    }
+
+    /**
+     * buy the develop card on top of the deck of whichColor and whichLevel and put it in the slot indexed by slotToStore
+     *
+     * @param game        current game
+     * @param whichColor  color of the develop card to buy
+     * @param whichLevel  level of the develop card to buy
+     * @param slotToStore slot in which to store the develop card
+     * @param toPay       resources to be paid for the card. They will be removed from the board
+     * @throws EmptyDeckException                if the deckDevelop with whichColor and whichLevel in game is empty
+     * @throws NotEnoughResourcesException       if this does not have enoughResources to buy the card
+     * @throws InvalidDevelopCardToSlotException if the card to buy cannot go in the chosen slot
+     * @throws IllegalArgumentException          if whichLevel or slotToStore are out of bound or toPay is in someway invalid
+     */
+    public void buyDevelopCard(Game<?> game, Color whichColor, int whichLevel, int slotToStore, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
+        if (slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3)
+            throw new IllegalArgumentException();
+
+        // think about checking for the color in the method below
+        DeckDevelop deck = game.getDecksDevelop().get(whichColor).get(whichLevel);
+        if (deck.isEmpty()) throw new EmptyDeckException();
+
+        TreeMap<Resource, Integer> resToGive = deck.topCard().getCurrentCost(); // it can throw InvalidDevelopCardToSlotException
+
+        // subtract toPay from resToGive
+        for(Resource r: resToGive.keySet()){
+            for (WarehouseType w : toPay.keySet()){
+                resToGive.replace(r, resToGive.get(r) - toPay.get(w).getOrDefault(r, 0));
+            }
+        }
+        // check that every resource in res toGive is equal to zero
+        for(Resource r: resToGive.keySet())
+            if(resToGive.get(r) != 0) throw new IllegalArgumentException();
+
+        payResources(toPay);
+
+        developCardSlots.get(slotToStore).addDevelopCard(deck.drawCard());
+    }
+
+    /**
+     * @param toPay resources to be removed from the board
+     * @throws NotEnoughResourcesException if there are not enough resources on the board
+     */
+    public void payResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
+        // first check that toPay is right
+        for (WarehouseType w : toPay.keySet()) {
+            switch (w) {
+                case STRONGBOX:
+                    if (enoughResInStrongBox(toPay.get(w))) throw new NotEnoughResourcesException();
+                    break;
+                case LEADER:
+                    if (enoughResInLeaderDepots(toPay.get(w))) throw new NotEnoughResourcesException();
+                    break;
+                case NORMAL:
+                    if (enoughResInNormalDepots(toPay.get(w))) throw new NotEnoughResourcesException();
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+        // then pay
+        for (WarehouseType w : toPay.keySet()) {
+            switch (w) {
+                case STRONGBOX:
+                    removeResFromStrongBox(toPay.get(w));
+                    break;
+                case LEADER:
+                    removeResFromLeaderDepot(toPay.get(w));
+                    break;
+                case NORMAL:
+                    removeResFromNormalDepot(toPay.get(w));
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
     }
 
     /**

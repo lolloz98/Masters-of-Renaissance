@@ -47,16 +47,16 @@ public class RequirementLevelDevelopTest {
     public void testCheckRequirement() {
         assertFalse(requirement.checkRequirement(player));
 
-        player.getBoard().buyDevelopCard(game, Color.BLUE, 1, 1);
-        player.getBoard().buyDevelopCard(game, Color.GOLD, 2, 1);
-        player.getBoard().buyDevelopCard(game, Color.GREEN, 1, 2);
+        player.getBoard().buyDevelopCardSmart(game, Color.BLUE, 1, 1);
+        player.getBoard().buyDevelopCardSmart(game, Color.GOLD, 2, 1);
+        player.getBoard().buyDevelopCardSmart(game, Color.GREEN, 1, 2);
 
         assertFalse(requirement.checkRequirement(player));
 
-        player.getBoard().buyDevelopCard(game, Color.PURPLE, 1, 0);
+        player.getBoard().buyDevelopCardSmart(game, Color.PURPLE, 1, 0);
         assertFalse(requirement.checkRequirement(player));
 
-        player.getBoard().buyDevelopCard(game, Color.PURPLE, 2, 0);
+        player.getBoard().buyDevelopCardSmart(game, Color.PURPLE, 2, 0);
 
         assertTrue(requirement.checkRequirement(player));
     }

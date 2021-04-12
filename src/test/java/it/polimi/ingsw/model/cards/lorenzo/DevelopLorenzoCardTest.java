@@ -34,9 +34,9 @@ public class DevelopLorenzoCardTest {
             put(Resource.SHIELD, 60);
         }}, singlePlayer);
         // logger.debug("#cards in deckDevelop Blue lv 1: " + singlePlayer.getDecksDevelop().get(Color.BLUE).get(1).howManyCards());
-        player.getBoard().buyDevelopCard(singlePlayer, Color.BLUE, 1, 1);
-        player.getBoard().buyDevelopCard(singlePlayer, Color.GOLD, 2, 1);
-        player.getBoard().buyDevelopCard(singlePlayer, Color.GREEN, 1, 2);
+        player.getBoard().buyDevelopCardSmart(singlePlayer, Color.BLUE, 1, 1);
+        player.getBoard().buyDevelopCardSmart(singlePlayer, Color.GOLD, 2, 1);
+        player.getBoard().buyDevelopCardSmart(singlePlayer, Color.GREEN, 1, 2);
     }
 
     @Test
