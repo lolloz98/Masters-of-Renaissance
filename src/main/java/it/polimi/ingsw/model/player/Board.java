@@ -147,23 +147,22 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param resToGive resources we would like to remove from normal depots.
-     * @param diff      there are put all the resources that we were not able to put in the normal depots
+     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the normal depots
      * @return true, if it is possible to remove resToGive from the normal depots
      * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
     private boolean enoughResInNormalDepots(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> diff) {
-        TreeMap<Resource, Integer> diffMap = new TreeMap<>(resToGive);
-        for (Resource r : diffMap.keySet()) {
+        diff.clear();
+        diff.putAll(resToGive);
+        for (Resource r : diff.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
             for (Depot d : depots) {
                 if (d.contains(r))
-                    diffMap.replace(r, diffMap.get(r) - d.getStored());
+                    diff.replace(r, diff.get(r) - d.getStored());
             }
         }
-        diff.clear();
-        diff.putAll(diffMap);
-        for (Resource r : diffMap.keySet()) {
-            if (diffMap.get(r) > 0)
+        for (Resource r : diff.keySet()) {
+            if (diff.get(r) > 0)
                 return false;
         }
         return true;
@@ -171,23 +170,22 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param resToGive resources we would like to remove from leader depots.
-     * @param diff      there are put all the resources that we were not able to put in the leader depots
+     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the leader depots
      * @return true, if it is possible to remove resToGive from the leader depots
      * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
     private boolean enoughResInLeaderDepots(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> diff) {
-        TreeMap<Resource, Integer> diffMap = new TreeMap<>(resToGive);
-        for (Resource r : diffMap.keySet()) {
+        diff.clear();
+        diff.putAll(resToGive);
+        for (Resource r : diff.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
             for (DepotLeaderCard dl : depotLeaders) {
                 if (dl.getDepot().contains(r))
-                    diffMap.replace(r, diffMap.get(r) - dl.getDepot().getStored());
+                    diff.replace(r, diff.get(r) - dl.getDepot().getStored());
             }
         }
-        diff.clear();
-        diff.putAll(diffMap);
-        for (Resource r : diffMap.keySet()) {
-            if (diffMap.get(r) > 0)
+        for (Resource r : diff.keySet()) {
+            if (diff.get(r) > 0)
                 return false;
         }
         return true;
@@ -195,23 +193,22 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param resToGive resources we would like to remove from the strong box.
-     * @param diff      there are put all the resources that we were not able to put in the strong box
+     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the strong box
      * @return true, if it is possible to remove resToGive from the strong box
      * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
     private boolean enoughResInStrongBox(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> diff) {
-        TreeMap<Resource, Integer> diffMap = new TreeMap<>(resToGive);
-        for (Resource r : diffMap.keySet()) {
+        diff.clear();
+        diff.putAll(resToGive);
+        for (Resource r : diff.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
             for (Resource inStrongBox : strongbox.getResources().keySet()) {
                 if (inStrongBox.equals(r))
-                    diffMap.replace(r, diffMap.get(r) - strongbox.getResources().get(inStrongBox));
+                    diff.replace(r, diff.get(r) - strongbox.getResources().get(inStrongBox));
             }
         }
-        diff.clear();
-        diff.putAll(diffMap);
-        for (Resource r : diffMap.keySet()) {
-            if (diffMap.get(r) > 0)
+        for (Resource r : diff.keySet()) {
+            if (diff.get(r) > 0)
                 return false;
         }
         return true;
