@@ -5,6 +5,11 @@ import it.polimi.ingsw.model.exception.MainActionNotOccurredException;
 import it.polimi.ingsw.model.exception.MarketTrayNotEmptyException;
 import it.polimi.ingsw.model.exception.ProductionsResourcesNotFlushedException;
 
+/**
+ * Class that represents the state of the turn. It's abstract as the game must be either a TurnSingle, containing the state
+ * of the turn in a SinglePlayer game, or TurnMulti, containing the state of the turn in a MultiPlayer game.
+ */
+
 public abstract class Turn {
     private boolean mainActionOccurred;
     private boolean productionsActivated;

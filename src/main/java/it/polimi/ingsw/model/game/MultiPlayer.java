@@ -82,7 +82,6 @@ public class MultiPlayer extends Game<TurnMulti> {
 
     /**
      * @return the winner if the game is over
-     *
      * @throws GameNotOverException if i call getWinner on an ongoing game
      */
     public ArrayList<Player> getWinners(){

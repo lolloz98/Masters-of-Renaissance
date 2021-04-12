@@ -4,8 +4,11 @@ import it.polimi.ingsw.model.exception.MainActionNotOccurredException;
 import it.polimi.ingsw.model.exception.MarketTrayNotEmptyException;
 import it.polimi.ingsw.model.exception.ProductionsResourcesNotFlushedException;
 import it.polimi.ingsw.model.player.Player;
-
 import java.util.ArrayList;
+
+/**
+ * Concrete extension of the class Turn. It has all the variables and methods needed to represent the state of a turn in a MultiPlayer game.
+ */
 
 public class TurnMulti extends Turn {
     private final Player currentPlayer;
