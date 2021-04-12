@@ -30,6 +30,7 @@ public abstract class Turn {
     /**
      * Sets the marketActivated flag. If marketActivated goes from true to false, also sets mainActionOccurred to true.
      *
+     * @param marketActivated is what to set the flag to
      * @throws MainActionAlreadyOccurredException if it's called twice, if a main action already occurred, or if there are resources not flushed in a production.
      */
     public void setMarketActivated(boolean marketActivated) {
@@ -46,6 +47,7 @@ public abstract class Turn {
     /**
      * Sets the productionsActivated flag. If productionsActivated goes from true to false, also sets mainActionOccurred to true.
      *
+     * @param productionsActivated is what to set the flag to
      * @throws MainActionAlreadyOccurredException if a main action already occurred, or if there are resources not flushed in market tray.
      */
     public void setProductionsActivated(boolean productionsActivated) {
@@ -60,7 +62,7 @@ public abstract class Turn {
     }
 
     /**
-     * Sets the mainActionOccurred flag.
+     * Sets this.mainActionOccurred to true.
      *
      * @throws MarketTrayNotEmptyException if there are resources not flushed in market tray.
      * @throws ProductionsResourcesNotFlushedException if there are resources not flushed in a production.

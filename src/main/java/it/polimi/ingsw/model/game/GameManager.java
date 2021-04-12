@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.exception.GameNotOverException;
 import it.polimi.ingsw.model.exception.NoSuchGameException;
 import it.polimi.ingsw.model.player.Player;
 
