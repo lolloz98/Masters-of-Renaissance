@@ -181,7 +181,7 @@ public abstract class Game <T extends Turn> {
     }
 
     /**
-     * Checks if one of the develop decks is empty
+     * @return if one of the develop decks is empty
      */
     public boolean isADeckDevelopEmpty(){
         for(Color color : Color.values())
@@ -199,6 +199,8 @@ public abstract class Game <T extends Turn> {
 
     /**
      * Helper method to distribute leaders
+     *
+     * @param player to distribute the cards to
      */
     protected void distributeLeaderToPlayer(Player player){
         player.getBoard().addLeaderCards(deckLeader.distributeCards(4));

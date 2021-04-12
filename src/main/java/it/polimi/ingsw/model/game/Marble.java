@@ -10,5 +10,4 @@ public final class Marble {
     public Resource getResource() {
         return resource;
     }
-
 }
