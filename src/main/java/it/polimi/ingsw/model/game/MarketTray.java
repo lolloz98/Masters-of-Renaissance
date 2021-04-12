@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 import it.polimi.ingsw.model.exception.MarketTrayNotEmptyException;
+import it.polimi.ingsw.model.exception.NoSuchResourceException;
 import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -49,6 +50,9 @@ public class MarketTray {
 
     /**
      * Checks if a combination of resources is contained in resCombinations
+     *
+     * @param res the combination to check
+     * @return a boolean indicating the result of the check
      */
     public boolean checkResources(TreeMap<Resource, Integer> res){
         return resCombinations.contains(res);
@@ -88,9 +92,13 @@ public class MarketTray {
 
     /**
      * Removes the effect of a MarbleLeader from the market
+     *
+     * @param res the resource to remove
+     * @throws NoSuchResourceException if there aren't active MarbleLeader of res type
      */
     public void removeLeaderResource(Resource res) {
-        leaderResources.remove(res);
+        boolean removed = leaderResources.remove(res);
+        if (!removed) throw new NoSuchResourceException();
     }
 
     /**
@@ -178,6 +186,9 @@ public class MarketTray {
     /**
      * Helper method to add a resource to a map.
      * If the resource is already present it increments the index, otherwise it adds the entry.
+     *
+     * @param resource the resource to add to the TreeMap
+     * @param resMap the map to add it to
      */
     private void addToResMap(TreeMap<Resource, Integer> resMap, Resource resource){
         if (resMap.containsKey(resource)) {

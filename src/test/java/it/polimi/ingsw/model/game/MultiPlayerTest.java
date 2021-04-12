@@ -81,25 +81,6 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void testGetNewId(){
-        ArrayList<Player> players1 = new ArrayList<>();
-        players1.add(new Player("fourth", 1));
-        players1.add(new Player("fifth", 2));
-        players1.add(new Player("sixth", 3));
-        MultiPlayer multiPlayer1 = new MultiPlayer(players1);
-        ArrayList<Player> players2 = new ArrayList<>();
-        players2.add(new Player("Aniello", 1));
-        players2.add(new Player("Lorenzo", 2));
-        players2.add(new Player("Lorenzo", 3));
-        MultiPlayer multiPlayer2 = new MultiPlayer(players2);
-        assertNotEquals(multiPlayer2.getId(), multiPlayer1.getId());
-        assertNotEquals(multiPlayer1.getId(), multiPlayer.getId());
-        assertNotEquals(multiPlayer.getId(), multiPlayer2.getId());
-        multiPlayer1.destroy();
-        multiPlayer2.destroy();
-    }
-
-    @Test
     public void testNextTurnEndOfFaithTrack(){
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());

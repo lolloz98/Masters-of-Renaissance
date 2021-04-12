@@ -4,6 +4,10 @@ import it.polimi.ingsw.model.exception.MainActionNotOccurredException;
 import it.polimi.ingsw.model.exception.MarketTrayNotEmptyException;
 import it.polimi.ingsw.model.exception.ProductionsResourcesNotFlushedException;
 
+/**
+ * Concrete extension of the class Turn. It has all the variables and methods needed to represent the state of a turn in a SinglePlayer game.
+ */
+
 public class TurnSingle extends Turn{
     private final boolean lorenzoPlaying;
 

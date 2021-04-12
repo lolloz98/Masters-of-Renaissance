@@ -17,6 +17,7 @@ public class Lorenzo {
     /**
      * Draws a card from the LorenzoDeck in SinglePlayer and activates its effect
      *
+     * @param singlePlayer current game
      * @throws EmptyDeckException if deck is empty
      */
     public void performLorenzoAction(SinglePlayer singlePlayer){

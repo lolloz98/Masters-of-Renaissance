@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
 import it.polimi.ingsw.model.exception.MarketTrayNotEmptyException;
+import it.polimi.ingsw.model.exception.NoSuchResourceException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -208,4 +209,12 @@ public class MarketTrayTest {
         marketTray.removeResources();
         assertTrue(marketTray.getResCombinations()==null);
     }
+
+    @Test (expected = NoSuchResourceException.class)
+    public void testRemoveResource() {
+        marketTray.addLeaderResource(Resource.SHIELD);
+        marketTray.addLeaderResource(Resource.SERVANT);
+        marketTray.removeLeaderResource(Resource.ROCK);
+    }
+
 }
