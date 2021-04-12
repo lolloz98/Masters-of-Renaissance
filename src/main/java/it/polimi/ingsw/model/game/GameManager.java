@@ -27,25 +27,25 @@ public class GameManager {
         return i;
     }
 
-    private synchronized Game<? extends Turn> getGameFromMap(int id){
+    public synchronized Game<? extends Turn> getGameFromMap(int id){
         return gameMap.get(id);
     }
 
-    private int getNewSinglePlayer(Player player){ // maybe it should return singlePlayer
+    public int getNewSinglePlayer(Player player){ // maybe it should return singlePlayer
         SinglePlayer singlePlayer = new SinglePlayer(player);
         return addGameToMap(singlePlayer);
     }
 
-    private int getNewMultiPlayer(ArrayList<Player> players){ // maybe it should return multiPlayer
+    public int getNewMultiPlayer(ArrayList<Player> players){ // maybe it should return multiPlayer
         MultiPlayer multiPlayer = new MultiPlayer(players);
         return addGameToMap(multiPlayer);
     }
 
-    private void destroyGame(int id){
+    public void destroyGame(int id){
         removeGameFromMap(id).destroy();
     }
 
-    public synchronized Game<? extends Turn> removeGameFromMap(int id){
+    private synchronized Game<? extends Turn> removeGameFromMap(int id){
         return gameMap.remove(id);
     }
 }

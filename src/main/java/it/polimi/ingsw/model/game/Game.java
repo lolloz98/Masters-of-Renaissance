@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public abstract class Game <T extends Turn> {
     private static Set<Integer> usedId = Collections.synchronizedSet(new TreeSet<>());
     private boolean gameOver;
-    private final int id;
     private final MarketTray marketTray;
     protected T turn;
     private TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
@@ -39,7 +38,6 @@ public abstract class Game <T extends Turn> {
         }
         this.marketTray = new MarketTray(new MarbleDispenserCollection());
         this.gameOver = false;
-        this.id = getNewId();
     }
 
     public TreeMap<Color, TreeMap<Integer, DeckDevelop>> getDecksDevelop() {
@@ -66,10 +64,6 @@ public abstract class Game <T extends Turn> {
         return deckLeader;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public MarketTray getMarketTray() {
         return marketTray;
     }
@@ -79,25 +73,6 @@ public abstract class Game <T extends Turn> {
     public abstract void nextTurn();
 
     public abstract void distributeLeader();
-
-    /**
-     * @return the value of an id that doesn't correspond to any of the currently ongoing games
-     */
-    private synchronized static int getNewId(){
-        int i = 0;
-        while (usedId.contains(i)) {
-            i++;
-        }
-        usedId.add(i);
-        return i;
-    }
-
-    /**
-     * Removes the id from the list of used ids
-     */
-    private synchronized static void removeId(int id){
-        usedId.remove(id);
-    }
 
     /**
      * Setup method for the 12 DeckDevelop in the game, loading the cards from the json folder, using gson library.
@@ -219,11 +194,11 @@ public abstract class Game <T extends Turn> {
      * Destroy method
      */
     public void destroy() {
-        removeId(this.id);
+        // TODO
     }
 
     /**
-     * Helper method to distribute
+     * Helper method to distribute leaders
      */
     protected void distributeLeaderToPlayer(Player player){
         player.getBoard().addLeaderCards(deckLeader.distributeCards(4));
