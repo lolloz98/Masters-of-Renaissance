@@ -73,7 +73,8 @@ public class Depot {
     public void spendResources(int howMany) {
         if (howMany <= 0 || !enoughResources(howMany)) throw new InvalidResourceQuantityToDepotException();
         if (stored == howMany) clear();
-        stored -= howMany;
+        else
+            stored -= howMany;
     }
 
     public boolean contains(Resource r) {
@@ -98,12 +99,11 @@ public class Depot {
      * method that add n resources to the depot
      */
     public void addResource(Resource r, int howMany) {
-        if (howMany < 0) throw new InvalidResourceQuantityToDepotException();
+        if (howMany <= 0 || tooManyResources(howMany)) throw new InvalidResourceQuantityToDepotException();
         if (!isResourceAppendable(r)) throw new DifferentResourceForDepotException();
-        if (tooManyResources(howMany)) throw new TooManyResourcesToAddExeption();
         if (!Resource.isDiscountable(r)) throw new InvalidTypeOfResourceToDepotExeption();
         if (stored != 0)
-            stored++;
+            stored+=howMany;
         else {
             resource = r;
             stored = howMany;

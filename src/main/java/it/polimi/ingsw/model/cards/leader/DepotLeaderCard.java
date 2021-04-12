@@ -41,9 +41,12 @@ public final class DepotLeaderCard extends LeaderCard<RequirementResource> {
                 ((game instanceof SinglePlayer) ?
                         ((SinglePlayer) game).getPlayer() : ((MultiPlayer) game).getTurn().getCurrentPlayer())
                         .getBoard();
-        board.removeResources(new TreeMap<>() {{
+
+        // todo: change this. the player must decide where to take the resources to spend. It must be done by the controller
+        board.removeResourcesSmart(new TreeMap<>() {{
             put(getRequirement().getRes(), getRequirement().getQuantity());
         }});
+
         board.discoverDepotLeader(this);
     }
 

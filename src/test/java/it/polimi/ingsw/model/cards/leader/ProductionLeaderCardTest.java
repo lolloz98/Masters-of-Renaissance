@@ -68,8 +68,8 @@ public class ProductionLeaderCardTest {
             put(Resource.SHIELD, 60);
         }}, game);
 
-        player.getBoard().buyDevelopCard(game, Color.GOLD, 1, 1);
-        player.getBoard().buyDevelopCard(game, Color.BLUE, 2, 1);
+        player.getBoard().buyDevelopCardSmart(game, Color.GOLD, 1, 1);
+        player.getBoard().buyDevelopCardSmart(game, Color.BLUE, 2, 1);
     }
 
     private void giveOwnership(Player player){

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.exception.DifferentResourceForDepotException;
-import it.polimi.ingsw.model.exception.TooManyResourcesToAddExeption;
 import it.polimi.ingsw.model.game.Resource;
 import org.junit.Before;
 import org.junit.Test;

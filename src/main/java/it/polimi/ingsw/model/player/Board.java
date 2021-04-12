@@ -97,25 +97,118 @@ public class Board implements VictoryPointCalculator {
      * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
     public boolean enoughResToActivate(TreeMap<Resource, Integer> resToGive) {
-        TreeMap<Resource, Integer> diffMap = new TreeMap<>();
-        diffMap.putAll(resToGive);
+        TreeMap<Resource, Integer> diffMap = new TreeMap<>(resToGive);
+        TreeMap<Resource, Integer> tmpDiffMap = new TreeMap<>();
+        enoughResInNormalDepots(diffMap, tmpDiffMap);
+
+        diffMap.clear();
+        diffMap.putAll(tmpDiffMap);
+        enoughResInLeaderDepots(diffMap, tmpDiffMap);
+
+        diffMap.clear();
+        diffMap.putAll(tmpDiffMap);
+        enoughResInStrongBox(diffMap, tmpDiffMap);
+
+        diffMap.clear();
+        diffMap.putAll(tmpDiffMap);
         for (Resource r : diffMap.keySet()) {
+            if (diffMap.get(r) > 0)
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param resToGive resources we would like to remove from normal depots.
+     * @return true, if it is possible to remove resToGive from the normal depots
+     * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
+     */
+    public boolean enoughResInNormalDepots(TreeMap<Resource, Integer> resToGive) {
+        return enoughResInNormalDepots(resToGive, new TreeMap<>());
+    }
+
+    /**
+     * @param resToGive resources we would like to remove from leader depots.
+     * @return true, if it is possible to remove resToGive from the leader depots
+     * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
+     */
+    public boolean enoughResInLeaderDepots(TreeMap<Resource, Integer> resToGive) {
+        return enoughResInLeaderDepots(resToGive, new TreeMap<>());
+    }
+
+    /**
+     * @param resToGive resources we would like to remove from the strong box.
+     * @return true, if it is possible to remove resToGive from the strong box
+     * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
+     */
+    public boolean enoughResInStrongBox(TreeMap<Resource, Integer> resToGive) {
+        return enoughResInStrongBox(resToGive, new TreeMap<>());
+    }
+
+    /**
+     * @param resToGive resources we would like to remove from normal depots.
+     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the normal depots
+     * @return true, if it is possible to remove resToGive from the normal depots
+     * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
+     */
+    private boolean enoughResInNormalDepots(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> diff) {
+        diff.clear();
+        diff.putAll(resToGive);
+        for (Resource r : diff.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
             for (Depot d : depots) {
                 if (d.contains(r))
-                    diffMap.replace(r, diffMap.get(r) - d.getStored());
-            }
-            for (DepotLeaderCard dl : depotLeaders) {
-                if (dl.getDepot().contains(r))
-                    diffMap.replace(r, diffMap.get(r) - dl.getDepot().getStored());
-            }
-            for (Resource inStrongBox : strongbox.getResources().keySet()) {
-                if (inStrongBox.equals(r))
-                    diffMap.replace(r, diffMap.get(r) - strongbox.getResources().get(inStrongBox));
+                    diff.replace(r, diff.get(r) - d.getStored());
             }
         }
-        for (Resource r : diffMap.keySet()) {
-            if (diffMap.get(r) > 0)
+        for (Resource r : diff.keySet()) {
+            if (diff.get(r) > 0)
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param resToGive resources we would like to remove from leader depots.
+     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the leader depots
+     * @return true, if it is possible to remove resToGive from the leader depots
+     * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
+     */
+    private boolean enoughResInLeaderDepots(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> diff) {
+        diff.clear();
+        diff.putAll(resToGive);
+        for (Resource r : diff.keySet()) {
+            if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+            for (DepotLeaderCard dl : depotLeaders) {
+                if (dl.getDepot().contains(r))
+                    diff.replace(r, diff.get(r) - dl.getDepot().getStored());
+            }
+        }
+        for (Resource r : diff.keySet()) {
+            if (diff.get(r) > 0)
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param resToGive resources we would like to remove from the strong box.
+     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the strong box
+     * @return true, if it is possible to remove resToGive from the strong box
+     * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
+     */
+    private boolean enoughResInStrongBox(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> diff) {
+        diff.clear();
+        diff.putAll(resToGive);
+        for (Resource r : diff.keySet()) {
+            if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+            for (Resource inStrongBox : strongbox.getResources().keySet()) {
+                if (inStrongBox.equals(r))
+                    diff.replace(r, diff.get(r) - strongbox.getResources().get(inStrongBox));
+            }
+        }
+        for (Resource r : diff.keySet()) {
+            if (diff.get(r) > 0)
                 return false;
         }
         return true;
@@ -136,19 +229,26 @@ public class Board implements VictoryPointCalculator {
      * @throws NotEnoughResourcesException      if there are not enough resources on the board
      * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
      */
-    public void removeResources(TreeMap<Resource, Integer> resToGive) {
+    public void removeResourcesSmart(TreeMap<Resource, Integer> resToGive) {
         if (!enoughResToActivate(resToGive)) throw new NotEnoughResourcesException();
-        int tmp;
-        TreeMap<Resource, Integer> resToSpend = new TreeMap<>();
-        resToSpend.putAll(resToGive);
+        TreeMap<Resource, Integer> resToSpend = removeResFromNormalDepotNoCheck(resToGive);
+        resToSpend = removeResFromLeaderDepotNoCheck(resToSpend);
+        removeResFromStrongBoxNoCheck(resToSpend);
+    }
+
+    /**
+     * @param resToGive resources to be removed from the normal depots
+     * @return treeMap with the resources still to be spent
+     * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
+     */
+    private TreeMap<Resource, Integer> removeResFromNormalDepotNoCheck(TreeMap<Resource, Integer> resToGive) {
+        TreeMap<Resource, Integer> resToSpend = new TreeMap<>(resToGive);
         for (Resource r : resToGive.keySet()) {
-
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
-
             for (Depot d : depots) {
                 if (d.contains(r)) {
                     if (!d.enoughResources(resToSpend.get(r))) {
-                        tmp = d.clear();
+                        int tmp = d.clear();
                         resToSpend.replace(r, resToSpend.get(r) - tmp);
                     } else {
                         d.spendResources(resToSpend.get(r));
@@ -156,22 +256,74 @@ public class Board implements VictoryPointCalculator {
                     }
                 }
             }
+        }
+        return resToSpend;
+    }
 
-            if (resToSpend.containsKey(r)) {//if i have other resources r to spend
-                for (DepotLeaderCard dl : depotLeaders) {
-                    if (dl.getDepot().contains(r)) {
-                        if (!dl.getDepot().enoughResources(resToSpend.get(r))) {
-                            tmp = dl.getDepot().clear();
-                            resToSpend.replace(r, resToSpend.get(r) - tmp);
-                        } else {
-                            dl.getDepot().spendResources(resToSpend.get(r));
-                            resToSpend.replace(r, 0);
-                        }
+    /**
+     * @param resToGive resources to be removed from the leader depots
+     * @return treeMap with the resources still to be spent
+     * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
+     */
+    private TreeMap<Resource, Integer> removeResFromLeaderDepotNoCheck(TreeMap<Resource, Integer> resToGive) {
+        TreeMap<Resource, Integer> resToSpend = new TreeMap<>(resToGive);
+        for (Resource r : resToGive.keySet()) {
+            if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+            for (DepotLeaderCard dl : depotLeaders) {
+                if (dl.getDepot().contains(r)) {
+                    if (!dl.getDepot().enoughResources(resToSpend.get(r))) {
+                        int tmp = dl.getDepot().clear();
+                        resToSpend.replace(r, resToSpend.get(r) - tmp);
+                    } else {
+                        dl.getDepot().spendResources(resToSpend.get(r));
+                        resToSpend.replace(r, 0);
                     }
                 }
             }
         }
+        return resToSpend;
+    }
+
+    /**
+     * @param resToGive resources to be removed from the strongbox
+     * @throws NotEnoughResourcesException if there are not enough resources on the strongbox
+     */
+    private void removeResFromStrongBoxNoCheck(TreeMap<Resource, Integer> resToGive) {
+        TreeMap<Resource, Integer> resToSpend = new TreeMap<>(resToGive);
+        for (Resource r : resToGive.keySet()) {
+            if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
+        }
         strongbox.spendResources(resToSpend);
+    }
+
+    /**
+     * @param resToGive resources to be removed from the normal depots
+     * @throws NotEnoughResourcesException      if there are not enough resources on the normal depots
+     * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
+     */
+    public void removeResFromNormalDepot(TreeMap<Resource, Integer> resToGive) {
+        if (!enoughResInNormalDepots(resToGive)) throw new NotEnoughResourcesException();
+        removeResFromNormalDepotNoCheck(resToGive);
+    }
+
+    /**
+     * @param resToGive resources to be removed from the leader depots
+     * @throws NotEnoughResourcesException      if there are not enough resources on the leader depots
+     * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
+     */
+    public void removeResFromLeaderDepot(TreeMap<Resource, Integer> resToGive) {
+        if (!enoughResInLeaderDepots(resToGive)) throw new NotEnoughResourcesException();
+        removeResFromLeaderDepotNoCheck(resToGive);
+    }
+
+    /**
+     * @param resToGive resources to be removed from the strongbox
+     * @throws NotEnoughResourcesException      if there are not enough resources on the strongbox
+     * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
+     */
+    public void removeResFromStrongBox(TreeMap<Resource, Integer> resToGive) {
+        if (!enoughResInStrongBox(resToGive)) throw new NotEnoughResourcesException();
+        removeResFromStrongBoxNoCheck(resToGive);
     }
 
     /**
@@ -280,17 +432,17 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that put the resources gained by the market in the depots
+     * method that put the resources gained by the market in the depots. It does it in a smart way: before it fills the leader depots, then the normal depots.
      *
      * @param resGained res gained by the market
      * @param toKeep    choice made by the player of the resources to store in the depots
-     * @param game
+     * @param game      current game
      * @throws InvalidResourcesToKeepByPlayerException if the player made an invalid decision regarding the resources to keep,
      *                                                 the resources given must be enough to not overload the depots
      * @throws IllegalArgumentException                if the treemaps toKeep and resGained contain an irregular type of resource
      *                                                 or if the amount of resources in the toKeep are greater that un the resGained
      */
-    public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException {
+    public void gainResourcesSmart(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException {
 
         for (Resource r : toKeep.keySet()) {
             if (!Resource.isDiscountable(r) && r != Resource.FAITH)
@@ -305,8 +457,8 @@ public class Board implements VictoryPointCalculator {
         if (cannotAppend(toKeep)) throw new InvalidResourcesToKeepByPlayerException();
 
         TreeMap<Resource, Integer> toGain = new TreeMap<>(toKeep);
-        storeInDepotLeader(toGain);
-        storeInNormalDepots(toGain, this.depots);
+        storeInDepotLeaderNoChecks(toGain);
+        storeInNormalDepotsNoChecks(toGain, this.depots);
         if (toKeep.containsKey(Resource.FAITH))
             moveOnFaithPath(toKeep.get(Resource.FAITH), game);
 
@@ -323,25 +475,52 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that checks if the treemap toKeep is valid (it can be added to the depots without any gap of resources)
-     *
-     * @param toKeep a Treemap chosen by the player
-     * @return true if the TreeMap passed by the player is not valid
+     * @param toGain resources we would like to put in the leader depots.
+     * @return true, if toGain cannot completely be stored in the leader depots
      */
-    private boolean cannotAppend(TreeMap<Resource, Integer> toKeep) {
-        TreeMap<Resource, Integer> toGain = new TreeMap<>(toKeep);
-        toGain.remove(Resource.ANYTHING);
-        for (Resource r : toGain.keySet()) {
+    public boolean cannotAppendToLeaderDepots(TreeMap<Resource, Integer> toGain) {
+        return cannotAppendToLeaderDepots(toGain, new TreeMap<>());
+    }
+
+    /**
+     * @param toGain resources we would like to put in the normal depots.
+     * @return true, if toGain cannot completely be stored in the normal depots
+     */
+    public boolean cannotAppendToNormalDepots(TreeMap<Resource, Integer> toGain) {
+        return cannotAppendToNormalDepots(toGain, new TreeMap<>());
+    }
+
+    /**
+     * @param toGain resources we would like to put in the leader depots.
+     * @param diff   modified inside this method. Used to store resource that I cannot gain in normal depots
+     * @return true, if toGain cannot completely be stored in the leader depots
+     */
+    private boolean cannotAppendToLeaderDepots(TreeMap<Resource, Integer> toGain, TreeMap<Resource, Integer> diff) {
+        diff.clear();
+        diff.putAll(toGain);
+        diff.remove(Resource.ANYTHING);
+        for (Resource r : diff.keySet()) {
             for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();
                 if (d.getTypeOfResource() == r) {
-                    if (toGain.get(r) - d.getFreeSpace() > 0)
-                        toGain.replace(r, toGain.get(r) - d.getFreeSpace());
+                    if (diff.get(r) - d.getFreeSpace() > 0)
+                        diff.replace(r, diff.get(r) - d.getFreeSpace());
                     else
-                        toGain.remove(r);
+                        diff.remove(r);
                 }
             }
         }
+        return !diff.isEmpty();
+    }
+
+    /**
+     * @param toGain resources we would like to put in the normal depots.
+     * @param diff   modified inside this method. Used to store resource that I cannot gain in normal depots
+     * @return true, if toGain cannot completely be stored in the normal depots
+     */
+    private boolean cannotAppendToNormalDepots(TreeMap<Resource, Integer> toGain, TreeMap<Resource, Integer> diff) {
+        diff.clear();
+        diff.putAll(toGain);
         ArrayList<Depot> copyOfDepots = new ArrayList<>() {{
             Depot d;
             for (int i = 0; i < 3; i++) {
@@ -351,8 +530,23 @@ public class Board implements VictoryPointCalculator {
                     get(i).addResource(d.getTypeOfResource(), d.getStored());
             }
         }};
-        storeInNormalDepots(toGain, copyOfDepots);
-        return !toGain.isEmpty();
+        storeInNormalDepotsNoChecks(diff, copyOfDepots);
+        return !diff.isEmpty();
+    }
+
+    /**
+     * method that checks if the treemap toKeep is valid (it can be added to the depots without any gap of resources)
+     *
+     * @param toKeep a Treemap chosen by the player
+     * @return true if the TreeMap passed by the player is not valid
+     */
+    private boolean cannotAppend(TreeMap<Resource, Integer> toKeep) {
+        TreeMap<Resource, Integer> tmp = new TreeMap<>();
+        cannotAppendToNormalDepots(toKeep, tmp);
+
+        TreeMap<Resource, Integer> tmp2 = new TreeMap<>();
+        cannotAppendToLeaderDepots(tmp, tmp2);
+        return !tmp2.isEmpty();
     }
 
     /**
@@ -361,7 +555,7 @@ public class Board implements VictoryPointCalculator {
      * @param depotToSwitchFrom depot that i want to substitute
      * @param depotArrayList
      * @param howMany           resources must be added to the depot
-     * @return the depot to substitute
+     * @return the depot to substitute or null if no valid depot is found
      */
     private Depot lookForADepotToSwitch(Depot depotToSwitchFrom, ArrayList<Depot> depotArrayList, int howMany) {
         for (Depot d : depotArrayList) {
@@ -418,7 +612,7 @@ public class Board implements VictoryPointCalculator {
      * @param toGain         resource that we want to gain. The values in the TreeMap gets changed.
      * @param depotArrayList list of depots in which i want to store the resources
      */
-    private void storeInNormalDepots(TreeMap<Resource, Integer> toGain, ArrayList<Depot> depotArrayList) {
+    private void storeInNormalDepotsNoChecks(TreeMap<Resource, Integer> toGain, ArrayList<Depot> depotArrayList) {
 
         Set<Resource> resInToGain = new TreeSet<>(toGain.keySet());
         for (Resource r : resInToGain) {
@@ -458,7 +652,7 @@ public class Board implements VictoryPointCalculator {
      *
      * @param toGain resource that we want to store. The values in the TreeMap gets changed.
      */
-    private void storeInDepotLeader(TreeMap<Resource, Integer> toGain) {
+    private void storeInDepotLeaderNoChecks(TreeMap<Resource, Integer> toGain) {
         for (Resource r : toGain.keySet()) {
             for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();
@@ -473,7 +667,28 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
+     * Put resources from toGain in depot leaders
+     *
+     * @param toGain resource that we want to store. The values in the TreeMap gets changed.
+     * @throws TooManyResourcesToAddException if toGain cannot be added to the depot leaders
+     */
+    public void storeInDepotLeader(TreeMap<Resource, Integer> toGain) {
+        if (cannotAppendToLeaderDepots(toGain)) throw new TooManyResourcesToAddException();
+        storeInDepotLeaderNoChecks(toGain);
+    }
+
+    /**
+     * @param toGain resource that we want to gain. The values in the TreeMap gets changed.
+     * @throws TooManyResourcesToAddException if toGain cannot be added to the normal leaders
+     */
+    public void storeInNormalDepot(TreeMap<Resource, Integer> toGain) {
+        if (cannotAppendToNormalDepots(toGain)) throw new TooManyResourcesToAddException();
+        storeInNormalDepotsNoChecks(toGain, depots);
+    }
+
+    /**
      * buy the develop card on top of the deck of whichColor and whichLevel and put it in the slot indexed by slotToStore
+     * it removes the resources from the board in a smart way.
      *
      * @param game        current game
      * @param whichColor  color of the develop card to buy
@@ -484,7 +699,7 @@ public class Board implements VictoryPointCalculator {
      * @throws InvalidDevelopCardToSlotException if the card to buy cannot go in the chosen slot
      * @throws IllegalArgumentException          if whichLevel or slotToStore are out of bound
      */
-    public void buyDevelopCard(Game<?> game, Color whichColor, int whichLevel, int slotToStore) {
+    public void buyDevelopCardSmart(Game<?> game, Color whichColor, int whichLevel, int slotToStore) {
         if (slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3)
             throw new IllegalArgumentException();
 
@@ -497,9 +712,89 @@ public class Board implements VictoryPointCalculator {
 
         developCardSlots.get(slotToStore).addDevelopCard(deck.drawCard()); // it can throw InvalidDevelopCardToSlotException
 
-        removeResources(resToGive);
+        removeResourcesSmart(resToGive);
     }
 
+    /**
+     * buy the develop card on top of the deck of whichColor and whichLevel and put it in the slot indexed by slotToStore
+     *
+     * @param game        current game
+     * @param whichColor  color of the develop card to buy
+     * @param whichLevel  level of the develop card to buy
+     * @param slotToStore slot in which to store the develop card
+     * @param toPay       resources to be paid for the card. They will be removed from the board
+     * @throws EmptyDeckException                if the deckDevelop with whichColor and whichLevel in game is empty
+     * @throws NotEnoughResourcesException       if this does not have enoughResources to buy the card
+     * @throws InvalidDevelopCardToSlotException if the card to buy cannot go in the chosen slot
+     * @throws IllegalArgumentException          if whichLevel or slotToStore are out of bound or toPay is in someway invalid
+     */
+    public void buyDevelopCard(Game<?> game, Color whichColor, int whichLevel, int slotToStore, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
+        if (slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3)
+            throw new IllegalArgumentException();
+
+        // think about checking for the color in the method below
+        DeckDevelop deck = game.getDecksDevelop().get(whichColor).get(whichLevel);
+        if (deck.isEmpty()) throw new EmptyDeckException();
+
+        TreeMap<Resource, Integer> resToGive = deck.topCard().getCurrentCost(); // it can throw InvalidDevelopCardToSlotException
+
+        // subtract toPay from resToGive
+        for(Resource r: resToGive.keySet()){
+            for (WarehouseType w : toPay.keySet()){
+                resToGive.replace(r, resToGive.get(r) - toPay.get(w).getOrDefault(r, 0));
+            }
+        }
+        // check that every resource in res toGive is equal to zero
+        for(Resource r: resToGive.keySet())
+            if(resToGive.get(r) != 0) throw new IllegalArgumentException();
+
+        payResources(toPay);
+
+        developCardSlots.get(slotToStore).addDevelopCard(deck.drawCard());
+    }
+
+    /**
+     * @param toPay resources to be removed from the board
+     * @throws NotEnoughResourcesException if there are not enough resources on the board
+     */
+    public void payResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
+        // first check that toPay is right
+        for (WarehouseType w : toPay.keySet()) {
+            switch (w) {
+                case STRONGBOX:
+                    if (enoughResInStrongBox(toPay.get(w))) throw new NotEnoughResourcesException();
+                    break;
+                case LEADER:
+                    if (enoughResInLeaderDepots(toPay.get(w))) throw new NotEnoughResourcesException();
+                    break;
+                case NORMAL:
+                    if (enoughResInNormalDepots(toPay.get(w))) throw new NotEnoughResourcesException();
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+        // then pay
+        for (WarehouseType w : toPay.keySet()) {
+            switch (w) {
+                case STRONGBOX:
+                    removeResFromStrongBox(toPay.get(w));
+                    break;
+                case LEADER:
+                    removeResFromLeaderDepot(toPay.get(w));
+                    break;
+                case NORMAL:
+                    removeResFromNormalDepot(toPay.get(w));
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+    }
+
+    /**
+     * @return number of resources gained by the player. Useful to calculate the victoryPoints
+     */
     public int howManyResources() {
         int count = 0;
         for (Depot d : depots) {
