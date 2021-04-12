@@ -40,7 +40,10 @@ public class Production {
         if (!checkResToGiveForActivation(resourcesToGive)) throw new InvalidResourcesByPlayerException();
         if (!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesByPlayerException();
         if (hasBeenActivated()) throw new ProductionAlreadyActivatedException();
-        board.removeResources(resourcesToGive);
+
+        // todo: change this. the player must decide where to take the resources to spend. It must be done by the controller
+        board.removeResourcesSmart(resourcesToGive);
+
         gainedResources.putAll(resourcesToGain);
     }
 
