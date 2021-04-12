@@ -56,7 +56,7 @@ public class DevelopCardSlotTest {
             put(Resource.ROCK,2);
             put(Resource.SHIELD, 2);
         }};
-        board.gainResources(resInDepots, resInDepots, sp);
+        board.gainResourcesSmart(resInDepots, resInDepots, sp);
     }
 
     @Test(expected = IllegalArgumentException.class)
