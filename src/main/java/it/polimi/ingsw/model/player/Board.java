@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 
+import com.sun.source.tree.Tree;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.leader.*;
 import it.polimi.ingsw.model.exception.*;
@@ -275,7 +276,7 @@ public class Board implements VictoryPointCalculator {
                         resToSpend.replace(r, resToSpend.get(r) - tmp);
                     } else {
                         dl.getDepot().spendResources(resToSpend.get(r));
-                        resToSpend.replace(r, 0);
+                        resToSpend.remove(r);
                     }
                 }
             }
@@ -399,6 +400,29 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
+     *
+     * @param whichLeaderDepot number of the leader depot to get
+     * @return the resources in the specified depot
+     * @throws IllegalArgumentException if the parameter indicates a depot which is not in the board
+     */
+    public TreeMap<Resource,Integer> getResInLeaderDepot(int whichLeaderDepot){
+        switch(whichLeaderDepot){
+            case 0:{
+                if(depotLeaders.size()==0) throw new IllegalArgumentException();
+                return depotLeaders.get(whichLeaderDepot).getDepot().getStoredResources();
+            }
+
+            case 1:{
+                if(depotLeaders.size()==0||depotLeaders.size()==1) throw new IllegalArgumentException();
+                return depotLeaders.get(whichLeaderDepot).getDepot().getStoredResources();
+            }
+            default:
+                throw  new IllegalArgumentException();
+
+        }
+    }
+
+    /**
      * @return list of leaderCards of the player
      */
     public ArrayList<LeaderCard<? extends Requirement>> getLeaderCards() {
@@ -498,7 +522,8 @@ public class Board implements VictoryPointCalculator {
         diff.clear();
         diff.putAll(toGain);
         diff.remove(Resource.ANYTHING);
-        for (Resource r : diff.keySet()) {
+
+        for (Resource r : toGain.keySet()) {
             for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();
                 if (d.getTypeOfResource() == r) {
@@ -634,6 +659,7 @@ public class Board implements VictoryPointCalculator {
                             }};
                             toSwitch.clear();
                             toSwitch.addResource(d.getTypeOfResource(), d.getStored() + toGain.get(r));
+                            d.clear();
                             d.addResource(tmp.getTypeOfResource(), tmp.getStored());
                             toGain.remove(r);
                             break;
@@ -656,7 +682,7 @@ public class Board implements VictoryPointCalculator {
             for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();
                 if (!d.isFull() && d.getTypeOfResource() == r) {
-                    while (!d.isFull() || toGain.get(r) == 0) {
+                    while (!d.isFull() && toGain.get(r) > 0) {
                         d.addResource(r, 1);
                         toGain.replace(r, toGain.get(r) - 1);
                     }
@@ -702,7 +728,6 @@ public class Board implements VictoryPointCalculator {
         if (slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3)
             throw new IllegalArgumentException();
 
-        // think about checking for the color in the method below
         DeckDevelop deck = game.getDecksDevelop().get(whichColor).get(whichLevel);
         if (deck.isEmpty()) throw new EmptyDeckException();
 
@@ -731,7 +756,6 @@ public class Board implements VictoryPointCalculator {
         if (slotToStore < 0 || slotToStore > 2 || whichLevel < 1 || whichLevel > 3)
             throw new IllegalArgumentException();
 
-        // think about checking for the color in the method below
         DeckDevelop deck = game.getDecksDevelop().get(whichColor).get(whichLevel);
         if (deck.isEmpty()) throw new EmptyDeckException();
 
