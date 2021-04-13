@@ -61,7 +61,7 @@ public class DevelopCardSlot {
      * @throws InvalidResourcesByPlayerException    if resToGive or resToGain contains invalid resources
      * @throws InvalidProductionSlotChosenException if this does not contain any develop card
      */
-    public void applyProduction(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
+    public void applyProduction(TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
         if (isEmpty()) throw new InvalidProductionSlotChosenException();
         cards.get(cards.size() - 1).getProduction().applyProduction(resToGive, resToGain, board);
     }

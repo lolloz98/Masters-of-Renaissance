@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.game.SinglePlayer;
 import it.polimi.ingsw.model.player.Board;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.WarehouseType;
 import it.polimi.ingsw.model.utility.Utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,7 @@ public class ProductionTest {
 
     TreeMap<Resource, Integer> toGive;
     TreeMap<Resource, Integer> toGain;
-    TreeMap<Resource, Integer> chosenByPlayerGive;
+    TreeMap<WarehouseType, TreeMap<Resource, Integer>> chosenByPlayerGive;
     TreeMap<Resource, Integer> chosenByPlayerGain;
     Production production;
     Board board;
@@ -58,11 +59,14 @@ public class ProductionTest {
 
         production = new Production(toGive, toGain);
 
-        chosenByPlayerGive = new TreeMap<>() {{
-            put(Resource.GOLD, 2);
-            put(Resource.ROCK, 1);
-            put(Resource.SERVANT, 2);
-        }};
+        chosenByPlayerGive = new TreeMap<>(){
+            {
+                put(WarehouseType.STRONGBOX,new TreeMap<>() {{
+                    put(Resource.GOLD, 2);
+                    put(Resource.ROCK, 1);
+                    put(Resource.SERVANT, 2);
+                }});
+            }};
 
 
         chosenByPlayerGain = new TreeMap<>() {{
@@ -106,7 +110,7 @@ public class ProductionTest {
         } catch(NotEnoughResourcesException ignore){}
 
         // put in the strongBox
-        board.flushGainedResources(chosenByPlayerGive, game);
+        board.flushGainedResources(Utility.getTotalResources(chosenByPlayerGive), game);
         try {
             production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
             assertTrue(Utility.checkTreeMapEquality(new TreeMap<>(), board.getResourcesInStrongBox()));
@@ -117,11 +121,11 @@ public class ProductionTest {
         }
 
         // put in the strongBox
-        board.flushGainedResources(chosenByPlayerGive, game);
+        board.flushGainedResources(Utility.getTotalResources(chosenByPlayerGive), game);
         try {
             production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
             // reapply production before flushing
-            board.flushGainedResources(chosenByPlayerGive, game);
+            board.flushGainedResources(Utility.getTotalResources(chosenByPlayerGive), game);
             production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
             fail();
         } catch (InvalidResourcesByPlayerException e) {
@@ -131,11 +135,11 @@ public class ProductionTest {
 
         board = new Board();
 
-        chosenByPlayerGive = new TreeMap<>() {{
+        chosenByPlayerGive.replace(WarehouseType.STRONGBOX, new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 1);
             put(Resource.SERVANT, 2);
-        }};
+        }});
 
         // Faith can't take the place of ANYTHING
         chosenByPlayerGain = new TreeMap<>() {{
@@ -143,7 +147,7 @@ public class ProductionTest {
             put(Resource.FAITH, 1);
         }};
 
-        board.flushGainedResources(chosenByPlayerGive, game);
+        board.flushGainedResources(Utility.getTotalResources(chosenByPlayerGive), game);
         try {
             production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
             fail();
@@ -159,18 +163,18 @@ public class ProductionTest {
 
         production = new Production(toGive, toGain);
 
-        chosenByPlayerGive = new TreeMap<>() {{
+        chosenByPlayerGive.replace(WarehouseType.STRONGBOX, new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 1);
             put(Resource.SERVANT, 2);
-        }};
+        }});
 
         chosenByPlayerGain = new TreeMap<>() {{
             put(Resource.SHIELD, 2);
             put(Resource.FAITH, 1);
         }};
 
-        board.flushGainedResources(chosenByPlayerGive, game);
+        board.flushGainedResources(Utility.getTotalResources(chosenByPlayerGive), game);
         try {
             production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
             assertTrue(Utility.checkTreeMapEquality(new TreeMap<>(), board.getResourcesInStrongBox()));
@@ -287,7 +291,7 @@ public class ProductionTest {
     @Test
     public void testGetGainedResources() {
         // put in the strongBox
-        board.flushGainedResources(chosenByPlayerGive, game);
+        board.flushGainedResources(Utility.getTotalResources(chosenByPlayerGive), game);
         try {
             production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
             assertTrue(Utility.checkTreeMapEquality(production.getGainedResources(), chosenByPlayerGain));
@@ -305,18 +309,18 @@ public class ProductionTest {
 
         production = new Production(toGive, toGain);
 
-        chosenByPlayerGive = new TreeMap<>() {{
+        chosenByPlayerGive.replace(WarehouseType.STRONGBOX, new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 1);
             put(Resource.SERVANT, 2);
-        }};
+        }});
 
         chosenByPlayerGain = new TreeMap<>() {{
             put(Resource.SHIELD, 2);
             put(Resource.FAITH, 1);
         }};
 
-        board.flushGainedResources(chosenByPlayerGive, game);
+        board.flushGainedResources(Utility.getTotalResources(chosenByPlayerGive), game);
         try {
             production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
             assertTrue(Utility.checkTreeMapEquality(new TreeMap<>(), board.getResourcesInStrongBox()));

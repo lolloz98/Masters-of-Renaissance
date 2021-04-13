@@ -71,12 +71,12 @@ public class Board implements VictoryPointCalculator {
      * @param whichprod if zero it refers to the normalProduction, if 1,2 or 3 it refers to which productionSlot,
      *                  if 4 or 5 it refers to the leaderCardProductionSlot.
      */
-    public void activateProduction(int whichprod, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
+    public void activateProduction(int whichprod, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
         if (whichprod < 0 || whichprod > developCardSlots.size() + productionLeaderSlots.size())
             throw new InvalidProductionSlotChosenException();
-        if (resToGive.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
+        if (Utility.getTotalResources(resToGive).containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
         if (resToGain.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
-        if (enoughResToActivate(resToGive)) {
+        if (enoughResourcesToPay(resToGive)) {
             if (whichprod == 0) {
                 normalProduction.applyProduction(resToGive, resToGain, this);
             }
