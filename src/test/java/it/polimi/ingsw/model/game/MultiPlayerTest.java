@@ -33,6 +33,7 @@ public class MultiPlayerTest {
         players.add(new Player("first", 1));
         players.add(new Player("second", 2));
         players.add(new Player("third", 3));
+        players.add(new Player("fourth", 4));
         multiPlayer = new MultiPlayer(players);
     }
 
@@ -66,6 +67,12 @@ public class MultiPlayerTest {
             multiPlayer.drawDevelopCard(Color.BLUE, 2);
     }
 
+    @Test (expected = EmptyDeckException.class)
+    public void testIsADeckDevelopEmptyTooManyCalls2(){
+        for(int i = 0; i <5; i++)
+            multiPlayer.getDecksDevelop().get(Color.BLUE).get(2).drawCard();
+    }
+
     @Test
     public void testIsADeckDevelopEmptyTrue(){
         for(int i = 0; i <4; i++)
@@ -94,6 +101,10 @@ public class MultiPlayerTest {
         assertFalse(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(3), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
+        multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         // player 0 gets to the end of the faith track
@@ -106,6 +117,10 @@ public class MultiPlayerTest {
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(3), multiPlayer.getTurn().getCurrentPlayer());
         assertTrue(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
@@ -123,6 +138,10 @@ public class MultiPlayerTest {
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(3), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
@@ -149,6 +168,10 @@ public class MultiPlayerTest {
         assertTrue(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(3), multiPlayer.getTurn().getCurrentPlayer());
+        assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
+        multiPlayer.nextTurn();
         assertTrue(multiPlayer.isGameOver());
     }
 
@@ -163,6 +186,10 @@ public class MultiPlayerTest {
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(multiPlayer.getPlayers().get(2), multiPlayer.getTurn().getCurrentPlayer());
+        assertFalse(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
+        multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(3), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
@@ -181,6 +208,10 @@ public class MultiPlayerTest {
         assertTrue(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
+        assertEquals(multiPlayer.getPlayers().get(3), multiPlayer.getTurn().getCurrentPlayer());
+        assertTrue(multiPlayer.isLastRound());
+        multiPlayer.getTurn().setMainActionOccurred();
+        multiPlayer.nextTurn();
         assertTrue(multiPlayer.isGameOver());
         // if i try to call nextTurn when the game is over i get an exception
         multiPlayer.nextTurn();
@@ -194,7 +225,6 @@ public class MultiPlayerTest {
         }
     }
 
-    /*
     @Test
     public void testGetWinnersSingle() {
         GsonBuilder builder = new GsonBuilder();
@@ -208,9 +238,9 @@ public class MultiPlayerTest {
             dc = multiPlayer.drawDevelopCard(Color.BLUE, 1);
         }
         multiPlayer.getTurn().getCurrentPlayer().getBoard().getDevelopCardSlots().get(0).addDevelopCard(dc);
-        multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(2,multiPlayer);
+        multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24,multiPlayer);
         try {
-            multiPlayer.getTurn().getCurrentPlayer().getBoard().gainResources(
+            multiPlayer.getTurn().getCurrentPlayer().getBoard().gainResourcesSmart(
                     new TreeMap<Resource, Integer>(){{
                         put(Resource.GOLD, 1);
                     }},
@@ -222,10 +252,14 @@ public class MultiPlayerTest {
         } catch (InvalidResourcesToKeepByPlayerException e) {
             e.printStackTrace();
         }
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
+        multiPlayer.getTurn().setMainActionOccurred();
+        multiPlayer.nextTurn();
+        multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertEquals(new ArrayList<>(){{add(multiPlayer.getPlayers().get(0));}}, multiPlayer.getWinners());
     }
-    */
 }
