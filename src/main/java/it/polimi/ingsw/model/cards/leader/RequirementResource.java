@@ -35,7 +35,7 @@ public class RequirementResource implements Requirement {
     /**
      * @param player player owning the object with this requirement
      * @param toPay resources to be paid for this requirement
-     * @return true, if the player has enough resources to spend for this requirement
+     * @return true, if the player has enough resources to spend for this requirement and toPay is valid
      */
     @Override
     public boolean checkRequirement(Player player, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {

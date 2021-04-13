@@ -738,17 +738,9 @@ public class Board implements VictoryPointCalculator {
 
         TreeMap<Resource, Integer> resToGive = deck.topCard().getCurrentCost(); // it can throw InvalidDevelopCardToSlotException
 
-        // subtract toPay from resToGive
-        for(Resource r: resToGive.keySet()){
-            for (WarehouseType w : toPay.keySet()){
-                resToGive.replace(r, resToGive.get(r) - toPay.get(w).getOrDefault(r, 0));
-            }
-        }
-        // check that every resource in res toGive is equal to zero
-        for(Resource r: resToGive.keySet())
-            if(resToGive.get(r) != 0) throw new IllegalArgumentException();
+        if(!Utility.checkTreeMapEquality(Utility.getTotalResources(toPay), resToGive)) throw new IllegalArgumentException();
 
-        payResources(toPay);
+        payResources(toPay); // it can throw NotEnoughResourcesException
 
         developCardSlots.get(slotToStore).addDevelopCard(deck.drawCard());
     }
@@ -756,10 +748,9 @@ public class Board implements VictoryPointCalculator {
     /**
      * @param toPay resources to be checked
      * @return true if it would be possible to remove toPay from the board
-     * @throws NotEnoughResourcesException if there are not enough resources on the board
+     * @throws IllegalArgumentException if toPay contains invalid type for WarehouseType
      */
     public boolean enoughResourcesToPay(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
-        // first check that toPay is right
         for (WarehouseType w : toPay.keySet()) {
             switch (w) {
                 case STRONGBOX:
