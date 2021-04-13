@@ -34,6 +34,10 @@ public class Utility {
         return sum;
     }
 
+    /**
+     * @param toPay TreeMap<WarehouseType, TreeMap<Resource, Integer>>
+     * @return TreeMap<Resource, Integer> with all the resources in toPay, regardless of the type of the Warehouse
+     */
     public static TreeMap<Resource, Integer> getTotalResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
         TreeMap<Resource, Integer> res = new TreeMap<>();
         for (WarehouseType w : toPay.keySet()) {
@@ -50,6 +54,9 @@ public class Utility {
         return res;
     }
 
+    /**
+     * take resources from toBeAdded and add them to whereToAdd (where to add is modified in this method)
+     */
     private static void addResToTreeMap(TreeMap<Resource, Integer> toBeAdded, TreeMap<Resource, Integer> whereToAdd){
         for(Resource r: toBeAdded.keySet()){
             if(whereToAdd.containsKey(r)){
