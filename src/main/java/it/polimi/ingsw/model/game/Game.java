@@ -129,7 +129,7 @@ public abstract class Game <T extends Turn> {
             path = String.format("src/main/resources/json_file/cards/leader/%03d.json", i);
             leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), MarbleLeaderCard.class));
         }
-        for(i = 61; i < 64; i++) {
+        for(i = 61; i < 65; i++) {
             path = String.format("src/main/resources/json_file/cards/leader/%03d.json", i);
             leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), ProductionLeaderCard.class));
         }
