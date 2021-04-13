@@ -30,11 +30,13 @@ public class RequirementColorsDevelop implements Requirement {
 
     /**
      * @param player player owning the object with this requirement
-     * @param toPay pass anything. It is not needed for this requirement
-     * @return true if player has at least the develop cards specified in requiredDevelops
+     * @param toPay  resources to be paid for the activation of this card
+     * @return true if player has at least the develop cards specified in requiredDevelops and toPay is empty
      */
     @Override
     public boolean checkRequirement(Player player, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
+        if(!toPay.isEmpty()) return false;
+
         TreeMap<Color, Integer> req = new TreeMap<>(requiredDevelops);
         for (DevelopCardSlot ds : player.getBoard().getDevelopCardSlots())
             for (DevelopCard c : ds.getCards())

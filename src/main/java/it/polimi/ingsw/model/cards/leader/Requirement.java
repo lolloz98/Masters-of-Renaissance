@@ -9,8 +9,9 @@ import java.util.TreeMap;
 public interface Requirement {
     /**
      * @param player player owning the object with this requirement
-     * @param toPay resources to be paid for the activation of this card
-     * @return true, if the requirement is satisfied, otherwise false
+     * @param toPay  resources to be paid for the activation of this card
+     * @return true, if the requirement is satisfied and toPay
+     * contains precisely the resources to pay (if none, toPay must be an empty treeMap), otherwise false
      */
     boolean checkRequirement(Player player, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay);
 

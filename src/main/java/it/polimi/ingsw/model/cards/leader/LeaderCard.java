@@ -110,7 +110,7 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
 
     /**
      * @param player player on whom to check the requirements
-     * @param toPay needed only if getResourcesToBePaidForActivation() is not empty
+     * @param toPay resources to be paid (if none are required, it must be an empty TreeMap, otherwise return false)
      * @return true if the player can activate the card
      */
     public boolean checkRequirement(Player player, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
