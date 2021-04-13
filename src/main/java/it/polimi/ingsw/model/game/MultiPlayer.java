@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.game;
 
 import it.polimi.ingsw.model.exception.GameIsOverException;
 import it.polimi.ingsw.model.exception.GameNotOverException;
+import it.polimi.ingsw.model.exception.PlayersOutOfBoundException;
 import it.polimi.ingsw.model.player.Player;
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class MultiPlayer extends Game<TurnMulti> {
 
     public MultiPlayer(ArrayList<Player> players){
         super();
+        if (players.size()<2 || players.size()>4) throw new PlayersOutOfBoundException();
         this.turn = new TurnMulti(players.get(0));
         this.players = players;
         this.lastRound = false;
