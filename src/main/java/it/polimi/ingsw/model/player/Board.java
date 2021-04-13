@@ -754,26 +754,38 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * @param toPay resources to be removed from the board
+     * @param toPay resources to be checked
+     * @return true if it would be possible to remove toPay from the board
      * @throws NotEnoughResourcesException if there are not enough resources on the board
      */
-    public void payResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
+    public boolean enoughResourcesToPay(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
         // first check that toPay is right
         for (WarehouseType w : toPay.keySet()) {
             switch (w) {
                 case STRONGBOX:
-                    if (enoughResInStrongBox(toPay.get(w))) throw new NotEnoughResourcesException();
+                    if (!enoughResInStrongBox(toPay.get(w))) return false;
                     break;
                 case LEADER:
-                    if (enoughResInLeaderDepots(toPay.get(w))) throw new NotEnoughResourcesException();
+                    if (!enoughResInLeaderDepots(toPay.get(w))) return false;
                     break;
                 case NORMAL:
-                    if (enoughResInNormalDepots(toPay.get(w))) throw new NotEnoughResourcesException();
+                    if (!enoughResInNormalDepots(toPay.get(w))) return false;
                     break;
                 default:
                     throw new IllegalArgumentException();
             }
         }
+        return true;
+    }
+
+    /**
+     * @param toPay resources to be removed from the board
+     * @throws NotEnoughResourcesException if there are not enough resources on the board
+     */
+    public void payResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
+        // first check that toPay is right
+        if(!enoughResourcesToPay(toPay)) throw new NotEnoughResourcesException();
+
         // then pay
         for (WarehouseType w : toPay.keySet()) {
             switch (w) {

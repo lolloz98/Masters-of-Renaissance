@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.utility;
 
 import it.polimi.ingsw.model.game.Resource;
+import it.polimi.ingsw.model.player.WarehouseType;
 
 import java.util.Set;
 import java.util.TreeMap;
@@ -31,5 +32,31 @@ public class Utility {
             sum+=treeMap.get(r);
         }
         return sum;
+    }
+
+    public static TreeMap<Resource, Integer> getTotalResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
+        TreeMap<Resource, Integer> res = new TreeMap<>();
+        for (WarehouseType w : toPay.keySet()) {
+            switch (w) {
+                case STRONGBOX:
+                case LEADER:
+                case NORMAL:
+                    addResToTreeMap(toPay.get(w), res);
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+        return res;
+    }
+
+    private static void addResToTreeMap(TreeMap<Resource, Integer> toBeAdded, TreeMap<Resource, Integer> whereToAdd){
+        for(Resource r: toBeAdded.keySet()){
+            if(whereToAdd.containsKey(r)){
+                whereToAdd.replace(r, whereToAdd.get(r) + toBeAdded.get(r));
+            }else{
+                whereToAdd.put(r, toBeAdded.get(r));
+            }
+        }
     }
 }

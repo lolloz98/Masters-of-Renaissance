@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.game.SinglePlayer;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.WarehouseType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ import static org.junit.Assert.*;
 public class RequirementResourceTest {
     Requirement requirement;
     TreeMap<Color, Integer> requiredDevelop;
+    TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay;
     Player player;
     Resource res = Resource.ROCK;
     Game<?> game;
@@ -26,6 +28,11 @@ public class RequirementResourceTest {
             put(Color.GOLD, 1);
         }};
         requirement = new RequirementResource(res);
+        toPay = new TreeMap<>(){{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(){{
+                put(res, 5);
+            }});
+        }};
         player = new Player("lorenzo", 0);
         game = new SinglePlayer(player);
     }
@@ -38,7 +45,7 @@ public class RequirementResourceTest {
 
     @Test
     public void testCheckRequirement() {
-        assertFalse(requirement.checkRequirement(player));
+        assertFalse(requirement.checkRequirement(player, toPay));
 
         player.getBoard().flushGainedResources(new TreeMap<>(){{
             put(Resource.GOLD, 1);
@@ -47,19 +54,19 @@ public class RequirementResourceTest {
             put(Resource.SHIELD, 5);
         }}, game);
 
-        assertFalse(requirement.checkRequirement(player));
+        assertFalse(requirement.checkRequirement(player, toPay));
 
         player.getBoard().flushGainedResources(new TreeMap<>(){{
             put(Resource.ROCK, 2);
         }}, game);
 
-        assertTrue(requirement.checkRequirement(player));
+        assertTrue(requirement.checkRequirement(player, toPay));
 
         player.getBoard().flushGainedResources(new TreeMap<>(){{
             put(Resource.ROCK, 1);
         }}, game);
 
-        assertTrue(requirement.checkRequirement(player));
+        assertTrue(requirement.checkRequirement(player, toPay));
 
         // TODO: test also after put resources into the player's depots
     }
