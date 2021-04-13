@@ -50,12 +50,10 @@ public class GameManagerTest {
         players.add(new Player("third", 3));
         int id = gameManager.getNewMultiPlayer(players);
         try{
-            gameManager.destroyGame(id);
+            gameManager.removeGame(id);
         } catch (NoSuchGameException e) {
             e.printStackTrace();
         }
         assertEquals(gameManager.getGameFromMap(id),null);
     }
-
-
 }
