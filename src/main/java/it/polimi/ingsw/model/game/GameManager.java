@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.exception.GameNotOverException;
 import it.polimi.ingsw.model.exception.NoSuchGameException;
 import it.polimi.ingsw.model.player.Player;
-
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -13,7 +11,7 @@ import java.util.TreeMap;
 
 public class GameManager {
     private static GameManager instance = null;
-    private TreeMap<Integer, Game<? extends Turn>> gameMap;
+    private final TreeMap<Integer, Game<? extends Turn>> gameMap;
 
     private GameManager(){
         gameMap = new TreeMap<>();
@@ -74,10 +72,9 @@ public class GameManager {
      * @param id of the game to destroy
      * @throws NoSuchGameException if there is no game with this id
      */
-    public void destroyGame(int id) throws NoSuchGameException {
+    public void removeGame(int id) throws NoSuchGameException {
         Game<? extends Turn> game = removeGameFromMap(id);
         if (game == null) throw new NoSuchGameException();
-        game.destroy();
     }
 
     /**

@@ -191,13 +191,6 @@ public abstract class Game <T extends Turn> {
     }
 
     /**
-     * Destroy method
-     */
-    public void destroy() {
-        // TODO
-    }
-
-    /**
      * Helper method to distribute leaders
      *
      * @param player to distribute the cards to

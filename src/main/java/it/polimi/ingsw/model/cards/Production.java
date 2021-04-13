@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
+import it.polimi.ingsw.model.exception.NotEnoughResourcesException;
 import it.polimi.ingsw.model.exception.ProductionAlreadyActivatedException;
 import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.player.Board;
+import it.polimi.ingsw.model.player.WarehouseType;
+import it.polimi.ingsw.model.utility.Utility;
 
 import java.util.TreeMap;
 
@@ -28,21 +31,22 @@ public class Production {
     }
 
     /**
-     * Remove resourcesToGive from board and return the gained resources
+     * Remove toPay from board and return the gained resources
      *
-     * @param resourcesToGive resource that the player wants to give to apply the production
+     * @param toPay           resource that the player wants to pay to apply the production
      * @param resourcesToGain resource that the player wants to gain after the application production
      * @param board           board of the player
      * @throws ProductionAlreadyActivatedException if the production has already been activated in this turn
-     * @throws InvalidResourcesByPlayerException   if resourcesToGive or resourcesToGain contain invalid type of Resources
+     * @throws InvalidResourcesByPlayerException   if toPay or resourcesToGain contain invalid type of Resources
+     * @throws NotEnoughResourcesException         if there are not enough resources topay on the board
      */
-    public void applyProduction(TreeMap<Resource, Integer> resourcesToGive, TreeMap<Resource, Integer> resourcesToGain, Board board) throws InvalidResourcesByPlayerException, ProductionAlreadyActivatedException {
-        if (!checkResToGiveForActivation(resourcesToGive)) throw new InvalidResourcesByPlayerException();
+    public void applyProduction(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay, TreeMap<Resource, Integer> resourcesToGain, Board board) throws InvalidResourcesByPlayerException, ProductionAlreadyActivatedException {
+        if (!checkResToGiveForActivation(Utility.getTotalResources(toPay)))
+            throw new InvalidResourcesByPlayerException();
         if (!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesByPlayerException();
         if (hasBeenActivated()) throw new ProductionAlreadyActivatedException();
 
-        // todo: change this. the player must decide where to take the resources to spend. It must be done by the controller
-        board.removeResourcesSmart(resourcesToGive);
+        board.payResources(toPay); // it can throw NotEnoughResourcesException
 
         gainedResources.putAll(resourcesToGain);
     }

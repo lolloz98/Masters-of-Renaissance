@@ -16,7 +16,7 @@ public class SinglePlayerTest {
 
     @Before
     public void setUp(){
-        singlePlayer = new SinglePlayer(new Player("first", 1));
+        singlePlayer = new SinglePlayer(new Player("player", 1));
     }
 
     @Test

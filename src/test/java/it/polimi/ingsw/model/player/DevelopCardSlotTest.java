@@ -104,7 +104,9 @@ public class DevelopCardSlotTest {
     public void applyProductionExceptionTest1() throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
         toGain=developCards.get(1).getProduction().whatResourceToGive();
         toGive=developCards.get(1).getProduction().whatResourceToGain();
-        slot.applyProduction(toGive, toGain, board);
+        slot.applyProduction(new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(toGive));
+        }}, toGain, board);
     }
 
     @Test(expected = InvalidResourcesByPlayerException.class)
@@ -114,7 +116,9 @@ public class DevelopCardSlotTest {
             put(Resource.SHIELD,5);
         }};
         slot.addDevelopCard(developCards.get(1));
-        slot.applyProduction(toGive, toGain, board);
+        slot.applyProduction(new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(toGive));
+        }}, toGain, board);
     }
 
     @Test
@@ -125,7 +129,9 @@ public class DevelopCardSlotTest {
         toGain=developCards.get(3).getProduction().whatResourceToGain();
 
         try{
-            slot.applyProduction(toGive, toGain, board);
+            slot.applyProduction(new TreeMap<>(){{
+                put(WarehouseType.NORMAL, new TreeMap<>(toGive));
+            }}, toGain, board);
         }catch (InvalidResourcesByPlayerException e){
             fail();
         }

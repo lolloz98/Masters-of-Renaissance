@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.game.Game;
 import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.game.SinglePlayer;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.WarehouseType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ import static org.junit.Assert.*;
 public class RequirementLevelDevelopTest {
     Requirement requirement;
     TreeMap<Color, Integer> requiredDevelop;
+    TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay = new TreeMap<>();
     Player player;
     Color color = Color.PURPLE;
     Game<?> game;
@@ -45,19 +47,19 @@ public class RequirementLevelDevelopTest {
 
     @Test
     public void testCheckRequirement() {
-        assertFalse(requirement.checkRequirement(player));
+        assertFalse(requirement.checkRequirement(player, toPay));
 
-        player.getBoard().buyDevelopCard(game, Color.BLUE, 1, 1);
-        player.getBoard().buyDevelopCard(game, Color.GOLD, 2, 1);
-        player.getBoard().buyDevelopCard(game, Color.GREEN, 1, 2);
+        player.getBoard().buyDevelopCardSmart(game, Color.BLUE, 1, 1);
+        player.getBoard().buyDevelopCardSmart(game, Color.GOLD, 2, 1);
+        player.getBoard().buyDevelopCardSmart(game, Color.GREEN, 1, 2);
 
-        assertFalse(requirement.checkRequirement(player));
+        assertFalse(requirement.checkRequirement(player, toPay));
 
-        player.getBoard().buyDevelopCard(game, Color.PURPLE, 1, 0);
-        assertFalse(requirement.checkRequirement(player));
+        player.getBoard().buyDevelopCardSmart(game, Color.PURPLE, 1, 0);
+        assertFalse(requirement.checkRequirement(player, toPay));
 
-        player.getBoard().buyDevelopCard(game, Color.PURPLE, 2, 0);
+        player.getBoard().buyDevelopCardSmart(game, Color.PURPLE, 2, 0);
 
-        assertTrue(requirement.checkRequirement(player));
+        assertTrue(requirement.checkRequirement(player, toPay));
     }
 }

@@ -2,8 +2,12 @@ package it.polimi.ingsw.model.cards.leader;
 
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DevelopCard;
+import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.WarehouseType;
+
+import java.util.TreeMap;
 
 /**
  * To be fulfilled, the player needs to have one developCards of a specific color of level 2.
@@ -33,13 +37,22 @@ public class RequirementLevelDevelop implements Requirement {
 
     /**
      * @param player player owning the object with this requirement
-     * @return true, if the player has at least a DevelopCard of level 2 of color this.color
+     * @param toPay  resources to be paid for the activation of this card
+     * @return true, if the player has at least a DevelopCard of level 2 of color this.color and toPay is empty
      */
     @Override
-    public boolean checkRequirement(Player player) {
+    public boolean checkRequirement(Player player, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
+        if(!toPay.isEmpty()) return false;
+
         for (DevelopCardSlot ds : player.getBoard().getDevelopCardSlots())
             for (DevelopCard c : ds.getCards())
                 if (c.getLevel() == level && c.getColor() == color) return true;
         return false;
     }
+
+    @Override
+    public TreeMap<Resource, Integer> getResourcesToBePaid() {
+        return new TreeMap<>();
+    }
+
 }

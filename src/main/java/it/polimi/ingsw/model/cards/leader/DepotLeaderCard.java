@@ -31,7 +31,7 @@ public final class DepotLeaderCard extends LeaderCard<RequirementResource> {
     }
 
     /**
-     * Add this Leader to the board depotLeaders and remove from the board the resources due because of the requirement
+     * Add this Leader to the board depotLeaders
      *
      * @param game current game: it is affected by this method
      */
@@ -41,11 +41,6 @@ public final class DepotLeaderCard extends LeaderCard<RequirementResource> {
                 ((game instanceof SinglePlayer) ?
                         ((SinglePlayer) game).getPlayer() : ((MultiPlayer) game).getTurn().getCurrentPlayer())
                         .getBoard();
-
-        // todo: change this. the player must decide where to take the resources to spend. It must be done by the controller
-        board.removeResourcesSmart(new TreeMap<>() {{
-            put(getRequirement().getRes(), getRequirement().getQuantity());
-        }});
 
         board.discoverDepotLeader(this);
     }
