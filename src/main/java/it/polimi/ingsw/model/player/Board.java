@@ -399,6 +399,16 @@ public class Board implements VictoryPointCalculator {
         return depots.get(whichDepot).getStoredResources();
     }
 
+    public TreeMap<Resource,Integer> getResInNormalDepots(){
+        TreeMap<Resource,Integer> inDepots=new TreeMap<>();
+        for(Depot d:depots){
+            if(!d.isEmpty()){
+                inDepots.put(d.getTypeOfResource(),d.getStored());
+            }
+        }
+        return inDepots;
+    }
+
     /**
      *
      * @param whichLeaderDepot number of the leader depot to get
@@ -420,6 +430,17 @@ public class Board implements VictoryPointCalculator {
                 throw  new IllegalArgumentException();
 
         }
+    }
+
+    public TreeMap<Resource,Integer> getResInLeaderDepots(){
+        TreeMap<Resource,Integer> inDepots=new TreeMap<>();
+        for(DepotLeaderCard dlc:depotLeaders){
+            Depot dl=dlc.getDepot();
+            if(!dl.isEmpty()){
+                inDepots.put(dl.getTypeOfResource(),dl.getStored());
+            }
+        }
+        return inDepots;
     }
 
     /**
@@ -498,6 +519,80 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
+     * method that put the resources gained by the market in the depots.
+     * @param resGained resources gained by the market
+     * @param toKeep resources to keep chosen by the player, the argument contains also the information about where to store the resources
+     * @param game current game
+     * @throws InvalidResourcesToKeepByPlayerException if the player made an invalid decision regarding the resources to keep,
+     *                                                 the resources given must be enough to not overload the depots
+     * @throws IllegalArgumentException                if the treemaps toKeep and resGained contain an irregular type of resource
+     *                                                 or if the amount of resources in the toKeep are greater than in the resGained
+     *                                                 or if the treemap toKeep contains the strongbox as Warehouse type
+     */
+    public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<WarehouseType,TreeMap<Resource, Integer>> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException {
+
+        TreeMap<Resource,Integer> entireToKeep;
+        entireToKeep= Utility.getTotalResources(toKeep);
+        for (Resource r : entireToKeep.keySet()) {
+            if (!Resource.isDiscountable(r) && r != Resource.FAITH)
+                throw new IllegalArgumentException();
+        }
+
+        for (Resource r : resGained.keySet()) {
+            if ((resGained.getOrDefault(r, 0) < entireToKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
+                throw new IllegalArgumentException();
+        }
+
+        //before control if i can append resources to depots
+        for (WarehouseType w : toKeep.keySet()) {
+            switch (w) {
+                case LEADER:
+                    if (cannotAppendToLeaderDepots(toKeep.get(w))) throw new InvalidResourcesToKeepByPlayerException();
+                    break;
+                case NORMAL:
+                    if (cannotAppendToNormalDepots(toKeep.get(w))) throw new InvalidResourcesToKeepByPlayerException();
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+
+        //then append and move on the faithpath
+        int steps=entireToKeep.get(Resource.FAITH);
+        moveOnFaithPath(steps, game);
+
+        for (WarehouseType w : toKeep.keySet()) {
+            switch (w) {
+                case LEADER:
+                    storeInDepotLeaderNoChecks(toKeep.get(w));
+                    break;
+                case NORMAL:
+                    storeInNormalDepotsNoChecks(toKeep.get(w),this.depots);
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+
+        //then discard the resources
+        entireToKeep.remove(Resource.FAITH);
+        resGained.remove(Resource.FAITH);
+
+        TreeMap<Resource, Integer> toDiscard = new TreeMap<>() {{
+            for (Resource r : resGained.keySet()) {
+
+                if (resGained.get(r) - entireToKeep.getOrDefault(r, 0) > 0)
+                    put(r, resGained.get(r) - entireToKeep.getOrDefault(r, 0));
+
+            }
+        }};
+
+        if (!toDiscard.isEmpty())
+            distributeFaithPoints(game, toDiscard);
+    }
+
+
+    /**
      * @param toGain resources we would like to put in the leader depots.
      * @return true, if toGain cannot completely be stored in the leader depots
      */
@@ -521,7 +616,7 @@ public class Board implements VictoryPointCalculator {
     private boolean cannotAppendToLeaderDepots(TreeMap<Resource, Integer> toGain, TreeMap<Resource, Integer> diff) {
         diff.clear();
         diff.putAll(toGain);
-        diff.remove(Resource.ANYTHING);
+        diff.remove(Resource.FAITH);
 
         for (Resource r : toGain.keySet()) {
             for (DepotLeaderCard dl : depotLeaders) {
@@ -545,6 +640,8 @@ public class Board implements VictoryPointCalculator {
     private boolean cannotAppendToNormalDepots(TreeMap<Resource, Integer> toGain, TreeMap<Resource, Integer> diff) {
         diff.clear();
         diff.putAll(toGain);
+        diff.remove(Resource.FAITH);
+
         ArrayList<Depot> copyOfDepots = new ArrayList<>() {{
             Depot d;
             for (int i = 0; i < 3; i++) {
@@ -638,6 +735,7 @@ public class Board implements VictoryPointCalculator {
      */
     private void storeInNormalDepotsNoChecks(TreeMap<Resource, Integer> toGain, ArrayList<Depot> depotArrayList) {
 
+        toGain.remove(Resource.FAITH);
         Set<Resource> resInToGain = new TreeSet<>(toGain.keySet());
         for (Resource r : resInToGain) {
             for (Depot d : depotArrayList) {
@@ -678,6 +776,7 @@ public class Board implements VictoryPointCalculator {
      * @param toGain resource that we want to store. The values in the TreeMap gets changed.
      */
     private void storeInDepotLeaderNoChecks(TreeMap<Resource, Integer> toGain) {
+        toGain.remove(Resource.FAITH);
         for (Resource r : toGain.keySet()) {
             for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();

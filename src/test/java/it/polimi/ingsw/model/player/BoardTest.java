@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.sun.source.tree.Tree;
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DevelopCard;
 import it.polimi.ingsw.model.cards.leader.DepotLeaderCard;
@@ -55,6 +54,12 @@ public class BoardTest {
         depotLeaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DepotLeaderCard.class));
         path = String.format("src/main/resources/json_file/cards/leader/%03d.json", 55);//resource type: SHIELD
         depotLeaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DepotLeaderCard.class));
+
+        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(0));//adding a ROCK depot
+        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(1));//adding a SHIELD depot
+        assertEquals(2,board.getDepotLeaders().size());
+        assertEquals(Resource.ROCK,board.getDepotLeaders().get(0).getDepot().getTypeOfResource());
+        assertEquals(Resource.SHIELD,board.getDepotLeaders().get(1).getDepot().getTypeOfResource());
 
         path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 1);//level 1
         developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
@@ -161,8 +166,6 @@ public class BoardTest {
 
     @Test(expected = TooManyResourcesToAddException.class)
     public void storeInDepotLeaderExceptionTest1(){
-        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(0));//adding a ROCK depot
-        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(1));//adding a SHIELD depot
 
         TreeMap<Resource,Integer> toGain=new TreeMap<>(){{
             put(Resource.SERVANT, 1);
@@ -172,8 +175,6 @@ public class BoardTest {
 
     @Test(expected = TooManyResourcesToAddException.class)
     public void storeInDepotLeaderExceptionTest2(){
-        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(0));//adding a ROCK depot
-        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(1));//adding a SHIELD depot
 
         TreeMap<Resource,Integer> toGain=new TreeMap<>(){{
             put(Resource.ROCK, 3);
@@ -183,19 +184,12 @@ public class BoardTest {
 
     @Test
     public void storeInDepotLeaderTest1(){
-        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(0));//adding a ROCK depot
-        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(1));//adding a SHIELD depot
-
-        assertEquals(2,board.getDepotLeaders().size());
-        assertEquals(Resource.ROCK,board.getDepotLeaders().get(0).getDepot().getTypeOfResource());
-        assertEquals(Resource.SHIELD,board.getDepotLeaders().get(1).getDepot().getTypeOfResource());
 
         TreeMap<Resource,Integer> toGain=new TreeMap<>(){{
             put(Resource.ROCK, 1);
             put(Resource.SHIELD,2);
         }};
         board.storeInDepotLeader(toGain);
-
         assertEquals(new TreeMap<Resource,Integer>(){{
             put(Resource.ROCK, 1);
         }}, board.getResInLeaderDepot(0));
@@ -203,7 +197,119 @@ public class BoardTest {
             put(Resource.SHIELD, 2);
         }}, board.getResInLeaderDepot(1));
 
-        //TODO: continue
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+        }};
+        board.storeInDepotLeader(toGain);
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.ROCK, 2);
+        }}, board.getResInLeaderDepot(0));
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.SHIELD, 2);
+        }}, board.getResInLeaderDepot(1));
+        assertTrue(board.getDepotLeaders().get(0).getDepot().isFull());
+        assertTrue(board.getDepotLeaders().get(1).getDepot().isFull());
+
+    }
+
+    @Test
+    public void cannotAppendToNormalDepotTest1(){
+        TreeMap<Resource,Integer> toGain=new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+            put(Resource.SHIELD,2);
+        }};
+        assertFalse(board.cannotAppendToNormalDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK, 3);
+        }};
+        assertFalse(board.cannotAppendToNormalDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT,1);
+        }};
+        assertFalse(board.cannotAppendToNormalDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT,4);
+        }};
+        assertTrue(board.cannotAppendToNormalDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT,1);
+            put(Resource.GOLD,1);
+            put(Resource.SHIELD,1);
+        }};
+        assertTrue(board.cannotAppendToNormalDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT,1);
+            put(Resource.GOLD,1);
+        }};
+        board.storeInNormalDepot(toGain);
+
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+            put(Resource.SERVANT,1);
+            put(Resource.GOLD,1);
+        }};
+        assertTrue(board.cannotAppendToNormalDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.GOLD,3);
+        }};
+        assertTrue(board.cannotAppendToNormalDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.GOLD,2);
+        }};
+        assertFalse(board.cannotAppendToNormalDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.SERVANT,2);
+        }};
+        assertFalse(board.cannotAppendToNormalDepots(toGain));
+    }
+
+    @Test
+    public void cannotAppendToLeaderDepotsTest1(){
+        TreeMap<Resource,Integer> toGain=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+        }};
+        assertFalse(board.cannotAppendToLeaderDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.SHIELD,2);
+        }};
+        assertFalse(board.cannotAppendToLeaderDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+        }};
+        assertFalse(board.cannotAppendToLeaderDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.ROCK,3);
+            put(Resource.SHIELD,2);
+        }};
+        assertTrue(board.cannotAppendToLeaderDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.SERVANT,1);
+            put(Resource.SHIELD,2);
+        }};
+        assertTrue(board.cannotAppendToLeaderDepots(toGain));
+
+        toGain=new TreeMap<>(){{
+            put(Resource.SERVANT,1);
+            put(Resource.GOLD,2);
+        }};
+        assertTrue(board.cannotAppendToLeaderDepots(toGain));
     }
 
     @Test
@@ -262,6 +368,282 @@ public class BoardTest {
 
     }
 
+    @Test
+    public void EnoughResInLeaderDepots(){
+        TreeMap<Resource,Integer> toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+        }};
+        board.storeInDepotLeader(toAdd);
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+        }};
+        assertTrue(board.enoughResInLeaderDepots(toAdd));
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.SHIELD,2);
+        }};
+        assertTrue(board.enoughResInLeaderDepots(toAdd));
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.SHIELD,2);
+        }};
+        assertTrue(board.enoughResInLeaderDepots(toAdd));
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,3);
+            put(Resource.SHIELD,2);
+        }};
+        assertFalse(board.enoughResInLeaderDepots(toAdd));
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.GOLD,2);
+            put(Resource.SHIELD,2);
+        }};
+        assertFalse(board.enoughResInLeaderDepots(toAdd));
+    }
+
+    @Test
+    public void flushGainedResourcesTest(){
+        board=multiPlayer.getPlayers().get(0).getBoard();
+        TreeMap<Resource,Integer> toFlush=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+        }};
+        board.flushGainedResources(toFlush, multiPlayer);
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+        }}, board.getResourcesInStrongBox());
+
+        toFlush=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.GOLD,2);
+        }};
+        board.flushGainedResources(toFlush, multiPlayer);
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.ROCK,3);
+            put(Resource.SHIELD,2);
+            put(Resource.GOLD,2);
+        }}, board.getResourcesInStrongBox());
+
+        toFlush=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.SHIELD,1);
+            put(Resource.GOLD,1);
+            put(Resource.SERVANT,1);
+            put(Resource.FAITH,1);
+        }};
+        board.flushGainedResources(toFlush, multiPlayer);
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.ROCK,4);
+            put(Resource.SHIELD,3);
+            put(Resource.GOLD,3);
+            put(Resource.SERVANT,1);
+        }}, board.getResourcesInStrongBox());
+        assertEquals(1,board.getFaithtrack().getPosition());
+
+        toFlush=new TreeMap<>(){{
+            put(Resource.ROCK,5);
+            put(Resource.FAITH,3);
+        }};
+        board.flushGainedResources(toFlush, multiPlayer);
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.ROCK,9);
+            put(Resource.SHIELD,3);
+            put(Resource.GOLD,3);
+            put(Resource.SERVANT,1);
+        }}, board.getResourcesInStrongBox());
+        assertEquals(4,board.getFaithtrack().getPosition());
+    }
+
+    @Test
+    public void enoughResInStrongBoxTest1(){
+        TreeMap<Resource,Integer> toFlush=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+            put(Resource.SERVANT,3);
+            put(Resource.GOLD,4);
+        }};
+        board.flushGainedResources(toFlush, multiPlayer);
+
+        TreeMap<Resource,Integer> toSpend=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+            put(Resource.SERVANT,3);
+            put(Resource.GOLD,4);
+        }};
+        assertTrue(board.enoughResInStrongBox(toSpend));
+
+        toSpend=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+        }};
+        assertTrue(board.enoughResInStrongBox(toSpend));
+
+        toSpend=new TreeMap<>(){{
+            put(Resource.SHIELD,2);
+        }};
+        assertTrue(board.enoughResInStrongBox(toSpend));
+
+        toSpend=new TreeMap<>(){{
+            put(Resource.GOLD,3);
+        }};
+        assertTrue(board.enoughResInStrongBox(toSpend));
+
+        toSpend=new TreeMap<>(){{
+            put(Resource.ROCK,3);
+            put(Resource.SHIELD,2);
+            put(Resource.SERVANT,3);
+            put(Resource.GOLD,4);
+        }};
+        assertFalse(board.enoughResInStrongBox(toSpend));
+
+        toSpend=new TreeMap<>(){{
+            put(Resource.GOLD,7);
+        }};
+        assertFalse(board.enoughResInStrongBox(toSpend));
+    }
+
+    @Test
+    public void removeResFromNormalDepotTest1(){
+        TreeMap<Resource,Integer> toAdd=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.SHIELD,2);
+            put(Resource.SERVANT,3);
+        }};
+        board.storeInNormalDepot(toAdd);
+
+        TreeMap<Resource,Integer> toRemove=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.SHIELD,2);
+            put(Resource.SERVANT,3);
+        }};
+        board.removeResFromNormalDepot(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(), board.getResInNormalDepots());
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.SHIELD,2);
+        }};
+        board.storeInNormalDepot(toAdd);
+
+        toRemove=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+        }};
+        board.removeResFromNormalDepot(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.SHIELD,2);
+        }}, board.getResInNormalDepots());
+
+        toRemove=new TreeMap<>(){{
+            put(Resource.SHIELD,1);
+        }};
+        board.removeResFromNormalDepot(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.SHIELD,1);
+        }}, board.getResInNormalDepots());
+
+        toRemove=new TreeMap<>(){{
+            put(Resource.SHIELD,1);
+        }};
+        board.removeResFromNormalDepot(toRemove);
+
+        assertTrue(board.getResInNormalDepots().isEmpty());
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.SERVANT,3);
+        }};
+        board.storeInNormalDepot(toAdd);
+
+        toRemove=new TreeMap<>(){{
+            put(Resource.SERVANT,1);
+            put(Resource.GOLD,1);
+        }};
+        board.removeResFromNormalDepot(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.SERVANT,2);
+        }}, board.getResInNormalDepots());
+    }
+
+    @Test
+    public void removeResFromLeaderDepotTest1(){
+        TreeMap<Resource,Integer> toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+        }};
+        board.storeInDepotLeader(toAdd);
+
+        TreeMap<Resource,Integer> toRemove=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+        }};
+        board.removeResFromLeaderDepot(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.SHIELD,2);
+        }},board.getResInLeaderDepots());
+
+        toRemove=new TreeMap<>(){{
+            put(Resource.SHIELD,1);
+        }};
+        board.removeResFromLeaderDepot(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.SHIELD,1);
+        }},board.getResInLeaderDepots());
+
+        toRemove=new TreeMap<>(){{
+            put(Resource.SHIELD,1);
+        }};
+        board.removeResFromLeaderDepot(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(),board.getResInLeaderDepots());
+    }
+
+    @Test
+    public void removeResFromStrongBoxTest1(){
+        TreeMap<Resource,Integer> toFlush=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+            put(Resource.SERVANT,3);
+            put(Resource.GOLD,4);
+        }};
+        board.flushGainedResources(toFlush, multiPlayer);
+
+        TreeMap<Resource,Integer> toRemove=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SERVANT,3);
+            put(Resource.GOLD,4);
+        }};
+        board.removeResFromStrongBox(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.SHIELD,2);
+        }}, board.getResourcesInStrongBox());
+
+        toRemove=new TreeMap<>(){{
+            put(Resource.SHIELD,1);
+        }};
+        board.removeResFromStrongBox(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.SHIELD,1);
+        }}, board.getResourcesInStrongBox());
+
+        toRemove=new TreeMap<>(){{
+            put(Resource.SHIELD,1);
+        }};
+        board.removeResFromStrongBox(toRemove);
+
+        assertEquals(new TreeMap<Resource,Integer>(), board.getResourcesInStrongBox());
+    }
 
 
 }
