@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 public class RequirementResourceTest {
     Requirement requirement;
     TreeMap<Color, Integer> requiredDevelop;
-    TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay;
     Player player;
     Resource res = Resource.ROCK;
     Game<?> game;
@@ -28,11 +27,6 @@ public class RequirementResourceTest {
             put(Color.GOLD, 1);
         }};
         requirement = new RequirementResource(res);
-        toPay = new TreeMap<>(){{
-            put(WarehouseType.STRONGBOX, new TreeMap<>(){{
-                put(res, 5);
-            }});
-        }};
         player = new Player("lorenzo", 0);
         game = new SinglePlayer(player);
     }
@@ -45,7 +39,7 @@ public class RequirementResourceTest {
 
     @Test
     public void testCheckRequirement() {
-        assertFalse(requirement.checkRequirement(player, toPay));
+        assertFalse(requirement.checkRequirement(player));
 
         player.getBoard().flushGainedResources(new TreeMap<>(){{
             put(Resource.GOLD, 1);
@@ -54,19 +48,19 @@ public class RequirementResourceTest {
             put(Resource.SHIELD, 5);
         }}, game);
 
-        assertFalse(requirement.checkRequirement(player, toPay));
+        assertFalse(requirement.checkRequirement(player));
 
         player.getBoard().flushGainedResources(new TreeMap<>(){{
             put(Resource.ROCK, 2);
         }}, game);
 
-        assertTrue(requirement.checkRequirement(player, toPay));
+        assertTrue(requirement.checkRequirement(player));
 
         player.getBoard().flushGainedResources(new TreeMap<>(){{
             put(Resource.ROCK, 1);
         }}, game);
 
-        assertTrue(requirement.checkRequirement(player, toPay));
+        assertTrue(requirement.checkRequirement(player));
 
         // TODO: test also after put resources into the player's depots
     }

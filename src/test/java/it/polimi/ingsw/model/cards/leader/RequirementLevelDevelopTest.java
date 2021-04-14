@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 public class RequirementLevelDevelopTest {
     Requirement requirement;
     TreeMap<Color, Integer> requiredDevelop;
-    TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay = new TreeMap<>();
     Player player;
     Color color = Color.PURPLE;
     Game<?> game;
@@ -47,19 +46,19 @@ public class RequirementLevelDevelopTest {
 
     @Test
     public void testCheckRequirement() {
-        assertFalse(requirement.checkRequirement(player, toPay));
+        assertFalse(requirement.checkRequirement(player));
 
         player.getBoard().buyDevelopCardSmart(game, Color.BLUE, 1, 1);
         player.getBoard().buyDevelopCardSmart(game, Color.GOLD, 2, 1);
         player.getBoard().buyDevelopCardSmart(game, Color.GREEN, 1, 2);
 
-        assertFalse(requirement.checkRequirement(player, toPay));
+        assertFalse(requirement.checkRequirement(player));
 
         player.getBoard().buyDevelopCardSmart(game, Color.PURPLE, 1, 0);
-        assertFalse(requirement.checkRequirement(player, toPay));
+        assertFalse(requirement.checkRequirement(player));
 
         player.getBoard().buyDevelopCardSmart(game, Color.PURPLE, 2, 0);
 
-        assertTrue(requirement.checkRequirement(player, toPay));
+        assertTrue(requirement.checkRequirement(player));
     }
 }

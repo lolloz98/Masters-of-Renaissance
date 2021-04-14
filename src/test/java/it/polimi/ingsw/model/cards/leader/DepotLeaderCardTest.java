@@ -24,7 +24,6 @@ import static org.junit.Assert.*;
 public class DepotLeaderCardTest {
     private static final Logger logger = LogManager.getLogger(DepotLeaderCardTest.class);
     private final static boolean isSinglePlayer = true;
-    TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay;
     DepotLeaderCard leaderCard;
     Depot depot;
     ArrayList<Player> players;
@@ -50,11 +49,6 @@ public class DepotLeaderCardTest {
         depot = new Depot(Resource.GOLD);
 
         leaderCard = new DepotLeaderCard(2, new RequirementResource(requiredRes), depot, 61);
-        toPay = new TreeMap<>(){{
-            put(WarehouseType.STRONGBOX, new TreeMap<>(){{
-                put(requiredRes, 5);
-            }});
-        }};
     }
 
     private void satisfyReq(Player player){
@@ -73,29 +67,23 @@ public class DepotLeaderCardTest {
     public void testActivate() {
         Player player = players.get(0);
         try {
-            leaderCard.activate(game, player, toPay);
+            leaderCard.activate(game, player);
             fail();
         }catch(RequirementNotSatisfiedException ignored){}
 
         satisfyReq(player);
 
         try {
-            leaderCard.activate(game, player, toPay);
+            leaderCard.activate(game, player);
             fail();
         }catch(IllegalArgumentException ignored){}
 
         giveOwnership(player);
 
-        try {
-            // not passing toPay
-            leaderCard.activate(game, player);
-            fail();
-        }catch(RequirementNotSatisfiedException ignored){}
-
         assertFalse(leaderCard.isActive());
         assertTrue(player.getBoard().getProductionLeaders().isEmpty());
 
-        leaderCard.activate(game, player, toPay);
+        leaderCard.activate(game, player);
 
         assertEquals(leaderCard, player.getBoard().getDepotLeaders().get(0));
         assertTrue(leaderCard.isActive());
@@ -103,7 +91,7 @@ public class DepotLeaderCardTest {
         satisfyReq(player);
 
         try {
-            leaderCard.activate(game, player, toPay);
+            leaderCard.activate(game, player);
             fail();
         }catch(AlreadyActiveLeaderException ignored){}
     }
@@ -116,7 +104,7 @@ public class DepotLeaderCardTest {
         satisfyReq(players.get(0));
         giveOwnership(players.get(0));
         try{
-            leaderCard.activate(game, players.get(0), toPay);
+            leaderCard.activate(game, players.get(0));
             fail();
         }catch (ActivateDiscardedCardException ignored){}
     }

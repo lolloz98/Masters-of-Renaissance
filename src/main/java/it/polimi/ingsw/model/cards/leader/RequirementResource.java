@@ -34,24 +34,12 @@ public class RequirementResource implements Requirement {
 
     /**
      * @param player player owning the object with this requirement
-     * @param toPay resources to be paid for this requirement
-     * @return true, if the player has enough resources to spend for this requirement and toPay is valid
+     * @return true, if the player has enough resources to spend for this requirement
      */
     @Override
-    public boolean checkRequirement(Player player, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
-        TreeMap<Resource, Integer> amountGiven = Utility.getTotalResources(toPay);
-        TreeMap<Resource, Integer> resToGive = new TreeMap<>(){{
+    public boolean checkRequirement(Player player) {
+        return player.getBoard().enoughResToActivate(new TreeMap<>(){{
             put(res, quantity);
-        }};
-
-        return Utility.checkTreeMapEquality(amountGiven, resToGive) && player.getBoard().enoughResourcesToPay(toPay);
+        }});
     }
-
-    @Override
-    public TreeMap<Resource, Integer> getResourcesToBePaid() {
-        return new TreeMap<>(){{
-            put(res, quantity);
-        }};
-    }
-
 }

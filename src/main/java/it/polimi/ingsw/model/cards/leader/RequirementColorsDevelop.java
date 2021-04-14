@@ -2,10 +2,8 @@ package it.polimi.ingsw.model.cards.leader;
 
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DevelopCard;
-import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.WarehouseType;
 
 import java.util.TreeMap;
 
@@ -30,13 +28,10 @@ public class RequirementColorsDevelop implements Requirement {
 
     /**
      * @param player player owning the object with this requirement
-     * @param toPay  resources to be paid for the activation of this card
-     * @return true if player has at least the develop cards specified in requiredDevelops and toPay is empty
+     * @return true if player has at least the develop cards specified in requiredDevelops
      */
     @Override
-    public boolean checkRequirement(Player player, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
-        if(!toPay.isEmpty()) return false;
-
+    public boolean checkRequirement(Player player) {
         TreeMap<Color, Integer> req = new TreeMap<>(requiredDevelops);
         for (DevelopCardSlot ds : player.getBoard().getDevelopCardSlots())
             for (DevelopCard c : ds.getCards())
@@ -48,10 +43,5 @@ public class RequirementColorsDevelop implements Requirement {
             if (req.get(c) > 0) return false;
         }
         return true;
-    }
-
-    @Override
-    public TreeMap<Resource, Integer> getResourcesToBePaid() {
-        return new TreeMap<>();
     }
 }
