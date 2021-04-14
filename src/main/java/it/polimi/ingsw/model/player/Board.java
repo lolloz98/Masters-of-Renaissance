@@ -343,7 +343,8 @@ public class Board implements VictoryPointCalculator {
         int res = howManyResources();
         points += Math.floorDiv(res, 5);
         for (LeaderCard<? extends Requirement> lc : leaderCards) {
-            points += lc.getVictoryPoints();
+            if(lc.isActive())
+                points += lc.getVictoryPoints();
         }
         for (DevelopCardSlot dcs : developCardSlots) {
             for (DevelopCard dc : dcs.getCards()) {
@@ -558,8 +559,9 @@ public class Board implements VictoryPointCalculator {
         }
 
         //then append and move on the faithpath
-        int steps=entireToKeep.get(Resource.FAITH);
-        moveOnFaithPath(steps, game);
+        int steps=resGained.getOrDefault(Resource.FAITH,0);
+        if(steps>0)
+            moveOnFaithPath(steps, game);
 
         for (WarehouseType w : toKeep.keySet()) {
             switch (w) {

@@ -3,16 +3,16 @@ package it.polimi.ingsw.model.player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DevelopCard;
 import it.polimi.ingsw.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.model.cards.leader.Requirement;
-import it.polimi.ingsw.model.cards.leader.RequirementResource;
+import it.polimi.ingsw.model.exception.InvalidResourcesToKeepByPlayerException;
 import it.polimi.ingsw.model.exception.InvalidTypeOfResourceToDepotExeption;
 import it.polimi.ingsw.model.exception.TooManyResourcesToAddException;
 import it.polimi.ingsw.model.game.MultiPlayer;
 import it.polimi.ingsw.model.game.Resource;
+import it.polimi.ingsw.model.game.SinglePlayer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,14 +23,15 @@ import java.util.TreeMap;
 import static org.junit.Assert.*;
 
 public class BoardTest {
-    private ArrayList<Board> multiplayerBoards;
     private ArrayList<DevelopCard> developCards;
     private ArrayList<LeaderCard<? extends Requirement>> depotLeaderCards;
     private MultiPlayer multiPlayer;
+    private SinglePlayer singlePlayer;
     private Board board;
 
     @Before
     public void setUp() throws Exception{
+        singlePlayer=new SinglePlayer(new Player("first", 1));
         multiPlayer=new MultiPlayer(new ArrayList<>(){{
             add(new Player("first", 1));
             add(new Player("second", 2));
@@ -38,10 +39,6 @@ public class BoardTest {
             add(new Player("fourth", 4));
         }});
         board=new Board();
-        multiplayerBoards=new ArrayList<>();
-        for(int i=0;i<4;i++){
-            multiplayerBoards.add(multiPlayer.getPlayers().get(i).getBoard());
-        }
 
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
@@ -81,14 +78,83 @@ public class BoardTest {
         developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
     }
 
-
-
-
     /**TODO:
     @Test
     public void buyDevelopCardTest(){
 
     }*/
+
+    @Test
+    public void getVictoryPointsTest(){
+        board=multiPlayer.getPlayers().get(0).getBoard();
+
+        TreeMap<Resource,Integer> toAdd=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,1);
+        }};
+        board.storeInNormalDepot(toAdd);
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.SERVANT,6);
+        }};
+        board.flushGainedResources(toAdd,multiPlayer);
+
+        board.addLeaderCards(new ArrayList<>(){{
+            add(depotLeaderCards.get(0));//3 victory points
+            add(depotLeaderCards.get(1));//3 victory points
+        }});
+        //flushing resources for leader cards requirements
+        board.flushGainedResources(new TreeMap<>(){{
+            put(Resource.GOLD,5);
+            put(Resource.SERVANT,5);
+        }},multiPlayer);
+
+        board.getLeaderCards().get(0).activate(multiPlayer,multiPlayer.getPlayers().get(0));
+        board.getLeaderCards().get(1).activate(multiPlayer,multiPlayer.getPlayers().get(0));
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.SHIELD,2);
+        }};
+        board.storeInDepotLeader(toAdd);
+        //should have 22 resources-->4 victory points
+
+        board.moveOnFaithPath(3,multiPlayer);
+        int pointsFaithTrack=board.getFaithtrack().getVictoryPoints();//should be 1
+        int pointsLeader=3+3;//3 victory points for each leadercard that has the board
+
+        //TODO: add develop card after testing buy develop
+
+        assertEquals(4+pointsFaithTrack+pointsLeader,board.getVictoryPoints());
+    }
+
+    @Test
+    public void howManyResourcesTest1(){
+        TreeMap<Resource,Integer> toAdd=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,1);
+        }};
+        board.storeInNormalDepot(toAdd);
+
+        assertEquals(2,board.howManyResources());
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.SERVANT,6);
+        }};
+        board.flushGainedResources(toAdd,multiPlayer);
+
+        assertEquals(9,board.howManyResources());
+
+        toAdd=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.SHIELD,2);
+        }};
+        board.storeInDepotLeader(toAdd);
+
+        assertEquals(12,board.howManyResources());
+    }
 
     @Test(expected = InvalidTypeOfResourceToDepotExeption.class)
     public void storeInNormalDepotsExceptionTest1(){
@@ -644,6 +710,198 @@ public class BoardTest {
 
         assertEquals(new TreeMap<Resource,Integer>(), board.getResourcesInStrongBox());
     }
+
+    @Test
+    public void gainResourcesExceptionTest1(){
+        //TODO:risorsa invalida in tokeep
+    }
+
+    @Test
+    public void gainResourcesExceptionTest2(){
+        //TODO:risorsa invalida in togain
+    }
+
+    @Test
+    public void gainResourcesExceptionTest3(){
+        //TODO:tokeep greater that togain
+    }
+
+    @Test
+    public void gainResourcesExceptionTest4(){
+        //TODO:strongbox in tokeep
+    }
+
+    @Test
+    public void gainResourcesMultiplayerTest1(){
+        TreeMap<Resource,Integer> resGained=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,3);
+            put(Resource.FAITH,2);
+            put(Resource.SHIELD,3);
+        }};
+
+        TreeMap<WarehouseType,TreeMap<Resource,Integer>> toKeep=new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(){{
+                put(Resource.GOLD, 1);
+                put(Resource.SHIELD,3);
+                put(Resource.ROCK,2);
+            }});
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        board=multiPlayer.getPlayers().get(0).getBoard();
+        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(0));//adding a ROCK depot
+        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(1));//adding a SHIELD depot
+
+        try {
+            board.gainResources(resGained,toKeep,multiPlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
+
+        assertEquals(new TreeMap<>(){{
+                         put(Resource.GOLD, 1);
+                         put(Resource.SHIELD,3);
+                         put(Resource.ROCK,2);
+                     }},board.getResInNormalDepots());
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+        }}, board.getResInLeaderDepots());
+        assertEquals(2, board.getFaithtrack().getPosition());
+        for(int i=1;i<4;i++)
+            assertEquals(0, multiPlayer.getPlayers().get(i).getBoard().getFaithtrack().getPosition());
+
+        resGained=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.FAITH,2);
+            put(Resource.SHIELD,2);
+        }};
+
+        toKeep=new TreeMap<>(){{
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+
+        try {
+            board.gainResources(resGained,toKeep,multiPlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.GOLD, 1);
+            put(Resource.SHIELD,3);
+            put(Resource.ROCK,2);
+        }},board.getResInNormalDepots());
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+            put(Resource.SHIELD,2);
+        }}, board.getResInLeaderDepots());
+        assertEquals(4, board.getFaithtrack().getPosition());
+        for(int i=1;i<4;i++)
+            assertEquals(1, multiPlayer.getPlayers().get(i).getBoard().getFaithtrack().getPosition());//one resource discarded
+
+        multiPlayer.getTurn().setMainActionOccurred();
+        multiPlayer.nextTurn();
+
+        board=multiPlayer.getPlayers().get(1).getBoard();
+
+        resGained=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.FAITH,2);
+            put(Resource.SHIELD,2);
+        }};
+
+        toKeep=new TreeMap<>(){{
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+
+        try {
+            board.gainResources(resGained,toKeep,multiPlayer);//one resource discarded
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.SHIELD,2);
+        }},board.getResInNormalDepots());
+        assertEquals(3, board.getFaithtrack().getPosition());
+        assertEquals(5, multiPlayer.getPlayers().get(0).getBoard().getFaithtrack().getPosition());//test the faithtrack of the other players
+        assertEquals(2, multiPlayer.getPlayers().get(2).getBoard().getFaithtrack().getPosition());
+        assertEquals(2, multiPlayer.getPlayers().get(3).getBoard().getFaithtrack().getPosition());
+    }
+
+    @Test
+    public void gainResourcesSingleplayerTest1(){
+        TreeMap<Resource,Integer> resGained=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,3);
+            put(Resource.FAITH,2);
+            put(Resource.SERVANT,1);
+        }};
+
+        TreeMap<WarehouseType,TreeMap<Resource,Integer>> toKeep=new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(){{
+                put(Resource.ROCK,2);
+                put(Resource.SERVANT,1);
+            }});
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        board=singlePlayer.getPlayer().getBoard();
+        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(0));//adding a ROCK depot
+        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(1));//adding a SHIELD depot
+
+        try {
+            board.gainResources(resGained,toKeep,singlePlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SERVANT,1);
+        }},board.getResInNormalDepots());
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+        }}, board.getResInLeaderDepots());
+        assertEquals(2, board.getFaithtrack().getPosition());
+        assertEquals(1, singlePlayer.getLorenzo().getFaithTrack().getPosition());
+    }
+
+    @Test
+    public void gainResourcesSmartExceptionTest1(){
+        //TODO:risorsa invalida in tokeep
+    }
+
+    @Test
+    public void gainResourcesSmartExceptionTest2(){
+        //TODO:risorsa invalida in togain
+    }
+
+    @Test
+    public void gainResourcesSmartExceptionTest3(){
+        //TODO:tokeep greater that togain
+    }
+
+    @Test
+    public void gainResourcesSmartExceptionTest4(){
+        //TODO:strongbox in tokeep
+    }
+
+    @Test
+    public void gainResourcesSmartTest1(){
+        //TODO
+    }
+
+
 
 
 }
