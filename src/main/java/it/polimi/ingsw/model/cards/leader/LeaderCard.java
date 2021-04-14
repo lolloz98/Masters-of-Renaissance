@@ -33,8 +33,7 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
     }
 
     /**
-     * set isActive to true and use the effect of the card
-     * and remove from the board the resources toPay
+     * set isActive and apply the effect
      *
      * @param game   current game, it is affected by this method
      * @param player player who activates the card, it can be affected by this method
