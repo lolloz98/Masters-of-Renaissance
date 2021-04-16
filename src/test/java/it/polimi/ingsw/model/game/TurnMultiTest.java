@@ -53,7 +53,7 @@ public class TurnMultiTest {
         assertEquals(multiPlayer.getPlayers().get(2), turnMulti2.getCurrentPlayer());
         turnMulti2.setMainActionOccurred();
         TurnMulti turnMulti3 = turnMulti2.nextTurn(multiPlayer);
-        assertEquals(null, turnMulti3);
+        assertNull(turnMulti3);
     }
 
     @Test(expected = MainActionAlreadyOccurredException.class)

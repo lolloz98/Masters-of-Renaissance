@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.exception.GameIsOverException;
 import it.polimi.ingsw.model.player.DevelopCardSlot;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.utility.CollectionsHelper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,6 +17,7 @@ public class SinglePlayerTest {
 
     @Before
     public void setUp(){
+        CollectionsHelper.setTest();
         singlePlayer = new SinglePlayer(new Player("player", 1));
     }
 

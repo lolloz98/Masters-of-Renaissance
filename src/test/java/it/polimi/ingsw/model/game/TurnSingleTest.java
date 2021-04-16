@@ -5,8 +5,6 @@ import it.polimi.ingsw.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 
 public class TurnSingleTest {
@@ -23,26 +21,26 @@ public class TurnSingleTest {
     @Test
     public void TestNextTurnNoEnd() {
         // test the normal cycle of player and lorenzo
-        assertEquals(false, turnSingle.isLorenzoPlaying());
+        assertFalse(turnSingle.isLorenzoPlaying());
         turnSingle.setMainActionOccurred();
         TurnSingle turnSingle1 = turnSingle.nextTurn(singlePlayer);
-        assertEquals(true, turnSingle1.isLorenzoPlaying());
+        assertTrue(turnSingle1.isLorenzoPlaying());
         turnSingle1.setMainActionOccurred();
         TurnSingle turnSingle2 = turnSingle1.nextTurn(singlePlayer);
-        assertEquals(false, turnSingle2.isLorenzoPlaying());
+        assertFalse(turnSingle2.isLorenzoPlaying());
     }
 
     @Test
     public void TestNextTurnEnd() {
         // test the end of the game
-        assertEquals(false, turnSingle.isLorenzoPlaying());
+        assertFalse(turnSingle.isLorenzoPlaying());
         turnSingle.setMainActionOccurred();
         TurnSingle turnSingle1 = turnSingle.nextTurn(singlePlayer);
-        assertEquals(true, turnSingle1.isLorenzoPlaying());
+        assertTrue(turnSingle1.isLorenzoPlaying());
         turnSingle1.setMainActionOccurred();
         singlePlayer.setLastTurn(true);
         TurnSingle turnSingle2 = turnSingle1.nextTurn(singlePlayer);
-        assertEquals(null, turnSingle2);
+        assertNull(turnSingle2);
     }
 
     @Test(expected = MainActionAlreadyOccurredException.class)

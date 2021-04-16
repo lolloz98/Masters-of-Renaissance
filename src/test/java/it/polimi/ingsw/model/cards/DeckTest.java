@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.exception.EmptyDeckException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +8,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class DeckTest {
-
     Deck<Card> deck;
     ArrayList<Card> cards;
     final int NUMBER = 15;

@@ -207,7 +207,7 @@ public class MarketTrayTest {
         marketTray.pushMarble(true, 0);
         ArrayList<TreeMap<Resource, Integer>> result = marketTray.getResCombinations();
         marketTray.removeResources();
-        assertTrue(marketTray.getResCombinations()==null);
+        assertNull(marketTray.getResCombinations());
     }
 
     @Test (expected = NoSuchResourceException.class)
