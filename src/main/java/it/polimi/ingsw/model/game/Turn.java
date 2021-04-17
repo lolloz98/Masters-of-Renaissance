@@ -14,6 +14,11 @@ public abstract class Turn {
     private boolean mainActionOccurred;
     private boolean productionsActivated;
     private boolean marketActivated;
+    protected boolean isPlayable;
+
+    public boolean getIsPlayable() {
+        return isPlayable;
+    }
 
     public boolean isProductionsActivated() {
         return productionsActivated;

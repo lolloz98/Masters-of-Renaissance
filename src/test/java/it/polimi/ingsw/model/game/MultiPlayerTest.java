@@ -84,7 +84,7 @@ public class MultiPlayerTest {
     public void testIsADeckDevelopEmptyFalse(){
         for(int i = 0; i <3; i++)
             multiPlayer.drawDevelopCard(Color.PURPLE, 3);
-        assertTrue(!multiPlayer.isADeckDevelopEmpty());
+        assertFalse(multiPlayer.isADeckDevelopEmpty());
     }
 
     @Test
@@ -241,10 +241,10 @@ public class MultiPlayerTest {
         multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24,multiPlayer);
         try {
             multiPlayer.getTurn().getCurrentPlayer().getBoard().gainResourcesSmart(
-                    new TreeMap<Resource, Integer>(){{
+                    new TreeMap<>(){{
                         put(Resource.GOLD, 1);
                     }},
-                    new TreeMap<Resource, Integer>(){{
+                    new TreeMap<>(){{
                         put(Resource.GOLD, 1);
                     }},
                     multiPlayer

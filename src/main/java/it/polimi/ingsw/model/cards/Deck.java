@@ -1,11 +1,15 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.exception.EmptyDeckException;
+import it.polimi.ingsw.model.utility.CollectionsHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Deck<T extends Card> {
+    private static final Logger logger = LogManager.getLogger(Deck.class);
+
     protected final ArrayList<T> cards = new ArrayList<>();
 
     public Deck(ArrayList<T> cards) {
@@ -30,7 +34,8 @@ public class Deck<T extends Card> {
      */
     public void shuffle() throws EmptyDeckException {
         if (isEmpty()) throw new EmptyDeckException();
-        Collections.shuffle(cards);
+        // logger.debug("Shuffle in deck, isTest: " + CollectionsHelper.isTest());
+        CollectionsHelper.shuffle(cards);
     }
 
     /**

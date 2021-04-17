@@ -16,6 +16,13 @@ public class TurnMulti extends Turn {
     public TurnMulti(Player currentPlayer) {
         super();
         this.currentPlayer = currentPlayer;
+        this.isPlayable = true;
+    }
+
+    public TurnMulti(Player currentPlayer, boolean isPlayable) {
+        super();
+        this.currentPlayer = currentPlayer;
+        this.isPlayable = isPlayable;
     }
 
     public Player getCurrentPlayer() {
@@ -36,7 +43,7 @@ public class TurnMulti extends Turn {
         MultiPlayer multiPlayer = (MultiPlayer) game;
         ArrayList<Player> allPlayers = multiPlayer.getPlayers();
         multiPlayer.checkEndConditions();
-        if (multiPlayer.isLastRound() && currentPlayer == allPlayers.get(allPlayers.size()-1)) return null;
+        if (multiPlayer.isLastRound() && currentPlayer == allPlayers.get(allPlayers.size()-1)) return new TurnMulti(currentPlayer, false);
         else {
             int ind = allPlayers.indexOf(currentPlayer);
             return new TurnMulti(allPlayers.get((ind + 1) % allPlayers.size()));

@@ -27,7 +27,7 @@ public class MultiPlayer extends Game<TurnMulti> {
         return lastRound;
     }
 
-    public void setLastRound(boolean lastRound) {
+    private void setLastRound(boolean lastRound) {
         this.lastRound = lastRound;
     }
 
@@ -56,7 +56,7 @@ public class MultiPlayer extends Game<TurnMulti> {
     public void nextTurn(){
         if (isGameOver()) throw new GameIsOverException();
         TurnMulti turn = getTurn().nextTurn(this);
-        if (turn == null){
+        if (!turn.getIsPlayable()){
             setGameOver(true);
             computeLeaderBoard();
         }

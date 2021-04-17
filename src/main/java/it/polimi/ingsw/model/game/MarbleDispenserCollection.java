@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.utility.CollectionsHelper;
+
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Implementation of MarbleShufflerInferface that uses the Collections library.
@@ -18,7 +19,7 @@ public class MarbleDispenserCollection implements MarbleDispenserInterface {
         for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.SERVANT));
         for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.GOLD));
         marbles.add(new Marble(Resource.FAITH));
-        Collections.shuffle(marbles);
+        CollectionsHelper.shuffle(marbles);
         return marbles;
     }
 }

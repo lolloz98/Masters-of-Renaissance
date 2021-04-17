@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  */
 
 public abstract class Game <T extends Turn> {
-    private static Set<Integer> usedId = Collections.synchronizedSet(new TreeSet<>());
     private boolean gameOver;
     private final MarketTray marketTray;
     protected T turn;
@@ -48,7 +47,7 @@ public abstract class Game <T extends Turn> {
         return gameOver;
     }
 
-    public void setGameOver(boolean gameOver) {
+    protected void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
 
@@ -133,7 +132,7 @@ public abstract class Game <T extends Turn> {
             path = String.format("src/main/resources/json_file/cards/leader/%03d.json", i);
             leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), ProductionLeaderCard.class));
         }
-        this.deckLeader = new Deck<LeaderCard<? extends Requirement>>(leaderCards);
+        this.deckLeader = new Deck<>(leaderCards);
         this.deckLeader.shuffle();
     }
 
@@ -148,36 +147,6 @@ public abstract class Game <T extends Turn> {
     public DevelopCard drawDevelopCard(Color color, int level){
         if(level<1 || level>3) throw new LevelOutOfBoundException();
         return decksDevelop.get(color).get(level).drawCard();
-    }
-
-    /**
-     * Use the market tray to get resources
-     *
-     * @param index index of the matrix that indicates where to push the marble
-     * @param onRow if true pushes on the row (from right), if false pushes on the column (from the bottom)
-     * @return an ArrayList containing the possible combinations of resources that the player can get, based on the leader cards he has activated
-     * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
-     */
-    public ArrayList<TreeMap<Resource, Integer>> useMarketTray(boolean onRow, int index) throws MatrixIndexOutOfBoundException {
-        marketTray.pushMarble(onRow, index);
-        return getMarketTray().getResCombinations();
-    }
-
-    /**
-     * Adds a resource to the leaderResources in marketTray
-     *
-     * @param resource is the resource to add
-     * @throws TooManyLeaderResourcesException if there are already 2 resource in the list
-     */
-    public void updateMarketWithLeader(Resource resource) {
-        marketTray.addLeaderResource(resource);
-    }
-
-    /**
-     * Removes all leaderResources from the marketTray
-     */
-    public void removeLeaderResFromMarket() {
-        marketTray.removeLeaderResources();
     }
 
     /**

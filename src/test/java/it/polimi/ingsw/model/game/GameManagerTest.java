@@ -19,7 +19,7 @@ public class GameManagerTest {
 
     @Test
     public void testSingleton(){
-        assertEquals(gameManager, gameManager.getInstance());
+        assertEquals(gameManager, GameManager.getInstance());
     }
 
     @Test
@@ -28,7 +28,7 @@ public class GameManagerTest {
         int id1 = gameManager.getNewSinglePlayer(player);
         int id2 = gameManager.getNewSinglePlayer(player);
         assertNotEquals(id1, id2);
-        gameManager.getGameFromMap(id1).getTurn();
+        assertNotNull(gameManager.getGameFromMap(id1).getTurn());
     }
 
     @Test
@@ -54,6 +54,6 @@ public class GameManagerTest {
         } catch (NoSuchGameException e) {
             e.printStackTrace();
         }
-        assertEquals(gameManager.getGameFromMap(id),null);
+        assertNull(gameManager.getGameFromMap(id));
     }
 }
