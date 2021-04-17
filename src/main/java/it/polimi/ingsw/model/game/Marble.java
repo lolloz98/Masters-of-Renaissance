@@ -10,4 +10,11 @@ public final class Marble {
     public Resource getResource() {
         return resource;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Marble) return getResource() == ((Marble) obj).getResource();
+        else if(obj instanceof Resource) return getResource() == obj;
+        return false;
+    }
 }

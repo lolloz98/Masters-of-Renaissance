@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.exception.MatrixIndexOutOfBoundException;
-import it.polimi.ingsw.model.exception.MarketTrayNotEmptyException;
-import it.polimi.ingsw.model.exception.NoSuchResourceException;
-import it.polimi.ingsw.model.exception.TooManyLeaderResourcesException;
+import it.polimi.ingsw.model.exception.*;
+
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -12,10 +10,10 @@ import java.util.TreeMap;
  */
 
 public class MarketTray {
-    private Marble[][] marbleMatrix;
+    private final Marble[][] marbleMatrix;
     private Marble freeMarble;
-    private ArrayList<Resource> leaderResources;
-    private ArrayList<TreeMap<Resource, Integer>> resCombinations;
+    private final ArrayList<Resource> leaderResources;
+    private final ArrayList<TreeMap<Resource, Integer>> resCombinations;
 
     public MarketTray(MarbleDispenserInterface md) {
         this.marbleMatrix = new Marble[3][4];
@@ -28,24 +26,21 @@ public class MarketTray {
         }
         freeMarble = marbles.get(12);
         leaderResources = new ArrayList<>();
+        resCombinations = new ArrayList<>();
     }
 
     /**
      * @return a copy resCombinations
      */
     public ArrayList<TreeMap<Resource, Integer>> getResCombinations() {
-        if(resCombinations == null) return null;
-        else {
-            ArrayList<TreeMap<Resource, Integer>> resCopy = new ArrayList<>(resCombinations);
-            return resCopy;
-        }
+        return new ArrayList<>(resCombinations);
     }
 
     /**
      * Resets resCombinations
      */
     public void removeResources(){
-        resCombinations = null;
+        resCombinations.clear();
     }
 
     /**
@@ -77,9 +72,11 @@ public class MarketTray {
      *
      * @param resource is the resource to add to the list
      * @throws TooManyLeaderResourcesException if there are already 2 resource in the list
+     * @throws AlreadyPresentLeaderResException if resource is already in leaderResources
      */
     public void addLeaderResource(Resource resource) {
         if (leaderResources.size() == 2) throw new TooManyLeaderResourcesException();
+        if(leaderResources.contains(resource)) throw new AlreadyPresentLeaderResException();
         leaderResources.add(resource);
     }
 
@@ -114,9 +111,10 @@ public class MarketTray {
      * @param index index of the matrix that indicates where to push the marble
      * @param onRow if true pushes on the row (from right), if false pushes on the column (from the bottom)
      * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
+     * @throws MarketTrayNotEmptyException if resCombinations is not empty
      */
     public void pushMarble(boolean onRow, int index) {
-        if (resCombinations!=null) throw new MarketTrayNotEmptyException();
+        if (!resCombinations.isEmpty()) throw new MarketTrayNotEmptyException();
         TreeMap<Resource, Integer> resourcesTaken = new TreeMap<>();
         Marble newMarble = freeMarble;
         Resource res;
@@ -144,7 +142,7 @@ public class MarketTray {
             }
             marbleMatrix[2][index] = newMarble;
         }
-        resCombinations = computeCombinations(resourcesTaken);
+        resCombinations.addAll(computeCombinations(resourcesTaken));
     }
 
     /**
@@ -154,17 +152,19 @@ public class MarketTray {
      * @return an ArrayList containing the possible combinations of resources that the player can get, based on the leader cards he has activated
      */
     private ArrayList<TreeMap<Resource, Integer>> computeCombinations(TreeMap<Resource, Integer> resourcesTaken) {
-        ArrayList<TreeMap<Resource, Integer>> resCombinations = new ArrayList<>();
+        ArrayList<TreeMap<Resource, Integer>> localResCombinations = new ArrayList<>();
         if (leaderResources.size() == 0 || !resourcesTaken.containsKey(Resource.NOTHING)) {
             resourcesTaken.remove(Resource.NOTHING);
-            resCombinations.add(resourcesTaken);
+            localResCombinations.add(resourcesTaken);
         }
         else {
             Integer howManyWhites = resourcesTaken.get(Resource.NOTHING);
             resourcesTaken.remove(Resource.NOTHING);
             if(leaderResources.size() == 1){
-                addToResMap(resourcesTaken, leaderResources.get(0));
-                resCombinations.add(resourcesTaken);
+                for (int i = 0; i < howManyWhites; i++) {
+                    addToResMap(resourcesTaken, leaderResources.get(0));
+                }
+                localResCombinations.add(resourcesTaken);
             }
             else{ // case with two leader resources
                 TreeMap<Resource, Integer> tmp;
@@ -176,11 +176,11 @@ public class MarketTray {
                     for(int j = i; j<howManyWhites; j++){
                         addToResMap(tmp, leaderResources.get(1));
                     }
-                    resCombinations.add(tmp);
+                    localResCombinations.add(tmp);
                 }
             }
         }
-        return resCombinations;
+        return localResCombinations;
     }
 
     /**

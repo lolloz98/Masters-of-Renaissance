@@ -172,6 +172,10 @@ public class MarketTrayTest {
 
     @Test
     public void testCheckResources() {
+        // check for weird errors in checkResources, before calling pushMarble
+        marketTray.checkResources(new TreeMap<>(){{
+            put(Resource.SHIELD, 4);
+        }});
         // worst case scenario, two leader resources and 4 white marbles in line
         marketTray.addLeaderResource(Resource.SHIELD);
         marketTray.addLeaderResource(Resource.SERVANT);
@@ -207,7 +211,7 @@ public class MarketTrayTest {
         marketTray.pushMarble(true, 0);
         ArrayList<TreeMap<Resource, Integer>> result = marketTray.getResCombinations();
         marketTray.removeResources();
-        assertNull(marketTray.getResCombinations());
+        assertTrue(marketTray.getResCombinations().isEmpty());
     }
 
     @Test (expected = NoSuchResourceException.class)
