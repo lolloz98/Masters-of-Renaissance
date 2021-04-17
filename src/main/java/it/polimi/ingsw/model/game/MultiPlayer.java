@@ -27,7 +27,7 @@ public class MultiPlayer extends Game<TurnMulti> {
         return lastRound;
     }
 
-    public void setLastRound(boolean lastRound) {
+    private void setLastRound(boolean lastRound) {
         this.lastRound = lastRound;
     }
 

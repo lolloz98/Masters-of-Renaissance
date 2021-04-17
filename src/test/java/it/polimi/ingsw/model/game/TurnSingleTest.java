@@ -38,7 +38,7 @@ public class TurnSingleTest {
         TurnSingle turnSingle1 = turnSingle.nextTurn(singlePlayer);
         assertTrue(turnSingle1.isLorenzoPlaying());
         turnSingle1.setMainActionOccurred();
-        singlePlayer.setLastTurn(true);
+        singlePlayer.getLorenzo().getFaithTrack().move(24, singlePlayer);
         TurnSingle turnSingle2 = turnSingle1.nextTurn(singlePlayer);
         assertNull(turnSingle2);
     }

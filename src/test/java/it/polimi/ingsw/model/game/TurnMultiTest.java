@@ -45,7 +45,7 @@ public class TurnMultiTest {
         // from when last round is set to true, there should be enough turns to go back to the player 0
         assertEquals(multiPlayer.getPlayers().get(0), turnMulti.getCurrentPlayer());
         turnMulti.setMainActionOccurred();
-        multiPlayer.setLastRound(true);
+        multiPlayer.getTurn().getCurrentPlayer().getBoard().getFaithtrack().move(24, multiPlayer);
         TurnMulti turnMulti1 = turnMulti.nextTurn(multiPlayer);
         assertEquals(multiPlayer.getPlayers().get(1), turnMulti1.getCurrentPlayer());
         turnMulti1.setMainActionOccurred();

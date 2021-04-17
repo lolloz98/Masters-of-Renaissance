@@ -47,7 +47,7 @@ public abstract class Game <T extends Turn> {
         return gameOver;
     }
 
-    public void setGameOver(boolean gameOver) {
+    protected void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
 

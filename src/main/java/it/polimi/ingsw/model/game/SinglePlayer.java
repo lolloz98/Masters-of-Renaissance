@@ -22,7 +22,7 @@ public class SinglePlayer extends Game<TurnSingle>{
         return lastTurn;
     }
 
-    public void setLastTurn(boolean lastTurn) {
+    private void setLastTurn(boolean lastTurn) {
         this.lastTurn = lastTurn;
     }
 
