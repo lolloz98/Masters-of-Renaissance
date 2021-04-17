@@ -96,7 +96,7 @@ public class SinglePlayer extends Game<TurnSingle>{
     public void nextTurn(){
         if (isGameOver()) throw new GameIsOverException();
         TurnSingle turn = getTurn().nextTurn(this);
-        if (turn == null){
+        if (!turn.getIsPlayable()){
             setGameOver(true);
             this.playerPoints = player.getBoard().getVictoryPoints();
         }

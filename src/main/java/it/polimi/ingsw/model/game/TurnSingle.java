@@ -14,6 +14,13 @@ public class TurnSingle extends Turn{
     public TurnSingle(boolean lorenzoPlaying) {
         super();
         this.lorenzoPlaying = lorenzoPlaying;
+        this.isPlayable = true;
+    }
+
+    public TurnSingle(boolean lorenzoPlaying, boolean isPlayable) {
+        super();
+        this.lorenzoPlaying = lorenzoPlaying;
+        this.isPlayable = isPlayable;
     }
 
     public boolean isLorenzoPlaying() {
@@ -34,7 +41,7 @@ public class TurnSingle extends Turn{
         checkConditions();
         SinglePlayer singlePlayer = (SinglePlayer) game;
         singlePlayer.checkEndConditions();
-        if (singlePlayer.isLastTurn()) return null;
+        if (singlePlayer.isLastTurn()) return new TurnSingle(lorenzoPlaying, false);
         else {
             if (lorenzoPlaying) {
                 return new TurnSingle(false);

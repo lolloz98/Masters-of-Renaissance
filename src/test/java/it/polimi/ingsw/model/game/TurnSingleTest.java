@@ -40,7 +40,7 @@ public class TurnSingleTest {
         turnSingle1.setMainActionOccurred();
         singlePlayer.getLorenzo().getFaithTrack().move(24, singlePlayer);
         TurnSingle turnSingle2 = turnSingle1.nextTurn(singlePlayer);
-        assertNull(turnSingle2);
+        assertFalse(turnSingle2.getIsPlayable());
     }
 
     @Test(expected = MainActionAlreadyOccurredException.class)
