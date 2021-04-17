@@ -14,6 +14,7 @@ public class CollectionsHelper {
     }
     public static void setTest(){
         isTest = true;
+        n = 0;
     }
     public static boolean isTest(){
         return isTest;
