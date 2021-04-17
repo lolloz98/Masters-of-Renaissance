@@ -17,6 +17,10 @@ public class MarketTrayTest2 {
     Marble freeMarbleOriginal;
     Gson gson;
 
+    String afterString;
+    Marble free;
+    ArrayList<TreeMap<Resource, Integer>> combinations;
+
     @Before
     public void setUp() {
         CollectionsHelper.setTest();
@@ -41,6 +45,15 @@ public class MarketTrayTest2 {
         for(TreeMap<Resource, Integer> i: combinations){
             assertTrue(marketTray.checkResources(i));
         }
+    }
+
+    private void checkAfterPush(String afterString, Marble free, ArrayList<TreeMap<Resource, Integer>> combinations){
+        Marble[][] afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
+        assertEquals(free, marketTray.getFreeMarble());
+        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
+        assertEquals(combinations.size(), marketTray.getResCombinations().size());
+        assertEquals(combinations, marketTray.getResCombinations());
+        checkResources(combinations);
     }
 
     @Test
@@ -68,20 +81,20 @@ public class MarketTrayTest2 {
     @Test
     public void testPushMarbleRowNoLeader() {
         marketTray.pushMarble(true, 2);
-        String afterString =
+        afterString =
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'ROCK'},{'resource':'FAITH'}]," +
                         "[{'resource':'GOLD'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SHIELD'}, {'resource':'SHIELD'},]]";
-        Marble[][] afterMatrix = gson.fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.GOLD), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.SHIELD, 1);
-            put(Resource.GOLD, 1);
-            put(Resource.SERVANT, 1);
-            put(Resource.ROCK, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.GOLD);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.SHIELD, 1);
+                put(Resource.GOLD, 1);
+                put(Resource.SERVANT, 1);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         try {
             marketTray.pushMarble(true, 0);
@@ -96,14 +109,14 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'ROCK'},{'resource':'FAITH'}, {'resource':'GOLD'}]," +
                         "[{'resource':'GOLD'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SHIELD'}, {'resource':'SHIELD'},]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.FAITH, 1);
-            put(Resource.ROCK, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.FAITH, 1);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
         assertEquals(0, marketTray.getResCombinations().size());
@@ -122,14 +135,14 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'ROCK'},{'resource':'FAITH'}, {'resource':'GOLD'}]," +
                         "[{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'NOTHING'}, {'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SHIELD'}, {'resource':'SHIELD'},]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.GOLD), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.GOLD, 1);
-            put(Resource.SERVANT, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.GOLD);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SERVANT, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
     }
 
     @Test
@@ -139,14 +152,14 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'FAITH'}]," +
                         "[{'resource':'GOLD'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'GOLD'},{'resource':'ROCK'},{'resource':'SHIELD'},{'resource':'SHIELD'}]]";
-        Marble[][] afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.ROCK), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.ROCK, 1);
-            put(Resource.SERVANT, 2);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.ROCK);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.ROCK, 1);
+                put(Resource.SERVANT, 2);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         try {
             marketTray.pushMarble(false, 0);
@@ -160,14 +173,13 @@ public class MarketTrayTest2 {
                 "[[{'resource':'GOLD'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'FAITH'}]," +
                         "[{'resource':'GOLD'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'ROCK'},{'resource':'SHIELD'},{'resource':'SHIELD'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.GOLD, 2);
-        }}, marketTray.getResCombinations().get(0));
-
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.GOLD, 2);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
         try {
@@ -185,13 +197,13 @@ public class MarketTrayTest2 {
                 "[[{'resource':'GOLD'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'FAITH'}]," +
                         "[{'resource':'GOLD'},{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'NOTHING'},{'resource':'SHIELD'},{'resource':'SHIELD'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.ROCK, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
         marketTray.pushMarble(false, 3);
@@ -199,32 +211,32 @@ public class MarketTrayTest2 {
                 "[[{'resource':'GOLD'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'GOLD'},{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SHIELD'}]," +
                         "[{'resource':'ROCK'},{'resource':'NOTHING'},{'resource':'SHIELD'},{'resource':'NOTHING'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.FAITH), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.FAITH, 1);
-            put(Resource.SHIELD, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.FAITH);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.FAITH, 1);
+                put(Resource.SHIELD, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
     }
 
     @Test
     public void testPushMarbleOneLeader() {
         marketTray.addLeaderResource(Resource.GOLD);
         marketTray.pushMarble(false, 1);
-        String afterString =
+        afterString =
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'ROCK'},{'resource':'FAITH'}]," +
                         "[{'resource':'GOLD'},{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'SERVANT'},{'resource':'SHIELD'}]]";
-        Marble[][] afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.GOLD, 2);
-            put(Resource.ROCK, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.GOLD, 2);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
         marketTray.removeLeaderResource(Resource.GOLD);
@@ -235,15 +247,15 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'ROCK'},{'resource':'FAITH'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'NOTHING'},{'resource':'NOTHING'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'SERVANT'},{'resource':'SHIELD'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.GOLD), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.GOLD, 1);
-            put(Resource.ROCK, 2);
-            put(Resource.SERVANT, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.GOLD);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.ROCK, 2);
+                put(Resource.SERVANT, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
         marketTray.removeLeaderResource(Resource.ROCK);
@@ -254,15 +266,15 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'FAITH'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'GOLD'},{'resource':'SHIELD'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.ROCK), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.SHIELD, 1);
-            put(Resource.ROCK, 1);
-            put(Resource.SERVANT, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.ROCK);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.SHIELD, 1);
+                put(Resource.ROCK, 1);
+                put(Resource.SERVANT, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
 
@@ -271,14 +283,14 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SERVANT'},{'resource':'SHIELD'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'GOLD'},{'resource':'ROCK'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.FAITH), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.FAITH, 1);
-            put(Resource.SHIELD, 2);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.FAITH);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.FAITH, 1);
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
 
@@ -287,13 +299,13 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'FAITH'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SERVANT'},{'resource':'SHIELD'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'GOLD'},{'resource':'ROCK'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.SHIELD, 4);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.SHIELD, 4);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
 
@@ -302,14 +314,14 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'FAITH'},{'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SERVANT'},{'resource':'SHIELD'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'GOLD'},{'resource':'ROCK'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(1, marketTray.getResCombinations().size());
-        assertEquals(new TreeMap<>() {{
-            put(Resource.SHIELD, 3);
-            put(Resource.FAITH, 1);
-        }}, marketTray.getResCombinations().get(0));
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>(){{
+            add(new TreeMap<>() {{
+                put(Resource.SHIELD, 3);
+                put(Resource.FAITH, 1);
+            }});
+        }};
+        checkAfterPush(afterString, free, combinations);
     }
 
     @Test
@@ -330,15 +342,12 @@ public class MarketTrayTest2 {
 
 
         marketTray.pushMarble(false, 1);
-        String afterString =
+        afterString =
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'ROCK'},{'resource':'FAITH'}]," +
                         "[{'resource':'GOLD'},{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'SERVANT'},{'resource':'SHIELD'}]]";
-        Marble[][] afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(3, marketTray.getResCombinations().size());
-        ArrayList<TreeMap<Resource, Integer>> combinations = new ArrayList<>() {{
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>() {{
             add(new TreeMap<>() {{
                 put(Resource.SERVANT, 2);
                 put(Resource.ROCK, 1);
@@ -353,8 +362,7 @@ public class MarketTrayTest2 {
                 put(Resource.ROCK, 1);
             }});
         }};
-        assertEquals(combinations, marketTray.getResCombinations());
-        checkResources(combinations);
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
 
@@ -363,11 +371,8 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'ROCK'},{'resource':'FAITH'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'NOTHING'},{'resource':'NOTHING'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'SERVANT'},{'resource':'SHIELD'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.GOLD), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(2, marketTray.getResCombinations().size());
-        assertEquals(new ArrayList<>() {{
+        free = new Marble(Resource.GOLD);
+        combinations = new ArrayList<>() {{
             add(new TreeMap<>() {{
                 put(Resource.ROCK, 1);
                 put(Resource.SERVANT, 2);
@@ -378,7 +383,8 @@ public class MarketTrayTest2 {
                 put(Resource.SERVANT, 1);
                 put(Resource.GOLD, 2);
             }});
-        }}, marketTray.getResCombinations());
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
 
@@ -387,11 +393,8 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'FAITH'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SERVANT'},{'resource':'NOTHING'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'GOLD'},{'resource':'SHIELD'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.ROCK), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(2, marketTray.getResCombinations().size());
-        assertEquals(new ArrayList<>() {{
+        free = new Marble(Resource.ROCK);
+        combinations = new ArrayList<>() {{
             add(new TreeMap<>() {{
                 put(Resource.ROCK, 1);
                 put(Resource.SERVANT, 2);
@@ -401,7 +404,8 @@ public class MarketTrayTest2 {
                 put(Resource.SERVANT, 1);
                 put(Resource.GOLD, 1);
             }});
-        }}, marketTray.getResCombinations());
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
 
@@ -410,11 +414,8 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SERVANT'},{'resource':'SHIELD'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'GOLD'},{'resource':'ROCK'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.FAITH), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(2, marketTray.getResCombinations().size());
-        assertEquals(new ArrayList<>() {{
+        free = new Marble(Resource.FAITH);
+        combinations = new ArrayList<>() {{
             add(new TreeMap<>() {{
                 put(Resource.SHIELD, 1);
                 put(Resource.FAITH, 1);
@@ -425,7 +426,8 @@ public class MarketTrayTest2 {
                 put(Resource.FAITH, 1);
                 put(Resource.GOLD, 1);
             }});
-        }}, marketTray.getResCombinations());
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
 
@@ -434,11 +436,8 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'FAITH'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SERVANT'},{'resource':'SHIELD'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'GOLD'},{'resource':'ROCK'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(5, marketTray.getResCombinations().size());
-        assertEquals(new ArrayList<>() {{
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>() {{
             add(new TreeMap<>() {{
                 put(Resource.SERVANT, 4);
             }});
@@ -457,7 +456,8 @@ public class MarketTrayTest2 {
             add(new TreeMap<>() {{
                 put(Resource.GOLD, 4);
             }});
-        }}, marketTray.getResCombinations());
+        }};
+        checkAfterPush(afterString, free, combinations);
 
         marketTray.removeResources();
 
@@ -466,11 +466,8 @@ public class MarketTrayTest2 {
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'FAITH'},{'resource':'NOTHING'}]," +
                         "[{'resource':'ROCK'},{'resource':'SERVANT'},{'resource':'SERVANT'},{'resource':'SHIELD'}]," +
                         "[{'resource':'GOLD'},{'resource':'SHIELD'},{'resource':'GOLD'},{'resource':'ROCK'}]]";
-        afterMatrix = new Gson().fromJson(afterString, Marble[][].class);
-        assertEquals(new Marble(Resource.NOTHING), marketTray.getFreeMarble());
-        checkMatrixEq(afterMatrix, marketTray.getMarbleMatrix());
-        assertEquals(4, marketTray.getResCombinations().size());
-        assertEquals(new ArrayList<>() {{
+        free = new Marble(Resource.NOTHING);
+        combinations = new ArrayList<>() {{
             add(new TreeMap<>() {{
                 put(Resource.SERVANT, 3);
                 put(Resource.FAITH, 1);
@@ -489,6 +486,7 @@ public class MarketTrayTest2 {
                 put(Resource.GOLD, 3);
                 put(Resource.FAITH, 1);
             }});
-        }}, marketTray.getResCombinations());
+        }};
+        checkAfterPush(afterString, free, combinations);
     }
 }
