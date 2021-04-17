@@ -14,6 +14,7 @@ public class MarketTray {
     private Marble freeMarble;
     private final ArrayList<Resource> leaderResources;
     private final ArrayList<TreeMap<Resource, Integer>> resCombinations;
+    private boolean isResCombinationsUsed = false;
 
     public MarketTray(MarbleDispenserInterface md) {
         this.marbleMatrix = new Marble[3][4];
@@ -41,6 +42,7 @@ public class MarketTray {
      */
     public void removeResources(){
         resCombinations.clear();
+        isResCombinationsUsed = false;
     }
 
     /**
@@ -111,10 +113,10 @@ public class MarketTray {
      * @param index index of the matrix that indicates where to push the marble
      * @param onRow if true pushes on the row (from right), if false pushes on the column (from the bottom)
      * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
-     * @throws MarketTrayNotEmptyException if resCombinations is not empty
+     * @throws MarketTrayNotEmptyException if resCombinations is used
      */
     public void pushMarble(boolean onRow, int index) {
-        if (!resCombinations.isEmpty()) throw new MarketTrayNotEmptyException();
+        if (isResCombinationsUsed) throw new MarketTrayNotEmptyException();
         TreeMap<Resource, Integer> resourcesTaken = new TreeMap<>();
         Marble newMarble = freeMarble;
         Resource res;
@@ -143,6 +145,7 @@ public class MarketTray {
             marbleMatrix[2][index] = newMarble;
         }
         resCombinations.addAll(computeCombinations(resourcesTaken));
+        isResCombinationsUsed = true;
     }
 
     /**
