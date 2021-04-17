@@ -216,9 +216,9 @@ public class Board implements VictoryPointCalculator {
     }
 
     private boolean theLeaderProductionIsActivated(int whichLeader) {
-        if (whichLeader < productionLeaderSlots.size() && whichLeader >= 0)
+        if(whichLeader >= productionLeaderSlots.size() && whichLeader < 0) throw new IllegalArgumentException();
+        else
             return productionLeaderSlots.get(whichLeader).isActive();
-        return false;
     }
 
     /**
