@@ -91,7 +91,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * checks if i have enough resources compared to resToGive
+     * checks if i have enough resources compared to resToGive, this method is useful for the "smart" methods of payment
      *
      * @param resToGive to be checked if in board there are at least this amount of resources
      * @return true if there are enough resources on the board, false otherwise

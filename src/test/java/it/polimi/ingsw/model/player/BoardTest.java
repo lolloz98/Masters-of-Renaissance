@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import com.sun.source.tree.Tree;
+import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DevelopCard;
 import it.polimi.ingsw.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.model.cards.leader.LeaderCard;
@@ -13,6 +15,7 @@ import it.polimi.ingsw.model.exception.TooManyResourcesToAddException;
 import it.polimi.ingsw.model.game.MultiPlayer;
 import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.game.SinglePlayer;
+import it.polimi.ingsw.model.utility.CollectionsHelper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +34,8 @@ public class BoardTest {
 
     @Before
     public void setUp() throws Exception{
+        CollectionsHelper.setTest();
+
         singlePlayer=new SinglePlayer(new Player("first", 1));
         multiPlayer=new MultiPlayer(new ArrayList<>(){{
             add(new Player("first", 1));
@@ -52,37 +57,263 @@ public class BoardTest {
         path = String.format("src/main/resources/json_file/cards/leader/%03d.json", 55);//resource type: SHIELD
         depotLeaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DepotLeaderCard.class));
 
-        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(0));//adding a ROCK depot
-        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(1));//adding a SHIELD depot
+        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(0));//adding a ROCK depot leader to board
+        board.discoverDepotLeader((DepotLeaderCard) depotLeaderCards.get(1));//adding a SHIELD depot leader to board
         assertEquals(2,board.getDepotLeaders().size());
         assertEquals(Resource.ROCK,board.getDepotLeaders().get(0).getDepot().getTypeOfResource());
         assertEquals(Resource.SHIELD,board.getDepotLeaders().get(1).getDepot().getTypeOfResource());
 
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 1);//level 1
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 3);//level 1
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 4);//level 1
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 17);//level 2
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 24);//level 2
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 27);//level 2
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 37);//level 3
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 46);//level 3
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
-        path = String.format("src/main/resources/json_file/cards/develop/%03d.json", 48);//level 3
-        developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
     }
 
-    /**TODO:
+    public void buildBoard(){
+        //preparing the board
+        TreeMap<Resource,Integer> resGained=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,3);
+            put(Resource.SHIELD,3);
+        }};
+
+        TreeMap<WarehouseType,TreeMap<Resource,Integer>> toKeep=new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(){{
+                put(Resource.GOLD, 1);
+                put(Resource.SHIELD,3);
+                put(Resource.ROCK,2);
+            }});
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        try {
+            board.gainResources(resGained,toKeep,multiPlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
+
+        TreeMap<Resource,Integer> toFlush=new TreeMap<>(){{
+            put(Resource.GOLD,5);
+        }};
+
+        board.flushGainedResources(toFlush,multiPlayer);
+    }
+
+    @Test
+    public void enoughResourcesToPay() {
+        buildBoard();
+        //building a treemap to pay
+        TreeMap<WarehouseType,TreeMap<Resource,Integer>> toPay=new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(){{
+                put(Resource.GOLD, 1);
+            }});
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        assertTrue(board.enoughResourcesToPay(toPay));
+
+        toPay=new TreeMap<>(){{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(){{
+                put(Resource.GOLD, 4);
+            }});
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        assertTrue(board.enoughResourcesToPay(toPay));
+
+        toPay=new TreeMap<>(){{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(){{
+                put(Resource.GOLD, 4);
+            }});
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+
+        assertTrue(board.enoughResourcesToPay(toPay));
+
+        toPay=new TreeMap<>(){{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(){{
+                put(Resource.GOLD, 6);
+            }});
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+
+        assertFalse(board.enoughResourcesToPay(toPay));
+
+        toPay=new TreeMap<>(){{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(){{
+                put(Resource.GOLD, 3);
+            }});
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.SHIELD, 2);
+                put(Resource.GOLD,3);
+            }});
+            put(WarehouseType.LEADER, new TreeMap<>(){{
+                put(Resource.ROCK,1);
+            }});
+        }};
+
+        assertFalse(board.enoughResourcesToPay(toPay));
+
+        toPay=new TreeMap<>(){{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(){{
+                put(Resource.GOLD, 3);
+            }});
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.SHIELD, 2);
+                put(Resource.ROCK,3);
+            }});
+            put(WarehouseType.LEADER, new TreeMap<>(){{
+                put(Resource.ROCK,1);
+            }});
+        }};
+
+        assertFalse(board.enoughResourcesToPay(toPay));
+    }
+
+    @Test
+    public void payResourcesTest(){
+        buildBoard();
+
+        //first payment
+        TreeMap<WarehouseType,TreeMap<Resource,Integer>> toPay=new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(){{
+                put(Resource.GOLD, 1);
+            }});
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        board.payResources(toPay);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,3);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(), board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.GOLD,5);
+        }}, board.getResourcesInStrongBox());
+
+        //second payment
+        toPay=new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(){{
+                put(Resource.SHIELD,1);
+            }});
+            put(WarehouseType.STRONGBOX,new TreeMap<>(){{
+                put(Resource.GOLD,3);
+            }});
+        }};
+
+        board.payResources(toPay);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SHIELD,2);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(), board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.GOLD,2);
+        }}, board.getResourcesInStrongBox());
+
+        //third payment
+        toPay=new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(){{
+                put(Resource.ROCK,2);
+                put(Resource.SHIELD,2);
+            }});
+            put(WarehouseType.STRONGBOX,new TreeMap<>(){{
+            }});
+        }};
+
+        board.payResources(toPay);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(), board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.GOLD,2);
+        }}, board.getResourcesInStrongBox());
+
+        //fourth payment
+        toPay=new TreeMap<>(){{
+            put(WarehouseType.NORMAL, new TreeMap<>(){{
+            }});
+            put(WarehouseType.STRONGBOX,new TreeMap<>(){{
+                put(Resource.GOLD,2);
+            }});
+        }};
+
+        board.payResources(toPay);
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(), board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+        }}, board.getResourcesInStrongBox());
+
+    }
+
+    public void fillStrongBox(){
+        board.flushGainedResources(new TreeMap<Resource,Integer>(){{
+            put(Resource.GOLD,5);
+            put(Resource.SERVANT,5);
+            put(Resource.SHIELD,5);
+            put(Resource.ROCK,5);
+        }},multiPlayer);
+    }
+
     @Test
     public void buyDevelopCardTest(){
+        board=multiPlayer.getPlayers().get(0).getBoard();
+        fillStrongBox();
 
-    }*/
+        //buy a developcard and put in the first slot
+        DevelopCard devCard=multiPlayer.getDecksDevelop().get(Color.GOLD).get(1).topCard();//it is a develop card with 2 rocks and 2 shields required required to buy
+
+        board.buyDevelopCard(multiPlayer,Color.GOLD,1,0,new TreeMap<>(){{
+            put(WarehouseType.STRONGBOX,new TreeMap<Resource,Integer>(){{
+                put(Resource.ROCK,2);
+                put(Resource.SHIELD,2);
+            }});
+        }});
+
+        assertEquals(devCard,board.getDevelopCardSlots().get(0).getCards().get(0));
+        assertEquals(Color.GOLD, board.getDevelopCardSlots().get(0).getCards().get(0).getColor());
+        assertEquals(1, board.getDevelopCardSlots().get(0).getCards().get(0).getLevel());
+        assertEquals(3, multiPlayer.getDecksDevelop().get(Color.GOLD).get(1).howManyCards());
+
+        //buy another card of level 1 and put in the second slot
+        devCard=multiPlayer.getDecksDevelop().get(Color.BLUE).get(1).topCard();//it is a develop card with 2 giolds and 2 servants required required to buy
+
+        board.buyDevelopCard(multiPlayer,Color.BLUE,1,1,new TreeMap<>(){{
+            put(WarehouseType.STRONGBOX,new TreeMap<Resource,Integer>(){{
+                put(Resource.GOLD,2);
+                put(Resource.SERVANT,2);
+            }});
+        }});
+
+        assertEquals(devCard,board.getDevelopCardSlots().get(1).getCards().get(0));
+        assertEquals(Color.BLUE, board.getDevelopCardSlots().get(1).getCards().get(0).getColor());
+        assertEquals(1, board.getDevelopCardSlots().get(1).getCards().get(0).getLevel());
+        assertEquals(3, multiPlayer.getDecksDevelop().get(Color.BLUE).get(1).howManyCards());
+
+        //todo CONTINUE
+    }
 
     @Test
     public void getVictoryPointsTest(){
