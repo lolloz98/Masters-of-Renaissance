@@ -22,8 +22,8 @@ public class SinglePlayer extends Game<TurnSingle>{
         return lastTurn;
     }
 
-    private void setLastTurn(boolean lastTurn) {
-        this.lastTurn = lastTurn;
+    private void setLastTurn() {
+        this.lastTurn = true;
     }
 
     public boolean getHasPlayerWon() {
@@ -81,11 +81,11 @@ public class SinglePlayer extends Game<TurnSingle>{
     public void checkEndConditions(){
         if((player.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 6)
                 || player.getBoard().getFaithtrack().isEndReached()){
-            setLastTurn(true);
+            setLastTurn();
             setHasPlayerWon(true);
         }
         if(this.isADeckDevelopEmpty() || lorenzo.getFaithTrack().isEndReached()){
-            setLastTurn(true);
+            setLastTurn();
         }
     }
 

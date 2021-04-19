@@ -30,7 +30,7 @@ public class TurnSingle extends Turn{
     /**
      * Method that computes the next turn.
      *
-     * @param game
+     * @param game current game
      * @return null if the game is over, otherwise returns the next turn.
      * @throws MarketTrayNotEmptyException if there are resources not flushed in market tray.
      * @throws ProductionsResourcesNotFlushedException if there are resources not flushed in a production.

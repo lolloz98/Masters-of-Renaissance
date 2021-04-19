@@ -41,7 +41,7 @@ public abstract class Turn {
     public void setMarketActivated(boolean marketActivated) {
         if (mainActionOccurred || productionsActivated || (this.marketActivated && marketActivated)) throw new MainActionAlreadyOccurredException();
         else {
-            if (this.marketActivated && !marketActivated) {
+            if (this.marketActivated) { // Take if market has been activated and now it is being set to false
                 this.marketActivated = false;
                 setMainActionOccurred();
             }

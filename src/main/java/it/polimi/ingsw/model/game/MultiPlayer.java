@@ -27,8 +27,8 @@ public class MultiPlayer extends Game<TurnMulti> {
         return lastRound;
     }
 
-    private void setLastRound(boolean lastRound) {
-        this.lastRound = lastRound;
+    private void setLastRound() {
+        this.lastRound = true;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -43,7 +43,7 @@ public class MultiPlayer extends Game<TurnMulti> {
         for(Player p : players) {
             if (p.getBoard().getFaithtrack().isEndReached() ||
                     p.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 6)
-                setLastRound(true);
+                setLastRound();
         }
     }
 
@@ -104,14 +104,13 @@ public class MultiPlayer extends Game<TurnMulti> {
         else {
             int maxRes = 0;
             ArrayList<Player> winnersRes = new ArrayList<>();
-            for(int i=0; i<winners.size(); i++) {
-                if (winners.get(i).getBoard().howManyResources() == maxRes) {
-                    winnersRes.add(winners.get(i));
-                }
-                else if(winners.get(i).getBoard().howManyResources() > maxRes) {
+            for (Player winner : winners) {
+                if (winner.getBoard().howManyResources() == maxRes) {
+                    winnersRes.add(winner);
+                } else if (winner.getBoard().howManyResources() > maxRes) {
                     winnersRes.clear();
-                    winnersRes.add(winners.get(i));
-                    maxRes = winners.get(i).getBoard().howManyResources();
+                    winnersRes.add(winner);
+                    maxRes = winner.getBoard().howManyResources();
                 }
             }
             return winnersRes;
