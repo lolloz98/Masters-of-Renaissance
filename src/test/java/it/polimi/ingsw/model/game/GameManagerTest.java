@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model.game;
 
-import it.polimi.ingsw.model.exception.NoSuchGameException;
-import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.exception.GameAlreadyStartedException;
+import it.polimi.ingsw.model.exception.NoSuchReservedIdException;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -23,37 +21,33 @@ public class GameManagerTest {
     }
 
     @Test
-    public void testGetNewSinglePlayer() {
-        Player player = new Player("player", 1);
-        int id1 = gameManager.getNewSinglePlayer(player);
-        int id2 = gameManager.getNewSinglePlayer(player);
-        assertNotEquals(id1, id2);
-        assertNotNull(gameManager.getGameFromMap(id1).getTurn());
+    public void testNewSinglePlayer(){
+        int id = gameManager.reserveId(1, "test");
+        SinglePlayer singlePlayer = (SinglePlayer) gameManager.getGameFromMap(id);
+        // TODO check if player in singlePlayer is correct
     }
 
     @Test
-    public void testGetNewMultiPlayer(){
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(new Player("first", 1));
-        players.add(new Player("second", 2));
-        players.add(new Player("third", 3));
-        int id1 = gameManager.getNewMultiPlayer(players);
-        int id2 = gameManager.getNewMultiPlayer(players);
-        assertNotEquals(id1, id2);
-    }
-
-    @Test
-    public void testDestroyGame(){
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(new Player("first", 1));
-        players.add(new Player("second", 2));
-        players.add(new Player("third", 3));
-        int id = gameManager.getNewMultiPlayer(players);
-        try{
-            gameManager.removeGame(id);
-        } catch (NoSuchGameException e) {
+    public void testNewMultiPlayer(){
+        int id = gameManager.reserveId(3, "first");
+        try {
+            gameManager.addPlayerToGame(id, "second");
+            gameManager.addPlayerToGame(id, "third");
+            MultiPlayer multiPlayer = (MultiPlayer) gameManager.getGameFromMap(id);
+            // TODO check if players in multiPlayer are correct
+        } catch (GameAlreadyStartedException e) {
+            e.printStackTrace();
+        } catch (NoSuchReservedIdException e) {
             e.printStackTrace();
         }
-        assertNull(gameManager.getGameFromMap(id));
     }
+
+    @Test (expected = GameAlreadyStartedException.class)
+    public void testNewMultiPlayerTooManyPlayers() throws GameAlreadyStartedException, NoSuchReservedIdException {
+        int id = gameManager.reserveId(3, "first");
+        gameManager.addPlayerToGame(id, "second");
+        gameManager.addPlayerToGame(id, "third");
+        gameManager.addPlayerToGame(id, "fourth");
+    }
+
 }

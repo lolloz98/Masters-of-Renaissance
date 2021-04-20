@@ -1,8 +1,14 @@
 package it.polimi.ingsw.model.game;
 
+import it.polimi.ingsw.model.exception.GameAlreadyStartedException;
 import it.polimi.ingsw.model.exception.NoSuchGameException;
+import it.polimi.ingsw.model.exception.NoSuchReservedIdException;
+import it.polimi.ingsw.model.exception.PlayersOutOfBoundException;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.utility.PairId;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.TreeMap;
 
 /**
@@ -12,9 +18,11 @@ import java.util.TreeMap;
 public class GameManager {
     private static GameManager instance = null;
     private final TreeMap<Integer, Game<? extends Turn>> gameMap;
+    private final TreeMap<Integer, PairId<Integer, ArrayList<Player>>> reservedIds;
 
     private GameManager(){
         gameMap = new TreeMap<>();
+        reservedIds = new TreeMap<>();
     }
 
     /**
@@ -26,16 +34,13 @@ public class GameManager {
     }
 
     /**
-     * Adds the game to gameMap
-     *
-     * @return the id of the new game
+     * @return an id not used in reservedId or gameMap
      */
-    private synchronized int addGameToMap(Game<? extends Turn> game){
+    private synchronized int getNewId(){
         int i = 0;
-        while (gameMap.containsKey(i)) {
+        while (gameMap.containsKey(i) || reservedIds.containsKey(i)) {
             i++;
         }
-        gameMap.put(i, game);
         return i;
     }
 
@@ -49,25 +54,27 @@ public class GameManager {
     /**
      * Instantiates a new SinglePlayer and adds it to gameMap.
      *
-     * @return the new id
+     * @param id of the game to be created
+     * @param player the player of the game
      */
-    public int getNewSinglePlayer(Player player){ // maybe it should return singlePlayer
+    private synchronized void getNewSinglePlayer(int id, Player player){
         SinglePlayer singlePlayer = new SinglePlayer(player);
-        return addGameToMap(singlePlayer);
+        gameMap.put(id, singlePlayer);
     }
 
     /**
      * Instantiates a new MultiPlayer and adds it to gameMap.
      *
-     * @return the new id
+     * @param id of the game to be created
+     * @param players the ArrayList of players of the game
      */
-    public int getNewMultiPlayer(ArrayList<Player> players){ // maybe it should return multiPlayer
+    private synchronized void getNewMultiPlayer(int id, ArrayList<Player> players){
         MultiPlayer multiPlayer = new MultiPlayer(players);
-        return addGameToMap(multiPlayer);
+        gameMap.put(id, multiPlayer);
     }
 
     /**
-     * Destroys a Game and deletes it from gameMap.
+     * Removes a Game from gameMap.
      *
      * @param id of the game to destroy
      * @throws NoSuchGameException if there is no game with this id
@@ -85,5 +92,46 @@ public class GameManager {
      */
     private synchronized Game<? extends Turn> removeGameFromMap(int id){
         return gameMap.remove(id);
+    }
+
+    /**
+     * Reserves a new id for a game. If the game is single player it starts immediately, otherwise it waits for other players.
+     *
+     * @param playersNumber number of players for this game
+     * @param userName name of the first player of the game
+     * @return the id of the new game
+     * @throws PlayersOutOfBoundException if playersNumber has a wrong value
+     */
+    public synchronized int reserveId (int playersNumber, String userName) {
+        if (playersNumber < 1 || playersNumber > 4) throw new PlayersOutOfBoundException();
+        int id = getNewId();
+        Player player = new Player(userName, id*10);
+        if(playersNumber == 1) getNewSinglePlayer(id, player);
+        else {
+            reservedIds.put(id, new PairId<>(playersNumber, new ArrayList<>() {{
+                add(player);
+            }}));
+        }
+        return id;
+    }
+
+    /**
+     * Adds a player to a reservedId. If the list of players is full, the game begins.
+     *
+     * @param id of the game to add a player to
+     * @param userName name of the new player of the game
+     * @throws GameAlreadyStartedException if the id corresponds to a game already started
+     * @throws NoSuchReservedIdException if the id is not in the reservedIds list
+     */
+    public synchronized void addPlayerToGame(int id, String userName) throws GameAlreadyStartedException, NoSuchReservedIdException {
+        if(gameMap.containsKey(id)) throw new GameAlreadyStartedException();
+        if(!reservedIds.containsKey(id)) throw new NoSuchReservedIdException();
+        Player player = new Player(userName, id+reservedIds.get(id).getSecond().size());
+        reservedIds.get(id).getSecond().add(player);
+        if (reservedIds.get(id).getSecond().size() == reservedIds.get(id).getFirst()){
+            ArrayList<Player> players = reservedIds.get(id).getSecond();
+            Collections.shuffle(players);
+            getNewMultiPlayer(id, players);
+        }
     }
 }
