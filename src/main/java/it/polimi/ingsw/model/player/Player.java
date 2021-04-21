@@ -1,18 +1,13 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.model.cards.leader.LeaderCard;
-
-import java.util.ArrayList;
-
 public class Player {
-
-    private final String playerId;
-    private final int playerNumber;
+    private final String name;
+    private final int playerId;
     private final Board board;
 
-    public Player(String playerid, int playerNumber) {
-        this.playerId = playerid;
-        this.playerNumber = playerNumber;
+    public Player(String name, int playerId) {
+        this.name = name;
+        this.playerId = playerId;
         board = new Board();
     }
 
@@ -20,4 +15,11 @@ public class Player {
         return board;
     }
 
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
