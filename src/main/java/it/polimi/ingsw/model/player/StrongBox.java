@@ -47,6 +47,8 @@ public class StrongBox {
      * @throws IllegalArgumentException    if there is a negative Integer in resToSpend
      */
     public void spendResources(TreeMap<Resource, Integer> resToSpend) {
+        for (Resource r : resToSpend.keySet())
+            if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
         if (!hasResources(resToSpend)) throw new NotEnoughResourcesException();
         for (Resource r : resToSpend.keySet()) {
             resources.replace(r, resources.get(r) - resToSpend.get(r));
@@ -59,7 +61,7 @@ public class StrongBox {
      * @param resToSpend check if the strongBox has this amount of resources
      * @return true, if there are at least resToSpend resources in the strongBox, false otherwise
      */
-    public boolean hasResources(TreeMap<Resource, Integer> resToSpend) {
+    protected boolean hasResources(TreeMap<Resource, Integer> resToSpend) {
         for (Resource r : resToSpend.keySet()) {
             if (resToSpend.get(r) < 0) throw new IllegalArgumentException();
             if (!resources.containsKey(r) || resources.get(r) < resToSpend.get(r))

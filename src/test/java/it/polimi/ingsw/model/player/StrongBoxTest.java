@@ -56,7 +56,7 @@ public class StrongBoxTest {
         assertEquals(1,(int)sb.getResources().get(Resource.SHIELD));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void hasResourcesTest(){
         TreeMap<Resource,Integer> inStrongBox1=new TreeMap<>(){{
             put(Resource.GOLD,2);
@@ -100,14 +100,36 @@ public class StrongBoxTest {
             put(Resource.SHIELD,2);
         }};
         assertTrue(sb.hasResources(toSpend3));
+    }
 
+    @Test (expected = IllegalArgumentException.class)
+    public void hasResourcesTestIllegal(){
         TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
             put(Resource.GOLD,-2);
-            put(Resource.ROCK,5);
-            put(Resource.SERVANT,8);
-            put(Resource.SHIELD,2);
         }};
-        sb.hasResources(illegalToSpend);
+        assertFalse(sb.hasResources(illegalToSpend));
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testSpendResourcesIllegal(){
+        TreeMap<Resource,Integer> inStrongBox1=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,1);
+            put(Resource.SERVANT,1);
+        }};
+        sb.addResources(inStrongBox1);
+        TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
+            put(Resource.GOLD,-1);
+        }};
+        sb.spendResources(illegalToSpend);
+    }
+
+    @Test (expected = ResourceNotDiscountableException.class)
+    public void testSpendResourcesIllegal2(){
+        TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
+            put(Resource.FAITH,2);
+        }};
+        sb.spendResources(illegalToSpend);
     }
 
     @Test
