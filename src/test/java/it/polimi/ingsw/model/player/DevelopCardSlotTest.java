@@ -59,7 +59,7 @@ public class DevelopCardSlotTest {
         board.gainResourcesSmart(resInDepots, resInDepots, sp);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void addDevelopCardTest(){
         assertTrue(slot.isEmpty());
 
@@ -78,26 +78,31 @@ public class DevelopCardSlotTest {
         assertEquals(developCards.get(0), slot.getCards().get(0));
         assertEquals(developCards.get(2), slot.getCards().get(1));
         assertEquals(developCards.get(5), slot.getCards().get(2));
+    }
 
-        slot.addDevelopCard(developCards.get(4));//adding the fourth card on the slot, should throws exception
+    @Test(expected = IllegalArgumentException.class)
+    public void addDevelopCardTestException(){
+        slot.addDevelopCard(developCards.get(0));//adding a card of level 1
+        slot.addDevelopCard(developCards.get(2));//adding a card of level 2
+        slot.addDevelopCard(developCards.get(5));//adding a card of level 3
+        slot.addDevelopCard(developCards.get(4));//adding the fourth card on the slot, should throw exception
     }
 
     @Test(expected = InvalidDevelopCardToSlotException.class)
     public void addDevelopCardExceptionTest1(){
         slot.addDevelopCard(developCards.get(0));//adding a card of level 1
-
-        slot.addDevelopCard(developCards.get(1));//adding another card of level 1, should throws exception
+        slot.addDevelopCard(developCards.get(1));//adding another card of level 1, should throw exception
     }
 
     @Test(expected = InvalidDevelopCardToSlotException.class)
     public void addDevelopCardExceptionTest2(){
-        slot.addDevelopCard(developCards.get(5));//adding a card of level 3, should throws exception
+        slot.addDevelopCard(developCards.get(5));//adding a card of level 3, should throw exception
     }
 
     @Test(expected = InvalidDevelopCardToSlotException.class)
     public void addDevelopCardExceptionTest3(){
         slot.addDevelopCard(developCards.get(1));//adding a card of level 1
-        slot.addDevelopCard(developCards.get(4));//adding a card of level 3,should throws exception
+        slot.addDevelopCard(developCards.get(4));//adding a card of level 3,should throw exception
     }
 
     @Test(expected = InvalidProductionSlotChosenException.class)
