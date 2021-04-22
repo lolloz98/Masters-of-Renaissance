@@ -106,6 +106,8 @@ public class StrongBoxTest {
     public void hasResourcesTestIllegal(){
         TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
             put(Resource.GOLD,-2);
+            put(Resource.ROCK,1);
+            put(Resource.SERVANT,1);
         }};
         assertFalse(sb.hasResources(illegalToSpend));
     }
@@ -130,6 +132,28 @@ public class StrongBoxTest {
             put(Resource.FAITH,2);
         }};
         sb.spendResources(illegalToSpend);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testHasResourcesIllegal(){
+        TreeMap<Resource,Integer> inStrongBox1=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,1);
+            put(Resource.SERVANT,1);
+        }};
+        sb.addResources(inStrongBox1);
+        TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
+            put(Resource.GOLD,-1);
+        }};
+        sb.hasResources(illegalToSpend);
+    }
+
+    @Test (expected = ResourceNotDiscountableException.class)
+    public void testHasResourcesIllegal2(){
+        TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
+            put(Resource.FAITH,2);
+        }};
+        sb.hasResources(illegalToSpend);
     }
 
     @Test
