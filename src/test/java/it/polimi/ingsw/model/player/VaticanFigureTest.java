@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
-import junit.framework.TestCase;
+import it.polimi.ingsw.model.exception.FigureAlreadyActivatedException;
+import it.polimi.ingsw.model.exception.FigureAlreadyDiscardedException;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -11,14 +12,69 @@ public class VaticanFigureTest {
     public void testActivation() {
         VaticanFigure vf = new VaticanFigure(2);
         vf.activate();
-        assertEquals(Figurestate.ACTIVE, vf.getState());
+        assertEquals(FigureState.ACTIVE, vf.getState());
     }
 
     @Test
     public void testDiscarding() {
         VaticanFigure vf = new VaticanFigure(4);
         vf.discard();
-        assertEquals(Figurestate.DISCARDED, vf.getState());
+        assertEquals(FigureState.DISCARDED, vf.getState());
     }
 
+    @Test
+    public void testSetState1() {
+        VaticanFigure vf = new VaticanFigure(2);
+        vf.setState(FigureState.ACTIVE);
+        assertEquals(FigureState.ACTIVE, vf.getState());
+    }
+
+    @Test
+    public void testSetState2() {
+        VaticanFigure vf = new VaticanFigure(2);
+        vf.setState(FigureState.DISCARDED);
+        assertEquals(FigureState.DISCARDED, vf.getState());
+    }
+
+    @Test (expected = FigureAlreadyActivatedException.class)
+    public void testActivationAlreadyActivated() {
+        VaticanFigure vf = new VaticanFigure(2);
+        vf.activate();
+        vf.activate();
+    }
+
+    @Test (expected = FigureAlreadyDiscardedException.class)
+    public void testDiscardAlreadyDiscarded() {
+        VaticanFigure vf = new VaticanFigure(2);
+        vf.discard();
+        vf.discard();
+    }
+
+    @Test (expected = FigureAlreadyActivatedException.class)
+    public void testDiscardAlreadyActivated() {
+        VaticanFigure vf = new VaticanFigure(2);
+        vf.activate();
+        vf.discard();
+    }
+
+    @Test (expected = FigureAlreadyDiscardedException.class)
+    public void testActivationAlreadyDiscarded() {
+        VaticanFigure vf = new VaticanFigure(2);
+        vf.discard();
+        vf.activate();
+    }
+
+    @Test (expected = FigureAlreadyDiscardedException.class)
+    public void testSetStateAlreadyDiscarded() {
+        VaticanFigure vf = new VaticanFigure(2);
+        vf.discard();
+        vf.setState(FigureState.ACTIVE);
+    }
+
+    @Test (expected = FigureAlreadyActivatedException.class)
+    public void testSetStateAlreadyActivated() {
+        VaticanFigure vf = new VaticanFigure(2);
+        vf.activate();
+        vf.setState(FigureState.ACTIVE);
+    }
 }

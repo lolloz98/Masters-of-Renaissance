@@ -10,12 +10,12 @@ import it.polimi.ingsw.model.game.SinglePlayer;
 import java.util.ArrayList;
 
 /**
- * class that models the faithpath of each player(including Leonardo)
+ * class that models the faith path of each player (including Lorenzo)
  */
+
 public class FaithTrack implements VictoryPointCalculator {
     private final VaticanFigure[] figures;
     private int position;
-
 
     public FaithTrack() {
         this.position = 0;
@@ -29,8 +29,16 @@ public class FaithTrack implements VictoryPointCalculator {
         return position;
     }
 
+    /**
+     * @return a deep copy of VaticanFigure[]
+     */
     public VaticanFigure[] getFigures() {
-        return figures;
+        VaticanFigure[] vaticanFigureCopy = new VaticanFigure[3];
+        for(int i=0; i<3; i++) {
+            vaticanFigureCopy[i] = new VaticanFigure(figures[i].getLevel());
+            vaticanFigureCopy[i].setState(figures[i].getState());
+        }
+        return vaticanFigureCopy;
     }
 
     @Override
@@ -63,6 +71,10 @@ public class FaithTrack implements VictoryPointCalculator {
 
     /**
      * method that moves the player through the path and handle the vaticanfigures activation
+     *
+     * @param steps number of steps to move the player on the track
+     * @throws EndAlreadyReachedException if the end is already reached
+     * @throws InvalidStepsException if the steps are negative, or zero
      */
     public void move(int steps, Game<?> game) {
         if (isEndReached()) throw new EndAlreadyReachedException();
@@ -112,6 +124,9 @@ public class FaithTrack implements VictoryPointCalculator {
 
     /**
      * method that advance the piece of n-steps
+     *
+     * @param n number of steps forward
+     * @throws InvalidStepsException if n is negative
      */
     private void advance(int n) {
         if (n <= 0) throw new InvalidStepsException();

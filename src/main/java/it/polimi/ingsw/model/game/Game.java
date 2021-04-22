@@ -33,7 +33,7 @@ public abstract class Game <T extends Turn> {
             loadDeckLeader();
         }
         catch (FileNotFoundException e){
-            // TODO
+            e.printStackTrace();
         }
         this.marketTray = new MarketTray(new MarbleDispenserCollection());
         this.gameOver = false;
