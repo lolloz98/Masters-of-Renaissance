@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.game.Resource;
 import java.util.TreeMap;
 
 /**
- * class that models a shelf of the warehouse, leaders shelfs's included
+ * class that models a shelf of the warehouse, leaders shelves included
  */
 
 public class Depot {
@@ -27,6 +27,17 @@ public class Depot {
         resource = Resource.NOTHING;
         stored = 0;
         this.modifiable = modifiable;
+    }
+
+    /**
+     * normal depot constructor, always modifiable
+     */
+    public Depot(int maxToStore) {
+        if(maxToStore<=0) throw new IllegalArgumentException();
+        this.maxToStore = maxToStore;
+        resource = Resource.NOTHING;
+        stored = 0;
+        this.modifiable = true;
     }
 
     /**
@@ -81,20 +92,6 @@ public class Depot {
         return r.equals(resource);
     }
 
-    //unuseful
-    /**
-     * modifies the type of resource that the depot contains
-     *
-     * @param type new type of resources that the depot can contain
-     * @throws DepotResourceModificationException if the Depot is not modifiable, or it is not empty
-
-    public void modifyTypeOfResource(Resource type) {
-        if (!isResModifiable()) throw new DepotResourceModificationException();
-        if (!isEmpty()) throw new DepotResourceModificationException();
-        resource = type;
-    }
-    */
-
     /**
      * method that add n resources to the depot
      */
@@ -138,12 +135,11 @@ public class Depot {
         return result;
     }
 
-
     public boolean isEmpty() {
         return stored == 0;
     }
 
     public boolean enoughResources(int n) {
-        return stored - n >= 0;
+        return stored >= n ;
     }
 }
