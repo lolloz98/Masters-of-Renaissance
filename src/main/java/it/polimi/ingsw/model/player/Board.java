@@ -68,26 +68,31 @@ public class Board implements VictoryPointCalculator {
     /**
      * method that handle the apply of the production chosen
      *
-     * @param resToGive and resToGain are given by the player with the hypothesis that (@requires) they don't contain "ANYTHING" type resources
+     * @param resToGive and resToGain are given by the player
      * @param whichprod if zero it refers to the normalProduction, if 1,2 or 3 it refers to which productionSlot,
      *                  if 4 or 5 it refers to the leaderCardProductionSlot.
+     * @throws ProductionAlreadyActivatedException if the production has already been activated in this turn
+     * @throws InvalidResourcesByPlayerException   if toPay or resourcesToGain contain invalid type of Resources
+     * @throws NotEnoughResourcesException         if there are not enough resources topay on the board
      */
-    public void activateProduction(int whichprod, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
+    public void activateProduction(int whichprod, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Game<?> game) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
         if (whichprod < 0 || whichprod > developCardSlots.size() + productionLeaderSlots.size())
             throw new InvalidProductionSlotChosenException();
-        if (Utility.getTotalResources(resToGive).containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
-        if (resToGain.containsKey(Resource.ANYTHING)) throw new InvalidSelectionByPlayer();
-        if (enoughResourcesToPay(resToGive)) {
-            if (whichprod == 0) {
-                normalProduction.applyProduction(resToGive, resToGain, this);
-            }
-            if (whichprod > 0 && whichprod <= 3)
-                developCardSlots.get(whichprod - 1).applyProduction(resToGive, resToGain, this);
-            if (whichprod >= 4) { //branch taken if the production chosen is a LeaderProduction
-                if (!theLeaderProductionIsActivated(whichprod - 4)) throw new InvalidProductionSlotChosenException();
-                productionLeaderSlots.get(whichprod - 4).getProduction().applyProduction(resToGive, resToGain, this);
-            }
+
+        if (whichprod == 0) {
+            normalProduction.applyProduction(resToGive, resToGain, this);
+            normalProduction.flushGainedToBoard(this,game);
         }
+        if (whichprod > 0 && whichprod <= 3){
+            developCardSlots.get(whichprod - 1).applyProduction(resToGive, resToGain, this);
+            developCardSlots.get(whichprod-1).lastCard().getProduction().flushGainedToBoard(this,game);
+        }
+        if (whichprod >= 4) { //branch taken if the production chosen is a LeaderProduction
+            if (!theLeaderProductionIsActivated(whichprod - 4)) throw new InvalidProductionSlotChosenException();
+            productionLeaderSlots.get(whichprod - 4).getProduction().applyProduction(resToGive, resToGain, this);
+            productionLeaderSlots.get(whichprod-4).getProduction().flushGainedToBoard(this,game);
+        }
+
     }
 
     /**
@@ -519,7 +524,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that put the resources gained by the market in the depots.
+     * method that put the resources gained by the market in the depots and if there is a discard of resources make the other players move on the faithpath
      *
      * @param resGained resources gained by the market
      * @param toKeep    resources to keep chosen by the player, the argument contains also the information about where to store the resources

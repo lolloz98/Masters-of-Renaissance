@@ -3,10 +3,13 @@ package it.polimi.ingsw.model.player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import com.sun.source.tree.Tree;
+import com.sun.source.tree.TreeVisitor;
 import it.polimi.ingsw.model.cards.Color;
 import it.polimi.ingsw.model.cards.DevelopCard;
 import it.polimi.ingsw.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.model.cards.leader.LeaderCard;
+import it.polimi.ingsw.model.cards.leader.ProductionLeaderCard;
 import it.polimi.ingsw.model.cards.leader.Requirement;
 import it.polimi.ingsw.model.exception.*;
 import it.polimi.ingsw.model.game.MultiPlayer;
@@ -25,6 +28,7 @@ import static org.junit.Assert.*;
 public class BoardTest {
     private ArrayList<DevelopCard> developCards;
     private ArrayList<LeaderCard<? extends Requirement>> depotLeaderCards;
+    private ArrayList<LeaderCard<? extends Requirement>> productionLeaderCards;
     private MultiPlayer multiPlayer;
     private SinglePlayer singlePlayer;
     private Board board;
@@ -47,8 +51,10 @@ public class BoardTest {
         Gson gson = builder.create();
         developCards = new ArrayList<>();
         depotLeaderCards = new ArrayList<>();
+        productionLeaderCards= new ArrayList<>();
         String path;
 
+        //adding 2 depot leader slots
         path = String.format("src/main/resources/json_file/cards/leader/%03d.json", 53); //resource type: ROCK
         depotLeaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DepotLeaderCard.class));
         path = String.format("src/main/resources/json_file/cards/leader/%03d.json", 55);//resource type: SHIELD
@@ -60,9 +66,57 @@ public class BoardTest {
         assertEquals(Resource.ROCK, board.getDepotLeaders().get(0).getDepot().getTypeOfResource());
         assertEquals(Resource.SHIELD, board.getDepotLeaders().get(1).getDepot().getTypeOfResource());
 
+        //adding 2 production leader slots
+        path = String.format("src/main/resources/json_file/cards/leader/%03d.json", 62); //"resourcesToGive:"SERVANT": 1; "resourcesToGain": "FAITH": 1,,"ANYTHING": 1
+        productionLeaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), ProductionLeaderCard.class));
+        path = String.format("src/main/resources/json_file/cards/leader/%03d.json", 63);//"resourcesToGive": "ROCK": 1; "resourcesToGain": "FAITH": 1,"ANYTHING": 1
+        productionLeaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), ProductionLeaderCard.class));
+
+        board.discoverProductionLeader((ProductionLeaderCard) productionLeaderCards.get(0));
+        board.discoverProductionLeader((ProductionLeaderCard) productionLeaderCards.get(1));
+        assertEquals(2, board.getProductionLeaders().size());
     }
 
-    public void buildBoard() {
+    public void buildBoard2(){
+
+        fillStrongBox1();
+        //adding the depot leader cards and activating it
+        board.addLeaderCards(new ArrayList<>() {{
+            add(depotLeaderCards.get(0));
+            add(depotLeaderCards.get(1));
+        }});
+
+        board.getLeaderCards().get(0).activate(multiPlayer, multiPlayer.getPlayers().get(0));
+        board.getLeaderCards().get(1).activate(multiPlayer, multiPlayer.getPlayers().get(0));
+
+        //preparing the board
+        TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.ROCK, 4);
+            put(Resource.SHIELD, 2);
+            put(Resource.SERVANT,3);
+        }};
+
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SERVANT, 3);
+                put(Resource.ROCK, 2);
+            }});
+            put(WarehouseType.LEADER, new TreeMap<>() {{
+                put(Resource.ROCK, 2);
+                put(Resource.SHIELD,2);
+            }});
+        }};
+
+        try {
+            board.gainResources(resGained, toKeep, multiPlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
+    }
+
+    public void buildBoard1() {
         //preparing the board
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
             put(Resource.GOLD, 1);
@@ -87,16 +141,12 @@ public class BoardTest {
             fail();
         }
 
-        TreeMap<Resource, Integer> toFlush = new TreeMap<>() {{
-            put(Resource.GOLD, 5);
-        }};
-
-        board.flushGainedResources(toFlush, multiPlayer);
+        fillStrongBox2();
     }
 
     @Test
     public void enoughResourcesToPay() {
-        buildBoard();
+        buildBoard1();
         //building a treemap to pay
         TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay = new TreeMap<>() {{
             put(WarehouseType.NORMAL, new TreeMap<>() {{
@@ -175,7 +225,7 @@ public class BoardTest {
 
     @Test
     public void payResourcesTest() {
-        buildBoard();
+        buildBoard1();
 
         //first payment
         TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay = new TreeMap<>() {{
@@ -265,7 +315,7 @@ public class BoardTest {
 
     }
 
-    public void fillStrongBox() {
+    public void fillStrongBox1() {
         board.flushGainedResources(new TreeMap<Resource, Integer>() {{
             put(Resource.GOLD, 20);
             put(Resource.SERVANT, 20);
@@ -274,10 +324,18 @@ public class BoardTest {
         }}, multiPlayer);
     }
 
+    public void fillStrongBox2(){
+        TreeMap<Resource, Integer> toFlush = new TreeMap<>() {{
+            put(Resource.GOLD, 5);
+        }};
+
+        board.flushGainedResources(toFlush, multiPlayer);
+    }
+
     @Test
     public void buyDevelopCardTest() {
         board = multiPlayer.getPlayers().get(0).getBoard();
-        fillStrongBox();
+        fillStrongBox1();
 
         //buy a developcard and put in the first slot
         DevelopCard devCard = multiPlayer.getDecksDevelop().get(Color.GOLD).get(1).topCard();//it is a develop card of level 1 with 2 rocks and 2 shields required required to buy
@@ -327,7 +385,7 @@ public class BoardTest {
 
     @Test(expected = InvalidDevelopCardToSlotException.class)
     public void buyDevelopCardExceptionTest1() {
-        fillStrongBox();
+        fillStrongBox1();
         //buying a develop card which i cannot obtain
         //buy a card of level 2 and put it in the second slot
         DevelopCard devCard = multiPlayer.getDecksDevelop().get(Color.PURPLE).get(2).topCard();//it is a develop card of level 2 with 3 shields and 3 servants required required to buy
@@ -342,7 +400,7 @@ public class BoardTest {
 
     @Test(expected = FullDevelopSlotException.class)
     public void buyDevelopCardExceptionTest2() {
-        fillStrongBox();
+        fillStrongBox1();
         //adding 4 develop card on the same depot
         //buy another card of level 1 and put in the second slot
         DevelopCard devCard = multiPlayer.getDecksDevelop().get(Color.BLUE).get(1).topCard();//it is a develop card of level 1 with 2 golds and 2 servants required required to buy
@@ -417,6 +475,18 @@ public class BoardTest {
         }};
         board.storeInDepotLeader(toAdd);
 
+        buyDevelopCards();
+        //should have 63 resources-->12 victory points
+
+        board.moveOnFaithPath(3, multiPlayer);
+        int pointsFaithTrack = board.getFaithtrack().getVictoryPoints();//should be 1
+        int pointsLeader = 3 + 3;//3 victory points for each leadercard that has the board
+        int pointsDevelop = 4 + 8 + 12 + 4;//two cards of level 1, one of level 2 and one of level 3
+
+        assertEquals(12 + pointsFaithTrack + pointsLeader + pointsDevelop, board.getVictoryPoints());
+    }
+
+    public void buyDevelopCards(){
         //buy a card of level 1 and put in the second slot
         DevelopCard devCard = multiPlayer.getDecksDevelop().get(Color.BLUE).get(1).topCard();//it is a develop card of level 1 with 2 golds and 2 servants required required to buy,
         // it gives 4 victory points
@@ -442,6 +512,8 @@ public class BoardTest {
         //buy a card of level 3 and put it in the second slot
         devCard = multiPlayer.getDecksDevelop().get(Color.PURPLE).get(3).topCard();//it is a develop card of level 2 with 4 shields and 4 servants required required to buy,
         //it gives 12 victory points
+        //resources to give: 1 gold
+        //resources to gain: 1 servant, 3 rocks
 
         board.buyDevelopCard(multiPlayer, Color.PURPLE, 3, 1, new TreeMap<>() {{
             put(WarehouseType.STRONGBOX, new TreeMap<Resource, Integer>() {{
@@ -453,6 +525,8 @@ public class BoardTest {
         //buy a card of level 1 and put in the third slot
         devCard = multiPlayer.getDecksDevelop().get(Color.GREEN).get(1).topCard();//it is a develop card of level 2 with 2 shields and 2 golds required required to buy,
         //it gives 4 victory points
+        //resources to give: 1 servant, 1 rock
+        //resources to gain: 2 gold, 1 faith
 
         board.buyDevelopCard(multiPlayer, Color.GREEN, 1, 2, new TreeMap<>() {{
             put(WarehouseType.STRONGBOX, new TreeMap<Resource, Integer>() {{
@@ -460,14 +534,6 @@ public class BoardTest {
                 put(Resource.GOLD, 2);
             }});
         }});
-        //should have 63 resources-->12 victory points
-
-        board.moveOnFaithPath(3, multiPlayer);
-        int pointsFaithTrack = board.getFaithtrack().getVictoryPoints();//should be 1
-        int pointsLeader = 3 + 3;//3 victory points for each leadercard that has the board
-        int pointsDevelop = 4 + 8 + 12 + 4;//two cards of level 1, one of level 2 and one of level 3
-
-        assertEquals(12 + pointsFaithTrack + pointsLeader + pointsDevelop, board.getVictoryPoints());
     }
 
     @Test
@@ -1052,24 +1118,120 @@ public class BoardTest {
         assertEquals(new TreeMap<Resource, Integer>(), board.getResourcesInStrongBox());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void gainResourcesExceptionTest1() {
-        //TODO:risorsa invalida in tokeep
+        //invalid resource in tokeep
+        //preparing the board
+        TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.ROCK, 3);
+            put(Resource.SHIELD, 3);
+        }};
+
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.NOTHING,1);//invalid resource
+                put(Resource.SHIELD, 3);
+                put(Resource.ROCK, 2);
+            }});
+            put(WarehouseType.LEADER, new TreeMap<>() {{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        try {
+            board.gainResources(resGained, toKeep, multiPlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void gainResourcesExceptionTest2() {
-        //TODO:risorsa invalida in togain
+        //invalid resource in resGained
+        //preparing the board
+        TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.ROCK, 3);
+            put(Resource.NOTHING,1);//invalid resource
+            put(Resource.SHIELD, 3);
+        }};
+
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SHIELD, 3);
+                put(Resource.ROCK, 2);
+            }});
+            put(WarehouseType.LEADER, new TreeMap<>() {{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        try {
+            board.gainResources(resGained, toKeep, multiPlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void gainResourcesExceptionTest3() {
-        //TODO:tokeep greater that togain
+        //tokeep greater than togain
+        //preparing the board
+        TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.ROCK, 3);
+            put(Resource.SHIELD, 3);
+        }};
+
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SHIELD, 6);
+                put(Resource.ROCK, 2);
+            }});
+            put(WarehouseType.LEADER, new TreeMap<>() {{
+                put(Resource.ROCK, 1);
+            }});
+        }};
+
+        try {
+            board.gainResources(resGained, toKeep, multiPlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void gainResourcesExceptionTest4() {
-        //TODO:strongbox in tokeep
+        //strongbox in tokeep
+        //preparing the board
+        TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.ROCK, 3);
+            put(Resource.SHIELD, 3);
+        }};
+
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.SHIELD, 3);
+                put(Resource.ROCK, 2);
+            }});
+            put(WarehouseType.LEADER, new TreeMap<>() {{
+                put(Resource.ROCK, 1);
+            }});
+            put(WarehouseType.STRONGBOX,new TreeMap<>(){{//illegal
+                put(Resource.GOLD,1);
+            }});
+        }};
+
+        try {
+            board.gainResources(resGained, toKeep, multiPlayer);
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            fail();
+        }
     }
 
     @Test
@@ -1242,4 +1404,167 @@ public class BoardTest {
         //TODO
     }
 
+    @Test
+    public void activateProductionTest1() {
+        board=multiPlayer.getPlayers().get(0).getBoard();
+
+        createEnvironment();
+
+        //activating the normal production
+        TreeMap<WarehouseType,TreeMap<Resource,Integer>> resToGive= new TreeMap<>(){{
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.SHIELD,2);
+            }});
+        }};
+
+        TreeMap<Resource,Integer> resToGain= new TreeMap<>(){{
+            put(Resource.GOLD, 1);
+        }};
+
+        try {
+            board.activateProduction(0,resToGive,resToGain,multiPlayer);
+        } catch (InvalidResourcesByPlayerException e) {
+            e.printStackTrace();
+            fail();
+        } catch (InvalidProductionSlotChosenException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SERVANT,3);
+            put(Resource.GOLD,1);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK,2);
+        }}, board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.GOLD,17);
+            put(Resource.SHIELD,11);
+            put(Resource.SERVANT,11);
+            put(Resource.ROCK,20);
+        }},board.getResourcesInStrongBox());
+
+        //activating the second production slot
+        //i should have a card with the following production: {resources to give: 1 gold ;resources to gain: 1 servant, 3 rocks}
+        resToGive= new TreeMap<>(){{
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.GOLD,1);
+            }});
+        }};
+
+        resToGain= new TreeMap<>(){{
+            put(Resource.SERVANT, 1);
+            put(Resource.ROCK,3);
+        }};
+
+        try {
+            board.activateProduction(2,resToGive,resToGain,multiPlayer);
+        } catch (InvalidResourcesByPlayerException e) {
+            e.printStackTrace();
+            fail();
+        } catch (InvalidProductionSlotChosenException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK,2);
+            put(Resource.SERVANT,3);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK,2);
+        }}, board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.GOLD,17);
+            put(Resource.SHIELD,11);
+            put(Resource.SERVANT,12);
+            put(Resource.ROCK,23);
+        }},board.getResourcesInStrongBox());
+
+        //activating the second leader production slot
+        //activating the leader
+        board.addLeaderCards(new ArrayList<>() {{
+            add(productionLeaderCards.get(0));
+            add(productionLeaderCards.get(1));
+        }});
+        /*
+        adding a leader a card with the following production: "resourcesToGive": "ROCK": 1; "resourcesToGain": "FAITH": 1,"ANYTHING": 1
+        it requires a purple develop card of level 2 to be activated, the demand is met
+        */
+        board.getLeaderCards().get(3).activate(multiPlayer, multiPlayer.getPlayers().get(0));
+
+        resToGive= new TreeMap<>(){{
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.ROCK,1);
+            }});
+        }};
+
+        resToGain= new TreeMap<>(){{
+            put(Resource.SERVANT, 1);
+            put(Resource.FAITH,1);
+        }};
+
+        try {
+            board.activateProduction(4,resToGive,resToGain,multiPlayer);
+        } catch (InvalidResourcesByPlayerException e) {
+            e.printStackTrace();
+            fail();
+        } catch (InvalidProductionSlotChosenException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.SERVANT,3);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>(){{
+            put(Resource.ROCK,2);
+        }}, board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource,Integer>(){{
+            put(Resource.GOLD,17);
+            put(Resource.SHIELD,11);
+            put(Resource.SERVANT,13);
+            put(Resource.ROCK,23);
+        }},board.getResourcesInStrongBox());
+
+        assertEquals(1, board.getFaithtrack().getPosition());
+    }
+
+    public void createEnvironment(){
+        buildBoard2();
+        buyDevelopCards();
+    }
+
+    @Test(expected = InvalidResourcesByPlayerException.class)
+    public void activateProductionTestException1() throws InvalidResourcesByPlayerException {
+        board=multiPlayer.getPlayers().get(0).getBoard();
+        createEnvironment();
+
+        //activating the base production with faith in resToGain
+        TreeMap<WarehouseType,TreeMap<Resource,Integer>> resToGive= new TreeMap<>(){{
+            put(WarehouseType.LEADER,new TreeMap<>(){{
+                put(Resource.ROCK,2);
+            }});
+        }};
+
+        TreeMap<Resource,Integer> resToGain= new TreeMap<>(){{
+            put(Resource.FAITH, 1);
+        }};
+
+        try {
+            board.activateProduction(0,resToGive,resToGain,multiPlayer);
+        }catch (InvalidProductionSlotChosenException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
 }

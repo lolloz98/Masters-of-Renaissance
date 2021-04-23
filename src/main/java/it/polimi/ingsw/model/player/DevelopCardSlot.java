@@ -20,6 +20,8 @@ public class DevelopCardSlot {
         this.cards = new ArrayList<>();
     }
 
+    public DevelopCard lastCard(){return cards.get(cards.size()-1);}
+
     public ArrayList<DevelopCard> getCards() {
         return new ArrayList<>(cards);
     }
