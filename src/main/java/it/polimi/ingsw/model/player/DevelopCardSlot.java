@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.cards.DevelopCard;
+import it.polimi.ingsw.model.exception.FullDevelopSlotException;
 import it.polimi.ingsw.model.exception.InvalidDevelopCardToSlotException;
 import it.polimi.ingsw.model.exception.InvalidProductionSlotChosenException;
 import it.polimi.ingsw.model.exception.InvalidResourcesByPlayerException;
@@ -28,6 +29,7 @@ public class DevelopCardSlot {
      *
      * @param card card to be added
      * @throws InvalidDevelopCardToSlotException if the level of the card to be added is not right
+     * @throws FullDevelopSlotException          if the slot has reached the maximum capacity
      */
     public void addDevelopCard(DevelopCard card) {
         int howmanycards = cards.size();
@@ -47,8 +49,11 @@ public class DevelopCardSlot {
                 cards.add(card);
                 break;
             }
+            case 3: {
+                throw new FullDevelopSlotException();
+            }
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalStateException();
         }
     }
 
