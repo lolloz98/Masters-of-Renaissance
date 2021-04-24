@@ -105,15 +105,15 @@ public class Board implements VictoryPointCalculator {
     public boolean enoughResToActivate(TreeMap<Resource, Integer> resToGive) {
         TreeMap<Resource, Integer> diffMap = new TreeMap<>(resToGive);
         TreeMap<Resource, Integer> tmpDiffMap = new TreeMap<>();
-        enoughResInNormalDepots(diffMap, tmpDiffMap);
+        enoughResInNormalDepots(diffMap, tmpDiffMap);//can throws exception
 
         diffMap.clear();
         diffMap.putAll(tmpDiffMap);
-        enoughResInLeaderDepots(diffMap, tmpDiffMap);
+        enoughResInLeaderDepots(diffMap, tmpDiffMap);//can throws exception
 
         diffMap.clear();
         diffMap.putAll(tmpDiffMap);
-        enoughResInStrongBox(diffMap, tmpDiffMap);
+        enoughResInStrongBox(diffMap, tmpDiffMap);//can throws exception
 
         diffMap.clear();
         diffMap.putAll(tmpDiffMap);
@@ -481,7 +481,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that put the resources gained by the market in the depots. It does it in a smart way: before it fills the leader depots, then the normal depots.
+     * method that puts the resources gained by the market in the depots in a smart way: before it fills the leader depots, then the normal depots.
      *
      * @param resGained res gained by the market
      * @param toKeep    choice made by the player of the resources to store in the depots
@@ -493,14 +493,21 @@ public class Board implements VictoryPointCalculator {
      */
     public void gainResourcesSmart(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException {
 
+        //check illegal resources in toKeep
         for (Resource r : toKeep.keySet()) {
             if (!Resource.isDiscountable(r) && r != Resource.FAITH)
                 throw new IllegalArgumentException();
         }
 
+        //check illegal resources in resGained and check if to keep is greater than resGained
         for (Resource r : resGained.keySet()) {
             if ((resGained.getOrDefault(r, 0) < toKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
                 throw new IllegalArgumentException();
+        }
+
+        //check if in toKeep there is a different type of resource than in to gain
+        for(Resource r: toKeep.keySet()){
+            if(!resGained.containsKey(r)) throw new IllegalArgumentException();
         }
 
         if (cannotAppend(toKeep)) throw new InvalidResourcesToKeepByPlayerException();
@@ -547,6 +554,11 @@ public class Board implements VictoryPointCalculator {
         for (Resource r : resGained.keySet()) {
             if ((resGained.getOrDefault(r, 0) < entireToKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
                 throw new IllegalArgumentException();
+        }
+
+        //check if in toKeep there is a different type of resource than in to gain
+        for(Resource r: entireToKeep.keySet()){
+            if(!resGained.containsKey(r)) throw new IllegalArgumentException();
         }
 
         //before control if i can append resources to depots
@@ -670,10 +682,10 @@ public class Board implements VictoryPointCalculator {
      */
     private boolean cannotAppend(TreeMap<Resource, Integer> toKeep) {
         TreeMap<Resource, Integer> tmp = new TreeMap<>();
-        cannotAppendToNormalDepots(toKeep, tmp);
+        cannotAppendToLeaderDepots(toKeep, tmp);
 
         TreeMap<Resource, Integer> tmp2 = new TreeMap<>();
-        cannotAppendToLeaderDepots(tmp, tmp2);
+        cannotAppendToNormalDepots(tmp, tmp2);
         return !tmp2.isEmpty();
     }
 
@@ -784,7 +796,8 @@ public class Board implements VictoryPointCalculator {
      */
     private void storeInDepotLeaderNoChecks(TreeMap<Resource, Integer> toGain) {
         toGain.remove(Resource.FAITH);
-        for (Resource r : toGain.keySet()) {
+        TreeSet<Resource> resInToGain= new TreeSet<>(toGain.keySet());
+        for (Resource r : resInToGain) {
             for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();
                 if (!d.isFull() && d.getTypeOfResource() == r) {
@@ -792,6 +805,8 @@ public class Board implements VictoryPointCalculator {
                         d.addResource(r, 1);
                         toGain.replace(r, toGain.get(r) - 1);
                     }
+                    if(toGain.get(r)==0)
+                        toGain.remove(r);
                 }
             }
         }
