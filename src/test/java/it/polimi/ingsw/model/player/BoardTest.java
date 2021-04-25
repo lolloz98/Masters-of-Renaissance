@@ -388,6 +388,42 @@ public class BoardTest {
         assertEquals(3, multiPlayer.getDecksDevelop().get(Color.PURPLE).get(2).howManyCards());
     }
 
+    @Test
+    public void buyDevelopCardSmartTest(){
+        board = multiPlayer.getPlayers().get(0).getBoard();
+        fillStrongBox1();
+
+        //buy a developcard and put in the first slot
+        DevelopCard devCard = multiPlayer.getDecksDevelop().get(Color.GOLD).get(1).topCard();//it is a develop card of level 1 with 2 rocks and 2 shields required required to buy
+
+        board.buyDevelopCardSmart(multiPlayer, Color.GOLD, 1, 0);
+
+        assertEquals(devCard, board.getDevelopCardSlots().get(0).getCards().get(0));
+        assertEquals(Color.GOLD, board.getDevelopCardSlots().get(0).getCards().get(0).getColor());
+        assertEquals(1, board.getDevelopCardSlots().get(0).getCards().get(0).getLevel());
+        assertEquals(3, multiPlayer.getDecksDevelop().get(Color.GOLD).get(1).howManyCards());
+
+        //buy another card of level 1 and put in the second slot
+        devCard = multiPlayer.getDecksDevelop().get(Color.BLUE).get(1).topCard();//it is a develop card of level 1 with 2 golds and 2 servants required required to buy
+
+        board.buyDevelopCardSmart(multiPlayer, Color.BLUE, 1, 1);
+
+        assertEquals(devCard, board.getDevelopCardSlots().get(1).getCards().get(0));
+        assertEquals(Color.BLUE, board.getDevelopCardSlots().get(1).getCards().get(0).getColor());
+        assertEquals(1, board.getDevelopCardSlots().get(1).getCards().get(0).getLevel());
+        assertEquals(3, multiPlayer.getDecksDevelop().get(Color.BLUE).get(1).howManyCards());
+
+        //buy a card of level 2 and put it in the second slot
+        devCard = multiPlayer.getDecksDevelop().get(Color.PURPLE).get(2).topCard();//it is a develop card of level 2 with 3 shields and 3 servants required required to buy
+
+        board.buyDevelopCardSmart(multiPlayer, Color.PURPLE, 2, 1);
+
+        assertEquals(devCard, board.getDevelopCardSlots().get(1).getCards().get(1));
+        assertEquals(Color.PURPLE, board.getDevelopCardSlots().get(1).getCards().get(1).getColor());
+        assertEquals(2, board.getDevelopCardSlots().get(1).getCards().get(1).getLevel());
+        assertEquals(3, multiPlayer.getDecksDevelop().get(Color.PURPLE).get(2).howManyCards());
+    }
+
     @Test(expected = InvalidDevelopCardToSlotException.class)
     public void buyDevelopCardExceptionTest1() {
         fillStrongBox1();
@@ -1723,7 +1759,7 @@ public class BoardTest {
         }
     }
 
-    public void prepareBardForEnoughResToActivateTest() {
+    public void prepareBardForTest() {
         //preparing the board
         board = multiPlayer.getPlayers().get(0).getBoard();
 
@@ -1765,7 +1801,7 @@ public class BoardTest {
     @Test(expected = ResourceNotDiscountableException.class)
     public void enoughResToActivateExceptionTest1() {
         //giving an illegal Resource
-        prepareBardForEnoughResToActivateTest();
+        prepareBardForTest();
 
         TreeMap<Resource, Integer> resToGive = new TreeMap<>() {{
             put(Resource.FAITH, 2);
@@ -1776,7 +1812,7 @@ public class BoardTest {
 
     @Test
     public void enoughResToActivateTest1() {
-        prepareBardForEnoughResToActivateTest();
+        prepareBardForTest();
 
         //start to test
         TreeMap<Resource, Integer> resToGive = new TreeMap<>() {{
@@ -1825,5 +1861,122 @@ public class BoardTest {
             put(Resource.SERVANT, 4);
         }};
         assertFalse(board.enoughResToActivate(resToGive));
+    }
+
+    @Test
+    public void removeResourcesSmartTest(){
+        prepareBardForTest();
+
+        TreeMap<Resource,Integer> resToGive=new TreeMap<>(){{
+            put(Resource.GOLD,1);
+            put(Resource.SHIELD,2);
+        }};
+
+        board.removeResourcesSmart(resToGive);
+
+        assertEquals(new TreeMap<>() {{
+            put(Resource.ROCK, 1);
+            put(Resource.GOLD,1);
+            put(Resource.SERVANT, 3);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>() {{
+            put(Resource.ROCK, 2);
+        }}, board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource, Integer>() {{
+            put(Resource.GOLD, 5);
+            put(Resource.SERVANT, 5);
+        }}, board.getResourcesInStrongBox());
+
+
+        resToGive=new TreeMap<>(){{
+            put(Resource.ROCK,2);
+        }};
+
+        board.removeResourcesSmart(resToGive);
+
+        assertEquals(new TreeMap<>() {{
+            put(Resource.GOLD,1);
+            put(Resource.SERVANT, 3);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>() {{
+            put(Resource.ROCK, 1);
+        }}, board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource, Integer>() {{
+            put(Resource.GOLD, 5);
+            put(Resource.SERVANT, 5);
+        }}, board.getResourcesInStrongBox());
+
+
+        resToGive=new TreeMap<>(){{
+            put(Resource.ROCK,1);
+            put(Resource.SERVANT,2);
+        }};
+
+        board.removeResourcesSmart(resToGive);
+
+        assertEquals(new TreeMap<>() {{
+            put(Resource.GOLD,1);
+            put(Resource.SERVANT, 1);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>() , board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource, Integer>() {{
+            put(Resource.GOLD, 5);
+            put(Resource.SERVANT, 5);
+        }}, board.getResourcesInStrongBox());
+
+
+        resToGive=new TreeMap<>(){{
+            put(Resource.SERVANT,2);
+        }};
+
+        board.removeResourcesSmart(resToGive);
+
+        assertEquals(new TreeMap<>() {{
+            put(Resource.GOLD,1);
+        }}, board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>() , board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource, Integer>() {{
+            put(Resource.GOLD, 5);
+            put(Resource.SERVANT, 4);
+        }}, board.getResourcesInStrongBox());
+
+        resToGive=new TreeMap<>(){{
+            put(Resource.SERVANT,2);
+            put(Resource.GOLD,2);
+        }};
+
+        board.removeResourcesSmart(resToGive);
+
+        assertEquals(new TreeMap<>(), board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>() , board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource, Integer>() {{
+            put(Resource.GOLD, 4);
+            put(Resource.SERVANT, 2);
+        }}, board.getResourcesInStrongBox());
+
+        resToGive=new TreeMap<>(){{
+            put(Resource.SERVANT,2);
+            put(Resource.GOLD,2);
+        }};
+
+        board.removeResourcesSmart(resToGive);
+
+        assertEquals(new TreeMap<>(), board.getResInNormalDepots());
+
+        assertEquals(new TreeMap<>() , board.getResInLeaderDepots());
+
+        assertEquals(new TreeMap<Resource, Integer>() {{
+            put(Resource.GOLD, 2);
+        }}, board.getResourcesInStrongBox());
     }
 }
