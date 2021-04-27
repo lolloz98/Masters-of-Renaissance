@@ -78,21 +78,19 @@ public class Board implements VictoryPointCalculator {
     public void activateProduction(int whichprod, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Game<?> game) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
         if (whichprod < 0 || whichprod > developCardSlots.size() + productionLeaderSlots.size())
             throw new InvalidProductionSlotChosenException();
-
         if (whichprod == 0) {
             normalProduction.applyProduction(resToGive, resToGain, this);
             normalProduction.flushGainedToBoard(this,game);
         }
         if (whichprod > 0 && whichprod <= 3){
-            developCardSlots.get(whichprod - 1).applyProduction(resToGive, resToGain, this);
+            developCardSlots.get(whichprod-1).applyProduction(resToGive, resToGain, this);
             developCardSlots.get(whichprod-1).lastCard().getProduction().flushGainedToBoard(this,game);
         }
         if (whichprod >= 4) { //branch taken if the production chosen is a LeaderProduction
             if (!theLeaderProductionIsActivated(whichprod - 4)) throw new InvalidProductionSlotChosenException();
-            productionLeaderSlots.get(whichprod - 4).getProduction().applyProduction(resToGive, resToGain, this);
+            productionLeaderSlots.get(whichprod-4).getProduction().applyProduction(resToGive, resToGain, this);
             productionLeaderSlots.get(whichprod-4).getProduction().flushGainedToBoard(this,game);
         }
-
     }
 
     /**
@@ -105,11 +103,11 @@ public class Board implements VictoryPointCalculator {
     public boolean enoughResToActivate(TreeMap<Resource, Integer> resToGive) {
         TreeMap<Resource, Integer> diffMap = new TreeMap<>(resToGive);
         TreeMap<Resource, Integer> tmpDiffMap = new TreeMap<>();
-        enoughResInNormalDepots(diffMap, tmpDiffMap);//can throws exception
+        enoughResInNormalDepots(diffMap, tmpDiffMap);//can throw exception
 
         diffMap.clear();
         diffMap.putAll(tmpDiffMap);
-        enoughResInLeaderDepots(diffMap, tmpDiffMap);//can throws exception
+        enoughResInLeaderDepots(diffMap, tmpDiffMap);//can throw exception
 
         diffMap.clear();
         diffMap.putAll(tmpDiffMap);

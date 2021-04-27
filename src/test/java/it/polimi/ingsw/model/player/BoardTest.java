@@ -1759,7 +1759,7 @@ public class BoardTest {
         }
     }
 
-    public void prepareBardForTest() {
+    public void prepareBoardForTest() {
         //preparing the board
         board = multiPlayer.getPlayers().get(0).getBoard();
 
@@ -1801,7 +1801,7 @@ public class BoardTest {
     @Test(expected = ResourceNotDiscountableException.class)
     public void enoughResToActivateExceptionTest1() {
         //giving an illegal Resource
-        prepareBardForTest();
+        prepareBoardForTest();
 
         TreeMap<Resource, Integer> resToGive = new TreeMap<>() {{
             put(Resource.FAITH, 2);
@@ -1812,7 +1812,7 @@ public class BoardTest {
 
     @Test
     public void enoughResToActivateTest1() {
-        prepareBardForTest();
+        prepareBoardForTest();
 
         //start to test
         TreeMap<Resource, Integer> resToGive = new TreeMap<>() {{
@@ -1865,7 +1865,7 @@ public class BoardTest {
 
     @Test
     public void removeResourcesSmartTest(){
-        prepareBardForTest();
+        prepareBoardForTest();
 
         TreeMap<Resource,Integer> resToGive=new TreeMap<>(){{
             put(Resource.GOLD,1);
