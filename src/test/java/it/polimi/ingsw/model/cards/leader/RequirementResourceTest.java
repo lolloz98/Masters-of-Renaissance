@@ -61,7 +61,27 @@ public class RequirementResourceTest {
         }}, game);
 
         assertTrue(requirement.checkRequirement(player));
+    }
 
-        // TODO: test also after put resources into the player's depots
+    @Test
+    public void testCheckRequirement2(){
+        player.getBoard().storeInNormalDepot(new TreeMap<>(){{
+            put(Resource.GOLD, 1);
+            put(Resource.ROCK, 3);
+        }});
+
+        assertFalse(requirement.checkRequirement(player));
+
+        player.getBoard().flushGainedResources(new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+        }}, game);
+
+        assertFalse(requirement.checkRequirement(player));
+
+        player.getBoard().flushGainedResources(new TreeMap<>(){{
+            put(Resource.ROCK, 1);
+        }}, game);
+
+        assertTrue(requirement.checkRequirement(player));
     }
 }
