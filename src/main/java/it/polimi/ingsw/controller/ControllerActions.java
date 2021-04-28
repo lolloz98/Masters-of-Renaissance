@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.game.Game;
 
-public class ControllerActions<T extends Game<?>> {
+public abstract class ControllerActions<T extends Game<?>> {
     private final T game;
     private final ControllerException exceptionHandler;
 
