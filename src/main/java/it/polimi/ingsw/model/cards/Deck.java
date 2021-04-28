@@ -59,7 +59,7 @@ public class Deck<T extends Card> {
     }
 
     /**
-     * Return and remove from the to of the deck the number of specified cards.
+     * Return and remove from the top of the deck the number of specified cards.
      *
      * @param number cards to be retrieved and removed from the deck
      * @return ArrayList of cards from the deck
