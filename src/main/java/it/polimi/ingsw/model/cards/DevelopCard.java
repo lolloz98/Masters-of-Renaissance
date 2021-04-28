@@ -47,7 +47,10 @@ public class DevelopCard implements Card, VictoryPointCalculator {
         if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
         if (cost.containsKey(r)) {
             if (discountApplied.containsKey(r)) throw new AlreadyAppliedDiscountForResException();
-            cost.replace(r, cost.get(r) - quantity);
+            if(cost.get(r)-quantity>=0)
+                cost.replace(r, cost.get(r) - quantity);
+            else
+                cost.replace(r, 0);
             discountApplied.put(r, quantity);
         }
     }

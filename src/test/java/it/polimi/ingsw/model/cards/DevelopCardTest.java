@@ -45,8 +45,19 @@ public class DevelopCardTest {
 
 
     @Test
-    public void testApplyDiscount() {
+    public void testApplyDiscount1() {
         applyDiscount();
+    }
+
+    @Test
+    public void testApplyDiscount2(){
+        developCard.applyDiscount(Resource.ROCK, 2);
+        assertTrue(developCard.isDiscounted());
+        assertEquals(0, (int) developCard.getCurrentCost().get(Resource.ROCK));
+
+        developCard.applyDiscount(Resource.GOLD, 1);
+        assertTrue(developCard.isDiscounted());
+        assertEquals((cost.get(Resource.GOLD) - 1), (int) developCard.getCurrentCost().get(Resource.GOLD));
     }
 
     @Test
