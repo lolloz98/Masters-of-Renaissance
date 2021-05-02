@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.model.exception.GameAlreadyStartedException;
 import it.polimi.ingsw.server.model.exception.NoSuchGameException;
 import it.polimi.ingsw.server.model.exception.NoSuchReservedIdException;
@@ -124,9 +125,11 @@ public class ControllerManager {
      * @param id of the game to destroy
      * @throws NoSuchGameException if there is no game with this id
      */
-    public void removeGame(int id) throws NoSuchGameException {
-        Game<? extends Turn> game = removeGameFromMap(id);
-        if (game == null) throw new NoSuchGameException();
+    public void removeGame(int id) throws NoSuchGameException, NoSuchControllerException {
+        if (!gameMap.containsKey(id)) throw new NoSuchGameException();
+        if (!controllerMap.containsKey(id)) throw new NoSuchControllerException();
+        removeGameFromMap(id);
+        controllerMap.remove(id);
     }
 
     /**
