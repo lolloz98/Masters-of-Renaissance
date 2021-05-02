@@ -10,7 +10,7 @@ public class ControllerActions<T extends Game<?>> {
     protected  T game;
     private int gameId;
     private State gameState;
-    private static final ControllerManager CONTROLLER_MANAGER = ControllerManager.getInstance();
+    private static final ControllerManager controllerManager = ControllerManager.getInstance();
 
     /**
      * method called to create a single player controller
