@@ -2,11 +2,9 @@ package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
-import it.polimi.ingsw.model.cards.leader.LeaderCard;
-import it.polimi.ingsw.model.game.Resource;
-import it.polimi.ingsw.model.player.DevelopCardSlot;
+import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
+import it.polimi.ingsw.server.model.game.Resource;
 
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class LocalBoard extends LocalModelAbstract {

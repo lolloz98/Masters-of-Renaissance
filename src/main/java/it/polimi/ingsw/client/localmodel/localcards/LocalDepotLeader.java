@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
-import it.polimi.ingsw.model.cards.Color;
-import it.polimi.ingsw.model.game.Resource;
+import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.server.model.game.Resource;
 
 import java.util.TreeMap;
 

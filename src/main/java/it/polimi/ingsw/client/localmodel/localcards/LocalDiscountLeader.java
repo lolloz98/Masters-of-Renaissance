@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
-import it.polimi.ingsw.model.game.Resource;
+import it.polimi.ingsw.server.model.game.Resource;
 
 public class LocalDiscountLeader extends LocalLeaderCard{
     private Resource resRequirement;
