@@ -2,11 +2,13 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.game.Game;
 
+import java.util.TreeMap;
+
 /**
  * class that handle the actions on the player and calls the methods of the model
  * @param <T> the instance of the game, it can be single player or multi player
  */
-public class ControllerActions<T extends Game<?>> {
+public abstract class ControllerActions<T extends Game<?>> {
     protected  T game;
     private int gameId;
     private State gameState;
@@ -29,10 +31,15 @@ public class ControllerActions<T extends Game<?>> {
 
     /**
      * method that changes the state of the game: from waitingState to prepareGameState
+     * and prepares the game to be played
      */
-    public void prepareGame(){
+    public synchronized void prepareGame(){
         this.gameState=new PrepareGameState();
+        game.distributeLeader();
+        distributeBeginningRes();
     }
+
+    protected abstract void distributeBeginningRes();
 
 
 

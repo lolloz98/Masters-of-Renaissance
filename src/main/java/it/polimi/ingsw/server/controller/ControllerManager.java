@@ -102,7 +102,7 @@ public class ControllerManager {
      */
     private synchronized void getNewSinglePlayer(int id, Player player){
         SinglePlayer singlePlayer = new SinglePlayer(player);
-        controllerMap.put(id,new ControllerActions(singlePlayer,id));
+        controllerMap.put(id,new ControllerActionsSingle(singlePlayer,id));
         gameMap.put(id, singlePlayer);
     }
 
@@ -114,7 +114,7 @@ public class ControllerManager {
      */
     private synchronized void getNewMultiPlayer(int id, ArrayList<Player> players){
         MultiPlayer multiPlayer = new MultiPlayer(players);
-        controllerMap.put(id,new ControllerActions(multiPlayer,id));
+        controllerMap.put(id,new ControllerActionsMulti(multiPlayer,id));
         gameMap.put(id, multiPlayer);
         reservedIds.remove(id);
     }
