@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.client.UI;
-import it.polimi.ingsw.model.game.Marble;
 import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.utility.CollectionsHelper;
 
@@ -9,25 +8,25 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class LocalMarket extends LocalModelAbstract {
-    private Marble[][] marbleMatrix;
+    private Resource[][] marbleMatrix;
     private UI ui;
-    private Marble freeMarble;
+    private Resource freeMarble;
     private ArrayList<TreeMap<Resource, Integer>> resCombinations;
 
-    public synchronized Marble[][] getMarbleMatrix() {
+    public synchronized Resource[][] getMarbleMatrix() {
         return marbleMatrix;
     }
 
-    public void setMarbleMatrix(Marble[][] marbleMatrix) {
+    public void setMarbleMatrix(Resource[][] marbleMatrix) {
         this.marbleMatrix = marbleMatrix;
         ui.notifyAction(this);
     }
 
-    public synchronized Marble getFreeMarble() {
+    public synchronized Resource getFreeMarble() {
         return freeMarble;
     }
 
-    public synchronized void setFreeMarble(Marble freeMarble) {
+    public synchronized void setFreeMarble(Resource freeMarble) {
         this.freeMarble = freeMarble;
     }
 
@@ -42,22 +41,22 @@ public class LocalMarket extends LocalModelAbstract {
 
     public LocalMarket(UI ui){
         // todo substitute with real constructor
-        this.marbleMatrix = new Marble[3][4];
-        ArrayList<Marble> marbles = new ArrayList<>();
+        this.marbleMatrix = new Resource[3][4];
+        ArrayList<Resource> resources = new ArrayList<>();
         int i, j;
-        for (i = 0; i < 4; i++) marbles.add(new Marble(Resource.NOTHING));
-        for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.SHIELD));
-        for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.ROCK));
-        for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.SERVANT));
-        for (i = 0; i < 2; i++) marbles.add(new Marble(Resource.GOLD));
-        marbles.add(new Marble(Resource.FAITH));
-        CollectionsHelper.shuffle(marbles);
+        for (i = 0; i < 4; i++) resources.add(Resource.NOTHING);
+        for (i = 0; i < 2; i++) resources.add(Resource.SHIELD);
+        for (i = 0; i < 2; i++) resources.add(Resource.ROCK);
+        for (i = 0; i < 2; i++) resources.add(Resource.SERVANT);
+        for (i = 0; i < 2; i++) resources.add(Resource.GOLD);
+        resources.add(Resource.FAITH);
+        CollectionsHelper.shuffle(resources);
         for (j = 0; j < 3; j++) {
             for (i = 0; i < 4; i++) {
-                marbleMatrix[j][i] = marbles.get(i + j * 4);
+                marbleMatrix[j][i] = resources.get(i + j * 4);
             }
         }
-        freeMarble = marbles.get(12);
+        freeMarble = resources.get(12);
         this.ui = ui;
     }
 }

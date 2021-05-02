@@ -6,6 +6,18 @@ import java.util.ArrayList;
 
 public class LocalGame extends LocalModelAbstract{
     private int currentPlayerId;
+    private boolean multiPlayer;
+    private ArrayList<String> playerNames;
+    private UI ui;
+    private int numberOfPlayers;
+
+    public synchronized int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public synchronized void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
 
     public synchronized int getCurrentPlayerId() {
         return currentPlayerId;
@@ -31,10 +43,6 @@ public class LocalGame extends LocalModelAbstract{
     public synchronized void setPlayerNames(ArrayList<String> playerNames) {
         this.playerNames = playerNames;
     }
-
-    private boolean multiPlayer;
-    private ArrayList<String> playerNames;
-    private UI ui;
 
     public LocalGame(UI ui){
         this.ui = ui;

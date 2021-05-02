@@ -18,6 +18,7 @@ public class CLI extends UI implements Runnable {
     private LocalMarket localMarket;
     private LocalGame localGame;
     private LocalDevelopmentGrid localDevelopmentGrid;
+    private View state;
 
     public View getState() {
         return state;
@@ -26,8 +27,6 @@ public class CLI extends UI implements Runnable {
     public void setState(View state) {
         this.state = state;
     }
-
-    private View state;
 
     public static void main(String[] args) {
         CLI cli = new CLI();
@@ -40,7 +39,7 @@ public class CLI extends UI implements Runnable {
         // todo: delete this, is just to simulate someone modifying the market
         new Thread(() -> {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(7000);
                 localBoards.get(0).setFaithTrackScore(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -48,11 +47,11 @@ public class CLI extends UI implements Runnable {
         }).start();
         new Thread(() -> {
             try {
-                Thread.sleep(6000);
+                Thread.sleep(10000);
                 localGame.setCurrentPlayerId(1);
-                Thread.sleep(6000);
+                Thread.sleep(10000);
                 localGame.setCurrentPlayerId(2);
-                Thread.sleep(6000);
+                Thread.sleep(10000);
                 localGame.setCurrentPlayerId(3);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -64,17 +63,32 @@ public class CLI extends UI implements Runnable {
         }
     }
 
-    public void setup(){
+    private void setup(){
+        try {
+            Process proc = Runtime.getRuntime().exec("printf '\\e[8;40;120t'");
+            proc.waitFor();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        /* for windows cmd
+        try {
+            new ProcessBuilder("cmd", "/c", "mode con:cols=120 lines=40").inheritIO().start().waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
         localGame = new LocalGame(this);
         localMarket = new LocalMarket(this);
         localDevelopmentGrid = new LocalDevelopmentGrid(this);
         localBoards = new ArrayList<>();
         this.localBoards.add(new LocalBoard(this));
         state = new BoardView(localBoards.get(0), localGame);
-        state.draw();
     }
 
     public static void clearScreen() {
+        /* for windows cmd
         try {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         } catch (InterruptedException e) {
@@ -82,10 +96,12 @@ public class CLI extends UI implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
+    @Override
     public void notifyAction(LocalModelAbstract localModelAbstract){
         state.notifyAction(localModelAbstract);
     }
@@ -97,14 +113,31 @@ public class CLI extends UI implements Runnable {
                 break;
             case "market":
                 state = new MarketView(localMarket, localGame);
-                state.draw();
                 break;
             case "develop":
                 state = new DevelopmentGridView(localDevelopmentGrid, localGame);
-                state.draw();
+                break;
+            case "board 0":
+                state = new BoardView(localBoards.get(0), localGame);
+                break;
+            case "board 1":
+                state = new BoardView(localBoards.get(1), localGame);
+                break;
+            case "board 2":
+                if(localGame.getNumberOfPlayers() < 3){
+                    System.out.println("there is no player 2");
+                }
+                else state = new BoardView(localBoards.get(2), localGame);
+                break;
+            case "board 3":
+                if(localGame.getNumberOfPlayers() < 3) {
+                    System.out.println("there is no player 3");
+                }
+                else state = new BoardView(localBoards.get(3), localGame);
                 break;
             default:
-                System.out.println("not valid");
+                // case for state-specific commands
+                state.handleCommand(line);
         }
     }
 }

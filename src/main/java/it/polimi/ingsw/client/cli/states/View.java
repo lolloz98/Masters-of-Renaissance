@@ -8,6 +8,7 @@ public abstract class View {
 
     public abstract void draw();
     public abstract void notifyAction(LocalModelAbstract localModelAbstract);
+    public abstract void handleCommand(String line);
 
     public void drawTurn(){
         System.out.println("Current player: " + localGame.getPlayerNames().get(localGame.getCurrentPlayerId()));

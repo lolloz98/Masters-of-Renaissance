@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.model.game.Resource;
 import it.polimi.ingsw.model.player.DevelopCardSlot;
@@ -9,22 +10,15 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class LocalBoard extends LocalModelAbstract {
-    private ArrayList<DevelopCardSlot> developCardSlots;
+    private LocalDevelopCard[] topDevelopCards;
+    private int[] developCardsNumber;
     private int faithTrackScore;
     private int playerId;
     private String playerName;
     private TreeMap<Resource, Integer> resInStrongBox;
     private TreeMap<Resource, Integer> resInNormalDeposit;
-    private ArrayList<LeaderCard> leaderCards;
+    private LeaderCard[] leaderCards;
     private UI ui;
-
-    public synchronized ArrayList<DevelopCardSlot> getDevelopCardSlots() {
-        return developCardSlots;
-    }
-
-    public synchronized void setDevelopCardSlots(ArrayList<DevelopCardSlot> developCardSlots) {
-        this.developCardSlots = developCardSlots;
-    }
 
     public synchronized TreeMap<Resource, Integer> getResInStrongBox() {
         return resInStrongBox;
@@ -40,14 +34,16 @@ public class LocalBoard extends LocalModelAbstract {
 
     public synchronized void setResInNormalDeposit(TreeMap<Resource, Integer> resInNormalDeposit) {
         this.resInNormalDeposit = resInNormalDeposit;
+        ui.notifyAction(this);
     }
 
-    public synchronized ArrayList<LeaderCard> getLeaderCards() {
+    public synchronized LeaderCard[] getLeaderCards() {
         return leaderCards;
     }
 
-    public synchronized void setLeaderCards(ArrayList<LeaderCard> leaderCards) {
+    public synchronized void setLeaderCards(LeaderCard[] leaderCards) {
         this.leaderCards = leaderCards;
+        ui.notifyAction(this);
     }
 
     public synchronized int getFaithTrackScore() {
@@ -73,10 +69,14 @@ public class LocalBoard extends LocalModelAbstract {
 
     public synchronized void setPlayerName(String playerName) {
         this.playerName = playerName;
+        ui.notifyAction(this);
     }
 
     public LocalBoard(UI ui){
         this.ui = ui;
+        developCardsNumber = new int[3];
+        topDevelopCards = new LocalDevelopCard[3];
+        leaderCards = new LeaderCard[2];
         // todo: modify with real constructor
         playerName = "firstplayer";
         resInStrongBox = new TreeMap<>(){{

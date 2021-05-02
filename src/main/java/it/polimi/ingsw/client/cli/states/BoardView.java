@@ -11,6 +11,7 @@ public class BoardView extends View{
     public BoardView(LocalBoard localBoard, LocalGame localGame){
         this.localBoard = localBoard;
         this.localGame = localGame;
+        draw();
     }
 
     @Override
@@ -29,6 +30,15 @@ public class BoardView extends View{
     public void notifyAction(LocalModelAbstract localModelAbstract){
         if (localModelAbstract == this.localBoard || localModelAbstract instanceof LocalGame) {
             draw();
+        }
+    }
+
+    @Override
+    public void handleCommand(String line){
+        switch (line){
+            // todo handle activate production (only if loadBoard.getPlayerId() == playerId)
+            default:
+                System.out.println("not valid");
         }
     }
 }

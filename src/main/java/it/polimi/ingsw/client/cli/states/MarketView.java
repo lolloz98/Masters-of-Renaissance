@@ -11,6 +11,7 @@ public class MarketView extends View{
     public MarketView(LocalMarket localMarket, LocalGame localGame){
         this.localMarket = localMarket;
         this.localGame = localGame;
+        draw();
     }
 
     @Override
@@ -18,11 +19,11 @@ public class MarketView extends View{
         CLI.clearScreen();
         System.out.println("Market:");
         System.out.println("");
-        System.out.println("Free marble: "+ localMarket.getFreeMarble().getResource());
+        System.out.println("Free marble: "+ localMarket.getFreeMarble());
         System.out.println("");
         for(int i = 0; i<3; i++){
             for(int j = 0; j<4; j++){
-                System.out.print(localMarket.getMarbleMatrix()[i][j].getResource() + " ");
+                System.out.print(localMarket.getMarbleMatrix()[i][j] + " ");
             }
             System.out.print("\r\n");
         }
@@ -34,6 +35,15 @@ public class MarketView extends View{
     public void notifyAction(LocalModelAbstract localModelAbstract){
         if (localModelAbstract == this.localMarket || localModelAbstract instanceof LocalGame) {
             draw();
+        }
+    }
+
+    @Override
+    public void handleCommand(String line){
+        switch (line){
+            // todo handle push command
+            default:
+                System.out.println("not valid");
         }
     }
 }
