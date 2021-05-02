@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.requests;
 
-public class CreateGameMessage extends ClientMessage{
+public class CreateGameMessage {
     private int playersNumber;
     private String userName;
 

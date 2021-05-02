@@ -1,16 +1,16 @@
 package it.polimi.ingsw.server.requests;
 
-public class JoinGameMessage extends ClientMessage{
-    private int id;
+public class JoinGameMessage {
+    private int gameId;
     private String userName;
 
-    public JoinGameMessage(int id, String userName) {
-        this.id = id;
+    public JoinGameMessage(int gameId, String userName) {
+        this.gameId=gameId;
         this.userName = userName;
     }
 
     public int getId() {
-        return id;
+        return gameId;
     }
 
     public String getUserName() {

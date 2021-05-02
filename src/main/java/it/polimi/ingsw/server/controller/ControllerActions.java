@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.game.Game;
-import it.polimi.ingsw.server.model.game.GameManager;
 
 /**
  * class that handle the actions on the player and calls the methods of the model
@@ -11,30 +10,17 @@ public class ControllerActions<T extends Game<?>> {
     protected  T game;
     private int gameId;
     private State gameState;
-    private final GameManager gameManager;
+    private static final ControllerManager CONTROLLER_MANAGER = ControllerManager.getInstance();
 
     /**
      * method called to create a single player controller
      * @param game single player game
      * @param id gameId
      */
-    public ControllerActions(T game, int id, GameManager gameManager) {
+    public ControllerActions(T game, int id) {
         this.game = game;
         this.gameId=id;
-        this.gameManager=gameManager;
         gameState=new PrepareGameState();
-    }
-
-    /**
-     * method called to create a multi player controller
-     */
-    public ControllerActions(GameManager gameManager) {
-        this.gameManager=gameManager;
-        gameState=new WaitingState();
-    }
-
-    public GameManager getGameManager() {
-        return gameManager;
     }
 
     public synchronized T getGame() {
