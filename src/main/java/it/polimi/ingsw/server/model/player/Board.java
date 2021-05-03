@@ -65,30 +65,47 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that handle the apply of the production chosen
+     * method that handle the application of the production chosen
      *
      * @param resToGive and resToGain are given by the player
-     * @param whichprod if zero it refers to the normalProduction, if 1,2 or 3 it refers to which productionSlot,
+     * @param whichProd if zero it refers to the normalProduction, if 1,2 or 3 it refers to which productionSlot,
      *                  if 4 or 5 it refers to the leaderCardProductionSlot.
      * @throws ProductionAlreadyActivatedException if the production has already been activated in this turn
      * @throws InvalidResourcesByPlayerException   if toPay or resourcesToGain contain invalid type of Resources
      * @throws NotEnoughResourcesException         if there are not enough resources topay on the board
      */
-    public void activateProduction(int whichprod, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Game<?> game) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
-        if (whichprod < 0 || whichprod > developCardSlots.size() + productionLeaderSlots.size())
+    public void activateProduction(int whichProd, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Game<?> game) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
+        if (whichProd < 0)
             throw new InvalidProductionSlotChosenException();
-        if (whichprod == 0) {
+        if(whichProd > 0 && whichProd <= 3 && whichProd > developCardSlots.size())
+            throw new InvalidProductionSlotChosenException();
+        if(whichProd > 3 && whichProd - 3 > productionLeaderSlots.size())
+            throw new InvalidProductionSlotChosenException();
+
+        if (whichProd == 0) {
             normalProduction.applyProduction(resToGive, resToGain, this);
-            normalProduction.flushGainedToBoard(this,game);
         }
-        if (whichprod > 0 && whichprod <= 3){
-            developCardSlots.get(whichprod-1).applyProduction(resToGive, resToGain, this);
-            developCardSlots.get(whichprod-1).lastCard().getProduction().flushGainedToBoard(this,game);
+        if (whichProd > 0 && whichProd <= 3){
+            developCardSlots.get(whichProd-1).applyProduction(resToGive, resToGain, this);
         }
-        if (whichprod >= 4) { //branch taken if the production chosen is a LeaderProduction
-            if (!theLeaderProductionIsActivated(whichprod - 4)) throw new InvalidProductionSlotChosenException();
-            productionLeaderSlots.get(whichprod-4).getProduction().applyProduction(resToGive, resToGain, this);
-            productionLeaderSlots.get(whichprod-4).getProduction().flushGainedToBoard(this,game);
+        if (whichProd >= 4) { //branch taken if the production chosen is a LeaderProduction
+            if (!theLeaderProductionIsActivated(whichProd - 4)) throw new InvalidProductionSlotChosenException();
+            productionLeaderSlots.get(whichProd-4).getProduction().applyProduction(resToGive, resToGain, this);
+        }
+    }
+
+    /**
+     * flush resources from productions to the board
+     * @param game current game
+     */
+    public void flushResFromProductions(Game<?> game){
+        normalProduction.flushGainedToBoard(this,game);
+        for(DevelopCardSlot ds: developCardSlots){
+            if(!ds.isEmpty())
+                ds.lastCard().getProduction().flushGainedToBoard(this, game);
+        }
+        for(ProductionLeaderCard pl : productionLeaderSlots){
+            pl.getProduction().flushGainedToBoard(this, game);
         }
     }
 
@@ -450,6 +467,18 @@ public class Board implements VictoryPointCalculator {
      */
     public ArrayList<LeaderCard<? extends Requirement>> getLeaderCards() {
         return new ArrayList<>(leaderCards);
+    }
+
+    /**
+     * @param id id of the card I want to get
+     * @return leaderCard with the same id
+     * @throws IllegalArgumentException if there is no card with this id
+     */
+    public LeaderCard<? extends Requirement> getLeaderCard(int id) {
+        for(LeaderCard<?> i: leaderCards){
+            if(i.getId() == id) return i;
+        }
+        throw new IllegalArgumentException("Player has no card with such id: " + id);
     }
 
     /**

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.server.Server;
+import it.polimi.ingsw.server.requests.CreateGameMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,9 +43,9 @@ public class Client
             int number = 0;
             while (number != -1) {
                 number = Integer.parseInt(scanner.nextLine());
-                output.writeObject(number);
-
-                int answerMsg = (Integer)input.readObject();
+                // todo modify
+                output.writeObject(new CreateGameMessage(number, "Lollo"));
+                Answer answerMsg = (Answer)input.readObject();
                 System.out.println(answerMsg);
             }
         } catch (IOException e) {

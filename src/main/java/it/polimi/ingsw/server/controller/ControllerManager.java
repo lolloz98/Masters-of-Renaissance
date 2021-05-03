@@ -59,7 +59,7 @@ public class ControllerManager {
 
     public synchronized void joinGame(JoinGameMessage message) throws ControllerException {
         try {
-            addPlayerToGame(message.getId(), message.getUserName());
+            addPlayerToGame(message.getPlayerId(), message.getUserName());
         } catch (GameAlreadyStartedException e) {
             e.printStackTrace();
             throw new ControllerException();

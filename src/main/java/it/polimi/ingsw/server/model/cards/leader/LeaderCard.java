@@ -23,6 +23,17 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
         this.id = id;
     }
 
+    /**
+     * @param obj object to compare
+     * @return true if obj is a LeaderCard with the same id of this
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof LeaderCard<?>)
+            return ((LeaderCard<?>) obj).getId() == getId();
+        return false;
+    }
+
     @Override
     public int getId() {
         return id;

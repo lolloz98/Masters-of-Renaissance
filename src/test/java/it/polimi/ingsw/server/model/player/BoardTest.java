@@ -1632,6 +1632,8 @@ public class BoardTest {
             put(Resource.ROCK, 2);
         }}, board.getResInLeaderDepots());
 
+        board.flushResFromProductions(multiPlayer);
+
         assertEquals(new TreeMap<Resource, Integer>() {{
             put(Resource.GOLD, 17);
             put(Resource.SHIELD, 11);
@@ -1670,6 +1672,8 @@ public class BoardTest {
         assertEquals(new TreeMap<>() {{
             put(Resource.ROCK, 2);
         }}, board.getResInLeaderDepots());
+
+        board.flushResFromProductions(multiPlayer);
 
         assertEquals(new TreeMap<Resource, Integer>() {{
             put(Resource.GOLD, 17);
@@ -1719,6 +1723,8 @@ public class BoardTest {
         assertEquals(new TreeMap<>() {{
             put(Resource.ROCK, 2);
         }}, board.getResInLeaderDepots());
+
+        board.flushResFromProductions(multiPlayer);
 
         assertEquals(new TreeMap<Resource, Integer>() {{
             put(Resource.GOLD, 17);

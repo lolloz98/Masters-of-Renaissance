@@ -1,10 +1,17 @@
 package it.polimi.ingsw.server.requests;
 
-public class CreateGameMessage {
-    private int playersNumber;
-    private String userName;
+/**
+ * Request to create a game
+ */
+public class CreateGameMessage extends ClientMessage {
+    private static final long serialVersionUID = 101L;
+
+    private final int playersNumber;
+    private final String userName;
 
     public CreateGameMessage(int playersNumber, String userName) {
+        // gameId and playerId useless in this kind of request
+        super(-1, -1);
         this.playersNumber = playersNumber;
         this.userName = userName;
     }

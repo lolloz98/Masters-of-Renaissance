@@ -1,5 +1,9 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.messages.answers.Answer;
+import it.polimi.ingsw.messages.answers.CreateGameAnswer;
+import it.polimi.ingsw.server.requests.ClientMessage;
+import it.polimi.ingsw.server.requests.CreateGameMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,9 +28,10 @@ public class ClientHandler implements Runnable {
     {
         try {
             while (true) {
-                Object next = iStream.readObject();
+                ClientMessage next = (ClientMessage) iStream.readObject();
                 logger.debug("input from client: " + next);
-                oStream.writeObject(next);
+                // TODO modify this
+                oStream.writeObject(new CreateGameAnswer(10, 10));
             }
         } catch (ClassNotFoundException | ClassCastException e) {
             System.out.println("invalid stream from client");

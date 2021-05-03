@@ -1,20 +1,20 @@
 package it.polimi.ingsw.server.requests;
 
-public class JoinGameMessage {
-    private int gameId;
-    private String userName;
+/**
+ * Request to join a game
+ */
+public class JoinGameMessage extends ClientMessage {
+    private static final long serialVersionUID = 102L;
+
+    private final String userName;
 
     public JoinGameMessage(int gameId, String userName) {
-        this.gameId=gameId;
+        // playerId useless in this kind of request
+        super(gameId, -1);
         this.userName = userName;
-    }
-
-    public int getId() {
-        return gameId;
     }
 
     public String getUserName() {
         return userName;
     }
-
 }
