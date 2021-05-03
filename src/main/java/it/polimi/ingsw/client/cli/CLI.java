@@ -13,12 +13,28 @@ import java.util.Scanner;
 
 public class CLI extends UI implements Runnable {
     private ArrayList<LocalBoard> localBoards;
-    private boolean gameOver;
-    private Scanner input;
     private LocalMarket localMarket;
     private LocalGame localGame;
     private LocalDevelopmentGrid localDevelopmentGrid;
     private View state;
+    private boolean gameOver;
+    private Scanner input;
+
+    protected ArrayList<LocalBoard> getLocalBoards() {
+        return localBoards;
+    }
+
+    protected LocalMarket getLocalMarket() {
+        return localMarket;
+    }
+
+    protected LocalGame getLocalGame() {
+        return localGame;
+    }
+
+    protected LocalDevelopmentGrid getLocalDevelopmentGrid() {
+        return localDevelopmentGrid;
+    }
 
     public View getState() {
         return state;
@@ -36,6 +52,7 @@ public class CLI extends UI implements Runnable {
     @Override
     public void run(){
         setup();
+        state = new BoardView(localBoards.get(0), localGame); // fixme default state, to be removed
         // todo: delete this, is just to simulate someone modifying the market
         new Thread(() -> {
             try {
@@ -63,13 +80,7 @@ public class CLI extends UI implements Runnable {
         }
     }
 
-    private void setup(){
-        try {
-            Process proc = Runtime.getRuntime().exec("printf '\\e[8;40;120t'");
-            proc.waitFor();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    void setup(){
         /* for windows cmd
         try {
             new ProcessBuilder("cmd", "/c", "mode con:cols=120 lines=40").inheritIO().start().waitFor();
@@ -84,7 +95,6 @@ public class CLI extends UI implements Runnable {
         localDevelopmentGrid = new LocalDevelopmentGrid(this);
         localBoards = new ArrayList<>();
         this.localBoards.add(new LocalBoard(this));
-        state = new BoardView(localBoards.get(0), localGame);
     }
 
     public static void clearScreen() {
@@ -99,6 +109,7 @@ public class CLI extends UI implements Runnable {
         */
         System.out.print("\033[H\033[2J");
         System.out.flush();
+        System.out.print(CLIutils.BLACK_BACKGROUND + CLIutils.ANSI_WHITE);
     }
 
     @Override
@@ -106,7 +117,7 @@ public class CLI extends UI implements Runnable {
         state.notifyAction(localModelAbstract);
     }
 
-    private void handleCommand(String line){
+    void handleCommand(String line){
         switch(line) {
             case "end":
                 gameOver = true;
@@ -138,6 +149,12 @@ public class CLI extends UI implements Runnable {
             default:
                 // case for state-specific commands
                 state.handleCommand(line);
+        }
+    }
+
+    public static void print(ArrayList<String> out){
+        for(String o : out){
+            System.out.println(o);
         }
     }
 }

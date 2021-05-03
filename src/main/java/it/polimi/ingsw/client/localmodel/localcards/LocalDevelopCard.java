@@ -5,6 +5,21 @@ import it.polimi.ingsw.server.model.game.Resource;
 import java.util.TreeMap;
 
 public class LocalDevelopCard {
+    private TreeMap<Resource, Integer> cost;
+    private int level;
+    private Color color;
+    private TreeMap<Resource, Integer> resToGive;
+    private TreeMap<Resource, Integer> resToGain;
+    private int victoryPoints;
+
+    public int getVictoryPoints() {
+        return victoryPoints;
+    }
+
+    public void setVictoryPoints(int victoryPoints) {
+        this.victoryPoints = victoryPoints;
+    }
+
     public synchronized TreeMap<Resource, Integer> getCost() {
         return cost;
     }
@@ -45,17 +60,12 @@ public class LocalDevelopCard {
         this.resToGain = resToGain;
     }
 
-    private TreeMap<Resource, Integer> cost;
-    private int level;
-    private Color color;
-    private TreeMap<Resource, Integer> resToGive;
-    private TreeMap<Resource, Integer> resToGain;
-
-    public LocalDevelopCard(TreeMap<Resource, Integer> cost, int level, Color color, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) {
+    public LocalDevelopCard(TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) {
         this.cost = cost;
         this.level = level;
         this.color = color;
         this.resToGive = resToGive;
         this.resToGain = resToGain;
+        this.victoryPoints = victoryPoints;
     }
 }
