@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.game.MultiPlayer;
-import it.polimi.ingsw.server.requests.CreateGameMessage;
-import it.polimi.ingsw.server.requests.JoinGameMessage;
+import it.polimi.ingsw.messages.requests.CreateGameMessage;
+import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import org.junit.Before;
 import org.junit.Test;
 

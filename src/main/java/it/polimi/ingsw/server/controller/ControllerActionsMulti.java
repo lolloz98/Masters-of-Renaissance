@@ -1,11 +1,9 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.Resource;
-import it.polimi.ingsw.server.model.game.TurnMulti;
 import it.polimi.ingsw.server.model.player.Player;
-import it.polimi.ingsw.server.requests.BeginningResourceDistributionMessage;
+import it.polimi.ingsw.messages.requests.BeginningResourceDistributionMessage;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

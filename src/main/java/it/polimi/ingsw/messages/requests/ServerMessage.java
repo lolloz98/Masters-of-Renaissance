@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.requests;
+package it.polimi.ingsw.messages.requests;
 
 public abstract class ServerMessage {
     private int playerId;

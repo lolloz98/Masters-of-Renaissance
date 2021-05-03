@@ -1,9 +1,7 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
-import it.polimi.ingsw.server.requests.ClientMessage;
-import it.polimi.ingsw.server.requests.CreateGameMessage;
+import it.polimi.ingsw.messages.requests.ClientMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

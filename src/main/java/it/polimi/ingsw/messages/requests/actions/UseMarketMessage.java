@@ -1,6 +1,6 @@
-package it.polimi.ingsw.server.requests.actions;
+package it.polimi.ingsw.messages.requests.actions;
 
-import it.polimi.ingsw.server.requests.ClientMessage;
+import it.polimi.ingsw.messages.requests.ClientMessage;
 
 /**
  * Request to use the market (push the marbles on the market)

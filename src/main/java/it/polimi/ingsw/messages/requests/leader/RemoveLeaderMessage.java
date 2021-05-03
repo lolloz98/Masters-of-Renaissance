@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.requests.leader;
+package it.polimi.ingsw.messages.requests.leader;
 
 /**
  * Request to remove a leader card at the beginning of the game

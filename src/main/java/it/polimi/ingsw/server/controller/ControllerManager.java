@@ -8,8 +8,8 @@ import it.polimi.ingsw.server.model.exception.PlayersOutOfBoundException;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.PairId;
-import it.polimi.ingsw.server.requests.CreateGameMessage;
-import it.polimi.ingsw.server.requests.JoinGameMessage;
+import it.polimi.ingsw.messages.requests.CreateGameMessage;
+import it.polimi.ingsw.messages.requests.JoinGameMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;

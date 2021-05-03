@@ -1,6 +1,6 @@
-package it.polimi.ingsw.server.requests.leader;
+package it.polimi.ingsw.messages.requests.leader;
 
-import it.polimi.ingsw.server.requests.ClientMessage;
+import it.polimi.ingsw.messages.requests.ClientMessage;
 
 /**
  * Request that involves a leaderCard

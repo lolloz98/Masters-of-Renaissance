@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.server.requests.ClientMessage;
-import it.polimi.ingsw.server.requests.PreparationMessage;
+import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.messages.requests.PreparationMessage;
 
 /**
  * representation of the preparation state of the game

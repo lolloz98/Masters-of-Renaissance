@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.requests.leader;
+package it.polimi.ingsw.messages.requests.leader;
 
 /**
  * Request to activate a leaderCard
