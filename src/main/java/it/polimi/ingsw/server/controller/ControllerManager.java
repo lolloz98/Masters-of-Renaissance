@@ -61,10 +61,8 @@ public class ControllerManager {
         try {
             addPlayerToGame(message.getGameId(), message.getUserName());
         } catch (GameAlreadyStartedException e) {
-            e.printStackTrace();
             throw new ControllerException();
         } catch (NoSuchReservedIdException e) {
-            e.printStackTrace();
             throw new ControllerException();
         }
     }
