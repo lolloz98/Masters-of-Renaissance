@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.server.controller.ControllerManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +13,8 @@ import java.net.Socket;
 
 public class ClientHandler implements Runnable {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
+
+    private final ControllerManager controllerManager = ControllerManager.getInstance();
 
     private final Socket client;
     private ObjectOutputStream oStream;

@@ -1,8 +1,9 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.server.controller.states.PrepareGameState;
+import it.polimi.ingsw.server.controller.states.State;
 import it.polimi.ingsw.server.model.game.Game;
-
-import java.util.TreeMap;
 
 /**
  * class that handles the actions of the players and calls the methods of the model
@@ -21,8 +22,8 @@ public abstract class ControllerActions<T extends Game<?>> {
      */
     public ControllerActions(T game, int id) {
         this.game = game;
-        this.gameId=id;
-        gameState=new PrepareGameState();
+        this.gameId = id;
+        gameState = new PrepareGameState();
     }
 
     public synchronized T getGame() {
@@ -38,7 +39,11 @@ public abstract class ControllerActions<T extends Game<?>> {
      * and prepares the game to be played
      */
     public synchronized void prepareGame(){
-        this.gameState=new PrepareGameState();
+        this.gameState = new PrepareGameState();
         game.distributeLeader();
+    }
+
+    public synchronized void doAction(ClientMessage clientMessage){
+        gameState.doAction(clientMessage, this);
     }
 }

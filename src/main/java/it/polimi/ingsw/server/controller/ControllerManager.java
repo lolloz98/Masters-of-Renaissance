@@ -109,7 +109,7 @@ public class ControllerManager {
      * @param id of the game to destroy
      * @throws NoSuchControllerException if there is no game with this id
      */
-    public void removeGame(int id) throws NoSuchControllerException {
+    public synchronized void removeGame(int id) throws NoSuchControllerException {
         if (!controllerMap.containsKey(id)) throw new NoSuchControllerException();
         controllerMap.remove(id);
     }
