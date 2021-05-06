@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.game.Resource;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
-
+@Deprecated
 public class PreparationMessage extends ClientMessage{
     private TreeMap<Resource,Integer> resToKeep;
     private ArrayList<LeaderCard> leadersToDiscard;

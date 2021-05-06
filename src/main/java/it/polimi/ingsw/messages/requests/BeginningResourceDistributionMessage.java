@@ -3,7 +3,7 @@ package it.polimi.ingsw.messages.requests;
 import it.polimi.ingsw.server.model.game.Resource;
 
 import java.util.TreeMap;
-
+@Deprecated
 public class BeginningResourceDistributionMessage extends ServerMessage{
     private TreeMap<Resource,Integer> toGain;
 

@@ -1,5 +1,5 @@
 package it.polimi.ingsw.messages.requests;
-
+@Deprecated
 public abstract class ServerMessage {
     private int playerId;
 

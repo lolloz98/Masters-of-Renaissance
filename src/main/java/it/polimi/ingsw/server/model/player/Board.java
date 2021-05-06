@@ -28,6 +28,19 @@ public class Board implements VictoryPointCalculator {
     private final ArrayList<DepotLeaderCard> depotLeaders;
     private final ArrayList<Depot> depots;
 
+    /**
+     * number of resources Any given at the beginning of the game. It becomes 0 when the player decides how to store them in the board
+     */
+    private int initialRes = 0;
+
+    public void setInitialRes(int initialRes) {
+        this.initialRes = initialRes;
+    }
+
+    public int getInitialRes() {
+        return initialRes;
+    }
+
     public Board() {
         this.faithtrack = new FaithTrack();
         this.strongbox = new StrongBox();
@@ -45,6 +58,11 @@ public class Board implements VictoryPointCalculator {
         depots = new ArrayList<>();
         for (int i = 0; i < 3; i++)
             depots.add(new Depot(i + 1, true));
+    }
+
+    public Board(int initialRes){
+        this();
+        this.initialRes = initialRes;
     }
 
     public ArrayList<DevelopCardSlot> getDevelopCardSlots() {
