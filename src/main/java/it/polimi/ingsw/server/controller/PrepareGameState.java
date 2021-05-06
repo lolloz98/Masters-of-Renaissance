@@ -8,8 +8,7 @@ import it.polimi.ingsw.messages.requests.PreparationMessage;
  */
 public class PrepareGameState implements State{
     @Override
-    public void doAction(ClientMessage clientMessage, ControllerActions controllerActions) {
+    public void doAction(ClientMessage clientMessage, ControllerActions<?> controllerActions) {
         PreparationMessage message=(PreparationMessage) clientMessage;
-
     }
 }

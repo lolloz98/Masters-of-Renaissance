@@ -5,12 +5,12 @@ import it.polimi.ingsw.server.model.game.Game;
 import java.util.TreeMap;
 
 /**
- * class that handle the actions on the player and calls the methods of the model
- * @param <T> the instance of the game, it can be single player or multi player
+ * class that handles the actions of the players and calls the methods of the model
+ * @param <T> the type of the game, it can be single player or multi player
  */
 public abstract class ControllerActions<T extends Game<?>> {
     protected  T game;
-    private int gameId;
+    private final int gameId;
     private State gameState;
     private static final ControllerManager controllerManager = ControllerManager.getInstance();
 
@@ -29,6 +29,10 @@ public abstract class ControllerActions<T extends Game<?>> {
         return game;
     }
 
+    public synchronized int getGameId() {
+        return gameId;
+    }
+
     /**
      * method that changes the state of the game: from waitingState to prepareGameState
      * and prepares the game to be played
@@ -36,12 +40,5 @@ public abstract class ControllerActions<T extends Game<?>> {
     public synchronized void prepareGame(){
         this.gameState=new PrepareGameState();
         game.distributeLeader();
-        distributeBeginningRes();
     }
-
-    protected abstract void distributeBeginningRes();
-
-
-
-
 }

@@ -1,78 +1,66 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
-import it.polimi.ingsw.server.model.exception.GameAlreadyStartedException;
-import it.polimi.ingsw.server.model.exception.NoSuchGameException;
-import it.polimi.ingsw.server.model.exception.NoSuchReservedIdException;
-import it.polimi.ingsw.server.model.exception.PlayersOutOfBoundException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.PairId;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
 
 /**
- * Singleton class that handles the creations of the model with his corresponding controller
+ * Singleton class that handles the creation of games with their corresponding controllers
  */
 public class ControllerManager {
-    private static ControllerManager instance=null;
+
+    private static final Logger logger = LogManager.getLogger(ControllerManager.class);
+
+    private static ControllerManager instance = null;
     /**
      * treemap containing the id of the game and the ControllerActions associated
      */
-    private final TreeMap<Integer,ControllerActions> controllerMap;
-    private final TreeMap<Integer, Game<? extends Turn>> gameMap;
+    private final TreeMap<Integer, ControllerActions<?>> controllerMap;
     private final TreeMap<Integer, PairId<Integer, ArrayList<Player>>> reservedIds;
 
-   private ControllerManager(){
-       controllerMap=new TreeMap<>();
-       gameMap = new TreeMap<>();
-       reservedIds = new TreeMap<>();
-   }
+    private ControllerManager() {
+        controllerMap = new TreeMap<>();
+        reservedIds = new TreeMap<>();
+    }
 
     /**
      * @return the only instance of ControllerHandler
      */
-    public static synchronized ControllerManager getInstance(){
+    public static synchronized ControllerManager getInstance() {
         if (instance == null) instance = new ControllerManager();
         return instance;
     }
 
     /**
-     * method that handle the request of creation a new game
+     * method that handles the request of creation a new game
+     *
      * @param message message by the first player
      * @return the id of the game
      */
-    public synchronized int createGame(CreateGameMessage message) throws ControllerException {
-        int id;
-        try {
-            id = reserveId(message.getPlayersNumber(), message.getUserName());
-        } catch (PlayersOutOfBoundException e) {
-            //todo
-            throw new ControllerException();
-        }
-        return id;
+    public synchronized int reserveIdForNewGame(CreateGameMessage message) throws ControllerException {
+        return reserveId(message.getPlayersNumber(), message.getUserName());
     }
 
     public synchronized void joinGame(JoinGameMessage message) throws ControllerException {
-        try {
-            addPlayerToGame(message.getGameId(), message.getUserName());
-        } catch (GameAlreadyStartedException e) {
-            throw new ControllerException();
-        } catch (NoSuchReservedIdException e) {
-            throw new ControllerException();
-        }
+        addPlayerToGame(message.getGameId(), message.getUserName());
     }
 
     /**
      * @return an id not used in reservedId or gameMap
      */
-    private synchronized int getNewId(){
+    private synchronized int getNewId() {
         int i = 0;
-        while (gameMap.containsKey(i) || reservedIds.containsKey(i)) {
+        while (controllerMap.containsKey(i) || reservedIds.containsKey(i)) {
+            // fixme: check i for upper bounds
             i++;
         }
         return i;
@@ -81,39 +69,37 @@ public class ControllerManager {
     /**
      * @return the game corresponding to the id
      */
-    private synchronized Game<? extends Turn> getGameFromMap(int id){
-        return gameMap.get(id);
+    private synchronized Game<? extends Turn> getGameFromMap(int id) {
+        return controllerMap.get(id).getGame();
     }
 
     /**
      * @return the controller corresponding to the id
      */
-    public synchronized ControllerActions getControllerFromMap(int id){
+    public synchronized ControllerActions<?> getControllerFromMap(int id) {
         return controllerMap.get(id);
     }
 
     /**
      * Instantiates a new SinglePlayer and adds it to gameMap.
      *
-     * @param id of the game to be created
+     * @param id     of the game to be created
      * @param player the player of the game
      */
-    private synchronized void getNewSinglePlayer(int id, Player player){
+    private synchronized void createNewSinglePlayer(int id, Player player) {
         SinglePlayer singlePlayer = new SinglePlayer(player);
-        controllerMap.put(id,new ControllerActionsSingle(singlePlayer,id));
-        gameMap.put(id, singlePlayer);
+        controllerMap.put(id, new ControllerActionsSingle(singlePlayer, id));
     }
 
     /**
      * Instantiates a new MultiPlayer and adds it to gameMap.
      *
-     * @param id of the game to be created
+     * @param id      of the game to be created
      * @param players the ArrayList of players of the game
      */
-    private synchronized void getNewMultiPlayer(int id, ArrayList<Player> players){
+    private synchronized void createNewMultiPlayer(int id, ArrayList<Player> players) {
         MultiPlayer multiPlayer = new MultiPlayer(players);
-        controllerMap.put(id,new ControllerActionsMulti(multiPlayer,id));
-        gameMap.put(id, multiPlayer);
+        controllerMap.put(id, new ControllerActionsMulti(multiPlayer, id));
         reservedIds.remove(id);
     }
 
@@ -121,38 +107,26 @@ public class ControllerManager {
      * Removes a Game from gameMap.
      *
      * @param id of the game to destroy
-     * @throws NoSuchGameException if there is no game with this id
+     * @throws NoSuchControllerException if there is no game with this id
      */
-    public void removeGame(int id) throws NoSuchGameException, NoSuchControllerException {
-        if (!gameMap.containsKey(id)) throw new NoSuchGameException();
+    public void removeGame(int id) throws NoSuchControllerException {
         if (!controllerMap.containsKey(id)) throw new NoSuchControllerException();
-        removeGameFromMap(id);
         controllerMap.remove(id);
-    }
-
-    /**
-     * Removes a game from gameMap.
-     *
-     * @param id of the game to remove
-     * @return the removed game, or null if it's not present
-     */
-    private synchronized Game<? extends Turn> removeGameFromMap(int id){
-        return gameMap.remove(id);
     }
 
     /**
      * Reserves a new id for a game. If the game is single player it starts immediately, otherwise it waits for other players.
      *
      * @param playersNumber number of players for this game
-     * @param userName name of the first player of the game
+     * @param userName      name of the first player of the game
      * @return the id of the new game
-     * @throws PlayersOutOfBoundException if playersNumber has a wrong value
+     * @throws PlayersOutOfBoundControllerException if playersNumber has a wrong value
      */
-    private synchronized int reserveId (int playersNumber, String userName) {
-        if (playersNumber < 1 || playersNumber > 4) throw new PlayersOutOfBoundException();
+    private synchronized int reserveId(int playersNumber, String userName) throws PlayersOutOfBoundControllerException {
+        if (playersNumber < 1 || playersNumber > 4) throw new PlayersOutOfBoundControllerException();
         int id = getNewId();
-        Player player = new Player(userName, id*10);
-        if(playersNumber == 1) getNewSinglePlayer(id, player);
+        Player player = new Player(userName, id * 10);
+        if (playersNumber == 1) createNewSinglePlayer(id, player);
         else {
             reservedIds.put(id, new PairId<>(playersNumber, new ArrayList<>() {{
                 add(player);
@@ -164,21 +138,24 @@ public class ControllerManager {
     /**
      * Adds a player to a reservedId. If the list of players is full, the game begins.
      *
-     * @param id of the game to add a player to
+     * @param id       of the game to add a player to
      * @param userName name of the new player of the game
-     * @throws GameAlreadyStartedException if the id corresponds to a game already started
-     * @throws NoSuchReservedIdException if the id is not in the reservedIds list
+     * @throws GameAlreadyStartedControllerException if the id corresponds to a game already started
+     * @throws NoSuchReservedIdControllerException   if the id is not in the reservedIds list
      */
-    private synchronized void addPlayerToGame(int id, String userName) throws GameAlreadyStartedException, NoSuchReservedIdException {
-        if(gameMap.containsKey(id)) throw new GameAlreadyStartedException();
-        if(!reservedIds.containsKey(id)) throw new NoSuchReservedIdException();
-        Player player = new Player(userName, id+reservedIds.get(id).getSecond().size());
+    private synchronized void addPlayerToGame(int id, String userName) throws GameAlreadyStartedControllerException, NoSuchReservedIdControllerException {
+        if(controllerMap.containsKey(id)) throw new GameAlreadyStartedControllerException();
+        if (!reservedIds.containsKey(id)) throw new NoSuchReservedIdControllerException();
+
+        if(reservedIds.get(id).getFirst() >= reservedIds.get(id).getSecond().size())
+            logger.error("player size exceeds the number specified by the creator of the game");
+
+        Player player = new Player(userName, id + reservedIds.get(id).getSecond().size());
         reservedIds.get(id).getSecond().add(player);
-        if (reservedIds.get(id).getSecond().size() == reservedIds.get(id).getFirst()){
+        if (reservedIds.get(id).getSecond().size() == reservedIds.get(id).getFirst()) {
             ArrayList<Player> players = reservedIds.get(id).getSecond();
             Collections.shuffle(players);
-            getNewMultiPlayer(id, players);
+            createNewMultiPlayer(id, players);
         }
     }
-
 }
