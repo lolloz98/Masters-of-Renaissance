@@ -5,7 +5,8 @@ public class ErrorAnswer extends Answer{
 
     private final String message;
 
-    public ErrorAnswer(String message){
+    public ErrorAnswer(int gameId, int playerId, String message){
+        super(gameId, playerId);
         this.message = (message == null)? "": message;
     }
 

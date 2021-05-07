@@ -40,9 +40,8 @@ public class ClientHandler implements Runnable {
                 try {
                     handleMessage(clientMessage);
                 } catch (ControllerException e) {
-                    // todo send back an error message to the client
                     logger.error("something went wrong, name of exception: " + e.getClass().getSimpleName() + "\n associated message: " + e.getMessage());
-                    oStream.writeObject(new ErrorAnswer(e.getMessage()));
+                    oStream.writeObject(new ErrorAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), e.getMessage()));
                 }
             }
         } catch (ClassNotFoundException | ClassCastException e) {

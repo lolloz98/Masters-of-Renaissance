@@ -17,7 +17,8 @@ public class UseMarketAnswer extends Answer{
         return combinations;
     }
 
-    public UseMarketAnswer(ArrayList<TreeMap<Resource, Integer>> combinations) {
+    public UseMarketAnswer(int gameId, int playerId, ArrayList<TreeMap<Resource, Integer>> combinations) {
+        super(gameId, playerId);
         this.combinations = combinations;
     }
 }
