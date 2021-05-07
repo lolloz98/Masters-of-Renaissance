@@ -39,11 +39,11 @@ public class Client
             ObjectInputStream input = new ObjectInputStream(server.getInputStream());
 
             // todo: handle the requests and the answers. Decouple the behaviour create a "controller" to do so
-            System.out.println("input a number, -1 to exit: ");
+            System.out.println("type a number (-1 to close), I create a CreateGameMessage and send it. I'll print the answer then");
             int number = 0;
             while (number != -1) {
                 number = Integer.parseInt(scanner.nextLine());
-                // todo modify
+                // todo modify ->
                 output.writeObject(new CreateGameMessage(number, "Lollo"));
                 Answer answerMsg = (Answer)input.readObject();
                 System.out.println(answerMsg);
