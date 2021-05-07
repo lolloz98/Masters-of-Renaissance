@@ -38,18 +38,7 @@ public class ClientHandler implements Runnable {
                 logger.debug("input from client: " + clientMessage);
                 // TODO modify this
                 try {
-                    Object parsedMessage = Parser.parse(clientMessage);
-                    if (parsedMessage instanceof BeforeControllerActionsMessageController) {
-                        Answer answer = ((BeforeControllerActionsMessageController) parsedMessage).doAction();
-                        oStream.writeObject(answer);
-
-                    } else if (parsedMessage instanceof ClientMessageController) {
-                        // todo: handle the answers when the model gets updated
-                        controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
-                                .doAction((ClientMessageController)parsedMessage);
-
-                    } else throw new ControllerException("Error occurred during the handling of the request");
-
+                    handleMessage(clientMessage);
                 } catch (ControllerException e) {
                     // todo send back an error message to the client
                     logger.error("something went wrong, name of exception: " + e.getClass().getSimpleName() + "\n associated message: " + e.getMessage());
@@ -57,8 +46,22 @@ public class ClientHandler implements Runnable {
                 }
             }
         } catch (ClassNotFoundException | ClassCastException e) {
-            System.out.println("invalid stream from client");
+            logger.error("invalid stream from client, connection closed");
         }
+    }
+
+    private void handleMessage(ClientMessage clientMessage) throws ControllerException, IOException {
+        Object parsedMessage = Parser.parse(clientMessage);
+        if (parsedMessage instanceof BeforeControllerActionsMessageController) {
+            Answer answer = ((BeforeControllerActionsMessageController) parsedMessage).doAction();
+            oStream.writeObject(answer);
+
+        } else if (parsedMessage instanceof ClientMessageController) {
+            // todo: handle the answers when the model gets updated
+            controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
+                    .doAction((ClientMessageController)parsedMessage);
+
+        } else throw new ControllerException("Error occurred during the handling of the request");
     }
 
     @Override

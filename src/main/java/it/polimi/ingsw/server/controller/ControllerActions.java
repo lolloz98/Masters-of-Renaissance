@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.EndGameState;
 import it.polimi.ingsw.server.controller.states.GamePlayState;
@@ -53,7 +54,11 @@ public abstract class ControllerActions<T extends Game<?>> {
         this.gameState = new EndGameState();
     }
 
-    public synchronized void doAction(ClientMessageController clientMessage){
+    public synchronized State getGameState(){
+        return gameState;
+    }
+
+    public synchronized void doAction(ClientMessageController clientMessage) throws ControllerException {
         clientMessage.doAction(this);
     }
 }
