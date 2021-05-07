@@ -25,7 +25,7 @@ public class ControllerManagerTest {
 
     @Test
     public void testNewSinglePlayer() throws ControllerException {
-        int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(1, "aniello"));
+        int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(1, "aniello")).getFirst();
         ControllerActions controller = controllerManager.getControllerFromMap(id);
         // TODO check if player in singlePlayer is correct
     }
@@ -34,7 +34,7 @@ public class ControllerManagerTest {
     public void testNewMultiPlayer()  {
         int id = 0;
         try {
-            id = controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"creator"));
+            id = controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"creator")).getFirst();
         } catch (ControllerException e) {
             fail();
         }
@@ -52,7 +52,7 @@ public class ControllerManagerTest {
 
     @Test (expected = ControllerException.class)
     public void testNewMultiPlayerTooManyPlayers() throws  ControllerException {
-        int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"first"));
+        int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"first")).getFirst();
         controllerManager.joinGame(new JoinGameMessage(id,"second"));
         controllerManager.joinGame(new JoinGameMessage(id,"Third"));
         controllerManager.joinGame(new JoinGameMessage(id,"fourth"));

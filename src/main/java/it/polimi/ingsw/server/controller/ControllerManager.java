@@ -44,14 +44,19 @@ public class ControllerManager {
      * method that handles the request of creation a new game
      *
      * @param message message by the first player
-     * @return the id of the game
+     * @return a pair with the id of the game and of the player
      */
-    public synchronized int reserveIdForNewGame(CreateGameMessage message) throws ControllerException {
+    public synchronized PairId<Integer, Integer> reserveIdForNewGame(CreateGameMessage message) throws ControllerException {
         return reserveId(message.getPlayersNumber(), message.getUserName());
     }
 
-    public synchronized void joinGame(JoinGameMessage message) throws ControllerException {
-        addPlayerToGame(message.getGameId(), message.getUserName());
+    /**
+     * @param message request of a client to join the game
+     * @return id of the added player
+     * @throws ControllerException if the information about the game in message are not valid
+     */
+    public synchronized int joinGame(JoinGameMessage message) throws ControllerException {
+        return addPlayerToGame(message.getGameId(), message.getUserName());
     }
 
     /**
@@ -119,20 +124,21 @@ public class ControllerManager {
      *
      * @param playersNumber number of players for this game
      * @param userName      name of the first player of the game
-     * @return the id of the new game
+     * @return a pair with the id of the new game and the id of the player
      * @throws PlayersOutOfBoundControllerException if playersNumber has a wrong value
      */
-    private synchronized int reserveId(int playersNumber, String userName) throws PlayersOutOfBoundControllerException {
+    private synchronized PairId<Integer, Integer> reserveId(int playersNumber, String userName) throws PlayersOutOfBoundControllerException {
         if (playersNumber < 1 || playersNumber > 4) throw new PlayersOutOfBoundControllerException();
         int id = getNewId();
-        Player player = new Player(userName, id * 10);
+        int playerId = id * 10;
+        Player player = new Player(userName, playerId);
         if (playersNumber == 1) createNewSinglePlayer(id, player);
         else {
             reservedIds.put(id, new PairId<>(playersNumber, new ArrayList<>() {{
                 add(player);
             }}));
         }
-        return id;
+        return new PairId<>(id, playerId);
     }
 
     /**
@@ -140,22 +146,24 @@ public class ControllerManager {
      *
      * @param id       of the game to add a player to
      * @param userName name of the new player of the game
+     * @return the playerId of the added player
      * @throws GameAlreadyStartedControllerException if the id corresponds to a game already started
      * @throws NoSuchReservedIdControllerException   if the id is not in the reservedIds list
      */
-    private synchronized void addPlayerToGame(int id, String userName) throws GameAlreadyStartedControllerException, NoSuchReservedIdControllerException {
+    private synchronized int addPlayerToGame(int id, String userName) throws GameAlreadyStartedControllerException, NoSuchReservedIdControllerException {
         if(controllerMap.containsKey(id)) throw new GameAlreadyStartedControllerException();
         if (!reservedIds.containsKey(id)) throw new NoSuchReservedIdControllerException();
 
         if(reservedIds.get(id).getFirst() >= reservedIds.get(id).getSecond().size())
             logger.error("player size exceeds the number specified by the creator of the game");
-
-        Player player = new Player(userName, id + reservedIds.get(id).getSecond().size());
+        int playerId = id * 10 + reservedIds.get(id).getSecond().size();
+        Player player = new Player(userName, playerId);
         reservedIds.get(id).getSecond().add(player);
         if (reservedIds.get(id).getSecond().size() == reservedIds.get(id).getFirst()) {
             ArrayList<Player> players = reservedIds.get(id).getSecond();
             Collections.shuffle(players);
             createNewMultiPlayer(id, players);
         }
+        return playerId;
     }
 }

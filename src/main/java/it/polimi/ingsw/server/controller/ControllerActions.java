@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
+import it.polimi.ingsw.server.controller.states.EndGameState;
+import it.polimi.ingsw.server.controller.states.GamePlayState;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.controller.states.State;
 import it.polimi.ingsw.server.model.game.Game;
@@ -38,12 +40,20 @@ public abstract class ControllerActions<T extends Game<?>> {
      * method that changes the state of the game: from waitingState to prepareGameState
      * and prepares the game to be played
      */
-    public synchronized void prepareGame(){
-        this.gameState = new PrepareGameState();
+    public synchronized void toPrepareGameState(){
         game.distributeLeader();
+        this.gameState = new PrepareGameState();
     }
 
-    public synchronized void doAction(ClientMessage clientMessage){
-        gameState.doAction(clientMessage, this);
+    public synchronized void toGamePlayState(){
+        this.gameState = new GamePlayState();
+    }
+
+    public synchronized void toEndGameState(){
+        this.gameState = new EndGameState();
+    }
+
+    public synchronized void doAction(ClientMessageController clientMessage){
+        clientMessage.doAction(this);
     }
 }

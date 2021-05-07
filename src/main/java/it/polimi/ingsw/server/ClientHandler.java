@@ -30,6 +30,7 @@ public class ClientHandler implements Runnable {
         try {
             while (true) {
                 ClientMessage next = (ClientMessage) iStream.readObject();
+                logger.debug("class of message: " + next.getClass());
                 logger.debug("input from client: " + next);
                 // TODO modify this
                 oStream.writeObject(new CreateGameAnswer(10, 10));

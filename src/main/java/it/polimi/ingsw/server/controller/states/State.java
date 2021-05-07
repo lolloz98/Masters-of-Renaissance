@@ -7,5 +7,4 @@ import it.polimi.ingsw.server.controller.ControllerActions;
  * implementation of state pattern. it represents the state in which the game could be
  */
 public interface State {
-    void doAction(ClientMessage clientMessage, ControllerActions<?> controllerActions);
 }
