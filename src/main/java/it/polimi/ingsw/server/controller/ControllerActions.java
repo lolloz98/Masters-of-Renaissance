@@ -54,6 +54,8 @@ public abstract class ControllerActions<T extends Game<?>> {
         this.gameState = new PrepareGameState();
     }
 
+    public abstract boolean checkToGamePlayState();
+
     public synchronized void toGamePlayState(){
         this.gameState = new GamePlayState();
     }

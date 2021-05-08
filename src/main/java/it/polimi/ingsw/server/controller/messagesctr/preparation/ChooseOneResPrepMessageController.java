@@ -1,30 +1,21 @@
-package it.polimi.ingsw.server.controller.messagesctr;
+package it.polimi.ingsw.server.controller.messagesctr.preparation;
 
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.ChooseOneResPrepAnswer;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
-import it.polimi.ingsw.messages.requests.ClientMessage;
-import it.polimi.ingsw.server.ClientHandler;
-import it.polimi.ingsw.server.Parser;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
-import it.polimi.ingsw.server.controller.exception.WrongPlayerIdControllerException;
 import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
+import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.model.exception.InvalidResourcesToKeepByPlayerException;
-import it.polimi.ingsw.server.model.game.Game;
-import it.polimi.ingsw.server.model.game.MultiPlayer;
-import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Board;
-import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.player.WarehouseType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 public class ChooseOneResPrepMessageController extends ClientMessageController {
     private static final long serialVersionUID = 208L;
@@ -50,6 +41,9 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
                         put(((ChooseOneResPrepMessage)getClientMessage()).getRes(), 1);
                     }});
                 }}, controllerActions.getGame());
+
+                if(controllerActions.checkToGamePlayState())//if the preparation state is ended(all the players have discarded 2 leaders and have chosen the beginning resources)
+                    controllerActions.checkToGamePlayState();
 
                 return new ChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((ChooseOneResPrepMessage)getClientMessage()).getRes());
 

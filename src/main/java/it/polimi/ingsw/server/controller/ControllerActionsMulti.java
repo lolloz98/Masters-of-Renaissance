@@ -30,6 +30,16 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
         }});
     }
 
+    @Override
+    public synchronized boolean checkToGamePlayState() {
+        for(Player p: game.getPlayers()){
+            Board board=p.getBoard();
+            if(!(board.getInitialRes()==0) || board.getLeaderCards().size()!=2)
+                return false;
+        }
+        return true;
+    }
+
     public synchronized void setGame(MultiPlayer game){
         this.game = game;
         distributeBeginningRes();

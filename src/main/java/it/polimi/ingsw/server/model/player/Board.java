@@ -525,6 +525,17 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
+     * definitely removes cards from the leaderCards of the board
+     *
+     * @param cards cards to be removed from the board
+     * @throws IllegalArgumentException if the cards was not contained in leaderCards of the board
+     */
+    public void removeLeaderCards(ArrayList<LeaderCard> cards) {
+        if (!leaderCards.containsAll(cards)) throw new IllegalArgumentException();
+        leaderCards.remove(cards);
+    }
+
+    /**
      * method that puts the resources gained by the market in the depots in a smart way: before it fills the leader depots, then the normal depots.
      *
      * @param resGained res gained by the market
