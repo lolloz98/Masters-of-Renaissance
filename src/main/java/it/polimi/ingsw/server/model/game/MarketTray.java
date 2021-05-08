@@ -30,6 +30,10 @@ public class MarketTray {
         resCombinations = new ArrayList<>();
     }
 
+    public ArrayList<Resource> getLeaderResources(){
+        return new ArrayList<>(leaderResources);
+    }
+
     /**
      * @return a copy resCombinations
      */

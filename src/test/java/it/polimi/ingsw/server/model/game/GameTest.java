@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.exception.LevelOutOfBoundException;
+import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
@@ -16,6 +17,11 @@ import static org.junit.Assert.*;
 public class GameTest {
     private static final Logger logger = LogManager.getLogger(GameTest.class);
     Game<? extends Turn> game = new Game<>() {
+        @Override
+        public Player getPlayer(int playerId) {
+            return null;
+        }
+
         @Override
         public void checkEndConditions() {
 

@@ -1,18 +1,18 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
-import it.polimi.ingsw.messages.answers.ActivateLeaderAnswer;
+import it.polimi.ingsw.messages.answers.leader.ActivateDepotLeaderAnswer;
+import it.polimi.ingsw.messages.answers.leader.ActivateDiscountLeaderAnswer;
+import it.polimi.ingsw.messages.answers.leader.ActivateMarbleLeaderAnswer;
+import it.polimi.ingsw.messages.answers.leader.ActivateProductionLeaderAnswer;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
-import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
 import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
-import it.polimi.ingsw.server.controller.messagesctr.CurrentPlayerMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
-import it.polimi.ingsw.server.controller.states.GamePlayState;
-import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
+import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.ActivateDiscardedCardException;
 import it.polimi.ingsw.server.model.exception.AlreadyActiveLeaderException;
 import it.polimi.ingsw.server.model.exception.RequirementNotSatisfiedException;
@@ -30,7 +30,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
     }
 
     @Override
-    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException, NotCurrentPlayerException {
+    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
 
         if(checkState(controllerActions)){
             if(checkCurrentPlayer(controllerActions)){
@@ -51,8 +51,20 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
                     throw new ControllerException("not possible to activate leader card");
                 }
 
-                return new ActivateLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId());
-
+                if(toActivate instanceof DepotLeaderCard){
+                    DepotLeaderCard card=(DepotLeaderCard) toActivate;
+                    return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),card.getId());
+                }
+                if(toActivate instanceof ProductionLeaderCard){
+                    ProductionLeaderCard card=(ProductionLeaderCard) toActivate;
+                    return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),card.getId());
+                }
+                if(toActivate instanceof DiscountLeaderCard){
+                    return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),controllerActions.getGame().getDecksDevelop());
+                }
+                if(toActivate instanceof MarbleLeaderCard){
+                    return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),controllerActions.getGame().getMarketTray().getLeaderResources());
+                }
 
             }
             else
@@ -60,6 +72,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
         }
         else
             throw new WrongStateControllerException();
+        return null;
     }
 
 }
