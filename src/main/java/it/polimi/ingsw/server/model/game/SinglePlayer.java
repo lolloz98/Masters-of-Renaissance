@@ -74,6 +74,12 @@ public class SinglePlayer extends Game<TurnSingle>{
         this.lorenzoDeck = new LorenzoDeck(lorenzoCards);
     }
 
+    @Override
+    public Player getPlayer(int playerId) {
+        if(this.getPlayer().getPlayerId()!=playerId) throw  new IllegalArgumentException();
+        return this.getPlayer();
+    }
+
     /**
      * Checks if end condition is met. If it is, the lastTurn is set to true, nextTurn() in Turn will return null and the Game will end.
      */

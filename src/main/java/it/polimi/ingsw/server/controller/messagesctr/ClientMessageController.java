@@ -4,6 +4,7 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
 import it.polimi.ingsw.server.controller.exception.WrongPlayerIdControllerException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
@@ -42,7 +43,7 @@ public abstract class ClientMessageController implements Serializable {
         return player;
     }
 
-    public abstract Answer doAction(ControllerActions<?> controllerActions) throws ControllerException;
+    public abstract Answer doAction(ControllerActions<?> controllerActions) throws ControllerException, NotCurrentPlayerException;
 
     protected abstract boolean checkState(ControllerActions<?> controllerActions);
 }

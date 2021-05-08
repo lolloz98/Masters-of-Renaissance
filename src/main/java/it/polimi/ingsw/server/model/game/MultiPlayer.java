@@ -35,6 +35,20 @@ public class MultiPlayer extends Game<TurnMulti> {
         return players;
     }
 
+    @Override
+    public Player getPlayer(int playerId) {
+        boolean idExists=false;
+        for(Player p: players){
+            if(p.getPlayerId()==playerId){
+                return p;
+            }
+        }
+
+        if(!idExists) throw new IllegalArgumentException();
+
+        return null;
+    }
+
     /**
      * Checks if end condition is met. If it is, the lastRound is set to true and when the last player completes its turn, the game ends.
      */

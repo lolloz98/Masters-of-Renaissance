@@ -21,7 +21,7 @@ public abstract class CurrentPlayerMessageController extends ClientMessageContro
      * @param controllerActions
      * @return true if this.playerId is equal to current layer id
      */
-    public boolean checkCurrentPlayer(ControllerActions controllerActions){
+    protected boolean checkCurrentPlayer(ControllerActions controllerActions){
         Game game=controllerActions.getGame();
         if(game instanceof SinglePlayer){
             SinglePlayer singlePlayer=(SinglePlayer) game;

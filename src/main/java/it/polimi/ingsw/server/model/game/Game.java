@@ -49,6 +49,8 @@ public abstract class Game <T extends Turn> {
         this.gameOver = gameOver;
     }
 
+    public abstract Player getPlayer(int playerId);
+
     public T getTurn() {
         return turn;
     }
