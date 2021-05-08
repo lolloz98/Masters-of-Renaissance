@@ -30,7 +30,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
         }});
     }
 
-    public void setGame(MultiPlayer game){
+    public synchronized void setGame(MultiPlayer game){
         this.game = game;
         distributeBeginningRes();
     }
