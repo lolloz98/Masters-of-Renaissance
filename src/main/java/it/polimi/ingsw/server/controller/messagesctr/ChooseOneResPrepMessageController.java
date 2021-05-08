@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.controller.messagesctr;
 
+import it.polimi.ingsw.messages.answers.Answer;
+import it.polimi.ingsw.messages.answers.ChooseOneResPrepAnswer;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.ClientHandler;
@@ -34,7 +36,7 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
     }
 
     @Override
-    public void doAction(ControllerActions<?> controllerActions) throws ControllerException{
+    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException{
         if(checkState(controllerActions)){
             Board board = getPlayerFromId(controllerActions).getBoard();
             int initRes = board.getInitialRes();
@@ -48,6 +50,9 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
                         put(((ChooseOneResPrepMessage)getClientMessage()).getRes(), 1);
                     }});
                 }}, controllerActions.getGame());
+
+                return new ChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId());
+
             } catch (InvalidResourcesToKeepByPlayerException e) {
                 logger.error("something unexpected happened in " + this.getClass() + " while putting initial resources in depot");
                 throw new ControllerException("not possible to add init resources to the depots");

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
@@ -25,7 +26,7 @@ public class ControllerManagerTest {
 
     @Test
     public void testNewSinglePlayer() throws ControllerException {
-        int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(1, "aniello")).getFirst();
+        int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(1, "aniello"), new AnswerListener(null)).getFirst();
         ControllerActions controller = controllerManager.getControllerFromMap(id);
         // TODO check if player in singlePlayer is correct
     }
@@ -34,7 +35,7 @@ public class ControllerManagerTest {
     public void testNewMultiPlayer()  {
         int id = 0;
         try {
-            id = controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"creator")).getFirst();
+            id = controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"creator"), new AnswerListener(null)).getFirst();
         } catch (ControllerException e) {
             fail();
         }
@@ -52,7 +53,7 @@ public class ControllerManagerTest {
 
     @Test (expected = ControllerException.class)
     public void testNewMultiPlayerTooManyPlayers() throws  ControllerException {
-        int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"first")).getFirst();
+        int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"first"), new AnswerListener(null)).getFirst();
         controllerManager.joinGame(new JoinGameMessage(id,"second"));
         controllerManager.joinGame(new JoinGameMessage(id,"Third"));
         controllerManager.joinGame(new JoinGameMessage(id,"fourth"));

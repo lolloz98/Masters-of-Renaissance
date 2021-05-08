@@ -10,12 +10,12 @@ import java.io.Serializable;
 /**
  * father of messages that precedes the creation of a controllerActions
  */
-public abstract class BeforeControllerActionsMessageController implements Serializable {
+public abstract class PreGameCreationMessageController implements Serializable {
     private static final long serialVersionUID = 201L;
 
     private final ClientMessage clientMessage;
 
-    public BeforeControllerActionsMessageController(ClientMessage clientMessage) {
+    public PreGameCreationMessageController(ClientMessage clientMessage) {
         this.clientMessage = clientMessage;
     }
 

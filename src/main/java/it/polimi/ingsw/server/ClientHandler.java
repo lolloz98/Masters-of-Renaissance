@@ -1,13 +1,13 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.CreateGameAnswer;
 import it.polimi.ingsw.messages.answers.ErrorAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.creation.BeforeControllerActionsMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,6 +25,8 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream oStream;
     private ObjectInputStream iStream;
 
+    private AnswerListener answerListener;
+
     public ClientHandler(Socket client) {
         this.client = client;
         // todo: add reference to controller/view
@@ -37,30 +39,34 @@ public class ClientHandler implements Runnable {
                 logger.debug("class of message: " + clientMessage.getClass());
                 logger.debug("input from client: " + clientMessage);
                 // TODO modify this
-                try {
-                    handleMessage(clientMessage);
-                } catch (ControllerException e) {
-                    logger.error("something went wrong, name of exception: " + e.getClass().getSimpleName() + "\n associated message: " + e.getMessage());
-                    oStream.writeObject(new ErrorAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), e.getMessage()));
-                }
+                handleMessage(clientMessage);
             }
         } catch (ClassNotFoundException | ClassCastException e) {
             logger.error("invalid stream from client, connection closed");
         }
     }
 
-    private void handleMessage(ClientMessage clientMessage) throws ControllerException, IOException {
-        Object parsedMessage = Parser.parse(clientMessage);
-        if (parsedMessage instanceof BeforeControllerActionsMessageController) {
-            Answer answer = ((BeforeControllerActionsMessageController) parsedMessage).doAction();
-            oStream.writeObject(answer);
+    private synchronized void handleMessage(ClientMessage clientMessage) throws IOException {
+        try {
+            Object parsedMessage = Parser.parse(clientMessage);
+            if(parsedMessage instanceof CreateGameMessageController){
+                // if here -> controllerActions not created yet, thus create it and then
+                Answer answer = ((CreateGameMessageController) parsedMessage).doAction(answerListener);
+                answerListener.sendAnswer(answer);
 
-        } else if (parsedMessage instanceof ClientMessageController) {
-            // todo: handle the answers when the model gets updated
-            controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
-                    .doAction((ClientMessageController)parsedMessage);
+            } else if (parsedMessage instanceof PreGameCreationMessageController) {
+                    controllerManager.getControllerFromMap(((PreGameCreationMessageController) parsedMessage).getClientMessage().getGameId())
+                            .doPreGameAction((PreGameCreationMessageController) parsedMessage, answerListener);
 
-        } else throw new ControllerException("Error occurred during the handling of the request");
+            } else if (parsedMessage instanceof ClientMessageController) {
+                controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
+                        .doAction((ClientMessageController) parsedMessage);
+
+            } else throw new ControllerException("Error occurred during the handling of the request");
+        } catch (ControllerException e) {
+            logger.error("something went wrong, name of exception: " + e.getClass().getSimpleName() + "\n associated message: " + e.getMessage());
+            answerListener.sendAnswer(new ErrorAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), e.getMessage()));
+        }
     }
 
     @Override
@@ -68,6 +74,7 @@ public class ClientHandler implements Runnable {
         try {
             oStream = new ObjectOutputStream(client.getOutputStream());
             iStream = new ObjectInputStream(client.getInputStream());
+            answerListener = new AnswerListener(oStream);
         } catch (IOException e) {
             logger.error("Can't open the connection to " + client.getInetAddress());
             closeConnection();

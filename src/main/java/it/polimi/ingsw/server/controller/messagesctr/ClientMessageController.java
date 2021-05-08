@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.messagesctr;
 
+import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -41,7 +42,7 @@ public abstract class ClientMessageController implements Serializable {
         return player;
     }
 
-    public abstract void doAction(ControllerActions<?> controllerActions) throws ControllerException;
+    public abstract Answer doAction(ControllerActions<?> controllerActions) throws ControllerException;
 
     protected abstract boolean checkState(ControllerActions<?> controllerActions);
 }

@@ -4,7 +4,8 @@ import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.messagesctr.creation.BeforeControllerActionsMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -18,7 +19,7 @@ public class ParserTest {
         try {
             Object object = Parser.parse(clientMessage);
             assertEquals("CreateGameMessageController", object.getClass().getSimpleName());
-            assertEquals(clientMessage, ((BeforeControllerActionsMessageController)object).getClientMessage());
+            assertEquals(clientMessage, ((CreateGameMessageController)object).getClientMessage());
         } catch (ControllerException e) {
             fail();
         }
@@ -28,7 +29,7 @@ public class ParserTest {
         try {
             Object object = Parser.parse(clientMessage);
             assertEquals("JoinGameMessageController", object.getClass().getSimpleName());
-            assertEquals(clientMessage, ((BeforeControllerActionsMessageController)object).getClientMessage());
+            assertEquals(clientMessage, ((PreGameCreationMessageController)object).getClientMessage());
         } catch (ControllerException e) {
             fail();
         }

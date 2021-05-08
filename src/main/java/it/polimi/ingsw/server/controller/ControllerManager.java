@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.messages.answers.Answer;
+import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
@@ -25,11 +27,9 @@ public class ControllerManager {
      * treemap containing the id of the game and the ControllerActions associated
      */
     private final TreeMap<Integer, ControllerActions<?>> controllerMap;
-    private final TreeMap<Integer, PairId<Integer, ArrayList<Player>>> reservedIds;
 
     private ControllerManager() {
         controllerMap = new TreeMap<>();
-        reservedIds = new TreeMap<>();
     }
 
     /**
@@ -46,8 +46,8 @@ public class ControllerManager {
      * @param message message by the first player
      * @return a pair with the id of the game and of the player
      */
-    public synchronized PairId<Integer, Integer> reserveIdForNewGame(CreateGameMessage message) throws ControllerException {
-        return reserveId(message.getPlayersNumber(), message.getUserName());
+    public synchronized PairId<Integer, Integer> reserveIdForNewGame(CreateGameMessage message, AnswerListener answerListener) throws ControllerException {
+        return reserveId(message.getPlayersNumber(), message.getUserName(), answerListener);
     }
 
     /**
@@ -64,7 +64,7 @@ public class ControllerManager {
      */
     private synchronized int getNewId() {
         int i = 0;
-        while (controllerMap.containsKey(i) || reservedIds.containsKey(i)) {
+        while (controllerMap.containsKey(i)) {
             // fixme: check i for upper bounds
             i++;
         }
@@ -91,21 +91,20 @@ public class ControllerManager {
      * @param id     of the game to be created
      * @param player the player of the game
      */
-    private synchronized void createNewSinglePlayer(int id, Player player) {
+    private synchronized void createNewSinglePlayer(int id, AnswerListener answerListener, Player player) {
         SinglePlayer singlePlayer = new SinglePlayer(player);
-        controllerMap.put(id, new ControllerActionsSingle(singlePlayer, id));
+        controllerMap.put(id, new ControllerActionsSingle(singlePlayer, id, answerListener));
     }
 
     /**
-     * Instantiates a new MultiPlayer and adds it to gameMap.
+     * Instantiates a new ControllerActionsMulti and adds it to gameMap.
      *
      * @param id      of the game to be created
-     * @param players the ArrayList of players of the game
+     * @param numberOfPlayers the number of players that this game must have
+     * @param player the player who asked for the creation of the game
      */
-    private synchronized void createNewMultiPlayer(int id, ArrayList<Player> players) {
-        MultiPlayer multiPlayer = new MultiPlayer(players);
-        controllerMap.put(id, new ControllerActionsMulti(multiPlayer, id));
-        reservedIds.remove(id);
+    private synchronized void createNewControllerActionsMulti(int id, AnswerListener answerListener, int numberOfPlayers, Player player) {
+        controllerMap.put(id, new ControllerActionsMulti(id, answerListener, numberOfPlayers, player));
     }
 
     /**
@@ -127,16 +126,14 @@ public class ControllerManager {
      * @return a pair with the id of the new game and the id of the player
      * @throws PlayersOutOfBoundControllerException if playersNumber has a wrong value
      */
-    private synchronized PairId<Integer, Integer> reserveId(int playersNumber, String userName) throws PlayersOutOfBoundControllerException {
+    private synchronized PairId<Integer, Integer> reserveId(int playersNumber, String userName, AnswerListener answerListener) throws PlayersOutOfBoundControllerException {
         if (playersNumber < 1 || playersNumber > 4) throw new PlayersOutOfBoundControllerException();
         int id = getNewId();
         int playerId = id * 10;
         Player player = new Player(userName, playerId);
-        if (playersNumber == 1) createNewSinglePlayer(id, player);
+        if (playersNumber == 1) createNewSinglePlayer(id, answerListener, player);
         else {
-            reservedIds.put(id, new PairId<>(playersNumber, new ArrayList<>() {{
-                add(player);
-            }}));
+            createNewControllerActionsMulti(id, answerListener, playersNumber, player);
         }
         return new PairId<>(id, playerId);
     }
@@ -151,18 +148,24 @@ public class ControllerManager {
      * @throws NoSuchReservedIdControllerException   if the id is not in the reservedIds list
      */
     private synchronized int addPlayerToGame(int id, String userName) throws GameAlreadyStartedControllerException, NoSuchReservedIdControllerException {
-        if(controllerMap.containsKey(id)) throw new GameAlreadyStartedControllerException();
-        if (!reservedIds.containsKey(id)) throw new NoSuchReservedIdControllerException();
+        if(!controllerMap.containsKey(id)) throw new NoSuchReservedIdControllerException();
+        if (controllerMap.get(id).getGame() != null) throw new GameAlreadyStartedControllerException();
 
-        if(reservedIds.get(id).getFirst() >= reservedIds.get(id).getSecond().size())
+        // if I am here the game is surely multiplayer (otherwise the game cannot be null)
+        ControllerActionsMulti controllerActionsMulti = (ControllerActionsMulti) controllerMap.get(id);
+        // I get the reference to numberAndPlayers
+        PairId<Integer, ArrayList<Player>> numberAndPlayers = controllerActionsMulti.getNumberAndPlayers();
+
+        if(numberAndPlayers.getFirst() >= numberAndPlayers.getSecond().size())
             logger.error("player size exceeds the number specified by the creator of the game");
-        int playerId = id * 10 + reservedIds.get(id).getSecond().size();
+
+        int playerId = id * 10 + numberAndPlayers.getSecond().size();
         Player player = new Player(userName, playerId);
-        reservedIds.get(id).getSecond().add(player);
-        if (reservedIds.get(id).getSecond().size() == reservedIds.get(id).getFirst()) {
-            ArrayList<Player> players = reservedIds.get(id).getSecond();
+        controllerActionsMulti.getNumberAndPlayers().getSecond().add(player);
+        if (numberAndPlayers.getSecond().size() == numberAndPlayers.getFirst()) {
+            ArrayList<Player> players = numberAndPlayers.getSecond();
             Collections.shuffle(players);
-            createNewMultiPlayer(id, players);
+            controllerActionsMulti.setGame(new MultiPlayer(players));
         }
         return playerId;
     }
