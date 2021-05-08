@@ -12,26 +12,28 @@ import static org.junit.Assert.*;
 
 public class ParserTest {
 
-    @Test
-    public void parse() {
-        ClientMessage clientMessage = new CreateGameMessage(1, "lollo");
+    Object object;
+    ClientMessage clientMessage;
 
+    public Object check(ClientMessage clientMessage){
         try {
             Object object = Parser.parse(clientMessage);
-            assertEquals("CreateGameMessageController", object.getClass().getSimpleName());
-            assertEquals(clientMessage, ((CreateGameMessageController)object).getClientMessage());
+            assertEquals(clientMessage.getClass().getSimpleName() + "Controller", object.getClass().getSimpleName());
+            return object;
         } catch (ControllerException e) {
             fail();
         }
+        return null;
+    }
+
+    @Test
+    public void parseTest() {
+        clientMessage = new CreateGameMessage(1, "lollo");
+        object = check(clientMessage);
+        assertEquals(clientMessage, ((CreateGameMessageController)object).getClientMessage());
 
         clientMessage = new JoinGameMessage(1, "lollo");
-
-        try {
-            Object object = Parser.parse(clientMessage);
-            assertEquals("JoinGameMessageController", object.getClass().getSimpleName());
-            assertEquals(clientMessage, ((PreGameCreationMessageController)object).getClientMessage());
-        } catch (ControllerException e) {
-            fail();
-        }
+        object = check(clientMessage);
+        assertEquals(clientMessage, ((PreGameCreationMessageController)object).getClientMessage());
     }
 }
