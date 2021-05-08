@@ -51,7 +51,7 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
                     }});
                 }}, controllerActions.getGame());
 
-                return new ChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId());
+                return new ChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((ChooseOneResPrepMessage)getClientMessage()).getRes());
 
             } catch (InvalidResourcesToKeepByPlayerException e) {
                 logger.error("something unexpected happened in " + this.getClass() + " while putting initial resources in depot");
