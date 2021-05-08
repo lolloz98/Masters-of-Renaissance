@@ -26,8 +26,8 @@ public abstract class ControllerActions<T extends Game<?>> {
     private final ArrayList<AnswerListener> listeners = new ArrayList<>();
 
     /**
-     * method called to create a single player controller
-     * @param game single player game
+     * method called to create a controller
+     * @param game
      * @param id gameId
      */
     public ControllerActions(T game, int id, AnswerListener answerListener) {
