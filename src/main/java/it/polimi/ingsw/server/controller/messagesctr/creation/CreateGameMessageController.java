@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller.messagesctr.creation;
 
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
+import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.server.AnswerListener;
@@ -32,6 +33,9 @@ public class CreateGameMessageController implements Serializable {
         PairId<Integer, Integer> id = ControllerManager.getInstance().reserveIdForNewGame((CreateGameMessage) getClientMessage(), answerListener);
         logger.debug("id " + id.getFirst() + " successfully reserved");
         answerListener.setPlayerId(id.getSecond());
+        if(((CreateGameMessage) getClientMessage()).getPlayersNumber() == 1){
+            return new GameStatusAnswer(id.getFirst(), id.getSecond());
+        }
         return new CreateGameAnswer(id.getFirst(), id.getSecond());
     }
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.messages.answers.Answer;
+import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
@@ -80,6 +81,9 @@ public abstract class ControllerActions<T extends Game<?>> {
         sendAnswer(answer);
         if(game != null){
             // todo: send to each player a message with the game. CAREFUL: each player cannot see the leader cards of the others
+            for(AnswerListener a: listeners){
+                answerListener.sendAnswer(new GameStatusAnswer(answer.getGameId(), a.getPlayerId()));
+            }
         }
     }
 
