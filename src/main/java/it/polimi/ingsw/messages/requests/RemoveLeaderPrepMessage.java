@@ -13,7 +13,7 @@ public class RemoveLeaderPrepMessage extends ClientMessage{
     private static final long serialVersionUID = 115L;
     private final ArrayList<LeaderCard> leadersToDiscard;
 
-        public RemoveLeaderPrepMessage(int gameId, int playerId, Resource res, ArrayList<LeaderCard> leaders) {
+        public RemoveLeaderPrepMessage(int gameId, int playerId, ArrayList<LeaderCard> leaders) {
             super(gameId, playerId);
             leadersToDiscard=new ArrayList<>();
             leadersToDiscard.addAll(leaders);

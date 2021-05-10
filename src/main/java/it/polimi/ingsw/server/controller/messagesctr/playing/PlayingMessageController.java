@@ -5,11 +5,19 @@ import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
-import it.polimi.ingsw.server.controller.messagesctr.CurrentPlayerMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.GamePlayState;
-import it.polimi.ingsw.server.controller.states.PrepareGameState;
+import it.polimi.ingsw.server.model.game.Game;
+import it.polimi.ingsw.server.model.game.MultiPlayer;
+import it.polimi.ingsw.server.model.game.SinglePlayer;
 
-public abstract class PlayingMessageController extends CurrentPlayerMessageController {
+/**
+ * every request that can come only from the current player must inherit from this class
+ */
+
+public abstract class PlayingMessageController extends ClientMessageController {
+
+
 
     public PlayingMessageController(ClientMessage clientMessage) {
         super(clientMessage);
@@ -17,6 +25,26 @@ public abstract class PlayingMessageController extends CurrentPlayerMessageContr
 
     @Override
     public abstract Answer doAction(ControllerActions<?> controllerActions) throws ControllerException, NotCurrentPlayerException;
+
+    /**
+     * method that checks if the player that has sent the request can do a currentPlayer action
+     * @param controllerActions
+     * @return true if this.playerId is equal to current player id
+     */
+    protected boolean checkCurrentPlayer(ControllerActions controllerActions){
+        Game game=controllerActions.getGame();
+        if(game instanceof SinglePlayer){
+            SinglePlayer singlePlayer=(SinglePlayer) game;
+            if(singlePlayer.getTurn().isLorenzoPlaying())
+                return false;
+        }
+        else if(game instanceof MultiPlayer){
+            MultiPlayer multiPlayer=(MultiPlayer) game;
+            if(multiPlayer.getTurn().getCurrentPlayer().getPlayerId()!=getClientMessage().getPlayerId())
+                return false;
+        }
+        return true;
+    }
 
     @Override
     protected boolean checkState(ControllerActions<?> controllerActions) {

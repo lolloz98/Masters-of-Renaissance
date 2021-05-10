@@ -6,6 +6,7 @@ import it.polimi.ingsw.messages.answers.leader.ActivateMarbleLeaderAnswer;
 import it.polimi.ingsw.messages.answers.leader.ActivateProductionLeaderAnswer;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -25,7 +26,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
 
     private static final Logger logger = LogManager.getLogger(ChooseOneResPrepMessageController.class);
 
-    public ActivateLeaderMessageController(ClientMessage clientMessage) {
+    public ActivateLeaderMessageController(ActivateLeaderMessage clientMessage) {
         super(clientMessage);
     }
 

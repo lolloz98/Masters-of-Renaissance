@@ -1,14 +1,13 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.messages.requests.leader.RemoveLeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.messagesctr.CurrentPlayerMessageController;
 
-public class RemoveLeaderMessageController extends CurrentPlayerMessageController {
+public class RemoveLeaderMessageController extends PlayingMessageController {
 
-    public RemoveLeaderMessageController(ClientMessage clientMessage) {
+    public RemoveLeaderMessageController(RemoveLeaderMessage clientMessage) {
         super(clientMessage);
     }
 
