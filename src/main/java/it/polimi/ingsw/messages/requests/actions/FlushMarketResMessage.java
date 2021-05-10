@@ -21,6 +21,7 @@ public class FlushMarketResMessage extends ClientMessage {
      */
     private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep;
 
+
     public FlushMarketResMessage(int gameId, int playerId, TreeMap<Resource, Integer> chosenCombination, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep) {
         super(gameId, playerId);
         this.chosenCombination = chosenCombination;

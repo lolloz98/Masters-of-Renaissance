@@ -66,8 +66,5 @@ public class ParserTest {
         object = check(clientMessage);
         assertEquals(clientMessage, ((ClientMessageController)object).getClientMessage());
 
-        clientMessage = new RemoveLeaderMessage(1,2,4);
-        object = check(clientMessage);
-        assertEquals(clientMessage, ((ClientMessageController)object).getClientMessage());
     }
 }

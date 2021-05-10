@@ -2,6 +2,10 @@ package it.polimi.ingsw.messages.requests.actions;
 
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.server.model.player.WarehouseType;
+
+import java.util.TreeMap;
 
 /**
  * Request for buying a develop card
@@ -15,11 +19,17 @@ public class BuyDevelopCardMessage extends ClientMessage {
      */
     public final int whichDeck;
 
-    public BuyDevelopCardMessage(int gameId, int playerId, int level, Color color, int whichDeck) {
+    /**
+     *resources to pay in order to obtain the desired develop card
+     */
+    public final TreeMap<WarehouseType, TreeMap<Resource,Integer>> toPay;
+
+    public BuyDevelopCardMessage(int gameId, int playerId, int level, Color color, int whichDeck, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
         super(gameId, playerId);
         this.level = level;
         this.color = color;
         this.whichDeck = whichDeck;
+        this.toPay = toPay;
     }
 
     public int getWhichDeck() {
