@@ -54,8 +54,8 @@ public class Board implements VictoryPointCalculator {
         resToGive.put(Resource.ANYTHING, 2);
         resToGain.put(Resource.ANYTHING, 1);
         normalProduction = new Production(resToGive, resToGain);
-        depotLeaders = new ArrayList<>();
-        depots = new ArrayList<>();
+        depotLeaders = new ArrayList<DepotLeaderCard>();
+        depots = new ArrayList<Depot>();
         for (int i = 0; i < 3; i++)
             depots.add(new Depot(i + 1, true));
     }
@@ -522,6 +522,32 @@ public class Board implements VictoryPointCalculator {
     public void removeLeaderCard(LeaderCard<? extends Requirement> card) {
         if (!leaderCards.contains(card)) throw new IllegalArgumentException();
         leaderCards.remove(card);
+    }
+
+    /**
+     * definitely discards card from the board
+     * @param card card to discard
+     * @throws IllegalArgumentException the card is not contained in the LeaderCards of the board
+     */
+    public void discardLeaderCard(LeaderCard<? extends Requirement> card){
+        if (!leaderCards.contains(card)) throw new IllegalArgumentException();
+
+        if(card instanceof DepotLeaderCard){
+            DepotLeaderCard depotCard=(DepotLeaderCard) card;
+            leaderCards.get(leaderCards.indexOf(depotCard)).discard();
+            leaderCards.remove(depotCard);
+            if(depotCard.isActive()) depotLeaders.remove(depotCard);
+        }
+        else if(card instanceof ProductionLeaderCard){
+            ProductionLeaderCard prodCard=(ProductionLeaderCard) card;
+            leaderCards.get(leaderCards.indexOf(prodCard)).discard();
+            leaderCards.remove(prodCard);
+            if(prodCard.isActive()) productionLeaderSlots.remove(prodCard);
+        }
+        else{
+            leaderCards.get(leaderCards.indexOf(card)).discard();
+            leaderCards.remove(card);
+        }
     }
 
     /**

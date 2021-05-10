@@ -36,7 +36,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
         if(checkState(controllerActions)){
             if(checkCurrentPlayer(controllerActions)){
                 Board board;
-                board = controllerActions.getGame().getPlayer(getClientMessage().getPlayerId()).getBoard();
+                board= getPlayerFromId(controllerActions).getBoard();
                 LeaderCard toActivate= board.getLeaderCard(((LeaderMessage)getClientMessage()).getLeaderId());
 
                 try{
@@ -69,10 +69,10 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
 
             }
             else
-                throw new NotCurrentPlayerException();
+                throw new NotCurrentPlayerException("you are not the current player! wait your turn");
         }
         else
-            throw new WrongStateControllerException();
+            throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
         return null;
     }
 

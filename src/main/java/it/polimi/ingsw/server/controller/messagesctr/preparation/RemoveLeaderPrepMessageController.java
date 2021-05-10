@@ -47,7 +47,7 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
 
         }
         else
-            throw new WrongStateControllerException();
+            throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
     }
 
     @Override

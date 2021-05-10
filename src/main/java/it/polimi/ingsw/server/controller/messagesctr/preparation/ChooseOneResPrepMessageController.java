@@ -52,7 +52,7 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
                 throw new ControllerException("not possible to add init resources to the depots");
             }
         } else{
-            throw new WrongStateControllerException();
+            throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
         }
     }
 
