@@ -34,7 +34,7 @@ public class CreateGameMessageController implements Serializable {
         logger.debug("id " + id.getFirst() + " successfully reserved");
         answerListener.setPlayerId(id.getSecond());
         if(((CreateGameMessage) getClientMessage()).getPlayersNumber() == 1){
-            return new GameStatusAnswer(id.getFirst(), id.getSecond());
+            return new GameStatusAnswer(id.getFirst(), id.getSecond(), id.getSecond());
         }
         return new CreateGameAnswer(id.getFirst(), id.getSecond());
     }

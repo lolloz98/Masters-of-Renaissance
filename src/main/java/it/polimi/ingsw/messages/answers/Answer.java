@@ -7,6 +7,9 @@ public abstract class Answer implements Serializable {
 
     private final int gameId;
 
+    /**
+     * player who asked the request who generated this answer
+     */
     private final int playerId;
 
     public Answer(int gameId, int playerId) {
