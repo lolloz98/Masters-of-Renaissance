@@ -15,7 +15,16 @@ import java.util.Arrays;
 public class AnswerListener {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
 
+    private int playerId;
     private final ObjectOutputStream oStream;
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
 
     public AnswerListener(ObjectOutputStream oStream){
         this.oStream = oStream;

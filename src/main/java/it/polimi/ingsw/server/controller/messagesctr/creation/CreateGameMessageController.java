@@ -31,6 +31,7 @@ public class CreateGameMessageController implements Serializable {
     public Answer doAction(AnswerListener answerListener) throws ControllerException {
         PairId<Integer, Integer> id = ControllerManager.getInstance().reserveIdForNewGame((CreateGameMessage) getClientMessage(), answerListener);
         logger.debug("id " + id.getFirst() + " successfully reserved");
+        answerListener.setPlayerId(id.getSecond());
         return new CreateGameAnswer(id.getFirst(), id.getSecond());
     }
 }

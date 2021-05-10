@@ -8,7 +8,8 @@ import it.polimi.ingsw.server.model.player.Board;
 public class ControllerActionsSingle extends ControllerActions<SinglePlayer> {
 
     public ControllerActionsSingle(SinglePlayer game, int id, AnswerListener answerListener) {
-        super((SinglePlayer) game, id, answerListener);
+        super(game, id, answerListener);
+        // todo: send the game to the player
     }
 
     @Override
