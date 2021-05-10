@@ -73,6 +73,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
         }
         else
             throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
+
         return null;
     }
 

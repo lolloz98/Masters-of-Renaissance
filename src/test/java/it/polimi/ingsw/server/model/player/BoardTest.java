@@ -70,9 +70,27 @@ public class BoardTest {
         path = String.format("src/main/resources/json_file/cards/leader/%03d.json", 63);//"resourcesToGive": "ROCK": 1; "resourcesToGain": "FAITH": 1,"ANYTHING": 1
         productionLeaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), ProductionLeaderCard.class));
 
+        board.addLeaderCards(productionLeaderCards);
+        board.addLeaderCards(depotLeaderCards);
+
         board.discoverProductionLeader((ProductionLeaderCard) productionLeaderCards.get(0));
         board.discoverProductionLeader((ProductionLeaderCard) productionLeaderCards.get(1));
         assertEquals(2, board.getProductionLeaders().size());
+    }
+
+    @Test
+    public void discardLeaderCardTest(){
+        DepotLeaderCard toDiscard= (DepotLeaderCard) depotLeaderCards.get(0);
+
+        getVictoryPointsTest();//add and activate 2 depot leaders
+
+        board.discardLeaderCard(toDiscard);
+
+        assertTrue(!board.getLeaderCards().contains(toDiscard));
+        assertEquals(1,board.getLeaderCards().size());
+        assertEquals(1,board.getDepotLeaders().size());
+        assertTrue(toDiscard.isDiscarded());
+        assertTrue(!board.getDepotLeaders().contains(toDiscard));
     }
 
     public void buildBoard2() {
