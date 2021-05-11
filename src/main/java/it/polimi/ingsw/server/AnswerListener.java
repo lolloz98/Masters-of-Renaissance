@@ -13,9 +13,9 @@ import java.util.Arrays;
  * Class that handles the sending of the answers to the client
  */
 public class AnswerListener {
-    private static final Logger logger = LogManager.getLogger(ClientHandler.class);
+    private static final Logger logger = LogManager.getLogger(AnswerListener.class);
 
-    private int playerId;
+    private int playerId = -1;
     private final ObjectOutputStream oStream;
 
     public void setPlayerId(int playerId) {
@@ -23,6 +23,7 @@ public class AnswerListener {
     }
 
     public int getPlayerId() {
+        if(playerId == -1) logger.error("the playerId was not set on this answer listener");
         return playerId;
     }
 
