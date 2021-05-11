@@ -31,50 +31,40 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
     }
 
     @Override
-    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
+    public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+        Board board;
+        board = getPlayerFromId(controllerActions).getBoard();
+        LeaderCard<?> toActivate = board.getLeaderCard(((LeaderMessage) getClientMessage()).getLeaderId());
 
-        if(checkState(controllerActions)){
-            if(checkCurrentPlayer(controllerActions)){
-                Board board;
-                board= getPlayerFromId(controllerActions).getBoard();
-                LeaderCard toActivate= board.getLeaderCard(((LeaderMessage)getClientMessage()).getLeaderId());
-
-                try{
-                    toActivate.activate(controllerActions.getGame(),controllerActions.getGame().getPlayer(getClientMessage().getPlayerId()));
-                }catch (RequirementNotSatisfiedException e){
-                    throw new ControllerException("you don't have the requirements to activate this card, try again on the next turn");
-                }catch(AlreadyActiveLeaderException e){
-                    throw new ControllerException("you have already activated this card");
-                }catch(ActivateDiscardedCardException e){
-                    throw new ControllerException("you cannot activate a discarded card");
-                }catch(IllegalArgumentException e){
-                    logger.debug("something unexpected happened in " + this.getClass() + " while activating a leader card");
-                    throw new ControllerException("not possible to activate leader card");
-                }
-
-                if(toActivate instanceof DepotLeaderCard){
-                    DepotLeaderCard card=(DepotLeaderCard) toActivate;
-                    return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),card.getId());
-                }
-                if(toActivate instanceof ProductionLeaderCard){
-                    ProductionLeaderCard card=(ProductionLeaderCard) toActivate;
-                    return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),card.getId());
-                }
-                if(toActivate instanceof DiscountLeaderCard){
-                    return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),controllerActions.getGame().getDecksDevelop());
-                }
-                if(toActivate instanceof MarbleLeaderCard){
-                    return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),controllerActions.getGame().getMarketTray().getLeaderResources());
-                }
-
-            }
-            else
-                throw new NotCurrentPlayerException("you are not the current player! wait your turn");
+        try {
+            toActivate.activate(controllerActions.getGame(), controllerActions.getGame().getPlayer(getClientMessage().getPlayerId()));
+        } catch (RequirementNotSatisfiedException e) {
+            throw new ControllerException("you don't have the requirements to activate this card, try again on the next turn");
+        } catch (AlreadyActiveLeaderException e) {
+            throw new ControllerException("you have already activated this card");
+        } catch (ActivateDiscardedCardException e) {
+            throw new ControllerException("you cannot activate a discarded card");
+        } catch (IllegalArgumentException e) {
+            logger.debug("something unexpected happened in " + this.getClass() + " while activating a leader card");
+            throw new ControllerException("not possible to activate leader card");
         }
-        else
-            throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
 
-        return null;
+        if (toActivate instanceof DepotLeaderCard) {
+            DepotLeaderCard card = (DepotLeaderCard) toActivate;
+            return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), card.getId());
+        }
+        if (toActivate instanceof ProductionLeaderCard) {
+            ProductionLeaderCard card = (ProductionLeaderCard) toActivate;
+            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), card.getId());
+        }
+        if (toActivate instanceof DiscountLeaderCard) {
+            return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), controllerActions.getGame().getDecksDevelop());
+        }
+        if (toActivate instanceof MarbleLeaderCard) {
+            return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), controllerActions.getGame().getMarketTray().getLeaderResources());
+        }
+        logger.error("toActivate is an unknown type of leader: " + toActivate.getClass());
+        throw new ControllerException("unknown type of leaderCard");
     }
 
 }

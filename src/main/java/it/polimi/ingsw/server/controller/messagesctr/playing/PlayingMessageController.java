@@ -1,15 +1,20 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.messages.answers.Answer;
+import it.polimi.ingsw.messages.answers.leader.DiscardLeaderAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
+import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.GamePlayState;
+import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
+import it.polimi.ingsw.server.model.player.Player;
 
 /**
  * every request that can come only from the current player must inherit from this class
@@ -17,31 +22,41 @@ import it.polimi.ingsw.server.model.game.SinglePlayer;
 
 public abstract class PlayingMessageController extends ClientMessageController {
 
-
-
     public PlayingMessageController(ClientMessage clientMessage) {
         super(clientMessage);
     }
 
     @Override
-    public abstract Answer doAction(ControllerActions<?> controllerActions) throws ControllerException, NotCurrentPlayerException;
+    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
+        if (checkState(controllerActions)) {
+            if (checkCurrentPlayer(controllerActions)) {
+                return doActionNoChecks(controllerActions);
+            } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
+        } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
+    }
+
+    /**
+     * do action without checking for the state and current player
+     * @param controllerActions controller action of current game
+     * @return answer of this message
+     * @throws ControllerException if something wrong with the message
+     */
+    protected abstract Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException;
 
     /**
      * method that checks if the player that has sent the request can do a currentPlayer action
-     * @param controllerActions
+     * @param controllerActions controllerActions of current game
      * @return true if this.playerId is equal to current player id
      */
-    protected boolean checkCurrentPlayer(ControllerActions controllerActions){
-        Game game=controllerActions.getGame();
+    protected boolean checkCurrentPlayer(ControllerActions<?> controllerActions){
+        Game<?> game=controllerActions.getGame();
         if(game instanceof SinglePlayer){
             SinglePlayer singlePlayer=(SinglePlayer) game;
-            if(singlePlayer.getTurn().isLorenzoPlaying())
-                return false;
+            return !singlePlayer.getTurn().isLorenzoPlaying();
         }
         else if(game instanceof MultiPlayer){
             MultiPlayer multiPlayer=(MultiPlayer) game;
-            if(multiPlayer.getTurn().getCurrentPlayer().getPlayerId()!=getClientMessage().getPlayerId())
-                return false;
+            return multiPlayer.getTurn().getCurrentPlayer().getPlayerId() == getClientMessage().getPlayerId();
         }
         return true;
     }

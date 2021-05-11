@@ -24,36 +24,28 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
     }
 
     /**
-     * discard the leadercard from the player's board
-     * @param controllerActions
+     * discard the leaderCard from the player's board
+     * @param controllerActions current controller action
      * @return DiscardLeaderCardAnswer to notify the changes
      * @throws ControllerException if the player doesn't own the card
      */
     @Override
-    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
-        if(checkState(controllerActions)){
-            if(checkCurrentPlayer(controllerActions)){
-                LeaderCard<?> card;
-                Player thisPlayer=getPlayerFromId(controllerActions);
-                try {
-                    card=thisPlayer.getBoard().getLeaderCard(((LeaderMessage)getClientMessage()).getLeaderId());
-                }catch(IllegalArgumentException e){
-                    throw new ControllerException("you don't own this leader");
-                }
-
-                try{
-                    thisPlayer.getBoard().discardLeaderCard(card);
-                }catch(IllegalArgumentException e){
-                    logger.error("something went wrong in " + this.getClass() + "while discarding a leadercard");
-                    throw new ControllerException("unexpected error");
-                }
-
-                return new DiscardLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),card.getId());
-            }
-            else
-                throw new NotCurrentPlayerException("you are not the current player! wait your turn");
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+        LeaderCard<?> card;
+        Player thisPlayer=getPlayerFromId(controllerActions);
+        try {
+            card=thisPlayer.getBoard().getLeaderCard(((LeaderMessage)getClientMessage()).getLeaderId());
+        }catch(IllegalArgumentException e){
+            throw new ControllerException("you don't own this leader");
         }
-        else
-            throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
+
+        try{
+            thisPlayer.getBoard().discardLeaderCard(card);
+        }catch(IllegalArgumentException e){
+            logger.error("something went wrong in " + this.getClass() + "while discarding a leadercard");
+            throw new ControllerException("unexpected error");
+        }
+
+        return new DiscardLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),card.getId());
     }
 }

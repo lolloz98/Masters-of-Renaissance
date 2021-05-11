@@ -15,7 +15,7 @@ public class FlushProductionResMessageController extends PlayingMessageControlle
     }
 
     @Override
-    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException, NotCurrentPlayerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         return null;
     }
 
