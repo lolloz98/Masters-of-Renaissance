@@ -65,6 +65,10 @@ public class Board implements VictoryPointCalculator {
         this.initialRes = initialRes;
     }
 
+    public Production getNormalProduction() {
+        return normalProduction;
+    }
+
     public ArrayList<DevelopCardSlot> getDevelopCardSlots() {
         return new ArrayList<>(developCardSlots);
     }

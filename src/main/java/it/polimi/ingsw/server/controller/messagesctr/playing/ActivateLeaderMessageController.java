@@ -1,25 +1,27 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
-import it.polimi.ingsw.messages.answers.leader.ActivateDepotLeaderAnswer;
-import it.polimi.ingsw.messages.answers.leader.ActivateDiscountLeaderAnswer;
-import it.polimi.ingsw.messages.answers.leader.ActivateMarbleLeaderAnswer;
-import it.polimi.ingsw.messages.answers.leader.ActivateProductionLeaderAnswer;
+import it.polimi.ingsw.messages.answers.leaderanswer.ActivateDepotLeaderAnswer;
+import it.polimi.ingsw.messages.answers.leaderanswer.ActivateDiscountLeaderAnswer;
+import it.polimi.ingsw.messages.answers.leaderanswer.ActivateMarbleLeaderAnswer;
+import it.polimi.ingsw.messages.answers.leaderanswer.ActivateProductionLeaderAnswer;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
-import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
+import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.ActivateDiscardedCardException;
 import it.polimi.ingsw.server.model.exception.AlreadyActiveLeaderException;
 import it.polimi.ingsw.server.model.exception.RequirementNotSatisfiedException;
+import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.TreeMap;
 
 public class ActivateLeaderMessageController extends PlayingMessageController {
     private static final long serialVersionUID = 208L;
@@ -55,13 +57,29 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
         }
         if (toActivate instanceof ProductionLeaderCard) {
             ProductionLeaderCard card = (ProductionLeaderCard) toActivate;
-            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), card.getId());
+            int whichLeaderProd=board.getProductionLeaders().indexOf(card)+4; //it must be 4 or 5
+            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), card.getId(),whichLeaderProd);
         }
         if (toActivate instanceof DiscountLeaderCard) {
-            return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), controllerActions.getGame().getDecksDevelop());
+
+            TreeMap<Resource,Integer>[][] newCosts= new TreeMap[4][3];
+            int i=0,j=0;
+            TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop= new TreeMap<>();
+            decksDevelop=controllerActions.getGame().getDecksDevelop();
+
+            for(Color c: decksDevelop.keySet()){
+                for(Integer level: decksDevelop.get(c).keySet()){
+                    newCosts[i][j]= decksDevelop.get(c).get(level).topCard().getCost();
+                    j++;
+                }
+                i++;
+            }
+
+
+            return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((LeaderMessage) getClientMessage()).getLeaderId(), newCosts);
         }
         if (toActivate instanceof MarbleLeaderCard) {
-            return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), controllerActions.getGame().getMarketTray().getLeaderResources());
+            return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((LeaderMessage) getClientMessage()).getLeaderId());
         }
         logger.error("toActivate is an unknown type of leader: " + toActivate.getClass());
         throw new ControllerException("unknown type of leaderCard");

@@ -1,8 +1,9 @@
-package it.polimi.ingsw.messages.answers;
+package it.polimi.ingsw.messages.answers.preparationanswer;
 
+import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.server.model.game.Resource;
 
-public class ChooseOneResPrepAnswer extends Answer{
+public class ChooseOneResPrepAnswer extends Answer {
     private final Resource res;
 
     public Resource getRes() {

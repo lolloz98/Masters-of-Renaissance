@@ -25,6 +25,10 @@ public class DevelopCard implements Card, VictoryPointCalculator {
         this.id = id;
     }
 
+    public TreeMap<Resource, Integer> getCost() {
+        return new TreeMap<Resource,Integer>(cost);
+    }
+
     @Override
     public int getVictoryPoints() {
         return victoryPoints;

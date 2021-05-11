@@ -1,12 +1,11 @@
 package it.polimi.ingsw.server.controller.messagesctr.preparation;
 
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.ChooseOneResPrepAnswer;
+import it.polimi.ingsw.messages.answers.preparationanswer.ChooseOneResPrepAnswer;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
-import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.model.exception.InvalidResourcesToKeepByPlayerException;
