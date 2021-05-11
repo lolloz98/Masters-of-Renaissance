@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
 import it.polimi.ingsw.server.controller.exception.WrongPlayerIdControllerException;
+import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
@@ -43,7 +44,19 @@ public abstract class ClientMessageController implements Serializable {
         return player;
     }
 
-    public abstract Answer doAction(ControllerActions<?> controllerActions) throws ControllerException, NotCurrentPlayerException;
+    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
+        if (checkState(controllerActions)) {
+                return doActionNoChecks(controllerActions);
+        } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
+    }
+
+    /**
+     * do action without checking for the state and current player
+     * @param controllerActions controller action of current game
+     * @return answer of this message
+     * @throws ControllerException if something wrong with the message
+     */
+    protected abstract Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException;
 
     protected abstract boolean checkState(ControllerActions<?> controllerActions);
 }

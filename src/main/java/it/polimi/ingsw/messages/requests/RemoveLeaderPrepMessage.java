@@ -11,15 +11,15 @@ import java.util.ArrayList;
 public class RemoveLeaderPrepMessage extends ClientMessage{
 
     private static final long serialVersionUID = 115L;
-    private final ArrayList<LeaderCard> leadersToDiscard;
+    private final ArrayList<LeaderCard<?>> leadersToDiscard;
 
-        public RemoveLeaderPrepMessage(int gameId, int playerId, ArrayList<LeaderCard> leaders) {
+        public RemoveLeaderPrepMessage(int gameId, int playerId, ArrayList<LeaderCard<?>> leaders) {
             super(gameId, playerId);
             leadersToDiscard=new ArrayList<>();
             leadersToDiscard.addAll(leaders);
         }
 
-        public ArrayList<LeaderCard> getLeadersToDiscard() {
+        public ArrayList<LeaderCard<?>> getLeadersToDiscard() {
             return leadersToDiscard;
         }
 }

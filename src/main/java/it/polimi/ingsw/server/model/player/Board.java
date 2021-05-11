@@ -556,7 +556,7 @@ public class Board implements VictoryPointCalculator {
      * @param cards cards to be removed from the board
      * @throws IllegalArgumentException if the cards was not contained in leaderCards of the board
      */
-    public void removeLeaderCards(ArrayList<LeaderCard> cards) {
+    public void removeLeaderCards(ArrayList<LeaderCard<? extends Requirement>> cards) {
         if (!leaderCards.containsAll(cards)) throw new IllegalArgumentException();
         leaderCards.remove(cards);
     }

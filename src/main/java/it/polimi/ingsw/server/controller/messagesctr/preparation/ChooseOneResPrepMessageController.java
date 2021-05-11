@@ -27,32 +27,28 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
     }
 
     @Override
-    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException{
-        if(checkState(controllerActions)){
-            Board board = getPlayerFromId(controllerActions).getBoard();
-            int initRes = board.getInitialRes();
+    public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+        Board board = getPlayerFromId(controllerActions).getBoard();
+        int initRes = board.getInitialRes();
 
-            if(initRes <= 0) throw new InvalidActionControllerException("not enough initial resources");
-            try {
-                board.gainResources(new TreeMap<>(){{
-                    put(((ChooseOneResPrepMessage)getClientMessage()).getRes(), 1);
-                }}, new TreeMap<>(){{
-                    put(WarehouseType.NORMAL, new TreeMap<>(){{
-                        put(((ChooseOneResPrepMessage)getClientMessage()).getRes(), 1);
-                    }});
-                }}, controllerActions.getGame());
+        if (initRes <= 0) throw new InvalidActionControllerException("not enough initial resources");
+        try {
+            board.gainResources(new TreeMap<>() {{
+                put(((ChooseOneResPrepMessage) getClientMessage()).getRes(), 1);
+            }}, new TreeMap<>() {{
+                put(WarehouseType.NORMAL, new TreeMap<>() {{
+                    put(((ChooseOneResPrepMessage) getClientMessage()).getRes(), 1);
+                }});
+            }}, controllerActions.getGame());
 
-                if(controllerActions.checkToGamePlayState())//if the preparation state is ended(all the players have discarded 2 leaders and have chosen the beginning resources)
-                    controllerActions.checkToGamePlayState();
+            if (controllerActions.checkToGamePlayState())//if the preparation state is ended(all the players have discarded 2 leaders and have chosen the beginning resources)
+                controllerActions.checkToGamePlayState();
 
-                return new ChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((ChooseOneResPrepMessage)getClientMessage()).getRes());
+            return new ChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((ChooseOneResPrepMessage) getClientMessage()).getRes());
 
-            } catch (InvalidResourcesToKeepByPlayerException e) {
-                logger.error("something unexpected happened in " + this.getClass() + " while putting initial resources in depot");
-                throw new ControllerException("not possible to add init resources to the depots");
-            }
-        } else{
-            throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
+        } catch (InvalidResourcesToKeepByPlayerException e) {
+            logger.error("something unexpected happened in " + this.getClass() + " while putting initial resources in depot");
+            throw new ControllerException("not possible to add init resources to the depots");
         }
     }
 

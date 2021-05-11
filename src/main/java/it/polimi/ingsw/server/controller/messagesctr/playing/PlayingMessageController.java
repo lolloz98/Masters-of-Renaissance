@@ -34,15 +34,7 @@ public abstract class PlayingMessageController extends ClientMessageController {
             } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
         } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
     }
-
-    /**
-     * do action without checking for the state and current player
-     * @param controllerActions controller action of current game
-     * @return answer of this message
-     * @throws ControllerException if something wrong with the message
-     */
-    protected abstract Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException;
-
+    
     /**
      * method that checks if the player that has sent the request can do a currentPlayer action
      * @param controllerActions controllerActions of current game

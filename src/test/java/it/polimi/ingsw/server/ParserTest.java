@@ -52,7 +52,7 @@ public class ParserTest {
         object = check(clientMessage);
         assertEquals(clientMessage, ((ClientMessageController)object).getClientMessage());
 
-        clientMessage = new RemoveLeaderPrepMessage(1,2, new ArrayList<LeaderCard>(){{
+        clientMessage = new RemoveLeaderPrepMessage(1,2, new ArrayList<LeaderCard<?>>(){{
             add(new DepotLeaderCard(1,new RequirementResource(Resource.GOLD), new Depot(Resource.GOLD), 2));
         }});
         object = check(clientMessage);

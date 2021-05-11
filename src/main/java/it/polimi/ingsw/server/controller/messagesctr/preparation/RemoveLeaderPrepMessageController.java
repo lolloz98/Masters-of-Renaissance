@@ -26,28 +26,25 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
     }
 
     @Override
-    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
-        if(checkState(controllerActions)){
-            Board board = getPlayerFromId(controllerActions).getBoard();
-            ArrayList<LeaderCard> toRemove=((RemoveLeaderPrepMessage)getClientMessage()).getLeadersToDiscard();
+    public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+        Board board = getPlayerFromId(controllerActions).getBoard();
+        ArrayList<LeaderCard<?>> toRemove = ((RemoveLeaderPrepMessage) getClientMessage()).getLeadersToDiscard();
 
-            if(toRemove.size()!=2) throw new InvalidActionControllerException("Wrong quantity of leader chosen: you should choose just two leaders");
+        if (toRemove.size() != 2)
+            throw new InvalidActionControllerException("Wrong quantity of leader chosen: you should choose just two leaders");
 
-            try {
-                board.removeLeaderCards(toRemove);
-            }catch (IllegalArgumentException e){
-                logger.error("something unexpected happened in " + this.getClass() + " while removing leaders");
-                throw new ControllerException("not possible to remove these leaders");
-            }
-
-            if(controllerActions.checkToGamePlayState())
-                controllerActions.toGamePlayState();
-
-             return new RemoveLeaderPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(),toRemove);
-
+        try {
+            board.removeLeaderCards(toRemove);
+        } catch (IllegalArgumentException e) {
+            logger.error("something unexpected happened in " + this.getClass() + " while removing leaders");
+            throw new ControllerException("not possible to remove these leaders");
         }
-        else
-            throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
+
+        if (controllerActions.checkToGamePlayState())
+            controllerActions.toGamePlayState();
+
+        return new RemoveLeaderPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), toRemove);
+
     }
 
     @Override
