@@ -7,9 +7,8 @@ import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-public class LocalMarket extends LocalModelAbstract {
+public class LocalMarket extends Observable {
     private Resource[][] marbleMatrix;
-    private UI ui;
     private Resource freeMarble;
     private ArrayList<TreeMap<Resource, Integer>> resCombinations;
 
@@ -17,9 +16,9 @@ public class LocalMarket extends LocalModelAbstract {
         return marbleMatrix;
     }
 
-    public void setMarbleMatrix(Resource[][] marbleMatrix) {
+    public synchronized void setMarbleMatrix(Resource[][] marbleMatrix) {
         this.marbleMatrix = marbleMatrix;
-        ui.notifyAction(this);
+        notifyObserver();
     }
 
     public synchronized Resource getFreeMarble() {
@@ -36,10 +35,10 @@ public class LocalMarket extends LocalModelAbstract {
 
     public synchronized void setResCombinations(ArrayList<TreeMap<Resource, Integer>> resCombinations) {
         this.resCombinations = resCombinations;
-        ui.notifyAction(this);
+        notifyObserver();
     }
 
-    public LocalMarket(UI ui){
+    public LocalMarket(){
         // todo substitute with real constructor
         this.marbleMatrix = new Resource[3][4];
         ArrayList<Resource> resources = new ArrayList<>();
@@ -57,6 +56,5 @@ public class LocalMarket extends LocalModelAbstract {
             }
         }
         freeMarble = resources.get(12);
-        this.ui = ui;
     }
 }

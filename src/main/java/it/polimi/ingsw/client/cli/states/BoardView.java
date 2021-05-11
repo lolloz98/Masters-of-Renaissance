@@ -3,39 +3,38 @@ package it.polimi.ingsw.client.cli.states;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalModelAbstract;
+import it.polimi.ingsw.client.localmodel.LocalPlayer;
 
-public class BoardView extends View{
-    private LocalBoard localBoard;
+public class BoardView extends GameView {
+    private LocalPlayer localPlayer;
+    private CLI cli;
 
-    public BoardView(LocalBoard localBoard, LocalGame localGame){
-        this.localBoard = localBoard;
+    public BoardView(CLI cli, LocalGame localGame, LocalPlayer localPlayer){
         this.localGame = localGame;
-        draw();
+        this.cli = cli;
+        this.localPlayer = localPlayer;
     }
 
     @Override
     public void draw(){
         CLI.clearScreen();
         // todo make this good looking
-        System.out.println(localBoard.getPlayerName() + "'s board:");
+        System.out.println(localPlayer.getName() + "'s board:");
         System.out.println("");
-        System.out.println("Resources in depot:" + localBoard.getResInNormalDeposit());
-        System.out.println("Resources in box:" + localBoard.getResInStrongBox());
-        System.out.println("Faith points:" + localBoard.getFaithTrackScore());
+        System.out.println("Resources in depot:" + localPlayer.getLocalBoard().getResInNormalDeposit());
+        System.out.println("Resources in box:" + localPlayer.getLocalBoard().getResInStrongBox());
+        System.out.println("Faith points:" + localPlayer.getLocalBoard().getLocalTrack().getFaithTrackScore());
         super.drawTurn();
     }
 
     @Override
-    public void notifyAction(LocalModelAbstract localModelAbstract){
-        if (localModelAbstract == this.localBoard || localModelAbstract instanceof LocalGame) {
-            draw();
-        }
+    public void notifyAction(){
+        draw();
     }
 
     @Override
-    public void handleCommand(String line){
-        switch (line){
+    public void handleCommand(int ans){
+        switch (ans){
             // todo handle activate production (only if loadBoard.getPlayerId() == playerId)
             default:
                 System.out.println("not valid");

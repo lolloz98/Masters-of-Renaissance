@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.localmodel.localcards;
 
 public class LocalLeaderCard {
     protected int victoryPoints;
+    protected int id;
 
     public synchronized int getVictoryPoints() {
         return victoryPoints;

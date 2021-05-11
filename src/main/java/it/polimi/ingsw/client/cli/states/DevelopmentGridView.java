@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalModelAbstract;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.server.model.game.Resource;
 
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class DevelopmentGridView extends View{
+public class DevelopmentGridView extends GameView {
     private LocalDevelopmentGrid localDevelopmentGrid;
     private ArrayList<String> out;
     private LocalDevelopCard[][] topDevelopCards;
@@ -42,15 +41,13 @@ public class DevelopmentGridView extends View{
     }
 
     @Override
-    public void notifyAction(LocalModelAbstract localModelAbstract) {
-        if (localModelAbstract == this.localDevelopmentGrid || localModelAbstract instanceof LocalGame) {
-            draw();
-        }
+    public void notifyAction() {
+        draw();
     }
 
     @Override
-    public void handleCommand(String line){
-        switch (line){
+    public void handleCommand(int ans){
+        switch (ans){
             // todo handle buy command
             default:
                 System.out.println("not valid");

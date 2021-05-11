@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.messages.answers.Answer;
+import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import org.apache.logging.log4j.LogManager;
@@ -12,8 +13,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client
-{
+public class Client {
+    Socket server;
+    ObjectOutputStream output;
+    ObjectInputStream input;
     private static final Logger logger = LogManager.getLogger(Client.class);
 
     public static void main(String[] args)
@@ -59,5 +62,15 @@ public class Client
         } catch (IOException e) {
             logger.warn("Error happened while closing a connection: " + e.getMessage());
         }
+    }
+
+    public Client(String address, int port) throws IOException{
+        server = new Socket(address, port);
+        output = new ObjectOutputStream(server.getOutputStream());
+        input = new ObjectInputStream(server.getInputStream());
+    }
+
+    public void sendMessage(ClientMessage message) throws IOException {
+        output.writeObject(message);
     }
 }

@@ -1,41 +1,39 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.UI;
-import it.polimi.ingsw.client.cli.states.BoardView;
-import it.polimi.ingsw.client.cli.states.DevelopmentGridView;
-import it.polimi.ingsw.client.cli.states.MarketView;
-import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.states.*;
 import it.polimi.ingsw.client.localmodel.*;
+import it.polimi.ingsw.messages.answers.CreateGameAnswer;
+import it.polimi.ingsw.messages.requests.CreateGameMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CLI extends UI implements Runnable {
-    private ArrayList<LocalBoard> localBoards;
-    private LocalMarket localMarket;
     private LocalGame localGame;
-    private LocalDevelopmentGrid localDevelopmentGrid;
     private View state;
     private boolean gameOver;
     private Scanner input;
 
-    protected ArrayList<LocalBoard> getLocalBoards() {
-        return localBoards;
+    public Client getClient() {
+        return client;
     }
 
-    protected LocalMarket getLocalMarket() {
-        return localMarket;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    protected LocalGame getLocalGame() {
+    private Client client;
+
+    public LocalGame getLocalGame() {
         return localGame;
     }
 
-    protected LocalDevelopmentGrid getLocalDevelopmentGrid() {
-        return localDevelopmentGrid;
+    public void setLocalGame(LocalGame localGame) {
+        this.localGame = localGame;
     }
-
     public View getState() {
         return state;
     }
@@ -51,50 +49,90 @@ public class CLI extends UI implements Runnable {
 
     @Override
     public void run(){
-        setup();
-        state = new BoardView(localBoards.get(0), localGame); // fixme default state, to be removed
-        // todo: delete this, is just to simulate someone modifying the market
-        new Thread(() -> {
-            try {
-                Thread.sleep(7000);
-                localBoards.get(0).setFaithTrackScore(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-        new Thread(() -> {
-            try {
-                Thread.sleep(10000);
-                localGame.setCurrentPlayerId(1);
-                Thread.sleep(10000);
-                localGame.setCurrentPlayerId(2);
-                Thread.sleep(10000);
-                localGame.setCurrentPlayerId(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
         this.input = new Scanner(System.in);
+        setup();
         while(!gameOver){
-            handleCommand(input.nextLine());
+            state.draw();
+            state.handleCommand(input.nextInt());
         }
     }
 
     void setup(){
-        /* for windows cmd
-        try {
-            new ProcessBuilder("cmd", "/c", "mode con:cols=120 lines=40").inheritIO().start().waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
-        localGame = new LocalGame(this);
-        localMarket = new LocalMarket(this);
-        localDevelopmentGrid = new LocalDevelopmentGrid(this);
-        localBoards = new ArrayList<>();
-        this.localBoards.add(new LocalBoard(this));
+        clearScreen();
+        System.out.println("Welcome to Masters of Renaissance");
+        System.out.println("Do you want to play a local single game, or to connect to a server?");
+        System.out.println("1. Play locally");
+        System.out.println("2. Connect to a server\n");
+        System.out.println("Enter your choice:\n");
+        Scanner input = new Scanner(System.in);
+        int choice;
+        boolean valid;
+        do{
+            choice = input.nextInt();
+            if (choice<1 || choice>2) {
+                System.out.println("Invalid answer, try again:");
+                valid = false;
+            }
+            else if (choice == 1) {
+                // todo when implemented local single player
+                valid = true;
+            } else {
+                input.nextLine(); // needed to use nextLine() after nextInt()
+                System.out.println("Enter server ip");
+                String ip = input.nextLine();
+                System.out.println("Enter server port");
+                int port = input.nextInt();
+                try {
+                    setClient(new Client(ip, port));
+                    valid = true;
+                    // choice for join or create game
+                    System.out.println("Do you want to join a game or create a new one?");
+                    System.out.println("1. Join game");
+                    System.out.println("2. Create a new game\n");
+                    System.out.println("Enter your choice:\n");
+                    int choice2;
+                    boolean valid2;
+                    do {
+                        choice2 = input.nextInt();
+                        if (choice2 < 1 || choice2 > 2) {
+                            System.out.println("Invalid answer, try again:");
+                            valid2 = false;
+                        } else if (choice2 == 1) {
+                            state = new JoinGameView();
+                            this.localGame = new LocalMulti();
+                            valid2 = true;
+                        } else {
+                            // choice for number of players
+                            System.out.println("Type the number of players:\n");
+                            boolean valid3;
+                            int ans;
+                            do {
+                                ans = input.nextInt();
+                                if (ans < 1 || ans > 4) {
+                                    System.out.println("Invalid answer, try again:");
+                                    valid3 = false;
+                                } else if (ans == 1) {
+                                    LocalSingle localSingle = new LocalSingle();
+                                    state = new NewSingleView(this, localSingle);
+                                    localGame = localSingle;
+                                    valid3 = true;
+                                } else {
+                                    LocalMulti localMulti = new LocalMulti();
+                                    state = new NewMultiView(this, localMulti, ans);
+                                    localGame = localMulti;
+                                    valid3 = true;
+                                }
+                            } while (valid3 == false);
+                            valid2 = true;
+                        }
+                    } while (valid2 == false);
+                } catch(IOException e){
+                    System.out.println("error connecting to the server");
+                    valid = false;
+                }
+            }
+        } while (valid == false);
+        // todo initialte server handler passign localgame
     }
 
     public static void clearScreen() {
@@ -112,12 +150,7 @@ public class CLI extends UI implements Runnable {
         System.out.print(CLIutils.BLACK_BACKGROUND + CLIutils.ANSI_WHITE);
     }
 
-    @Override
-    public void notifyAction(LocalModelAbstract localModelAbstract){
-        state.notifyAction(localModelAbstract);
-    }
-
-    void handleCommand(String line){
+/*    void handleCommand(String line){
         switch(line) {
             case "end":
                 gameOver = true;
@@ -150,7 +183,7 @@ public class CLI extends UI implements Runnable {
                 // case for state-specific commands
                 state.handleCommand(line);
         }
-    }
+    } */
 
     public static void print(ArrayList<String> out){
         for(String o : out){

@@ -4,23 +4,13 @@ import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.game.Resource;
-import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.util.TreeMap;
 
-public class CLITest extends TestCase {
-    CLI cli;
-
-    @Before
-    public void setUp(){
-        cli = new CLI();
+public class test {
+    public static void main(String[] args) {
+        CLI cli = new CLI();
         cli.setup();
-    }
-
-    @Test
-    public void testDevelopmentGrid(){
         LocalDevelopmentGrid localDevelopmentGrid = cli.getLocalGame().getLocalDevelopmentGrid();
         int[][] developCardsNumber = new int[4][3];
         LocalDevelopCard[][] topDevelopCards = new LocalDevelopCard[4][3];
@@ -48,6 +38,7 @@ public class CLITest extends TestCase {
         }
         localDevelopmentGrid.setDevelopCardsNumber(developCardsNumber);
         localDevelopmentGrid.setTopDevelopCards(topDevelopCards);
-        // todo fix this cli.handleCommand("develop");
+        // cli.handleCommand("develop");
     }
+
 }

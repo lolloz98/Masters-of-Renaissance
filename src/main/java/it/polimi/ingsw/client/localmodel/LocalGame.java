@@ -1,57 +1,45 @@
 package it.polimi.ingsw.client.localmodel;
 
-import it.polimi.ingsw.client.UI;
 
-import java.util.ArrayList;
+public abstract class LocalGame<T extends LocalTurn> extends Observable {
+    protected LocalDevelopmentGrid localDevelopmentGrid;
+    protected LocalMarket localMarket;
+    protected int gameId;
+    protected T localTurn;
+    protected boolean ready;
 
-public class LocalGame extends LocalModelAbstract{
-    private int currentPlayerId;
-    private boolean multiPlayer;
-    private ArrayList<String> playerNames;
-    private UI ui;
-    private int numberOfPlayers;
-
-    public synchronized int getNumberOfPlayers() {
-        return numberOfPlayers;
+    public synchronized boolean isReady() {
+        return ready;
     }
 
-    public synchronized void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
+    public synchronized void setReady(boolean ready) {
+        this.ready = ready;
+        notifyObserver();
     }
 
-    public synchronized int getCurrentPlayerId() {
-        return currentPlayerId;
+    public LocalDevelopmentGrid getLocalDevelopmentGrid() {
+        return localDevelopmentGrid;
     }
 
-    public synchronized void setCurrentPlayerId(int currentPlayerId) {
-        this.currentPlayerId = currentPlayerId;
-        ui.notifyAction(this);
+    public LocalMarket getLocalMarket() {
+        return localMarket;
     }
 
-    public synchronized boolean isMultiPlayer() {
-        return multiPlayer;
+    public int getGameId() {
+        return gameId;
     }
 
-    public synchronized void setMultiPlayer(boolean multiPlayer) {
-        this.multiPlayer = multiPlayer;
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
 
-    public synchronized ArrayList<String> getPlayerNames() {
-        return playerNames;
+    public T getLocalTurn() {
+        return localTurn;
     }
 
-    public synchronized void setPlayerNames(ArrayList<String> playerNames) {
-        this.playerNames = playerNames;
-    }
-
-    public LocalGame(UI ui){
-        this.ui = ui;
-        //todo substitute with real constructor
-        this.playerNames = new ArrayList<>(){{
-            add("firstplayer");
-            add("secondplayer");
-            add("thirdplayer");
-            add("fourthplayer");
-        }};
+    public LocalGame(){
+        this.localDevelopmentGrid = new LocalDevelopmentGrid();
+        this.localMarket = new LocalMarket();
+        ready = false;
     }
 }

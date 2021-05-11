@@ -1,22 +1,24 @@
 package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.game.Resource;
 
 import java.util.TreeMap;
 
-public class LocalBoard extends LocalModelAbstract {
+public class LocalBoard extends Observable {
     private LocalDevelopCard[] topDevelopCards;
     private int[] developCardsNumber;
-    private int faithTrackScore;
-    private int playerId;
-    private String playerName;
     private TreeMap<Resource, Integer> resInStrongBox;
     private TreeMap<Resource, Integer> resInNormalDeposit;
     private LeaderCard[] leaderCards;
-    private UI ui;
+    private LocalTrack localTrack;
+
+    public synchronized LocalTrack getLocalTrack() {
+        return localTrack;
+    }
 
     public synchronized TreeMap<Resource, Integer> getResInStrongBox() {
         return resInStrongBox;
@@ -32,7 +34,7 @@ public class LocalBoard extends LocalModelAbstract {
 
     public synchronized void setResInNormalDeposit(TreeMap<Resource, Integer> resInNormalDeposit) {
         this.resInNormalDeposit = resInNormalDeposit;
-        ui.notifyAction(this);
+        notifyObserver();
     }
 
     public synchronized LeaderCard[] getLeaderCards() {
@@ -41,41 +43,15 @@ public class LocalBoard extends LocalModelAbstract {
 
     public synchronized void setLeaderCards(LeaderCard[] leaderCards) {
         this.leaderCards = leaderCards;
-        ui.notifyAction(this);
+        notifyObserver();
     }
 
-    public synchronized int getFaithTrackScore() {
-        return faithTrackScore;
-    }
-
-    public synchronized void setFaithTrackScore(int faithTrackScore) {
-        this.faithTrackScore = faithTrackScore;
-        ui.notifyAction(this);
-    }
-
-    public synchronized int getPlayerId() {
-        return playerId;
-    }
-
-    public synchronized void setPlayerId(int playerId) {
-        this.playerId = playerId;
-    }
-
-    public synchronized String getPlayerName() {
-        return playerName;
-    }
-
-    public synchronized void setPlayerName(String playerName) {
-        this.playerName = playerName;
-        ui.notifyAction(this);
-    }
-
-    public LocalBoard(UI ui){
-        this.ui = ui;
+    public LocalBoard(){
         developCardsNumber = new int[3];
         topDevelopCards = new LocalDevelopCard[3];
         leaderCards = new LeaderCard[2];
-        // todo: modify with real constructor
+        localTrack = new LocalTrack();
+        /* todo: modify with real constructor
         playerName = "firstplayer";
         resInStrongBox = new TreeMap<>(){{
             put(Resource.GOLD, 2);
@@ -87,5 +63,6 @@ public class LocalBoard extends LocalModelAbstract {
             put(Resource.SHIELD, 1);
             put(Resource.SERVANT, 1);
         }};
+        */
     }
 }

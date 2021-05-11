@@ -3,15 +3,15 @@ package it.polimi.ingsw.client.cli.states;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
-import it.polimi.ingsw.client.localmodel.LocalModelAbstract;
 
-public class MarketView extends View{
+public class MarketView extends GameView {
     private LocalMarket localMarket;
+    private CLI cli;
 
-    public MarketView(LocalMarket localMarket, LocalGame localGame){
+    public MarketView(CLI cli, LocalGame localGame, LocalMarket localMarket){
+        this.cli = cli;
         this.localMarket = localMarket;
         this.localGame = localGame;
-        draw();
     }
 
     @Override
@@ -32,15 +32,13 @@ public class MarketView extends View{
     }
 
     @Override
-    public void notifyAction(LocalModelAbstract localModelAbstract){
-        if (localModelAbstract == this.localMarket || localModelAbstract instanceof LocalGame) {
-            draw();
-        }
+    public void notifyAction(){
+        draw();
     }
 
     @Override
-    public void handleCommand(String line){
-        switch (line){
+    public void handleCommand(int ans){
+        switch (ans){
             // todo handle push command
             default:
                 System.out.println("not valid");
