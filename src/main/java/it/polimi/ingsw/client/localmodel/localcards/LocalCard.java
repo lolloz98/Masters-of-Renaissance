@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
-public class LocalCard {
+import it.polimi.ingsw.client.localmodel.Observable;
+
+public class LocalCard extends Observable {
     protected int id;
 
     public synchronized int getId() {

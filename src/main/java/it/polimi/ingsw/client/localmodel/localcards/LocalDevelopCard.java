@@ -10,8 +10,19 @@ public class LocalDevelopCard extends LocalCard{
     private Color color;
     private TreeMap<Resource, Integer> resToGive;
     private TreeMap<Resource, Integer> resToGain;
+
+
     private TreeMap<Resource, Integer> resToFlush;
     private int victoryPoints;
+
+    public synchronized TreeMap<Resource, Integer> getResToFlush() {
+        return resToFlush;
+    }
+
+    public synchronized void setResToFlush(TreeMap<Resource, Integer> resToFlush) {
+        this.resToFlush = resToFlush;
+        notifyObserver();
+    }
 
     public synchronized int getVictoryPoints() {
         return victoryPoints;
@@ -27,6 +38,7 @@ public class LocalDevelopCard extends LocalCard{
 
     public synchronized void setCost(TreeMap<Resource, Integer> cost) {
         this.cost = cost;
+        notifyObserver();
     }
 
     public synchronized int getLevel() {

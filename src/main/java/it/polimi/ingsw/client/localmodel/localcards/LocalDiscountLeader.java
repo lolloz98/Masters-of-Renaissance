@@ -15,7 +15,6 @@ public class LocalDiscountLeader extends LocalLeaderCard{
         this.prodRequirement = prodRequirement;
     }
 
-
     public synchronized Resource getDiscountedRes() {
         return discountedRes;
     }

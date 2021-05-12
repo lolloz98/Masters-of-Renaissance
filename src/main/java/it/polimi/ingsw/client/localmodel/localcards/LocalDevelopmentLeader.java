@@ -7,6 +7,8 @@ import java.util.TreeMap;
 public class LocalDevelopmentLeader extends LocalLeaderCard{
     private TreeMap<Resource, Integer> resToGive;
     private TreeMap<Resource, Integer> resToGain;
+
+
     private TreeMap<Resource, Integer> resToFlush;
     private Color colorRequirement;
 
@@ -15,6 +17,15 @@ public class LocalDevelopmentLeader extends LocalLeaderCard{
         this.resToGive = resToGive;
         this.resToGain = resToGain;
         this.colorRequirement = colorRequirement;
+    }
+
+    public synchronized TreeMap<Resource, Integer> getResToFlush() {
+        return resToFlush;
+    }
+
+    public synchronized void setResToFlush(TreeMap<Resource, Integer> resToFlush) {
+        this.resToFlush = resToFlush;
+        notifyObserver();
     }
 
     public synchronized TreeMap<Resource, Integer> getToGive() {
