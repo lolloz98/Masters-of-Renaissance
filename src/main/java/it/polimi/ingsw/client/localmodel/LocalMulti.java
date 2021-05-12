@@ -3,6 +3,9 @@ package it.polimi.ingsw.client.localmodel;
 import java.util.ArrayList;
 
 public class LocalMulti extends LocalGame<LocalTurnMulti>{
+    /**
+     * id of the player playing on the specific device
+     */
     private int mainPlayerId;
     private ArrayList<LocalPlayer> localPlayers;
 
@@ -33,5 +36,11 @@ public class LocalMulti extends LocalGame<LocalTurnMulti>{
         this.localTurn = new LocalTurnMulti();
         localPlayers = new ArrayList<>();
         state = LocalGameState.NEW;
+    }
+
+    public LocalMulti(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, LocalTurnMulti localTurn, ArrayList<LocalPlayer> localPlayers, int mainPlayerId){
+        super(gameId,localDevelopmentGrid, localMarket, localTurn);
+        this.localPlayers = localPlayers;
+        this.mainPlayerId = mainPlayerId;
     }
 }
