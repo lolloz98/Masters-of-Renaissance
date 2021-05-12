@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 public class LocalBoard extends Observable {
     private final ArrayList<ArrayList<LocalDevelopCard>> developCards;
+    private final LocalProduction baseProduction;
     private TreeMap<Resource, Integer> resInStrongBox;
     private TreeMap<Resource, Integer> resInNormalDeposit;
     private ArrayList<LocalCard> leaderCards;
@@ -54,10 +55,26 @@ public class LocalBoard extends Observable {
         notifyObserver();
     }
 
-    public LocalBoard(){
-        developCards = new ArrayList<>();
-        for(int i=0; i<3; i++) developCards.add(new ArrayList<>());
-        leaderCards = new ArrayList<>();
-        localTrack = new LocalTrack();
+//    public LocalBoard(){
+//        developCards = new ArrayList<>();
+//        for(int i=0; i<3; i++) developCards.add(new ArrayList<>());
+//        leaderCards = new ArrayList<>();
+//        localTrack = new LocalTrack();
+//        baseProduction = new LocalProduction(new TreeMap<>(){{
+//            put(Resource.ANYTHING, 2);
+//        }}, new TreeMap<>(){{
+//            put(Resource.ANYTHING, 1);
+//        }}, new TreeMap<>());
+//    }
+
+    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction){
+        this.developCards = developCards;
+        this.leaderCards = leaderCards;
+        this.localTrack = localTrack;
+        this.baseProduction = baseProduction;
+    }
+
+    public synchronized LocalProduction getBaseProduction() {
+        return baseProduction;
     }
 }

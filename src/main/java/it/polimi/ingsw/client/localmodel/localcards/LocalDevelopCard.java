@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
+import it.polimi.ingsw.client.localmodel.LocalProduction;
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.game.Resource;
 import java.util.TreeMap;
@@ -8,17 +9,12 @@ public class LocalDevelopCard extends LocalCard{
     private TreeMap<Resource, Integer> cost;
     private final int level;
     private final Color color;
-    private final TreeMap<Resource, Integer> resToGive;
-    private final TreeMap<Resource, Integer> resToGain;
-    private TreeMap<Resource, Integer> resToFlush;
+    private final LocalProduction production;
     private final int victoryPoints;
 
-    public synchronized TreeMap<Resource, Integer> getResToFlush() {
-        return resToFlush;
-    }
 
     public synchronized void setResToFlush(TreeMap<Resource, Integer> resToFlush) {
-        this.resToFlush = resToFlush;
+        this.production.setResToFlush(resToFlush);
         notifyObserver();
     }
 
@@ -43,21 +39,16 @@ public class LocalDevelopCard extends LocalCard{
         return color;
     }
 
-    public TreeMap<Resource, Integer> getResToGive() {
-        return resToGive;
+    public synchronized LocalProduction getProduction() {
+        return production;
     }
 
-    public TreeMap<Resource, Integer> getResToGain() {
-        return resToGain;
-    }
-
-    public LocalDevelopCard(int id, TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) {
+    public LocalDevelopCard(int id, TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, TreeMap<Resource, Integer> resToFlush) {
         super(id);
         this.cost = cost;
         this.level = level;
         this.color = color;
-        this.resToGive = resToGive;
-        this.resToGain = resToGain;
+        production = new LocalProduction(resToGive, resToGain, resToFlush);
         this.victoryPoints = victoryPoints;
     }
 }

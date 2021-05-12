@@ -54,4 +54,8 @@ public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop>
         if (isActive())
             game.getMarketTray().removeLeaderResource(targetRes);
     }
+
+    public Resource getTargetRes() {
+        return targetRes;
+    }
 }

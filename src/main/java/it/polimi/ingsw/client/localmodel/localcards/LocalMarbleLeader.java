@@ -8,8 +8,8 @@ public class LocalMarbleLeader extends LocalLeaderCard{
     private final Resource marbleResource;
     private final TreeMap<Color,Integer> prodRequirement;
 
-    public LocalMarbleLeader(int id, int victoryPoints, Resource marbleResource, TreeMap<Color, Integer> prodRequirement) {
-        super(id, victoryPoints);
+    public LocalMarbleLeader(int id, int victoryPoints, boolean isActive, boolean isDiscarded, Resource marbleResource, TreeMap<Color, Integer> prodRequirement) {
+        super(id, victoryPoints, isActive, isDiscarded);
         this.marbleResource = marbleResource;
         this.prodRequirement = prodRequirement;
     }

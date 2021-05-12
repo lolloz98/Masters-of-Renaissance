@@ -37,6 +37,11 @@ public class LocalDevelopmentGrid extends Observable {
         setTopDevelopCard(x, y, topDevelopCard);
     }
 
+    public LocalDevelopmentGrid(LocalDevelopCard[][] topDevelopCards,  int[][] developCardsNumber){
+        this.topDevelopCards = topDevelopCards;
+        this.developCardsNumber = developCardsNumber;
+    }
+
     public LocalDevelopmentGrid(){
         topDevelopCards = new LocalDevelopCard[4][3];
         developCardsNumber = new int[4][3];

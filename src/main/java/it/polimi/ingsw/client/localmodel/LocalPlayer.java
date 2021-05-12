@@ -17,9 +17,9 @@ public class LocalPlayer extends Observable{
         return name;
     }
 
-    public LocalPlayer(int id, String name){
+    public LocalPlayer(int id, String name, LocalBoard localBoard){
         this.id = id;
         this.name = name;
-        localBoard = new LocalBoard();
+        this.localBoard = localBoard;
     }
 }
