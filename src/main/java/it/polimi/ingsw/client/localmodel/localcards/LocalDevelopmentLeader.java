@@ -7,8 +7,6 @@ import java.util.TreeMap;
 public class LocalDevelopmentLeader extends LocalLeaderCard{
     private TreeMap<Resource, Integer> resToGive;
     private TreeMap<Resource, Integer> resToGain;
-
-
     private TreeMap<Resource, Integer> resToFlush;
     private Color colorRequirement;
 

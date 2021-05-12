@@ -10,8 +10,6 @@ public class LocalDevelopCard extends LocalCard{
     private Color color;
     private TreeMap<Resource, Integer> resToGive;
     private TreeMap<Resource, Integer> resToGain;
-
-
     private TreeMap<Resource, Integer> resToFlush;
     private int victoryPoints;
 
