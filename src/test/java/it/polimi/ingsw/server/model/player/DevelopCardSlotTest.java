@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
-import it.polimi.ingsw.server.model.exception.FullDevelopSlotException;
-import it.polimi.ingsw.server.model.exception.InvalidDevelopCardToSlotException;
-import it.polimi.ingsw.server.model.exception.InvalidProductionSlotChosenException;
-import it.polimi.ingsw.server.model.exception.InvalidResourcesByPlayerException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import org.junit.Before;
@@ -61,7 +58,7 @@ public class DevelopCardSlotTest {
     }
 
     @Test
-    public void addDevelopCardTest() {
+    public void addDevelopCardTest() throws ModelException {
         assertTrue(slot.isEmpty());
 
         slot.addDevelopCard(developCards.get(0));//adding a card of level 1
@@ -82,7 +79,7 @@ public class DevelopCardSlotTest {
     }
 
     @Test(expected = FullDevelopSlotException.class)
-    public void addDevelopCardTestException() {
+    public void addDevelopCardTestException() throws ModelException {
         slot.addDevelopCard(developCards.get(0));//adding a card of level 1
         slot.addDevelopCard(developCards.get(2));//adding a card of level 2
         slot.addDevelopCard(developCards.get(5));//adding a card of level 3
@@ -90,24 +87,24 @@ public class DevelopCardSlotTest {
     }
 
     @Test(expected = InvalidDevelopCardToSlotException.class)
-    public void addDevelopCardExceptionTest1() {
+    public void addDevelopCardExceptionTest1() throws ModelException {
         slot.addDevelopCard(developCards.get(0));//adding a card of level 1
         slot.addDevelopCard(developCards.get(1));//adding another card of level 1, should throw exception
     }
 
     @Test(expected = InvalidDevelopCardToSlotException.class)
-    public void addDevelopCardExceptionTest2() {
+    public void addDevelopCardExceptionTest2() throws ModelException {
         slot.addDevelopCard(developCards.get(5));//adding a card of level 3, should throw exception
     }
 
     @Test(expected = InvalidDevelopCardToSlotException.class)
-    public void addDevelopCardExceptionTest3() {
+    public void addDevelopCardExceptionTest3() throws ModelException {
         slot.addDevelopCard(developCards.get(1));//adding a card of level 1
         slot.addDevelopCard(developCards.get(4));//adding a card of level 3,should throw exception
     }
 
     @Test(expected = InvalidProductionSlotChosenException.class)
-    public void applyProductionExceptionTest1() throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
+    public void applyProductionExceptionTest1() throws ModelException{
         toGain = developCards.get(1).getProduction().whatResourceToGive();
         toGive = developCards.get(1).getProduction().whatResourceToGain();
         slot.applyProduction(new TreeMap<>() {{
@@ -116,7 +113,7 @@ public class DevelopCardSlotTest {
     }
 
     @Test(expected = InvalidResourcesByPlayerException.class)
-    public void applyProductionExceptionTest2() throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
+    public void applyProductionExceptionTest2() throws ModelException{
         toGain = developCards.get(1).getProduction().whatResourceToGive();
         toGive = new TreeMap<>() {{
             put(Resource.SHIELD, 5);
@@ -128,7 +125,7 @@ public class DevelopCardSlotTest {
     }
 
     @Test
-    public void applyProductionTest() throws InvalidProductionSlotChosenException {
+    public void applyProductionTest() throws ModelException {
         slot.addDevelopCard(developCards.get(1));//added a card of level1
         slot.addDevelopCard(developCards.get(3));//added a card of level2
         toGive = developCards.get(3).getProduction().whatResourceToGive();

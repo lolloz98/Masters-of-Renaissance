@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
 import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
@@ -20,7 +21,7 @@ public class RequirementResourceTest {
     Game<?> game;
 
     @Before
-    public void setUp(){
+    public void setUp() throws ModelException {
         requiredDevelop = new TreeMap<>(){{
             put(Color.BLUE, 2);
             put(Color.GOLD, 1);
@@ -37,7 +38,7 @@ public class RequirementResourceTest {
     }
 
     @Test
-    public void testCheckRequirement() {
+    public void testCheckRequirement() throws ModelException {
         assertFalse(requirement.checkRequirement(player));
 
         player.getBoard().flushGainedResources(new TreeMap<>(){{
@@ -63,7 +64,7 @@ public class RequirementResourceTest {
     }
 
     @Test
-    public void testCheckRequirement2(){
+    public void testCheckRequirement2() throws ModelException {
         player.getBoard().storeInNormalDepot(new TreeMap<>(){{
             put(Resource.GOLD, 1);
             put(Resource.ROCK, 3);

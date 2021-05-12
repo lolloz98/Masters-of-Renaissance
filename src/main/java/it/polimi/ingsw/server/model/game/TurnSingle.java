@@ -37,7 +37,7 @@ public class TurnSingle extends Turn{
      * @throws MainActionNotOccurredException if the main action hasn't occurred yet in this turn.
      */
     @Override
-    public TurnSingle nextTurn(Game<? extends Turn> game){
+    public TurnSingle nextTurn(Game<? extends Turn> game) throws MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException {
         checkConditions();
         SinglePlayer singlePlayer = (SinglePlayer) game;
         singlePlayer.checkEndConditions();

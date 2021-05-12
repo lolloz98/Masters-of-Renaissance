@@ -5,8 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.leader.*;
-import it.polimi.ingsw.server.model.exception.EmptyDeckException;
-import it.polimi.ingsw.server.model.exception.LevelOutOfBoundException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.io.FileNotFoundException;
@@ -25,7 +24,7 @@ public abstract class Game <T extends Turn> {
     private TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
     private Deck<LeaderCard<? extends Requirement>> deckLeader;
 
-    public Game(){
+    public Game() throws WrongColorDeckException, WrongLevelDeckException, EmptyDeckException {
         try {
             loadDecksDevelop();
             loadDeckLeader();
@@ -49,7 +48,7 @@ public abstract class Game <T extends Turn> {
         this.gameOver = gameOver;
     }
 
-    public abstract Player getPlayer(int playerId);
+    public abstract Player getPlayer(int playerId) throws InvalidArgumentException;
 
     public T getTurn() {
         return turn;
@@ -69,16 +68,16 @@ public abstract class Game <T extends Turn> {
 
     public abstract void checkEndConditions();
 
-    public abstract void nextTurn();
+    public abstract void nextTurn() throws GameIsOverException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException;
 
-    public abstract void distributeLeader();
+    public abstract void distributeLeader() throws EmptyDeckException;
 
     /**
      * Setup method for the 12 DeckDevelop in the game, loading the cards from the json folder, using gson library.
      *
      * @throws FileNotFoundException if there the files are not present
      */
-    private void loadDecksDevelop() throws FileNotFoundException {
+    private void loadDecksDevelop() throws FileNotFoundException, EmptyDeckException, WrongColorDeckException, WrongLevelDeckException {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
@@ -109,7 +108,7 @@ public abstract class Game <T extends Turn> {
      *
      * @throws FileNotFoundException if there the files are not present
      */
-    private void loadDeckLeader() throws FileNotFoundException {
+    private void loadDeckLeader() throws FileNotFoundException, EmptyDeckException {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
@@ -144,8 +143,8 @@ public abstract class Game <T extends Turn> {
      * @return the drawn card
      * @throws EmptyDeckException if deck is empty
      */
-    public DevelopCard drawDevelopCard(Color color, int level){
-        if(level<1 || level>3) throw new LevelOutOfBoundException();
+    public DevelopCard drawDevelopCard(Color color, int level) throws EmptyDeckException, LevelOutOfBoundException {
+        if(level<1 || level>3) throw new LevelOutOfBoundException("level for develop card out of bound");
         return decksDevelop.get(color).get(level).drawCard();
     }
 
@@ -164,7 +163,7 @@ public abstract class Game <T extends Turn> {
      *
      * @param player to distribute the cards to
      */
-    protected void distributeLeaderToPlayer(Player player){
+    protected void distributeLeaderToPlayer(Player player) throws EmptyDeckException {
         player.getBoard().addLeaderCards(deckLeader.distributeCards(4));
     }
 }

@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.game;
 
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.lorenzo.*;
-import it.polimi.ingsw.server.model.exception.GameIsOverException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Player;
 import java.util.ArrayList;
 
@@ -50,7 +50,7 @@ public class SinglePlayer extends Game<TurnSingle>{
         return lorenzo;
     }
 
-    public SinglePlayer(Player player) {
+    public SinglePlayer(Player player) throws EmptyDeckException, WrongColorDeckException, WrongLevelDeckException {
         super();
         this.turn = new TurnSingle(false);
         this.player = player;
@@ -63,7 +63,7 @@ public class SinglePlayer extends Game<TurnSingle>{
     /**
      * Setup method for the Lorenzo Deck.
      */
-    private void createLorenzoDeck(){
+    private void createLorenzoDeck() throws EmptyDeckException {
         ArrayList<LorenzoCard> lorenzoCards = new ArrayList<>();
         lorenzoCards.add(new DevelopLorenzoCard(65, Color.GOLD));
         lorenzoCards.add(new DevelopLorenzoCard(66, Color.PURPLE));
@@ -75,8 +75,8 @@ public class SinglePlayer extends Game<TurnSingle>{
     }
 
     @Override
-    public Player getPlayer(int playerId) {
-        if(this.getPlayer().getPlayerId()!=playerId) throw  new IllegalArgumentException();
+    public Player getPlayer(int playerId) throws InvalidArgumentException {
+        if(this.getPlayer().getPlayerId()!=playerId) throw new InvalidArgumentException("the player does not have id: " + playerId);
         return this.getPlayer();
     }
 
@@ -99,7 +99,7 @@ public class SinglePlayer extends Game<TurnSingle>{
      * Method that changes the turn. If the next turn is null, it means that the game is over.
      */
     @Override
-    public void nextTurn(){
+    public void nextTurn() throws GameIsOverException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException {
         if (isGameOver()) throw new GameIsOverException();
         TurnSingle turn = getTurn().nextTurn(this);
         if (!turn.getIsPlayable()){
@@ -113,7 +113,7 @@ public class SinglePlayer extends Game<TurnSingle>{
      * Distribute 4 cards to the players
      */
     @Override
-    public void distributeLeader(){
+    public void distributeLeader() throws EmptyDeckException {
         distributeLeaderToPlayer(player);
     }
 }

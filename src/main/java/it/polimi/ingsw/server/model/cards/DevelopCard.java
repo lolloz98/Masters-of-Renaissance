@@ -47,10 +47,10 @@ public class DevelopCard implements Card, VictoryPointCalculator {
      * @throws ResourceNotDiscountableException      if r is notDiscountable
      * @throws AlreadyAppliedDiscountForResException if a discount has already been applied on that resource
      */
-    public void applyDiscount(Resource r, int quantity) throws AlreadyAppliedDiscountForResException {
+    public void applyDiscount(Resource r, int quantity) throws AlreadyAppliedDiscountForResException, ResourceNotDiscountableException {
         if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
         if (cost.containsKey(r)) {
-            if (discountApplied.containsKey(r)) throw new AlreadyAppliedDiscountForResException();
+            if (discountApplied.containsKey(r)) throw new AlreadyAppliedDiscountForResException(r);
             if(cost.get(r)-quantity>=0)
                 cost.replace(r, cost.get(r) - quantity);
             else

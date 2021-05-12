@@ -79,21 +79,21 @@ public class BoardTest {
     }
 
     @Test
-    public void discardLeaderCardTest(){
+    public void discardLeaderCardTest() throws ModelException{
         DepotLeaderCard toDiscard= (DepotLeaderCard) depotLeaderCards.get(0);
 
         getVictoryPointsTest();//add and activate 2 depot leaders
 
         board.discardLeaderCard(toDiscard);
 
-        assertTrue(!board.getLeaderCards().contains(toDiscard));
+        assertFalse(board.getLeaderCards().contains(toDiscard));
         assertEquals(1,board.getLeaderCards().size());
         assertEquals(1,board.getDepotLeaders().size());
         assertTrue(toDiscard.isDiscarded());
-        assertTrue(!board.getDepotLeaders().contains(toDiscard));
+        assertFalse(board.getDepotLeaders().contains(toDiscard));
     }
 
-    public void buildBoard2() {
+    public void buildBoard2() throws ModelException{
 
         fillStrongBox1();
         //adding the depot leader cards and activating it
@@ -132,7 +132,7 @@ public class BoardTest {
         }
     }
 
-    public void buildBoard1() {
+    public void buildBoard1() throws ModelException {
         //preparing the board
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
             put(Resource.GOLD, 1);
@@ -161,7 +161,7 @@ public class BoardTest {
     }
 
     @Test
-    public void enoughResourcesToPay() {
+    public void enoughResourcesToPay()  throws ModelException {
         buildBoard1();
         //building a treemap to pay
         TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay = new TreeMap<>() {{
@@ -240,7 +240,7 @@ public class BoardTest {
     }
 
     @Test
-    public void payResourcesTest() {
+    public void payResourcesTest() throws ModelException {
         buildBoard1();
 
         //first payment
@@ -331,7 +331,7 @@ public class BoardTest {
 
     }
 
-    public void fillStrongBox1() {
+    public void fillStrongBox1() throws ModelException{
         board.flushGainedResources(new TreeMap<Resource, Integer>() {{
             put(Resource.GOLD, 20);
             put(Resource.SERVANT, 20);
@@ -340,7 +340,7 @@ public class BoardTest {
         }}, multiPlayer);
     }
 
-    public void fillStrongBox2() {
+    public void fillStrongBox2() throws ModelException{
         TreeMap<Resource, Integer> toFlush = new TreeMap<>() {{
             put(Resource.GOLD, 5);
         }};
@@ -348,7 +348,7 @@ public class BoardTest {
         board.flushGainedResources(toFlush, multiPlayer);
     }
 
-    public void fillStrongBox3() {
+    public void fillStrongBox3() throws ModelException{
         board.flushGainedResources(new TreeMap<Resource, Integer>() {{
             put(Resource.GOLD, 5);
             put(Resource.SERVANT, 5);
@@ -356,7 +356,7 @@ public class BoardTest {
     }
 
     @Test
-    public void buyDevelopCardTest() {
+    public void buyDevelopCardTest() throws ModelException{
         board = multiPlayer.getPlayers().get(0).getBoard();
         fillStrongBox1();
 
@@ -407,7 +407,7 @@ public class BoardTest {
     }
 
     @Test
-    public void buyDevelopCardSmartTest(){
+    public void buyDevelopCardSmartTest() throws ModelException{
         board = multiPlayer.getPlayers().get(0).getBoard();
         fillStrongBox1();
 
@@ -443,7 +443,7 @@ public class BoardTest {
     }
 
     @Test(expected = InvalidDevelopCardToSlotException.class)
-    public void buyDevelopCardExceptionTest1() {
+    public void buyDevelopCardExceptionTest1() throws ModelException {
         fillStrongBox1();
         //buying a develop card which i cannot obtain
         //buy a card of level 2 and put it in the second slot
@@ -458,7 +458,7 @@ public class BoardTest {
     }
 
     @Test(expected = FullDevelopSlotException.class)
-    public void buyDevelopCardExceptionTest2() {
+    public void buyDevelopCardExceptionTest2() throws ModelException {
         fillStrongBox1();
         //adding 4 develop card on the same depot
         //buy another card of level 1 and put in the second slot
@@ -503,7 +503,7 @@ public class BoardTest {
     }
 
     @Test
-    public void getVictoryPointsTest() {
+    public void getVictoryPointsTest() throws ModelException {
         board = multiPlayer.getPlayers().get(0).getBoard();
 
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
@@ -545,7 +545,7 @@ public class BoardTest {
         assertEquals(12 + pointsFaithTrack + pointsLeader + pointsDevelop, board.getVictoryPoints());
     }
 
-    public void buyDevelopCards() {
+    public void buyDevelopCards() throws ModelException {
         //buy a card of level 1 and put in the second slot
         DevelopCard devCard = multiPlayer.getDecksDevelop().get(Color.BLUE).get(1).topCard();//it is a develop card of level 1 with 2 golds and 2 servants required required to buy,
         // it gives 4 victory points
@@ -596,7 +596,7 @@ public class BoardTest {
     }
 
     @Test
-    public void howManyResourcesTest1() {
+    public void howManyResourcesTest1() throws ModelException {
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.ROCK, 1);
@@ -622,8 +622,8 @@ public class BoardTest {
         assertEquals(12, board.howManyResources());
     }
 
-    @Test(expected = InvalidTypeOfResourceToDepotExeption.class)
-    public void storeInNormalDepotsExceptionTest1() {
+    @Test(expected = InvalidTypeOfResourceToDepotException.class)
+    public void storeInNormalDepotsExceptionTest1() throws ModelException {
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.ANYTHING, 1);
@@ -632,7 +632,7 @@ public class BoardTest {
     }
 
     @Test(expected = TooManyResourcesToAddException.class)
-    public void storeInNormalDepotsExceptionTest2() {
+    public void storeInNormalDepotsExceptionTest2() throws ModelException{
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SHIELD, 1);
@@ -643,7 +643,7 @@ public class BoardTest {
     }
 
     @Test(expected = TooManyResourcesToAddException.class)
-    public void storeInNormalDepotsTest1() {
+    public void storeInNormalDepotsTest1() throws ModelException {
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SHIELD, 1);
@@ -697,7 +697,7 @@ public class BoardTest {
     }
 
     @Test(expected = TooManyResourcesToAddException.class)
-    public void storeInDepotLeaderExceptionTest1() {
+    public void storeInDepotLeaderExceptionTest1() throws ModelException {
 
         TreeMap<Resource, Integer> toGain = new TreeMap<>() {{
             put(Resource.SERVANT, 1);
@@ -706,7 +706,7 @@ public class BoardTest {
     }
 
     @Test(expected = TooManyResourcesToAddException.class)
-    public void storeInDepotLeaderExceptionTest2() {
+    public void storeInDepotLeaderExceptionTest2() throws ModelException {
 
         TreeMap<Resource, Integer> toGain = new TreeMap<>() {{
             put(Resource.ROCK, 3);
@@ -715,7 +715,7 @@ public class BoardTest {
     }
 
     @Test
-    public void storeInDepotLeaderTest1() {
+    public void storeInDepotLeaderTest1() throws ModelException {
 
         TreeMap<Resource, Integer> toGain = new TreeMap<>() {{
             put(Resource.ROCK, 1);
@@ -745,7 +745,7 @@ public class BoardTest {
     }
 
     @Test
-    public void cannotAppendToNormalDepotTest1() {
+    public void cannotAppendToNormalDepotTest1() throws ModelException {
         TreeMap<Resource, Integer> toGain = new TreeMap<>() {{
             put(Resource.ROCK, 1);
             put(Resource.SHIELD, 2);
@@ -808,7 +808,7 @@ public class BoardTest {
     }
 
     @Test
-    public void cannotAppendToLeaderDepotsTest1() {
+    public void cannotAppendToLeaderDepotsTest1() throws ModelException {
         TreeMap<Resource, Integer> toGain = new TreeMap<>() {{
             put(Resource.ROCK, 2);
             put(Resource.SHIELD, 2);
@@ -845,7 +845,7 @@ public class BoardTest {
     }
 
     @Test
-    public void enoughResInNormalDepotsTest1() {
+    public void enoughResInNormalDepotsTest1() throws ModelException {
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SHIELD, 2);
@@ -901,7 +901,7 @@ public class BoardTest {
     }
 
     @Test
-    public void EnoughResInLeaderDepots() {
+    public void EnoughResInLeaderDepots() throws ModelException {
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
             put(Resource.ROCK, 2);
             put(Resource.SHIELD, 2);
@@ -939,7 +939,7 @@ public class BoardTest {
     }
 
     @Test
-    public void flushGainedResourcesTest() {
+    public void flushGainedResourcesTest() throws ModelException {
         board = multiPlayer.getPlayers().get(0).getBoard();
         TreeMap<Resource, Integer> toFlush = new TreeMap<>() {{
             put(Resource.ROCK, 2);
@@ -993,7 +993,7 @@ public class BoardTest {
     }
 
     @Test
-    public void enoughResInStrongBoxTest1() {
+    public void enoughResInStrongBoxTest1() throws ModelException {
         TreeMap<Resource, Integer> toFlush = new TreeMap<>() {{
             put(Resource.ROCK, 2);
             put(Resource.SHIELD, 2);
@@ -1040,7 +1040,7 @@ public class BoardTest {
     }
 
     @Test
-    public void removeResFromNormalDepotTest1() {
+    public void removeResFromNormalDepotTest1() throws ModelException {
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SHIELD, 2);
@@ -1106,7 +1106,7 @@ public class BoardTest {
     }
 
     @Test
-    public void removeResFromLeaderDepotTest1() {
+    public void removeResFromLeaderDepotTest1() throws ModelException {
         TreeMap<Resource, Integer> toAdd = new TreeMap<>() {{
             put(Resource.ROCK, 2);
             put(Resource.SHIELD, 2);
@@ -1140,7 +1140,7 @@ public class BoardTest {
     }
 
     @Test
-    public void removeResFromStrongBoxTest1() {
+    public void removeResFromStrongBoxTest1() throws ModelException {
         TreeMap<Resource, Integer> toFlush = new TreeMap<>() {{
             put(Resource.ROCK, 2);
             put(Resource.SHIELD, 2);
@@ -1177,8 +1177,8 @@ public class BoardTest {
         assertEquals(new TreeMap<Resource, Integer>(), board.getResourcesInStrongBox());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void gainResourcesExceptionTest1() {
+    @Test(expected = InvalidArgumentException.class)
+    public void gainResourcesExceptionTest1() throws ModelException {
         //invalid resource in tokeep
         //preparing the board
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
@@ -1206,8 +1206,8 @@ public class BoardTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void gainResourcesExceptionTest2() {
+    @Test(expected = InvalidArgumentException.class)
+    public void gainResourcesExceptionTest2() throws ModelException {
         //invalid resource in resGained
         //preparing the board
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
@@ -1235,8 +1235,8 @@ public class BoardTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void gainResourcesExceptionTest3() {
+    @Test(expected = InvalidArgumentException.class)
+    public void gainResourcesExceptionTest3() throws ModelException {
         //tokeep greater than togain
         //preparing the board
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
@@ -1263,8 +1263,8 @@ public class BoardTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void gainResourcesExceptionTest4() {
+    @Test(expected = InvalidArgumentException.class)
+    public void gainResourcesExceptionTest4() throws ModelException {
         //strongbox in tokeep
         //preparing the board
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
@@ -1294,7 +1294,7 @@ public class BoardTest {
     }
 
     @Test
-    public void gainResourcesMultiplayerTest1() {
+    public void gainResourcesMultiplayerTest1()throws ModelException  {
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.ROCK, 3);
@@ -1399,7 +1399,7 @@ public class BoardTest {
     }
 
     @Test
-    public void gainResourcesSingleplayerTest1() {
+    public void gainResourcesSingleplayerTest1() throws ModelException {
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.ROCK, 3);
@@ -1438,8 +1438,8 @@ public class BoardTest {
         assertEquals(1, singlePlayer.getLorenzo().getFaithTrack().getPosition());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void gainResourcesSmartExceptionTest1() {
+    @Test(expected = InvalidArgumentException.class)
+    public void gainResourcesSmartExceptionTest1() throws ModelException {
         //invalid resource in tokeep
         board = multiPlayer.getPlayers().get(0).getBoard();
 
@@ -1461,8 +1461,8 @@ public class BoardTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void gainResourcesSmartExceptionTest2() {
+    @Test(expected = InvalidArgumentException.class)
+    public void gainResourcesSmartExceptionTest2() throws ModelException {
         //invalid resource in togain
         board = multiPlayer.getPlayers().get(0).getBoard();
 
@@ -1484,8 +1484,8 @@ public class BoardTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void gainResourcesSmartExceptionTest3() throws InvalidResourcesToKeepByPlayerException {
+    @Test(expected = InvalidArgumentException.class)
+    public void gainResourcesSmartExceptionTest3() throws ModelException {
         //tokeep or different than togain
         board = multiPlayer.getPlayers().get(0).getBoard();
 
@@ -1504,7 +1504,7 @@ public class BoardTest {
 
 
     @Test
-    public void gainResourcesSmartTest1() {
+    public void gainResourcesSmartTest1() throws ModelException {
         board = multiPlayer.getPlayers().get(0).getBoard();
 
         //adding leader depots
@@ -1614,7 +1614,7 @@ public class BoardTest {
     }
 
     @Test
-    public void activateProductionTest1() {
+    public void activateProductionTest1() throws ModelException {
         board = multiPlayer.getPlayers().get(0).getBoard();
 
         createEnvironment();
@@ -1632,10 +1632,7 @@ public class BoardTest {
 
         try {
             board.activateProduction(0, resToGive, resToGain, multiPlayer);
-        } catch (InvalidResourcesByPlayerException e) {
-            e.printStackTrace();
-            fail();
-        } catch (InvalidProductionSlotChosenException e) {
+        } catch (InvalidResourcesByPlayerException | InvalidProductionSlotChosenException e) {
             e.printStackTrace();
             fail();
         }
@@ -1674,10 +1671,7 @@ public class BoardTest {
 
         try {
             board.activateProduction(2, resToGive, resToGain, multiPlayer);
-        } catch (InvalidResourcesByPlayerException e) {
-            e.printStackTrace();
-            fail();
-        } catch (InvalidProductionSlotChosenException e) {
+        } catch (InvalidResourcesByPlayerException | InvalidProductionSlotChosenException e) {
             e.printStackTrace();
             fail();
         }
@@ -1725,10 +1719,7 @@ public class BoardTest {
 
         try {
             board.activateProduction(4, resToGive, resToGain, multiPlayer);
-        } catch (InvalidResourcesByPlayerException e) {
-            e.printStackTrace();
-            fail();
-        } catch (InvalidProductionSlotChosenException e) {
+        } catch (InvalidResourcesByPlayerException | InvalidProductionSlotChosenException e) {
             e.printStackTrace();
             fail();
         }
@@ -1754,13 +1745,13 @@ public class BoardTest {
         assertEquals(1, board.getFaithtrack().getPosition());
     }
 
-    public void createEnvironment() {
+    public void createEnvironment() throws ModelException {
         buildBoard2();
         buyDevelopCards();
     }
 
     @Test(expected = InvalidResourcesByPlayerException.class)
-    public void activateProductionTestException1() throws InvalidResourcesByPlayerException {
+    public void activateProductionTestException1() throws ModelException {
         board = multiPlayer.getPlayers().get(0).getBoard();
         createEnvironment();
 
@@ -1783,7 +1774,7 @@ public class BoardTest {
         }
     }
 
-    public void prepareBoardForTest() {
+    public void prepareBoardForTest() throws ModelException {
         //preparing the board
         board = multiPlayer.getPlayers().get(0).getBoard();
 
@@ -1823,7 +1814,7 @@ public class BoardTest {
     }
 
     @Test(expected = ResourceNotDiscountableException.class)
-    public void enoughResToActivateExceptionTest1() {
+    public void enoughResToActivateExceptionTest1() throws ModelException {
         //giving an illegal Resource
         prepareBoardForTest();
 
@@ -1835,7 +1826,7 @@ public class BoardTest {
     }
 
     @Test
-    public void enoughResToActivateTest1() {
+    public void enoughResToActivateTest1() throws ModelException {
         prepareBoardForTest();
 
         //start to test
@@ -1888,7 +1879,7 @@ public class BoardTest {
     }
 
     @Test
-    public void removeResourcesSmartTest(){
+    public void removeResourcesSmartTest() throws ModelException{
         prepareBoardForTest();
 
         TreeMap<Resource,Integer> resToGive=new TreeMap<>(){{

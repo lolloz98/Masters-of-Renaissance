@@ -1,10 +1,7 @@
 package it.polimi.ingsw.server.model.player;
 
 import it.polimi.ingsw.server.model.cards.DevelopCard;
-import it.polimi.ingsw.server.model.exception.FullDevelopSlotException;
-import it.polimi.ingsw.server.model.exception.InvalidDevelopCardToSlotException;
-import it.polimi.ingsw.server.model.exception.InvalidProductionSlotChosenException;
-import it.polimi.ingsw.server.model.exception.InvalidResourcesByPlayerException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Resource;
 
 import java.util.ArrayList;
@@ -33,7 +30,7 @@ public class DevelopCardSlot {
      * @throws InvalidDevelopCardToSlotException if the level of the card to be added is not right
      * @throws FullDevelopSlotException          if the slot has reached the maximum capacity
      */
-    public void addDevelopCard(DevelopCard card) {
+    public void addDevelopCard(DevelopCard card) throws InvalidDevelopCardToSlotException, FullDevelopSlotException {
         int howmanycards = cards.size();
         switch (howmanycards) {
             case 0: {
@@ -68,7 +65,7 @@ public class DevelopCardSlot {
      * @throws InvalidResourcesByPlayerException    if resToGive or resToGain contains invalid resources
      * @throws InvalidProductionSlotChosenException if this does not contain any develop card
      */
-    public void applyProduction(TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException {
+    public void applyProduction(TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException, ProductionAlreadyActivatedException, ResourceNotDiscountableException, NotEnoughResourcesException, InvalidArgumentException, InvalidResourceQuantityToDepotException {
         if (isEmpty()) throw new InvalidProductionSlotChosenException();
         cards.get(cards.size() - 1).getProduction().applyProduction(resToGive, resToGain, board);
     }

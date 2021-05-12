@@ -2,11 +2,11 @@ package it.polimi.ingsw.server.model.game;
 
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
-import it.polimi.ingsw.server.model.exception.EmptyDeckException;
-import it.polimi.ingsw.server.model.exception.LevelOutOfBoundException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.TreeMap;
@@ -16,30 +16,36 @@ import static org.junit.Assert.*;
 
 public class GameTest {
     private static final Logger logger = LogManager.getLogger(GameTest.class);
-    Game<? extends Turn> game = new Game<>() {
-        @Override
-        public Player getPlayer(int playerId) {
-            return null;
-        }
+    Game<? extends Turn> game;
 
-        @Override
-        public void checkEndConditions() {
+    @Before
+    public void setUp() throws WrongColorDeckException, WrongLevelDeckException, EmptyDeckException {
+        game = new Game<>(){
 
-        }
+            @Override
+            public Player getPlayer(int playerId) {
+                return null;
+            }
 
-        @Override
-        public void nextTurn() {
+            @Override
+            public void checkEndConditions() {
 
-        }
+            }
 
-        @Override
-        public void distributeLeader() {
+            @Override
+            public void nextTurn() throws GameIsOverException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException {
 
-        }
-    };
+            }
+
+            @Override
+            public void distributeLeader() throws EmptyDeckException {
+
+            }
+        };
+    }
 
     @Test
-    public void testLoadDecksDevelop() {
+    public void testLoadDecksDevelop() throws EmptyDeckException {
         TreeSet<Integer> ids = new TreeSet<>();
         TreeMap<Color, Integer> cs = new TreeMap<>(){{
            for(Color c: Color.values()) put(c, 0);
@@ -68,7 +74,7 @@ public class GameTest {
     }
 
     @Test
-    public void testLoadDecksLeader(){
+    public void testLoadDecksLeader() throws EmptyDeckException {
         TreeSet<Integer> s = new TreeSet<>();
         for(int i = 0; i < 16; i++) {
             if(s.contains(game.getDeckLeader().topCard().getId())) fail();
@@ -80,7 +86,7 @@ public class GameTest {
     }
 
     @Test
-    public void testDrawDevelopCard(){
+    public void testDrawDevelopCard() throws EmptyDeckException, LevelOutOfBoundException {
         assertFalse(game.isADeckDevelopEmpty());
         DevelopCard c = game.drawDevelopCard(Color.PURPLE, 2);
         assertEquals(Color.PURPLE, c.getColor());

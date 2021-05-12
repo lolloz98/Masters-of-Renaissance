@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model.game;
 
-import it.polimi.ingsw.server.model.exception.GameIsOverException;
-import it.polimi.ingsw.server.model.exception.GameNotOverException;
-import it.polimi.ingsw.server.model.exception.PlayersOutOfBoundException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Player;
 import java.util.ArrayList;
 
@@ -15,7 +13,7 @@ public class MultiPlayer extends Game<TurnMulti> {
     private boolean lastRound;
     private ArrayList<Integer> playerPoints;
 
-    public MultiPlayer(ArrayList<Player> players){
+    public MultiPlayer(ArrayList<Player> players) throws PlayersOutOfBoundException, WrongColorDeckException, WrongLevelDeckException, EmptyDeckException {
         super();
         if (players.size()<2 || players.size()>4) throw new PlayersOutOfBoundException();
         this.turn = new TurnMulti(players.get(0));
@@ -36,17 +34,13 @@ public class MultiPlayer extends Game<TurnMulti> {
     }
 
     @Override
-    public Player getPlayer(int playerId) {
-        boolean idExists=false;
+    public Player getPlayer(int playerId) throws InvalidArgumentException {
         for(Player p: players){
             if(p.getPlayerId()==playerId){
                 return p;
             }
         }
-
-        if(!idExists) throw new IllegalArgumentException();
-
-        return null;
+        throw new InvalidArgumentException("no player found with id " + playerId);
     }
 
     /**
@@ -67,7 +61,7 @@ public class MultiPlayer extends Game<TurnMulti> {
      * @throws GameIsOverException if i call nextTurn on an game that is already terminated
      */
     @Override
-    public void nextTurn(){
+    public void nextTurn() throws GameIsOverException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException {
         if (isGameOver()) throw new GameIsOverException();
         TurnMulti turn = getTurn().nextTurn(this);
         if (!turn.getIsPlayable()){
@@ -92,7 +86,7 @@ public class MultiPlayer extends Game<TurnMulti> {
      * Distribute 4 cards to the players
      */
     @Override
-    public void distributeLeader(){
+    public void distributeLeader() throws EmptyDeckException {
         for(Player p : players) distributeLeaderToPlayer(p);
     }
 
@@ -100,7 +94,7 @@ public class MultiPlayer extends Game<TurnMulti> {
      * @return the winner if the game is over
      * @throws GameNotOverException if i call getWinner on an ongoing game
      */
-    public ArrayList<Player> getWinners(){
+    public ArrayList<Player> getWinners() throws GameNotOverException {
         if(!isGameOver()) throw new GameNotOverException();
         int max = 0;
         ArrayList<Player> winners = new ArrayList<>();

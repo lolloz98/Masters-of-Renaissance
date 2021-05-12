@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.game;
 
-import it.polimi.ingsw.server.model.exception.MainActionAlreadyOccurredException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,14 +12,14 @@ public class TurnSingleTest {
     TurnSingle turnSingle;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ModelException {
         Player player = new Player("player", 0);
         singlePlayer = new SinglePlayer(player);
         turnSingle = new TurnSingle(false);
     }
 
     @Test
-    public void TestNextTurnNoEnd() {
+    public void TestNextTurnNoEnd() throws ModelException {
         // test the normal cycle of player and lorenzo
         assertFalse(turnSingle.isLorenzoPlaying());
         turnSingle.setMainActionOccurred();
@@ -31,7 +31,7 @@ public class TurnSingleTest {
     }
 
     @Test
-    public void TestNextTurnEnd() {
+    public void TestNextTurnEnd() throws ModelException {
         // test the end of the game
         assertFalse(turnSingle.isLorenzoPlaying());
         turnSingle.setMainActionOccurred();
@@ -44,7 +44,7 @@ public class TurnSingleTest {
     }
 
     @Test(expected = MainActionAlreadyOccurredException.class)
-    public void TestPerformMainAction(){
+    public void TestPerformMainAction() throws ModelException{
         // if i try to setMainActionOccurred twice, an exception should be thrown
         turnSingle.setMainActionOccurred();
         turnSingle.setMainActionOccurred();

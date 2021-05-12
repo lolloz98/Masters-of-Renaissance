@@ -2,9 +2,7 @@ package it.polimi.ingsw.server.model.cards.leader;
 
 import it.polimi.ingsw.server.model.cards.Card;
 import it.polimi.ingsw.server.model.cards.VictoryPointCalculator;
-import it.polimi.ingsw.server.model.exception.ActivateDiscardedCardException;
-import it.polimi.ingsw.server.model.exception.AlreadyActiveLeaderException;
-import it.polimi.ingsw.server.model.exception.RequirementNotSatisfiedException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.player.Player;
 
@@ -51,13 +49,13 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
      * @throws RequirementNotSatisfiedException if the requirement for this card was not satisfied
      * @throws AlreadyActiveLeaderException     if the card was already active
      * @throws ActivateDiscardedCardException   if the card was discarded
-     * @throws IllegalArgumentException         if this is not owned by the player (-> not contained in the board of the player)
+     * @throws InvalidArgumentException         if this is not owned by the player (-> not contained in the board of the player)
      */
-    public void activate(Game<?> game, Player player) throws RequirementNotSatisfiedException, AlreadyActiveLeaderException, ActivateDiscardedCardException, IllegalArgumentException {
+    public void activate(Game<?> game, Player player) throws ModelException {
         if (!checkRequirement(player)) throw new RequirementNotSatisfiedException();
         if (isActive) throw new AlreadyActiveLeaderException();
         if (isDiscarded) throw new ActivateDiscardedCardException();
-        if (!player.getBoard().getLeaderCards().contains(this)) throw new IllegalArgumentException();
+        if (!player.getBoard().getLeaderCards().contains(this)) throw new InvalidArgumentException("The leaderCard specified is not owned by the player");
 
         isActive = true;
         applyEffectNoCheckOnActive(game);
@@ -72,21 +70,21 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
      *
      * @param game current game, it can be affected by this method
      */
-    public abstract void applyEffect(Game<?> game);
+    public abstract void applyEffect(Game<?> game) throws AlreadyAppliedLeaderCardException, AlreadyAppliedDiscountForResException, AlreadyPresentLeaderResException, TooManyLeaderResourcesException;
 
     /**
      * apply effect of this card without checking if it is active
      *
      * @param game current game: it is affected by this method
      */
-    protected abstract void applyEffectNoCheckOnActive(Game<?> game);
+    protected abstract void applyEffectNoCheckOnActive(Game<?> game) throws AlreadyAppliedDiscountForResException, AlreadyPresentLeaderResException, TooManyLeaderResourcesException;
 
     /**
      * if the card isActive remove the effects of the card (or do nothing, it depends on the concrete card)
      *
      * @param game current game, it can be affected by this method
      */
-    public abstract void removeEffect(Game<?> game);
+    public abstract void removeEffect(Game<?> game) throws NoSuchResourceException;
 
     @Override
     public int getVictoryPoints() {
@@ -101,7 +99,7 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
      * @param player player on whom to check the requirements
      * @return true if the player can activate the card
      */
-    public boolean checkRequirement(Player player) {
+    public boolean checkRequirement(Player player) throws ModelException {
         return requirement.checkRequirement(player);
     }
 

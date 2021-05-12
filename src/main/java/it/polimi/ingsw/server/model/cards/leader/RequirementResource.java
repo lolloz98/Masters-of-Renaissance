@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
+import it.polimi.ingsw.server.model.exception.ModelException;
+import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.Player;
 
@@ -35,8 +37,8 @@ public class RequirementResource implements Requirement {
      * @return true, if the player has enough resources to spend for this requirement
      */
     @Override
-    public boolean checkRequirement(Player player) {
-        return player.getBoard().enoughResToActivate(new TreeMap<>(){{
+    public boolean checkRequirement(Player player) throws ModelException {
+        return player.getBoard().enoughResToActivate(new TreeMap<>() {{
             put(res, quantity);
         }});
     }

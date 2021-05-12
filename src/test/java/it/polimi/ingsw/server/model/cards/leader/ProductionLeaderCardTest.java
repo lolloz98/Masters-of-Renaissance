@@ -2,9 +2,7 @@ package it.polimi.ingsw.server.model.cards.leader;
 
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.Production;
-import it.polimi.ingsw.server.model.exception.ActivateDiscardedCardException;
-import it.polimi.ingsw.server.model.exception.AlreadyActiveLeaderException;
-import it.polimi.ingsw.server.model.exception.RequirementNotSatisfiedException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
@@ -28,8 +26,8 @@ public class ProductionLeaderCardTest {
     Game<?> game;
 
     @BeforeClass
-    public static void testInfo(){
-        if(isSinglePlayer) logger.info("testing on single player");
+    public static void testInfo() {
+        if (isSinglePlayer) logger.info("testing on single player");
         else logger.info("testing on multiplayer");
     }
 
@@ -49,19 +47,19 @@ public class ProductionLeaderCardTest {
 
         production = new Production(toGive, toGain);
 
-        players = new ArrayList<>(){{
-          add(new Player("Lorenzo", 0));
-          add(new Player("Lorenzo", 1));
-          add(new Player("Aniello", 2));
+        players = new ArrayList<>() {{
+            add(new Player("Lorenzo", 0));
+            add(new Player("Lorenzo", 1));
+            add(new Player("Aniello", 2));
         }};
 
-        game = (isSinglePlayer)? new MultiPlayer(players): new SinglePlayer(players.get(0));
+        game = (isSinglePlayer) ? new MultiPlayer(players) : new SinglePlayer(players.get(0));
 
         leaderCard = new ProductionLeaderCard(2, new RequirementLevelDevelop(Color.BLUE), production, 0);
     }
 
-    private void satisfyReq(Player player){
-        player.getBoard().flushGainedResources(new TreeMap<>(){{
+    private void satisfyReq(Player player) throws ModelException {
+        player.getBoard().flushGainedResources(new TreeMap<>() {{
             put(Resource.GOLD, 60);
             put(Resource.ROCK, 60);
             put(Resource.SERVANT, 60);
@@ -72,26 +70,30 @@ public class ProductionLeaderCardTest {
         player.getBoard().buyDevelopCardSmart(game, Color.BLUE, 2, 1);
     }
 
-    private void giveOwnership(Player player){
-        player.getBoard().addLeaderCards(new ArrayList<>(){
-            {add(leaderCard);}
+    private void giveOwnership(Player player) {
+        player.getBoard().addLeaderCards(new ArrayList<>() {
+            {
+                add(leaderCard);
+            }
         });
     }
 
     @Test
-    public void testActivate() {
+    public void testActivate() throws ModelException {
         Player player = players.get(0);
         try {
             leaderCard.activate(game, player);
             fail();
-        }catch(RequirementNotSatisfiedException ignored){}
+        } catch (RequirementNotSatisfiedException ignored) {
+        }
 
         satisfyReq(player);
 
         try {
             leaderCard.activate(game, player);
             fail();
-        }catch(IllegalArgumentException ignored){}
+        } catch (InvalidArgumentException ignored) {
+        }
 
         giveOwnership(player);
 
@@ -106,20 +108,22 @@ public class ProductionLeaderCardTest {
         try {
             leaderCard.activate(game, player);
             fail();
-        }catch(AlreadyActiveLeaderException ignored){}
+        } catch (AlreadyActiveLeaderException ignored) {
+        }
     }
 
     @Test
-    public void testDiscard() {
+    public void testDiscard() throws ModelException {
         assertFalse(leaderCard.isDiscarded());
         leaderCard.discard();
         assertTrue(leaderCard.isDiscarded());
         satisfyReq(players.get(0));
         giveOwnership(players.get(0));
-        try{
+        try {
             leaderCard.activate(game, players.get(0));
             fail();
-        }catch (ActivateDiscardedCardException ignored){}
+        } catch (ActivateDiscardedCardException ignored) {
+        }
     }
 
     @Test

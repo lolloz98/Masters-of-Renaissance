@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
 import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
@@ -19,8 +20,8 @@ public class RequirementColorsDevelopTest {
     Game<?> game;
 
     @Before
-    public void setUp(){
-        requiredDevelop = new TreeMap<>(){{
+    public void setUp() throws ModelException {
+        requiredDevelop = new TreeMap<>() {{
             put(Color.BLUE, 2);
             put(Color.GOLD, 1);
         }};
@@ -28,7 +29,7 @@ public class RequirementColorsDevelopTest {
         player = new Player("lorenzo", 0);
         game = new SinglePlayer(player);
 
-        player.getBoard().flushGainedResources(new TreeMap<>(){{
+        player.getBoard().flushGainedResources(new TreeMap<>() {{
             put(Resource.GOLD, 60);
             put(Resource.ROCK, 60);
             put(Resource.SERVANT, 60);
@@ -38,14 +39,14 @@ public class RequirementColorsDevelopTest {
 
     @Test
     public void getRequiredDevelop() {
-        assertEquals(requiredDevelop, ((RequirementColorsDevelop)requirement).getRequiredDevelop());
+        assertEquals(requiredDevelop, ((RequirementColorsDevelop) requirement).getRequiredDevelop());
         TreeMap<Color, Integer> copy = new TreeMap<>(requiredDevelop);
         requiredDevelop.clear();
-        assertEquals(copy, ((RequirementColorsDevelop)requirement).getRequiredDevelop());
+        assertEquals(copy, ((RequirementColorsDevelop) requirement).getRequiredDevelop());
     }
 
     @Test
-    public void testCheckRequirement() {
+    public void testCheckRequirement() throws ModelException {
         assertFalse(requirement.checkRequirement(player));
 
         player.getBoard().buyDevelopCardSmart(game, Color.BLUE, 1, 1);

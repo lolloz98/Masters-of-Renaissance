@@ -15,7 +15,7 @@ public class LorenzoDeckTest {
     private final int N = 3;
 
     @Before
-    public void setUp() {
+    public void setUp() throws EmptyDeckException {
         cards = new ArrayList<>();
         for(int i = 0; i < N; i++){
             cards.add(new LorenzoCard(i) {
@@ -30,7 +30,7 @@ public class LorenzoDeckTest {
     }
 
     @Test
-    public void testDrawCard() {
+    public void testDrawCard() throws EmptyDeckException {
         ArrayList<LorenzoCard> c = new ArrayList<>();
         for (int i = 0; i < N; i++){
             c.add(deck.drawCard());
@@ -40,7 +40,7 @@ public class LorenzoDeckTest {
     }
 
     @Test
-    public void testBackToOriginalAndShuffle() {
+    public void testBackToOriginalAndShuffle() throws EmptyDeckException {
         deck.backToOriginalAndShuffle();
         testDrawCard();
 

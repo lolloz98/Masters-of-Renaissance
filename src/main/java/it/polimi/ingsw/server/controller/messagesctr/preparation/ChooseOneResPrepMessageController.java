@@ -8,7 +8,7 @@ import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
-import it.polimi.ingsw.server.model.exception.InvalidResourcesToKeepByPlayerException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Board;
 import it.polimi.ingsw.server.model.player.WarehouseType;
 import org.apache.logging.log4j.LogManager;
@@ -48,6 +48,9 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
         } catch (InvalidResourcesToKeepByPlayerException e) {
             logger.error("something unexpected happened in " + this.getClass() + " while putting initial resources in depot");
             throw new ControllerException("not possible to add init resources to the depots");
+        } catch (FigureAlreadyDiscardedException | InvalidTypeOfResourceToDepotException | InvalidArgumentException | FigureAlreadyActivatedException | InvalidStepsException | InvalidResourceQuantityToDepotException | EndAlreadyReachedException | DifferentResourceForDepotException e) {
+            // todo: handle catch clause
+            throw new ControllerException(e.getMessage());
         }
     }
 

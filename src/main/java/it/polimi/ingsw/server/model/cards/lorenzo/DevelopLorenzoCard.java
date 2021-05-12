@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.cards.lorenzo;
 
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
+import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 
 import java.util.TreeMap;
@@ -23,7 +24,7 @@ public class DevelopLorenzoCard extends LorenzoCard {
      * @param game current single game player
      */
     @Override
-    public void applyEffect(SinglePlayer game) {
+    public void applyEffect(SinglePlayer game) throws EmptyDeckException {
         TreeMap<Integer, DeckDevelop> decks = game.getDecksDevelop().get(color);
         for (int i = 0; i < 2; i++) removeCardFromDevelop(decks);
     }
@@ -33,7 +34,7 @@ public class DevelopLorenzoCard extends LorenzoCard {
      *
      * @param decks TreeMap of deck develop of color equal to this.color
      */
-    private void removeCardFromDevelop(TreeMap<Integer, DeckDevelop> decks) {
+    private void removeCardFromDevelop(TreeMap<Integer, DeckDevelop> decks) throws EmptyDeckException {
         for (Integer i : decks.keySet()) {
             if (!decks.get(i).isEmpty()) {
                 decks.get(i).drawCard();

@@ -80,9 +80,9 @@ public class MarketTray {
      * @throws TooManyLeaderResourcesException if there are already 2 resource in the list
      * @throws AlreadyPresentLeaderResException if resource is already in leaderResources
      */
-    public void addLeaderResource(Resource resource) {
-        if (leaderResources.size() == 2) throw new TooManyLeaderResourcesException();
-        if(leaderResources.contains(resource)) throw new AlreadyPresentLeaderResException();
+    public void addLeaderResource(Resource resource) throws TooManyLeaderResourcesException, AlreadyPresentLeaderResException {
+        if (leaderResources.size() == 2) throw new TooManyLeaderResourcesException("already two leader resources in market, cannot add anymore");
+        if(leaderResources.contains(resource)) throw new AlreadyPresentLeaderResException("selected res " + resource.name() + " already in market leader resources");
         leaderResources.add(resource);
     }
 
@@ -99,9 +99,9 @@ public class MarketTray {
      * @param res the resource to remove
      * @throws NoSuchResourceException if there aren't active MarbleLeader of res type
      */
-    public void removeLeaderResource(Resource res) {
+    public void removeLeaderResource(Resource res) throws NoSuchResourceException {
         boolean removed = leaderResources.remove(res);
-        if (!removed) throw new NoSuchResourceException();
+        if (!removed) throw new NoSuchResourceException("no market leader resources of type " + res.name() + " found");
     }
 
     /**
@@ -119,7 +119,7 @@ public class MarketTray {
      * @throws MatrixIndexOutOfBoundException the combination of onRow and index is not valid
      * @throws MarketTrayNotEmptyException if resCombinations is used
      */
-    public void pushMarble(boolean onRow, int index) {
+    public void pushMarble(boolean onRow, int index) throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         if (isResCombinationsUsed) throw new MarketTrayNotEmptyException();
         TreeMap<Resource, Integer> resourcesTaken = new TreeMap<>();
         Marble newMarble = freeMarble;

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.player;
 
 import it.polimi.ingsw.server.model.exception.EndAlreadyReachedException;
 import it.polimi.ingsw.server.model.exception.InvalidStepsException;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import org.junit.Before;
@@ -17,7 +18,7 @@ public class FaithTrackTest {
     private ArrayList<FaithTrack> ft;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ModelException  {
         ArrayList<Player> players = new ArrayList<>();
         ft = new ArrayList<>();
         players.add(new Player("first", 1));
@@ -39,7 +40,7 @@ public class FaithTrackTest {
     }
 
     @Test
-    public void moveTestMulti() {
+    public void moveTestMulti() throws ModelException {
         int s1 = 1, s2 = 2, s3 = 3, s4 = 5, s5 = 15,s6=9, illegalStep=-2;
         int i;
         ft.get(0).move(s1, multiPlayer);
@@ -91,19 +92,19 @@ public class FaithTrackTest {
     }
 
     @Test(expected = InvalidStepsException.class)
-    public void moveTestMultiInvalid() {
+    public void moveTestMultiInvalid() throws ModelException {
         int illegalStep=-2;
         ft.get(2).move(illegalStep, multiPlayer);
     }
 
     @Test(expected = InvalidStepsException.class)
-    public void moveTestMultiInvalid2() {
+    public void moveTestMultiInvalid2() throws ModelException {
         int illegalStep=0;
         ft.get(2).move(illegalStep, multiPlayer);
     }
 
     @Test
-    public void moveTest1(){
+    public void moveTest1() throws ModelException {
         int i;
         int s1=1, s2=24;
         ft.get(0).move(s2,multiPlayer);
@@ -118,14 +119,14 @@ public class FaithTrackTest {
     }
 
     @Test(expected = EndAlreadyReachedException.class)
-    public void moveTestEndAlreadyReached(){
+    public void moveTestEndAlreadyReached() throws ModelException{
         int s1=1, s2=24;
         ft.get(0).move(s2,multiPlayer);
         ft.get(0).move(s1,multiPlayer);
     }
 
     @Test
-    public void moveTestSingle() {
+    public void moveTestSingle() throws ModelException{
         FaithTrack lorenzoFt=singlePLayer.getLorenzo().getFaithTrack();
         FaithTrack playerFt=ft.get(0);
         int s1 = 1, s2 = 2, s3 = 3, s4 = 5, s5 = 15,s6=9, s7=7;
@@ -174,7 +175,7 @@ public class FaithTrackTest {
     }
 
     @Test
-    public void getVictoryPointsTest(){
+    public void getVictoryPointsTest() throws ModelException{
         int s1 = 1, s2 = 2, s3 = 3, s4 = 5, s5 = 15, s6=9;
         ft.get(0).move(s1, multiPlayer);
         ft.get(0).move(s2, multiPlayer);

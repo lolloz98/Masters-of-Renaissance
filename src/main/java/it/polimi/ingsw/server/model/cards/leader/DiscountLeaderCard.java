@@ -1,11 +1,17 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
+import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
+import it.polimi.ingsw.server.model.exception.AlreadyAppliedDiscountForResException;
 import it.polimi.ingsw.server.model.exception.AlreadyAppliedLeaderCardException;
+import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Resource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -13,6 +19,8 @@ import java.util.TreeMap;
  * To be activated, it requires the fulfillment of RequirementColorsDevelop.
  */
 public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelop> {
+    private static final Logger logger = LogManager.getLogger(DiscountLeaderCard.class);
+
     private final Resource res;
     private final int quantity = 1;
     private boolean hasBeenApplied = false;
@@ -41,7 +49,7 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
      * @throws AlreadyAppliedLeaderCardException if the effect of this card has been applied and yet not removed
      */
     @Override
-    public void applyEffect(Game<?> game) {
+    public void applyEffect(Game<?> game) throws AlreadyAppliedLeaderCardException, AlreadyAppliedDiscountForResException {
         if (hasBeenApplied) throw new AlreadyAppliedLeaderCardException();
         if (isActive()) applyEffectNoCheckOnActive(game);
     }
@@ -52,11 +60,18 @@ public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelo
      * @param game current game: it is affected by this method
      */
     @Override
-    protected void applyEffectNoCheckOnActive(Game<?> game) {
+    protected void applyEffectNoCheckOnActive(Game<?> game) throws AlreadyAppliedDiscountForResException {
         hasBeenApplied = true;
         TreeMap<Color, TreeMap<Integer, DeckDevelop>> decks = game.getDecksDevelop();
         for (Color c : decks.keySet()) {
-            decks.get(c).forEach((i, d) -> d.applyDiscount(res, quantity));
+            for (Map.Entry<Integer, DeckDevelop> entry : decks.get(c).entrySet()) {
+                DeckDevelop d = entry.getValue();
+                try {
+                    d.applyDiscount(res, quantity);
+                } catch (ResourceNotDiscountableException e) {
+                    logger.error("Resource specified by leader is not discountable");
+                }
+            }
         }
     }
 

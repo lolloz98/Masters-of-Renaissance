@@ -2,7 +2,8 @@ package it.polimi.ingsw.server.model.player;
 
 import it.polimi.ingsw.server.model.exception.DifferentResourceForDepotException;
 import it.polimi.ingsw.server.model.exception.InvalidResourceQuantityToDepotException;
-import it.polimi.ingsw.server.model.exception.InvalidTypeOfResourceToDepotExeption;
+import it.polimi.ingsw.server.model.exception.InvalidTypeOfResourceToDepotException;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.game.Resource;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class DepotTest {
     private Depot normalDepot, leaderDepot;
 
     @Before
-    public void setUp(){
+    public void setUp() throws ModelException {
         normalDepot=new Depot(2);
         leaderDepot=new Depot(Resource.GOLD);
     }
@@ -35,7 +36,7 @@ public class DepotTest {
     }
 
     @Test
-    public void testAddResource(){
+    public void testAddResource() throws  ModelException{
         assertTrue(normalDepot.isResModifiable());
         assertEquals(2, normalDepot.getFreeSpace());
         assertTrue(normalDepot.isEmpty());
@@ -52,7 +53,7 @@ public class DepotTest {
     }
 
     @Test
-    public void testEnoughResources(){
+    public void testEnoughResources() throws ModelException{
         normalDepot.addResource(Resource.GOLD, 2);
         assertTrue(normalDepot.enoughResources(1));
         assertTrue(normalDepot.enoughResources(2));
@@ -60,35 +61,35 @@ public class DepotTest {
     }
 
     @Test (expected = InvalidResourceQuantityToDepotException.class)
-    public void testAddResourceExceptionTest1(){
+    public void testAddResourceExceptionTest1() throws ModelException{
         normalDepot.addResource(Resource.GOLD, 0);
     }
 
     @Test (expected = InvalidResourceQuantityToDepotException.class)
-    public void testAddResourceExceptionTest2(){
+    public void testAddResourceExceptionTest2() throws ModelException{
         normalDepot.addResource(Resource.GOLD, -1);
     }
 
     @Test (expected = DifferentResourceForDepotException.class)
-    public void testAddResourceExceptionTest3(){
+    public void testAddResourceExceptionTest3() throws ModelException{
         normalDepot.addResource(Resource.GOLD, 1);
         normalDepot.addResource(Resource.ROCK, 1);
     }
 
     @Test (expected = InvalidResourceQuantityToDepotException.class)
-    public void testAddResourceExceptionTest4(){
+    public void testAddResourceExceptionTest4() throws ModelException{
         normalDepot.addResource(Resource.GOLD, 1);
         normalDepot.addResource(Resource.GOLD, 1);
         normalDepot.addResource(Resource.GOLD, 1);
     }
 
-    @Test (expected = InvalidTypeOfResourceToDepotExeption.class)
-    public void testAddResourceExceptionTest5(){
+    @Test (expected = InvalidTypeOfResourceToDepotException.class)
+    public void testAddResourceExceptionTest5() throws ModelException{
         normalDepot.addResource(Resource.NOTHING, 1);
     }
 
     @Test
-    public void addResourceNormalDepotTest1() {
+    public void addResourceNormalDepotTest1() throws ModelException {
         normalDepot.addResource(Resource.GOLD, 1);
         assertFalse(normalDepot.isEmpty());
         assertTrue(normalDepot.contains(Resource.GOLD));
@@ -131,13 +132,13 @@ public class DepotTest {
     }
 
     @Test(expected = DifferentResourceForDepotException.class)
-    public void addResourceLeaderDepotExceptionTest1(){
+    public void addResourceLeaderDepotExceptionTest1() throws ModelException{
         assertFalse(leaderDepot.isResModifiable());
         leaderDepot.addResource(Resource.ROCK, 1);
     }
 
     @Test
-    public void addResourceLeaderDepotTest1(){
+    public void addResourceLeaderDepotTest1() throws ModelException{
         leaderDepot.addResource(Resource.GOLD, 1);
         assertFalse(leaderDepot.isEmpty());
         assertTrue(leaderDepot.contains(Resource.GOLD));
@@ -155,7 +156,7 @@ public class DepotTest {
     }
 
     @Test(expected = DifferentResourceForDepotException.class)
-    public void testAddResourceLeaderDepotTest2() {
+    public void testAddResourceLeaderDepotTest2() throws ModelException {
         leaderDepot.addResource(Resource.SERVANT,2);
     }
 }

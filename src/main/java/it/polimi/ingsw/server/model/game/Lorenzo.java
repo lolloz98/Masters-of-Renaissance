@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.game;
 
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.player.FaithTrack;
 
 public class Lorenzo {
@@ -20,7 +21,7 @@ public class Lorenzo {
      * @param singlePlayer current game
      * @throws EmptyDeckException if deck is empty
      */
-    public void performLorenzoAction(SinglePlayer singlePlayer){
+    public void performLorenzoAction(SinglePlayer singlePlayer) throws ModelException {
         singlePlayer.getLorenzoDeck().drawCard().applyEffect(singlePlayer);
     }
 }

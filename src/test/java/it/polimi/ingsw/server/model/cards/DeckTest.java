@@ -27,7 +27,7 @@ public class DeckTest {
     }
 
     @Test
-    public void testDrawCard() {
+    public void testDrawCard() throws EmptyDeckException {
         int i = 0;
         while(!deck.isEmpty()){
             Assert.assertTrue(cards.contains(deck.drawCard()));
@@ -37,25 +37,25 @@ public class DeckTest {
     }
 
     @Test(expected = EmptyDeckException.class)
-    public void testDrawCardException() {
+    public void testDrawCardException() throws EmptyDeckException {
         testDrawCard();
         deck.drawCard();
     }
 
     @Test
-    public void testTopCard() {
+    public void testTopCard() throws EmptyDeckException {
         Assert.assertTrue(cards.contains(deck.topCard()));
         Assert.assertEquals(deck.topCard(), deck.topCard());
     }
 
     @Test
-    public void testShuffle() {
+    public void testShuffle() throws EmptyDeckException {
         deck.shuffle();
         testDrawCard();
     }
 
     @Test
-    public void testDistributeCards() {
+    public void testDistributeCards() throws EmptyDeckException {
         int i1 = NUMBER / 2, i2 = NUMBER / 3, i3 = NUMBER - (i1 + i2);
         ArrayList<Card> tmp;
 

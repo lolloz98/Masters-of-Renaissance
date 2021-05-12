@@ -4,9 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
-import it.polimi.ingsw.server.model.exception.InvalidResourcesToKeepByPlayerException;
-import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
-import it.polimi.ingsw.server.model.exception.TooManyResourcesToAddException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
@@ -24,7 +22,7 @@ public class BoardTest2 {
     SinglePlayer singlePlayer;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ModelException  {
         CollectionsHelper.setTest();
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
@@ -33,7 +31,7 @@ public class BoardTest2 {
     }
 
     @Test
-    public void testStoreInNormalDepot() {
+    public void testStoreInNormalDepot() throws ModelException {
         singlePlayer.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SERVANT, 1);
@@ -45,7 +43,7 @@ public class BoardTest2 {
     }
 
     @Test
-    public void testStoreInNormalDepot2() {
+    public void testStoreInNormalDepot2() throws ModelException {
         singlePlayer.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SERVANT, 1);
@@ -57,7 +55,7 @@ public class BoardTest2 {
     }
 
     @Test(expected = TooManyResourcesToAddException.class)
-    public void testStoreInNormalDepot3() {
+    public void testStoreInNormalDepot3() throws ModelException {
         singlePlayer.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SERVANT, 1);
@@ -69,7 +67,7 @@ public class BoardTest2 {
     }
 
     @Test
-    public void testStoreInNormalDepot6() {
+    public void testStoreInNormalDepot6() throws ModelException {
         singlePlayer.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SERVANT, 1);
@@ -88,7 +86,7 @@ public class BoardTest2 {
     }
 
     @Test(expected = TooManyResourcesToAddException.class)
-    public void testStoreInNormalDepot4() {
+    public void testStoreInNormalDepot4() throws ModelException {
         singlePlayer.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SERVANT, 1);
@@ -97,7 +95,7 @@ public class BoardTest2 {
     }
 
     @Test(expected = TooManyResourcesToAddException.class)
-    public void testStoreInNormalDepot5() {
+    public void testStoreInNormalDepot5() throws ModelException {
         singlePlayer.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>() {{
             put(Resource.GOLD, 1);
             put(Resource.SERVANT, 4);
@@ -106,7 +104,7 @@ public class BoardTest2 {
     }
 
     @Test
-    public void testGaignResources() throws FileNotFoundException, InvalidResourcesToKeepByPlayerException {
+    public void testGaignResources() throws ModelException, FileNotFoundException, InvalidResourcesToKeepByPlayerException {
         singlePlayer.getPlayer().getBoard().flushGainedResources(new TreeMap<>() {{
             put(Resource.GOLD, 20);
             put(Resource.SERVANT, 20);
@@ -140,7 +138,7 @@ public class BoardTest2 {
 
     // trying to push resources of the wrong type to leader
     @Test(expected = InvalidResourcesToKeepByPlayerException.class)
-    public void testGaignResourcesException() throws FileNotFoundException, InvalidResourcesToKeepByPlayerException {
+    public void testGaignResourcesException() throws ModelException, FileNotFoundException, InvalidResourcesToKeepByPlayerException {
         singlePlayer.getPlayer().getBoard().flushGainedResources(new TreeMap<>() {{
             put(Resource.GOLD, 20);
             put(Resource.SERVANT, 20);
@@ -170,8 +168,8 @@ public class BoardTest2 {
     }
 
     // trying to push resources from market to strongbox
-    @Test(expected = IllegalArgumentException.class)
-    public void testGaignResourcesException1() throws FileNotFoundException, InvalidResourcesToKeepByPlayerException {
+    @Test(expected = InvalidArgumentException.class)
+    public void testGaignResourcesException1() throws ModelException, FileNotFoundException, InvalidResourcesToKeepByPlayerException {
         singlePlayer.getPlayer().getBoard().flushGainedResources(new TreeMap<>() {{
             put(Resource.GOLD, 20);
             put(Resource.SERVANT, 20);
@@ -204,7 +202,7 @@ public class BoardTest2 {
     }
 
     @Test
-    public void testGaignResourcesTwoLeaders() throws FileNotFoundException, InvalidResourcesToKeepByPlayerException {
+    public void testGaignResourcesTwoLeaders() throws ModelException, FileNotFoundException, InvalidResourcesToKeepByPlayerException {
         singlePlayer.getPlayer().getBoard().flushGainedResources(new TreeMap<>() {{
             put(Resource.GOLD, 20);
             put(Resource.SERVANT, 20);
@@ -240,7 +238,7 @@ public class BoardTest2 {
     }
 
     @Test
-    public void testGaignResourcesTwoLeadersException() throws FileNotFoundException, InvalidResourcesToKeepByPlayerException {
+    public void testGaignResourcesTwoLeadersException() throws ModelException, FileNotFoundException, InvalidResourcesToKeepByPlayerException {
         singlePlayer.getPlayer().getBoard().flushGainedResources(new TreeMap<>() {{
             put(Resource.GOLD, 20);
             put(Resource.SERVANT, 20);
@@ -277,7 +275,7 @@ public class BoardTest2 {
 
     // test changing turn
     @Test
-    public void testGaignResourcesNextTurn() throws FileNotFoundException, InvalidResourcesToKeepByPlayerException {
+    public void testGaignResourcesNextTurn() throws ModelException, FileNotFoundException, InvalidResourcesToKeepByPlayerException {
         singlePlayer.getPlayer().getBoard().flushGainedResources(new TreeMap<>() {{
             put(Resource.GOLD, 20);
             put(Resource.SERVANT, 20);
@@ -317,7 +315,7 @@ public class BoardTest2 {
     }
 
     @Test (expected = ResourceNotDiscountableException.class)
-    public void testEnoughResInNormalDepot() throws InvalidResourcesToKeepByPlayerException {
+    public void testEnoughResInNormalDepot() throws ModelException {
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 2);
@@ -337,7 +335,7 @@ public class BoardTest2 {
     }
 
     @Test
-    public void testEnoughResInNormalDepot2() throws InvalidResourcesToKeepByPlayerException {
+    public void testEnoughResInNormalDepot2() throws ModelException, InvalidResourcesToKeepByPlayerException {
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 2);

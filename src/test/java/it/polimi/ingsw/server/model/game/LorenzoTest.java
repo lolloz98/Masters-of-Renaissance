@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.game;
 
 import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.junit.Before;
@@ -12,13 +14,13 @@ public class LorenzoTest {
     SinglePlayer singlePlayer;
 
     @Before
-    public void setUp(){
+    public void setUp() throws ModelException {
         CollectionsHelper.setTest();
         singlePlayer = new SinglePlayer(new Player("play", 1));
     }
 
     @Test
-    public void testPerformLorenzoAction(){
+    public void testPerformLorenzoAction() throws ModelException {
         assertTrue(CollectionsHelper.isTest());
         // Faith
         singlePlayer.getLorenzo().performLorenzoAction(singlePlayer);

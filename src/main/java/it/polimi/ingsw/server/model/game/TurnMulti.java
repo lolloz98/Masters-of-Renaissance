@@ -38,7 +38,7 @@ public class TurnMulti extends Turn {
      * @throws MainActionNotOccurredException if the main action hasn't occurred yet in this turn.
      */
     @Override
-    public TurnMulti nextTurn(Game<? extends Turn> game){
+    public TurnMulti nextTurn(Game<? extends Turn> game) throws MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException {
         checkConditions();
         MultiPlayer multiPlayer = (MultiPlayer) game;
         ArrayList<Player> allPlayers = multiPlayer.getPlayers();

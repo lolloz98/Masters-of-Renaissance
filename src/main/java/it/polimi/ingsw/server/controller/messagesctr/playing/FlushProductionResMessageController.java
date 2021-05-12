@@ -8,7 +8,7 @@ import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.model.cards.Production;
 import it.polimi.ingsw.server.model.cards.leader.ProductionLeaderCard;
-import it.polimi.ingsw.server.model.exception.MainActionAlreadyOccurredException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.Turn;
 import it.polimi.ingsw.server.model.player.Board;
@@ -33,7 +33,12 @@ public class  FlushProductionResMessageController extends PlayingMessageControll
         Board board=thisPlayer.getBoard();
         Turn turn=controllerActions.getGame().getTurn();
 
-        board.flushResFromProductions(controllerActions.getGame());
+        try {
+            board.flushResFromProductions(controllerActions.getGame());
+        } catch (ModelException e) {
+            // todo: handle exceptions
+            throw new ControllerException(e.getMessage());
+        }
 
         TreeMap<Resource,Integer> totGainedResources= new TreeMap<>();
 
@@ -58,6 +63,8 @@ public class  FlushProductionResMessageController extends PlayingMessageControll
             turn.setProductionsActivated(false);
         }catch(MainActionAlreadyOccurredException e){//an idea is to disable the button with this option if there is not been applied any production
             throw  new ControllerException("error: you cannot flush the resources");
+        } catch (MarketTrayNotEmptyException | ProductionsResourcesNotFlushedException e) {
+            // todo: handle exceptions
         }
 
         return new FlushProductionResAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),totGainedResources);

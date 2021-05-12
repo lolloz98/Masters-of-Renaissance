@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model.game;
 
-import it.polimi.ingsw.server.model.exception.MatrixIndexOutOfBoundException;
-import it.polimi.ingsw.server.model.exception.MarketTrayNotEmptyException;
-import it.polimi.ingsw.server.model.exception.NoSuchResourceException;
+import it.polimi.ingsw.server.model.exception.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +18,7 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void testPushMarbleRowNoLeader() {
+    public void testPushMarbleRowNoLeader() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         // given the arrangement of the marble matrix, pushing index 1 onRow true should result in:
         Marble[][] mat = new Marble[3][4];
         mat[0][0] = new Marble(Resource.NOTHING); mat[0][1] = new Marble(Resource.NOTHING); mat[0][2] = new Marble(Resource.NOTHING); mat[0][3] = new Marble(Resource.NOTHING);
@@ -49,7 +47,7 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void testPushMarbleColumnNoLeader() {
+    public void testPushMarbleColumnNoLeader() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         // given the arrangement of the marble matrix, pushing index 1 onRow true shoud result in:
         Marble[][] mat = new Marble[3][4];
         mat[0][0] = new Marble(Resource.NOTHING); mat[0][1] = new Marble(Resource.NOTHING); mat[0][2] = new Marble(Resource.ROCK); mat[0][3] = new Marble(Resource.NOTHING);
@@ -78,7 +76,7 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void testPushMarbleOneLeader() {
+    public void testPushMarbleOneLeader() throws AlreadyPresentLeaderResException, TooManyLeaderResourcesException, MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         marketTray.addLeaderResource(Resource.SHIELD);
         // given the arrangement of the marble matrix, pushing index 1 onRow true shoud result in:
         Marble[][] mat = new Marble[3][4];
@@ -109,7 +107,7 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void testPushMarbleTwoLeaders() {
+    public void testPushMarbleTwoLeaders() throws AlreadyPresentLeaderResException, TooManyLeaderResourcesException, MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         // worst case scenario, two leader resources and 4 white marbles in line
         marketTray.addLeaderResource(Resource.SHIELD);
         marketTray.addLeaderResource(Resource.SERVANT);
@@ -155,23 +153,23 @@ public class MarketTrayTest {
     }
 
     @Test(expected = MatrixIndexOutOfBoundException.class)
-    public void testPushMarbleMinusOne() {
+    public void testPushMarbleMinusOne() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         marketTray.pushMarble(true, -1);
     }
 
     @Test(expected = MatrixIndexOutOfBoundException.class)
-    public void testPushMarbleOutOfBound() {
+    public void testPushMarbleOutOfBound() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         marketTray.pushMarble(false, 4);
     }
 
     @Test(expected = MarketTrayNotEmptyException.class)
-    public void testPushMarbleTwice() {
+    public void testPushMarbleTwice() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         marketTray.pushMarble(false, 2);
         marketTray.pushMarble(false, 2);
     }
 
     @Test
-    public void testCheckResources() {
+    public void testCheckResources() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException, AlreadyPresentLeaderResException, TooManyLeaderResourcesException {
         // check for weird errors in checkResources, before calling pushMarble
         marketTray.checkResources(new TreeMap<>(){{
             put(Resource.SHIELD, 4);
@@ -198,7 +196,7 @@ public class MarketTrayTest {
     }
 
     @Test
-    public void testRemoveResources() {
+    public void testRemoveResources() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException, AlreadyPresentLeaderResException, TooManyLeaderResourcesException {
         // worst case scenario, two leader resources and 4 white marbles in line
         marketTray.addLeaderResource(Resource.SHIELD);
         marketTray.addLeaderResource(Resource.SERVANT);
@@ -215,7 +213,7 @@ public class MarketTrayTest {
     }
 
     @Test (expected = NoSuchResourceException.class)
-    public void testRemoveResource() {
+    public void testRemoveResource() throws NoSuchResourceException, AlreadyPresentLeaderResException, TooManyLeaderResourcesException {
         marketTray.addLeaderResource(Resource.SHIELD);
         marketTray.addLeaderResource(Resource.SERVANT);
         marketTray.removeLeaderResource(Resource.ROCK);

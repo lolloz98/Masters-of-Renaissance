@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.player;
 
+import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.exception.NotEnoughResourcesException;
 import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.game.Resource;
@@ -18,8 +20,8 @@ public class StrongBoxTest {
         sb=new StrongBox();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void addResourcesTest1(){
+    @Test(expected = InvalidArgumentException.class)
+    public void addResourcesTest1() throws ModelException {
         TreeMap<Resource,Integer> illegalMap=new TreeMap<>(){{
            put(Resource.GOLD,-1);
         }};
@@ -27,7 +29,7 @@ public class StrongBoxTest {
     }
 
     @Test(expected = ResourceNotDiscountableException.class)
-    public void addResourcesTest2(){
+    public void addResourcesTest2() throws ModelException{
         TreeMap<Resource,Integer> illegalMap=new TreeMap<>(){{
             put(Resource.FAITH,3);
         }};
@@ -35,7 +37,7 @@ public class StrongBoxTest {
     }
 
     @Test
-    public void addResourcesTest3(){
+    public void addResourcesTest3() throws ModelException{
         TreeMap<Resource,Integer> map1=new TreeMap<>(){{
             put(Resource.GOLD,3);
             put(Resource.ROCK,1);
@@ -57,7 +59,7 @@ public class StrongBoxTest {
     }
 
     @Test
-    public void hasResourcesTest(){
+    public void hasResourcesTest() throws ModelException{
         TreeMap<Resource,Integer> inStrongBox1=new TreeMap<>(){{
             put(Resource.GOLD,2);
             put(Resource.ROCK,5);
@@ -102,8 +104,8 @@ public class StrongBoxTest {
         assertTrue(sb.hasResources(toSpend3));
     }
 
-    @Test (expected = IllegalArgumentException.class)
-    public void hasResourcesTestIllegal(){
+    @Test (expected = InvalidArgumentException.class)
+    public void hasResourcesTestIllegal() throws ModelException{
         TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
             put(Resource.GOLD,-2);
             put(Resource.ROCK,1);
@@ -112,8 +114,8 @@ public class StrongBoxTest {
         assertFalse(sb.hasResources(illegalToSpend));
     }
 
-    @Test (expected = IllegalArgumentException.class)
-    public void testSpendResourcesIllegal(){
+    @Test (expected = InvalidArgumentException.class)
+    public void testSpendResourcesIllegal() throws ModelException{
         TreeMap<Resource,Integer> inStrongBox1=new TreeMap<>(){{
             put(Resource.GOLD,1);
             put(Resource.ROCK,1);
@@ -127,15 +129,15 @@ public class StrongBoxTest {
     }
 
     @Test (expected = ResourceNotDiscountableException.class)
-    public void testSpendResourcesIllegal2(){
+    public void testSpendResourcesIllegal2() throws ModelException{
         TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
             put(Resource.FAITH,2);
         }};
         sb.spendResources(illegalToSpend);
     }
 
-    @Test (expected = IllegalArgumentException.class)
-    public void testHasResourcesIllegal(){
+    @Test (expected = InvalidArgumentException.class)
+    public void testHasResourcesIllegal() throws ModelException{
         TreeMap<Resource,Integer> inStrongBox1=new TreeMap<>(){{
             put(Resource.GOLD,1);
             put(Resource.ROCK,1);
@@ -149,7 +151,7 @@ public class StrongBoxTest {
     }
 
     @Test (expected = ResourceNotDiscountableException.class)
-    public void testHasResourcesIllegal2(){
+    public void testHasResourcesIllegal2() throws ModelException{
         TreeMap<Resource,Integer> illegalToSpend=new TreeMap<>(){{
             put(Resource.FAITH,2);
         }};
@@ -157,7 +159,7 @@ public class StrongBoxTest {
     }
 
     @Test
-    public void spendResourcesTest(){
+    public void spendResourcesTest() throws ModelException{
         TreeMap<Resource,Integer> inStrongBox1=new TreeMap<>(){{
             put(Resource.GOLD,2);
             put(Resource.ROCK,5);
@@ -173,7 +175,7 @@ public class StrongBoxTest {
         }};
         try{
             sb.spendResources(toSpend1);
-        }catch(NotEnoughResourcesException | IllegalArgumentException e){
+        }catch(NotEnoughResourcesException | InvalidArgumentException e){
             fail();
         }
 
@@ -190,7 +192,7 @@ public class StrongBoxTest {
         }};
         try{
             sb.spendResources(toSpend2);
-        }catch(NotEnoughResourcesException | IllegalArgumentException e){
+        }catch(NotEnoughResourcesException | InvalidArgumentException e){
             fail();
         }
 
