@@ -3,33 +3,30 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.messages.requests.*;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
-import it.polimi.ingsw.messages.requests.leader.RemoveLeaderMessage;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
-import it.polimi.ingsw.server.model.cards.leader.Requirement;
 import it.polimi.ingsw.server.model.cards.leader.RequirementResource;
-import it.polimi.ingsw.server.model.game.Game;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.Depot;
-import it.polimi.ingsw.server.model.player.Player;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class ParserTest {
+public class ParserServerTest {
 
     Object object;
     ClientMessage clientMessage;
 
     public Object check(ClientMessage clientMessage){
         try {
-            Object object = Parser.parse(clientMessage);
+            Object object = ParserServer.parseRequest(clientMessage);
             assertEquals(clientMessage.getClass().getSimpleName() + "Controller", object.getClass().getSimpleName());
             return object;
         } catch (ControllerException e) {
@@ -39,7 +36,7 @@ public class ParserTest {
     }
 
     @Test
-    public void parseTest() {
+    public void parseTest() throws ModelException {
         clientMessage = new CreateGameMessage(1, "lollo");
         object = check(clientMessage);
         assertEquals(clientMessage, ((CreateGameMessageController)object).getClientMessage());

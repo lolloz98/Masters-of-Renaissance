@@ -48,7 +48,7 @@ public class ClientHandler implements Runnable {
 
     private synchronized void handleMessage(ClientMessage clientMessage) throws IOException {
         try {
-            Object parsedMessage = Parser.parse(clientMessage);
+            Object parsedMessage = ParserServer.parseRequest(clientMessage);
             if(parsedMessage instanceof CreateGameMessageController){
                 // if here -> controllerActions not created yet, thus create it and then
                 Answer answer = ((CreateGameMessageController) parsedMessage).doAction(answerListener);
