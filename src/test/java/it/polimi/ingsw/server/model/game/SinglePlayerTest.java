@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.game;
 
 import it.polimi.ingsw.server.model.cards.Color;
-import it.polimi.ingsw.server.model.exception.GameIsOverException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.DevelopCardSlot;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
@@ -16,13 +16,13 @@ public class SinglePlayerTest {
     SinglePlayer singlePlayer;
 
     @Before
-    public void setUp(){
+    public void setUp() throws ModelException {
         CollectionsHelper.setTest();
         singlePlayer = new SinglePlayer(new Player("player", 1));
     }
 
     @Test
-    public void testNextTurnLorenzoWinsDevelop(){
+    public void testNextTurnLorenzoWinsDevelop() throws ModelException {
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
         singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
@@ -36,7 +36,7 @@ public class SinglePlayerTest {
     }
 
     @Test
-    public void testNextTurnLorenzoWinsFaith(){
+    public void testNextTurnLorenzoWinsFaith() throws ModelException {
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
         singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
@@ -50,7 +50,7 @@ public class SinglePlayerTest {
     }
 
     @Test
-    public void testNextTurnPlayerWinsFaith(){
+    public void testNextTurnPlayerWinsFaith() throws ModelException {
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
         singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
@@ -67,7 +67,7 @@ public class SinglePlayerTest {
     }
 
     @Test
-    public void testNextTurnPlayerWinsDevelop(){
+    public void testNextTurnPlayerWinsDevelop() throws ModelException {
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
         singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
@@ -91,7 +91,7 @@ public class SinglePlayerTest {
     }
 
     @Test (expected = GameIsOverException.class)
-    public void testNextTurnException(){
+    public void testNextTurnException() throws ModelException {
         assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
         singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
@@ -110,7 +110,7 @@ public class SinglePlayerTest {
     }
 
     @Test
-    public void testDistributeLeader(){
+    public void testDistributeLeader() throws ModelException {
         singlePlayer.distributeLeader();
         assertEquals(singlePlayer.getPlayer().getBoard().getLeaderCards().size(), 4);
     }

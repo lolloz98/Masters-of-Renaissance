@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.server.model.exception.InvalidResourcesByPlayerException;
-import it.polimi.ingsw.server.model.exception.NotEnoughResourcesException;
-import it.polimi.ingsw.server.model.exception.ProductionAlreadyActivatedException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.Board;
@@ -40,10 +38,10 @@ public class Production {
      * @throws InvalidResourcesByPlayerException   if toPay or resourcesToGain contain invalid type of Resources
      * @throws NotEnoughResourcesException         if there are not enough resources topay on the board
      */
-    public void applyProduction(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay, TreeMap<Resource, Integer> resourcesToGain, Board board) throws InvalidResourcesByPlayerException, ProductionAlreadyActivatedException {
+    public void applyProduction(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay, TreeMap<Resource, Integer> resourcesToGain, Board board) throws InvalidResourcesByPlayerException, ProductionAlreadyActivatedException, ResourceNotDiscountableException, NotEnoughResourcesException, InvalidArgumentException, InvalidResourceQuantityToDepotException {
         if (!checkResToGiveForActivation(Utility.getTotalResources(toPay)))
-            throw new InvalidResourcesByPlayerException();
-        if (!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesByPlayerException();
+            throw new InvalidResourcesByPlayerException("Invalid resources to pay specified");
+        if (!checkResToGainForActivation(resourcesToGain)) throw new InvalidResourcesByPlayerException("Invalid resources to gain specified");
         if (hasBeenActivated()) throw new ProductionAlreadyActivatedException();
 
         board.payResources(toPay); // it can throw NotEnoughResourcesException
@@ -58,7 +56,7 @@ public class Production {
      */
     public boolean checkResToGiveForActivation(TreeMap<Resource, Integer> byPlayer) throws InvalidResourcesByPlayerException {
         for (Resource r : byPlayer.keySet()) {
-            if (!Resource.isDiscountable(r)) throw new InvalidResourcesByPlayerException();
+            if (!Resource.isDiscountable(r)) throw new InvalidResourcesByPlayerException("A type of resource specified is invalid");
         }
         return checkResForActivation(byPlayer, resourcesToGive);
     }
@@ -70,7 +68,7 @@ public class Production {
      */
     public boolean checkResToGainForActivation(TreeMap<Resource, Integer> byPlayer) throws InvalidResourcesByPlayerException {
         for (Resource r : byPlayer.keySet()) {
-            if (!Resource.isDiscountable(r) && r != Resource.FAITH) throw new InvalidResourcesByPlayerException();
+            if (!Resource.isDiscountable(r) && r != Resource.FAITH) throw new InvalidResourcesByPlayerException("A type of resource specified is invalid");
         }
         return checkResForActivation(byPlayer, resourcesToGain);
     }
@@ -126,7 +124,7 @@ public class Production {
      * @param board board of the player
      * @param game  current game
      */
-    public void flushGainedToBoard(Board board, Game<?> game) {
+    public void flushGainedToBoard(Board board, Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, FigureAlreadyDiscardedException, InvalidArgumentException, FigureAlreadyActivatedException {
         board.flushGainedResources(gainedResources, game);
         gainedResources.clear();
     }

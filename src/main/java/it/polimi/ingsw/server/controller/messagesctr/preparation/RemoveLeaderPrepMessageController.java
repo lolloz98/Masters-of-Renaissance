@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.controller.exception.InvalidActionControllerExcept
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
+import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,7 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
 
         try {
             board.removeLeaderCards(toRemove);
-        } catch (IllegalArgumentException e) {
+        } catch (InvalidArgumentException e) {
             logger.error("something unexpected happened in " + this.getClass() + " while removing leaders");
             throw new ControllerException("not possible to remove these leaders");
         }

@@ -9,9 +9,7 @@ import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.cards.leader.Requirement;
-import it.polimi.ingsw.server.model.exception.EmptyDeckException;
-import it.polimi.ingsw.server.model.exception.GameIsOverException;
-import it.polimi.ingsw.server.model.exception.InvalidResourcesToKeepByPlayerException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.DevelopCardSlot;
 import it.polimi.ingsw.server.model.player.Player;
 import org.junit.Before;
@@ -28,7 +26,7 @@ public class MultiPlayerTest {
     MultiPlayer multiPlayer;
 
     @Before
-    public void setUp(){
+    public void setUp() throws ModelException {
         ArrayList<Player> players = new ArrayList<>();
         players.add(new Player("first", 1));
         players.add(new Player("second", 2));
@@ -38,7 +36,7 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void testDecksDevelop(){ // maybe should be modified to exclude shuffle method
+    public void testDecksDevelop() throws ModelException { // maybe should be modified to exclude shuffle method
         DeckDevelop dd;
         DevelopCard dc;
         for(Color color : Color.values()) {
@@ -54,7 +52,7 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void testDeckLeader(){ // maybe should be modified to exclude shuffle method
+    public void testDeckLeader() throws ModelException { // maybe should be modified to exclude shuffle method
         Deck<LeaderCard<? extends Requirement>> dl = multiPlayer.getDeckLeader();
         for(int i=0; i<12; i++){
             dl.drawCard();
@@ -62,33 +60,33 @@ public class MultiPlayerTest {
     }
 
     @Test (expected = EmptyDeckException.class)
-    public void testIsADeckDevelopEmptyTooManyCalls(){
+    public void testIsADeckDevelopEmptyTooManyCalls() throws ModelException {
         for(int i = 0; i <5; i++)
             multiPlayer.drawDevelopCard(Color.BLUE, 2);
     }
 
     @Test (expected = EmptyDeckException.class)
-    public void testIsADeckDevelopEmptyTooManyCalls2(){
+    public void testIsADeckDevelopEmptyTooManyCalls2() throws ModelException {
         for(int i = 0; i <5; i++)
             multiPlayer.getDecksDevelop().get(Color.BLUE).get(2).drawCard();
     }
 
     @Test
-    public void testIsADeckDevelopEmptyTrue(){
+    public void testIsADeckDevelopEmptyTrue() throws ModelException {
         for(int i = 0; i <4; i++)
             multiPlayer.drawDevelopCard(Color.GREEN, 1);
         assertTrue(multiPlayer.isADeckDevelopEmpty());
     }
 
     @Test
-    public void testIsADeckDevelopEmptyFalse(){
+    public void testIsADeckDevelopEmptyFalse() throws ModelException {
         for(int i = 0; i <3; i++)
             multiPlayer.drawDevelopCard(Color.PURPLE, 3);
         assertFalse(multiPlayer.isADeckDevelopEmpty());
     }
 
     @Test
-    public void testNextTurnEndOfFaithTrack(){
+    public void testNextTurnEndOfFaithTrack() throws ModelException {
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
@@ -128,7 +126,7 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void testNextTurnDevelop(){
+    public void testNextTurnDevelop() throws ModelException {
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
@@ -176,7 +174,7 @@ public class MultiPlayerTest {
     }
 
     @Test (expected = GameIsOverException.class)
-    public void testNextTurnException(){
+    public void testNextTurnException() throws ModelException {
         assertEquals(multiPlayer.getPlayers().get(0), multiPlayer.getTurn().getCurrentPlayer());
         assertFalse(multiPlayer.isLastRound());
         multiPlayer.getTurn().setMainActionOccurred();
@@ -218,7 +216,7 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void testDistributeLeader(){
+    public void testDistributeLeader() throws ModelException {
         multiPlayer.distributeLeader();
         for(Player p : multiPlayer.getPlayers()){
             assertEquals(p.getBoard().getLeaderCards().size(), 4);
@@ -226,7 +224,7 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void testGetWinnersSingle() {
+    public void testGetWinnersSingle() throws ModelException {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();

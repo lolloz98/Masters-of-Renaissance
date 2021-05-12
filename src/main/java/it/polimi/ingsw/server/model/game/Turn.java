@@ -38,7 +38,7 @@ public abstract class Turn {
      * @param marketActivated is what to set the flag to
      * @throws MainActionAlreadyOccurredException if it's called twice, if a main action already occurred, or if there are resources not flushed in a production.
      */
-    public void setMarketActivated(boolean marketActivated) {
+    public void setMarketActivated(boolean marketActivated) throws MainActionAlreadyOccurredException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException {
         if (mainActionOccurred || productionsActivated || (this.marketActivated && marketActivated)) throw new MainActionAlreadyOccurredException();
         else {
             if (this.marketActivated) { // Take if market has been activated and now it is being set to false
@@ -55,7 +55,7 @@ public abstract class Turn {
      * @param productionsActivated is what to set the flag to
      * @throws MainActionAlreadyOccurredException if a main action already occurred, or if there are resources not flushed in market tray.
      */
-    public void setProductionsActivated(boolean productionsActivated) {
+    public void setProductionsActivated(boolean productionsActivated) throws MainActionAlreadyOccurredException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException {
         if (mainActionOccurred || marketActivated) throw new MainActionAlreadyOccurredException();
         else {
             if (this.productionsActivated && !productionsActivated) {
@@ -73,14 +73,14 @@ public abstract class Turn {
      * @throws ProductionsResourcesNotFlushedException if there are resources not flushed in a production.
      * @throws MainActionAlreadyOccurredException if it's called twice, as the main action can only occur once in every turn.
      */
-    public void setMainActionOccurred() {
+    public void setMainActionOccurred() throws MarketTrayNotEmptyException, MainActionAlreadyOccurredException, ProductionsResourcesNotFlushedException {
         if (marketActivated) throw new MarketTrayNotEmptyException();
         if (productionsActivated) throw new ProductionsResourcesNotFlushedException();
         if (mainActionOccurred) throw new MainActionAlreadyOccurredException();
         this.mainActionOccurred = true;
     }
 
-    public abstract Turn nextTurn(Game<? extends Turn> game);
+    public abstract Turn nextTurn(Game<? extends Turn> game) throws MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException;
 
     public Turn(){
         marketActivated = false;
@@ -95,7 +95,7 @@ public abstract class Turn {
      * @throws ProductionsResourcesNotFlushedException if there are resources not flushed in a production.
      * @throws MainActionNotOccurredException if the main action hasn't occurred yet in this turn.
      */
-    protected void checkConditions(){
+    protected void checkConditions() throws MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException {
         if (marketActivated) throw new MarketTrayNotEmptyException();
         if (productionsActivated) throw new ProductionsResourcesNotFlushedException();
         if (!mainActionOccurred) throw new MainActionNotOccurredException();

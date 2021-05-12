@@ -1,9 +1,6 @@
 package it.polimi.ingsw.server.model.game;
 
-import it.polimi.ingsw.server.model.exception.MainActionAlreadyOccurredException;
-import it.polimi.ingsw.server.model.exception.MainActionNotOccurredException;
-import it.polimi.ingsw.server.model.exception.MarketTrayNotEmptyException;
-import it.polimi.ingsw.server.model.exception.ProductionsResourcesNotFlushedException;
+import it.polimi.ingsw.server.model.exception.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +20,7 @@ public class TurnTest {
     }
 
     @Test
-    public void setMarketActivated() {
+    public void setMarketActivated()throws ModelException {
         // nothing should happen
         turn.setMarketActivated(false);
         try {
@@ -56,7 +53,7 @@ public class TurnTest {
     }
 
     @Test
-    public void setProductionsActivated() {
+    public void setProductionsActivated() throws ModelException{
         turn.setProductionsActivated(false);
         try {
             turn.checkConditions();
@@ -87,7 +84,7 @@ public class TurnTest {
     }
 
     @Test
-    public void setMainActionOccurred() {
+    public void setMainActionOccurred()throws ModelException {
         turn.setMainActionOccurred();
         turn.checkConditions();
         assertTrue(turn.isMainActionOccurred());

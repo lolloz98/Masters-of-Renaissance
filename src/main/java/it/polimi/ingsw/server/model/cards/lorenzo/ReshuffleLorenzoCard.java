@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards.lorenzo;
 
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 
 /**
@@ -16,7 +17,7 @@ public class ReshuffleLorenzoCard extends LorenzoCard {
      * @param game current single game player
      */
     @Override
-    public void applyEffect(SinglePlayer game) {
+    public void applyEffect(SinglePlayer game) throws EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         game.getLorenzo().getFaithTrack().move(1, game);
         game.getLorenzoDeck().backToOriginalAndShuffle();
     }

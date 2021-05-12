@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.exception.AlreadyAppliedDiscountForResException;
+import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.exception.WrongColorDeckException;
 import it.polimi.ingsw.server.model.exception.WrongLevelDeckException;
 import it.polimi.ingsw.server.model.game.Resource;
@@ -23,7 +24,7 @@ public final class DeckDevelop extends Deck<DevelopCard> {
      * @throws WrongLevelDeckException if there is a card with different level
      * @throws WrongColorDeckException if there is a card with different color
      */
-    public DeckDevelop(ArrayList<DevelopCard> cards, int level, Color color) {
+    public DeckDevelop(ArrayList<DevelopCard> cards, int level, Color color) throws WrongLevelDeckException, WrongColorDeckException {
         super(cards);
         this.level = level;
         this.color = color;
@@ -46,9 +47,11 @@ public final class DeckDevelop extends Deck<DevelopCard> {
      * @param quantity quantity of resources to discount
      * @throws AlreadyAppliedDiscountForResException if a discount has already been applied on that resource
      */
-    public void applyDiscount(Resource r, int quantity) throws AlreadyAppliedDiscountForResException {
-        if (resDiscounted.contains(r)) throw new AlreadyAppliedDiscountForResException();
-        cards.forEach(card -> card.applyDiscount(r, quantity));
+    public void applyDiscount(Resource r, int quantity) throws AlreadyAppliedDiscountForResException, ResourceNotDiscountableException {
+        if (resDiscounted.contains(r)) throw new AlreadyAppliedDiscountForResException(r);
+        for(DevelopCard card: cards){
+            card.applyDiscount(r, quantity);
+        }
         resDiscounted.add(r);
     }
 

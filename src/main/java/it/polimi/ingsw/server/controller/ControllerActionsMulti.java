@@ -5,6 +5,10 @@ import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
+import it.polimi.ingsw.server.model.exception.EndAlreadyReachedException;
+import it.polimi.ingsw.server.model.exception.FigureAlreadyActivatedException;
+import it.polimi.ingsw.server.model.exception.FigureAlreadyDiscardedException;
+import it.polimi.ingsw.server.model.exception.InvalidStepsException;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.Board;
@@ -66,11 +70,19 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
                     break;
                 case 2:
                     b.setInitialRes(1);
-                    b.moveOnFaithPath(1, game);
+                    try {
+                        b.moveOnFaithPath(1, game);
+                    } catch (InvalidStepsException | FigureAlreadyActivatedException | FigureAlreadyDiscardedException | EndAlreadyReachedException e) {
+                        logger.error("something unexpected happened in distributeBeginningRes");
+                    }
                     break;
                 case 3:
                     b.setInitialRes(2);
-                    b.moveOnFaithPath(1, game);
+                    try {
+                        b.moveOnFaithPath(1, game);
+                    } catch (InvalidStepsException | EndAlreadyReachedException | FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
+                        logger.error("something unexpected happened in distributeBeginningRes");
+                    }
                     break;
                 default:
                     break;

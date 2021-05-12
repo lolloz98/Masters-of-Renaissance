@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.player;
 
+import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.exception.NotEnoughResourcesException;
 import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.game.Resource;
@@ -24,13 +25,13 @@ public class StrongBox {
      * Add resGained to the strongBox
      *
      * @param resGained gained resources, to add to the strongBox
-     * @throws IllegalArgumentException         if there is any negative integer in resGained
+     * @throws InvalidArgumentException         if there is any negative integer in resGained
      * @throws ResourceNotDiscountableException if there is any resource notDiscountable in resGained
      */
-    public void addResources(TreeMap<Resource, Integer> resGained) {
+    public void addResources(TreeMap<Resource, Integer> resGained) throws ResourceNotDiscountableException, InvalidArgumentException {
         for (Resource r : resGained.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
-            if (resGained.get(r) < 0) throw new IllegalArgumentException();
+            if (resGained.get(r) < 0) throw new InvalidArgumentException("Cannot gain a negative amount of resources");
         }
         for (Resource r : resGained.keySet()) {
             if (resources.containsKey(r)) {
@@ -46,12 +47,12 @@ public class StrongBox {
      *
      * @param resToSpend resources to subtract from the strongBox
      * @throws NotEnoughResourcesException if there are not enough resources in the strongBox
-     * @throws IllegalArgumentException    if there is a negative Integer in resToSpend
+     * @throws InvalidArgumentException    if there is a negative Integer in resToSpend
      */
-    public void spendResources(TreeMap<Resource, Integer> resToSpend) {
+    public void spendResources(TreeMap<Resource, Integer> resToSpend) throws ResourceNotDiscountableException, NotEnoughResourcesException, InvalidArgumentException {
         for (Resource r : resToSpend.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
-            if (resToSpend.get(r) < 0) throw new IllegalArgumentException();
+            if (resToSpend.get(r) < 0) throw new InvalidArgumentException("Cannot spend a negative amount of resources");
         }
         if (!hasResources(resToSpend)) throw new NotEnoughResourcesException();
         for (Resource r : resToSpend.keySet()) {
@@ -65,10 +66,10 @@ public class StrongBox {
      * @param resToSpend check if the strongBox has this amount of resources
      * @return true, if there are at least resToSpend resources in the strongBox, false otherwise
      */
-    protected boolean hasResources(TreeMap<Resource, Integer> resToSpend) {
+    protected boolean hasResources(TreeMap<Resource, Integer> resToSpend) throws ResourceNotDiscountableException, InvalidArgumentException {
         for (Resource r : resToSpend.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
-            if (resToSpend.get(r) < 0) throw new IllegalArgumentException();
+            if (resToSpend.get(r) < 0) throw new InvalidArgumentException("Cannot spend a negative amount of resources");
         }
         for (Resource r : resToSpend.keySet()) {
             if (!resources.containsKey(r) || resources.get(r) < resToSpend.get(r))

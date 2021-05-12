@@ -21,8 +21,8 @@ public class Depot {
     /**
      * normal depot constructor
      */
-    public Depot(int maxToStore, boolean modifiable) {
-        if(maxToStore<=0) throw new IllegalArgumentException();
+    public Depot(int maxToStore, boolean modifiable) throws InvalidArgumentException {
+        if(maxToStore<=0) throw new InvalidArgumentException("Max to store for depot cannot be less than 0");
         this.maxToStore = maxToStore;
         resource = Resource.NOTHING;
         stored = 0;
@@ -32,8 +32,8 @@ public class Depot {
     /**
      * normal depot constructor, always modifiable
      */
-    public Depot(int maxToStore) {
-        if(maxToStore<=0) throw new IllegalArgumentException();
+    public Depot(int maxToStore) throws InvalidArgumentException {
+        if(maxToStore<=0) throw new InvalidArgumentException("Max to store for depot cannot be less than 0");
         this.maxToStore = maxToStore;
         resource = Resource.NOTHING;
         stored = 0;
@@ -43,9 +43,9 @@ public class Depot {
     /**
      * leader depot constructor
      */
-    public Depot(Resource r) {
+    public Depot(Resource r) throws InvalidArgumentException {
         this.maxToStore = 2;
-        if(!Resource.isDiscountable(r)) throw new IllegalArgumentException();
+        if(!Resource.isDiscountable(r)) throw new InvalidArgumentException("Invalid type of resource to be contained in depot");
         resource = r;
         stored = 0;
         this.modifiable = false;
@@ -81,8 +81,8 @@ public class Depot {
         return modifiable;
     }
 
-    public void spendResources(int howMany) {
-        if (howMany <= 0 || !enoughResources(howMany)) throw new InvalidResourceQuantityToDepotException();
+    public void spendResources(int howMany) throws InvalidResourceQuantityToDepotException {
+        if (howMany <= 0 || !enoughResources(howMany)) throw new InvalidResourceQuantityToDepotException(maxToStore);
         if (stored == howMany) clear();
         else
             stored -= howMany;
@@ -95,10 +95,10 @@ public class Depot {
     /**
      * method that add n resources to the depot
      */
-    public void addResource(Resource r, int howMany) {
-        if (howMany <= 0 || tooManyResources(howMany)) throw new InvalidResourceQuantityToDepotException();
-        if (!isResourceAppendable(r)) throw new DifferentResourceForDepotException();
-        if (!Resource.isDiscountable(r)) throw new InvalidTypeOfResourceToDepotExeption();
+    public void addResource(Resource r, int howMany) throws InvalidTypeOfResourceToDepotException, DifferentResourceForDepotException, InvalidResourceQuantityToDepotException {
+        if (howMany <= 0 || tooManyResources(howMany)) throw new InvalidResourceQuantityToDepotException(maxToStore);
+        if (!isResourceAppendable(r)) throw new DifferentResourceForDepotException(r);
+        if (!Resource.isDiscountable(r)) throw new InvalidTypeOfResourceToDepotException(r);
         if (stored != 0)
             stored+=howMany;
         else {

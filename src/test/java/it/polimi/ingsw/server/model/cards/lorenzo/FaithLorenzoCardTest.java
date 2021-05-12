@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.model.cards.lorenzo;
 
+import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import it.polimi.ingsw.server.model.exception.MainActionAlreadyOccurredException;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
 import org.junit.Before;
@@ -21,7 +24,7 @@ public class FaithLorenzoCardTest {
     }
 
     @Test
-    public void testApplyEffect() {
+    public void testApplyEffect() throws ModelException {
         card = new FaithLorenzoCard(0);
         assertEquals(0, singlePlayer.getLorenzo().getFaithTrack().getPosition());
         card.applyEffect(singlePlayer);

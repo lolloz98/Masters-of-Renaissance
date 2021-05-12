@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.utility;
 
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.WarehouseType;
 import org.junit.Test;
@@ -77,7 +78,7 @@ public class UtilityTest {
     }
 
     @Test
-    public void testGetTotalResources() {
+    public void testGetTotalResources() throws ModelException {
         TreeMap<WarehouseType, TreeMap<Resource, Integer>> toGive;
         TreeMap<Resource, Integer> expected;
 

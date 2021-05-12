@@ -7,6 +7,7 @@ import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
+import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,13 +33,13 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
         Player thisPlayer=getPlayerFromId(controllerActions);
         try {
             card=thisPlayer.getBoard().getLeaderCard(((LeaderMessage)getClientMessage()).getLeaderId());
-        }catch(IllegalArgumentException e){
+        }catch(InvalidArgumentException e){
             throw new ControllerException("you don't own this leader");
         }
 
         try{
             thisPlayer.getBoard().discardLeaderCard(card);
-        }catch(IllegalArgumentException e){
+        }catch(InvalidArgumentException e){
             logger.error("something went wrong in " + this.getClass() + "while discarding a leadercard");
             throw new ControllerException("unexpected error");
         }

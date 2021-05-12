@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.utility;
 
+import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.WarehouseType;
 
@@ -38,7 +39,7 @@ public class Utility {
      * @param toPay TreeMap<WarehouseType, TreeMap<Resource, Integer>>
      * @return TreeMap<Resource, Integer> with all the resources in toPay, regardless of the type of the Warehouse
      */
-    public static TreeMap<Resource, Integer> getTotalResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay){
+    public static TreeMap<Resource, Integer> getTotalResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) throws InvalidArgumentException {
         TreeMap<Resource, Integer> res = new TreeMap<>();
         for (WarehouseType w : toPay.keySet()) {
             switch (w) {
@@ -48,7 +49,7 @@ public class Utility {
                     addResToTreeMap(toPay.get(w), res);
                     break;
                 default:
-                    throw new IllegalArgumentException();
+                    throw new InvalidArgumentException("Warehouse type specified, invalid");
             }
         }
         return res;

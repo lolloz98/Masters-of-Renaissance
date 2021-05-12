@@ -13,9 +13,7 @@ import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPre
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.cards.leader.*;
-import it.polimi.ingsw.server.model.exception.ActivateDiscardedCardException;
-import it.polimi.ingsw.server.model.exception.AlreadyActiveLeaderException;
-import it.polimi.ingsw.server.model.exception.RequirementNotSatisfiedException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +34,12 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
     public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Board board;
         board = getPlayerFromId(controllerActions).getBoard();
-        LeaderCard<?> toActivate = board.getLeaderCard(((LeaderMessage) getClientMessage()).getLeaderId());
+        LeaderCard<?> toActivate = null;
+        try {
+            toActivate = board.getLeaderCard(((LeaderMessage) getClientMessage()).getLeaderId());
+        } catch (InvalidArgumentException e) {
+            throw new ControllerException(e.getMessage());
+        }
 
         try {
             toActivate.activate(controllerActions.getGame(), controllerActions.getGame().getPlayer(getClientMessage().getPlayerId()));
@@ -46,9 +49,10 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
             throw new ControllerException("you have already activated this card");
         } catch (ActivateDiscardedCardException e) {
             throw new ControllerException("you cannot activate a discarded card");
-        } catch (IllegalArgumentException e) {
-            logger.debug("something unexpected happened in " + this.getClass() + " while activating a leader card");
-            throw new ControllerException("not possible to activate leader card");
+        } catch (ModelException e) {
+            // todo check
+            logger.warn("something unexpected happened in " + this.getClass() + " while activating a leader card");
+            throw new ControllerException(e.getMessage());
         }
 
         if (toActivate instanceof DepotLeaderCard) {
@@ -69,7 +73,11 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
 
             for(Color c: decksDevelop.keySet()){
                 for(Integer level: decksDevelop.get(c).keySet()){
-                    newCosts[i][j]= decksDevelop.get(c).get(level).topCard().getCost();
+                    try {
+                        newCosts[i][j]= decksDevelop.get(c).get(level).topCard().getCost();
+                    } catch (EmptyDeckException e) {
+                        // TODO
+                    }
                     j++;
                 }
                 i++;

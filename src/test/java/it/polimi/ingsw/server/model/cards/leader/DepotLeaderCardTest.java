@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
-import it.polimi.ingsw.server.model.exception.ActivateDiscardedCardException;
-import it.polimi.ingsw.server.model.exception.AlreadyActiveLeaderException;
-import it.polimi.ingsw.server.model.exception.RequirementNotSatisfiedException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.Resource;
@@ -30,52 +28,56 @@ public class DepotLeaderCardTest {
     Resource requiredRes = Resource.ROCK;
 
     @BeforeClass
-    public static void testInfo(){
-        if(isSinglePlayer) logger.info("testing on single player");
+    public static void testInfo() {
+        if (isSinglePlayer) logger.info("testing on single player");
         else logger.info("testing on multiplayer");
     }
 
     @Before
     public void setUp() throws Exception {
-        players = new ArrayList<>(){{
+        players = new ArrayList<>() {{
             add(new Player("Lorenzo", 0));
             add(new Player("Lorenzo", 1));
             add(new Player("Aniello", 2));
         }};
 
-        game = (isSinglePlayer)? new MultiPlayer(players): new SinglePlayer(players.get(0));
+        game = (isSinglePlayer) ? new MultiPlayer(players) : new SinglePlayer(players.get(0));
 
         depot = new Depot(Resource.GOLD);
 
         leaderCard = new DepotLeaderCard(2, new RequirementResource(requiredRes), depot, 61);
     }
 
-    private void satisfyReq(Player player){
-        player.getBoard().flushGainedResources(new TreeMap<>(){{
+    private void satisfyReq(Player player) throws ModelException {
+        player.getBoard().flushGainedResources(new TreeMap<>() {{
             put(requiredRes, 5);
         }}, game);
     }
 
-    private void giveOwnership(Player player){
-        player.getBoard().addLeaderCards(new ArrayList<>(){
-            {add(leaderCard);}
+    private void giveOwnership(Player player) {
+        player.getBoard().addLeaderCards(new ArrayList<>() {
+            {
+                add(leaderCard);
+            }
         });
     }
 
     @Test
-    public void testActivate() {
+    public void testActivate() throws ModelException {
         Player player = players.get(0);
         try {
             leaderCard.activate(game, player);
             fail();
-        }catch(RequirementNotSatisfiedException ignored){}
+        } catch (RequirementNotSatisfiedException ignored) {
+        }
 
         satisfyReq(player);
 
         try {
             leaderCard.activate(game, player);
             fail();
-        }catch(IllegalArgumentException ignored){}
+        } catch (InvalidArgumentException ignored) {
+        }
 
         giveOwnership(player);
 
@@ -92,20 +94,22 @@ public class DepotLeaderCardTest {
         try {
             leaderCard.activate(game, player);
             fail();
-        }catch(AlreadyActiveLeaderException ignored){}
+        } catch (AlreadyActiveLeaderException ignored) {
+        }
     }
 
     @Test
-    public void testDiscard() {
+    public void testDiscard() throws ModelException {
         assertFalse(leaderCard.isDiscarded());
         leaderCard.discard();
         assertTrue(leaderCard.isDiscarded());
         satisfyReq(players.get(0));
         giveOwnership(players.get(0));
-        try{
+        try {
             leaderCard.activate(game, players.get(0));
             fail();
-        }catch (ActivateDiscardedCardException ignored){}
+        } catch (ActivateDiscardedCardException ignored) {
+        }
     }
 
     @Test

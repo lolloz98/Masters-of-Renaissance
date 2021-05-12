@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.*;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.PairId;
@@ -91,8 +92,14 @@ public class ControllerManager {
      * @param id     of the game to be created
      * @param player the player of the game
      */
-    private synchronized void createNewSinglePlayer(int id, AnswerListener answerListener, Player player) {
-        SinglePlayer singlePlayer = new SinglePlayer(player);
+    private synchronized void createNewSinglePlayer(int id, AnswerListener answerListener, Player player) throws UnexpectedControllerException {
+        SinglePlayer singlePlayer = null;
+        try {
+            singlePlayer = new SinglePlayer(player);
+        } catch (ModelException e) {
+            logger.error("something went wrong with the creation of a singlePlayer");
+            throw new UnexpectedControllerException("something went wrong with the creation of a singlePlayer");
+        }
         controllerMap.put(id, new ControllerActionsSingle(singlePlayer, id, answerListener));
     }
 
@@ -126,11 +133,16 @@ public class ControllerManager {
      * @return a pair with the id of the new game and the id of the player
      * @throws PlayersOutOfBoundControllerException if playersNumber has a wrong value
      */
-    private synchronized PairId<Integer, Integer> reserveId(int playersNumber, String userName, AnswerListener answerListener) throws PlayersOutOfBoundControllerException {
+    private synchronized PairId<Integer, Integer> reserveId(int playersNumber, String userName, AnswerListener answerListener) throws PlayersOutOfBoundControllerException, UnexpectedControllerException {
         if (playersNumber < 1 || playersNumber > 4) throw new PlayersOutOfBoundControllerException();
         int id = getNewId();
         int playerId = id * 10;
-        Player player = new Player(userName, playerId);
+        Player player = null;
+        try {
+            player = new Player(userName, playerId);
+        } catch (InvalidArgumentException e) {
+            throw new UnexpectedControllerException(e.getMessage());
+        }
         if (playersNumber == 1) createNewSinglePlayer(id, answerListener, player);
         else {
             createNewControllerActionsMulti(id, answerListener, playersNumber, player);
@@ -147,7 +159,7 @@ public class ControllerManager {
      * @throws GameAlreadyStartedControllerException if the id corresponds to a game already started
      * @throws NoSuchReservedIdControllerException   if the id is not in the reservedIds list
      */
-    private synchronized int addPlayerToGame(int id, String userName) throws GameAlreadyStartedControllerException, NoSuchReservedIdControllerException {
+    private synchronized int addPlayerToGame(int id, String userName) throws GameAlreadyStartedControllerException, NoSuchReservedIdControllerException, UnexpectedControllerException {
         if(!controllerMap.containsKey(id)) throw new NoSuchReservedIdControllerException();
         if (controllerMap.get(id).getGame() != null) throw new GameAlreadyStartedControllerException();
 
@@ -160,12 +172,23 @@ public class ControllerManager {
             logger.error("player size exceeds the number specified by the creator of the game");
 
         int playerId = id * 10 + numberAndPlayers.getSecond().size();
-        Player player = new Player(userName, playerId);
+        Player player = null;
+        try {
+            player = new Player(userName, playerId);
+        } catch (InvalidArgumentException e) {
+            throw new UnexpectedControllerException(e.getMessage());
+        }
+
         controllerActionsMulti.getNumberAndPlayers().getSecond().add(player);
         if (numberAndPlayers.getSecond().size() == numberAndPlayers.getFirst()) {
             ArrayList<Player> players = numberAndPlayers.getSecond();
             Collections.shuffle(players);
-            controllerActionsMulti.setGame(new MultiPlayer(players));
+            try {
+                controllerActionsMulti.setGame(new MultiPlayer(players));
+            } catch (ModelException e) {
+                logger.error("something went wrong with the creation of a multiPlayer");
+                throw new UnexpectedControllerException("something went wrong with the creation of a multiPlayer");
+            }
         }
         return playerId;
     }

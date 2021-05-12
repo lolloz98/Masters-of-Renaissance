@@ -4,12 +4,14 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import it.polimi.ingsw.server.controller.states.EndGameState;
 import it.polimi.ingsw.server.controller.states.GamePlayState;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.controller.states.State;
+import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.Game;
 
 import java.util.ArrayList;
@@ -50,8 +52,12 @@ public abstract class ControllerActions<T extends Game<?>> {
      * method that changes the state of the game: from waitingState to prepareGameState
      * and prepares the game to be played
      */
-    public synchronized void toPrepareGameState(){
-        game.distributeLeader();
+    public synchronized void toPrepareGameState() throws UnexpectedControllerException {
+        try {
+            game.distributeLeader();
+        } catch (EmptyDeckException e) {
+            throw new UnexpectedControllerException("The deck of leader is empty before having distributed the cards to the players");
+        }
         this.gameState = new PrepareGameState();
     }
 

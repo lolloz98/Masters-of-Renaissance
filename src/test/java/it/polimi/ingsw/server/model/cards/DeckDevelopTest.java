@@ -3,6 +3,9 @@ package it.polimi.ingsw.server.model.cards;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import it.polimi.ingsw.server.model.exception.AlreadyAppliedDiscountForResException;
+import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.game.Resource;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +63,7 @@ public class DeckDevelopTest {
     }
 
     @Test
-    public void testApplyDiscount1() {
+    public void testApplyDiscount1() throws ModelException {
         deck1.applyDiscount(Resource.GOLD, 1);
         while(!deck1.isEmpty()){
             DevelopCard tmp = deck1.drawCard();
@@ -71,7 +74,7 @@ public class DeckDevelopTest {
     }
 
     @Test
-    public void testApplyDiscount2(){
+    public void testApplyDiscount2() throws ModelException {
         deck2.applyDiscount(Resource.SERVANT, 1);
         while(!deck2.isEmpty()){
             DevelopCard tmp = deck2.drawCard();
@@ -90,7 +93,7 @@ public class DeckDevelopTest {
     }
 
     @Test
-    public void testRemoveDiscounts1() {
+    public void testRemoveDiscounts1() throws ModelException {
         deck1.removeDiscounts(); // nothing happens: no discounts applied
         assertFalse(deck1.isDiscounted());
         deck1.applyDiscount(Resource.GOLD, 1);
@@ -103,7 +106,7 @@ public class DeckDevelopTest {
     }
 
     @Test
-    public void testRemoveDiscounts2(){
+    public void testRemoveDiscounts2() throws ModelException {
         deck2.removeDiscounts(); // nothing happens: no discounts applied
         assertFalse(deck2.isDiscounted());
         deck2.applyDiscount(Resource.GOLD, 1);
@@ -116,7 +119,7 @@ public class DeckDevelopTest {
     }
 
     @Test
-    public void testRemoveDiscount1() {
+    public void testRemoveDiscount1() throws ModelException {
         assertFalse(deck1.isDiscounted());
         deck1.removeDiscount(Resource.GOLD); // nothing happens: no discounts applied
         assertFalse(deck1.isDiscounted());
@@ -132,7 +135,7 @@ public class DeckDevelopTest {
     }
 
     @Test
-    public void testRemoveDiscount2(){
+    public void testRemoveDiscount2() throws ModelException {
         assertFalse(deck2.isDiscounted());
         deck2.removeDiscount(Resource.GOLD); // nothing happens: no discounts applied
         assertFalse(deck2.isDiscounted());

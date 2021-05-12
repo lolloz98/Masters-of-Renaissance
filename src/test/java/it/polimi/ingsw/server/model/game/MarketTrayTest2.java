@@ -79,7 +79,7 @@ public class MarketTrayTest2 {
     }
 
     @Test
-    public void testPushMarbleRowNoLeader() {
+    public void testPushMarbleRowNoLeader() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         marketTray.pushMarble(true, 2);
         afterString =
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'ROCK'},{'resource':'FAITH'}]," +
@@ -146,7 +146,7 @@ public class MarketTrayTest2 {
     }
 
     @Test
-    public void testPushMarbleColumnNoLeader() {
+    public void testPushMarbleColumnNoLeader() throws MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         marketTray.pushMarble(false, 2);
         String afterString =
                 "[[{'resource':'NOTHING'},{'resource':'NOTHING'},{'resource':'SERVANT'},{'resource':'FAITH'}]," +
@@ -222,7 +222,7 @@ public class MarketTrayTest2 {
     }
 
     @Test
-    public void testPushMarbleOneLeader() {
+    public void testPushMarbleOneLeader() throws AlreadyPresentLeaderResException, TooManyLeaderResourcesException, MarketTrayNotEmptyException, MatrixIndexOutOfBoundException, NoSuchResourceException {
         marketTray.addLeaderResource(Resource.GOLD);
         marketTray.pushMarble(false, 1);
         afterString =
@@ -325,7 +325,7 @@ public class MarketTrayTest2 {
     }
 
     @Test
-    public void testPushMarbleTwoLeaders() {
+    public void testPushMarbleTwoLeaders() throws AlreadyPresentLeaderResException, TooManyLeaderResourcesException, MarketTrayNotEmptyException, MatrixIndexOutOfBoundException {
         marketTray.addLeaderResource(Resource.GOLD);
         try {
             marketTray.addLeaderResource(Resource.GOLD);

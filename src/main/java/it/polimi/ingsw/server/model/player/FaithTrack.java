@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.player;
 
 import it.polimi.ingsw.server.model.cards.VictoryPointCalculator;
 import it.polimi.ingsw.server.model.exception.EndAlreadyReachedException;
+import it.polimi.ingsw.server.model.exception.FigureAlreadyActivatedException;
+import it.polimi.ingsw.server.model.exception.FigureAlreadyDiscardedException;
 import it.polimi.ingsw.server.model.exception.InvalidStepsException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
@@ -32,7 +34,7 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * @return a deep copy of VaticanFigure[]
      */
-    public VaticanFigure[] getFigures() {
+    public VaticanFigure[] getFigures() throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         VaticanFigure[] vaticanFigureCopy = new VaticanFigure[3];
         for(int i=0; i<3; i++) {
             vaticanFigureCopy[i] = new VaticanFigure(figures[i].getLevel());
@@ -76,7 +78,7 @@ public class FaithTrack implements VictoryPointCalculator {
      * @throws EndAlreadyReachedException if the end is already reached
      * @throws InvalidStepsException if the steps are negative, or zero
      */
-    public void move(int steps, Game<?> game) {
+    public void move(int steps, Game<?> game) throws EndAlreadyReachedException, InvalidStepsException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         if (isEndReached()) throw new EndAlreadyReachedException();
         advance(steps);
         ArrayList<Integer> checkpointnumber = whichCheckpointIsReached(steps);
@@ -96,7 +98,7 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * method that activate the VaticanFigures of the player that has the rights (in a single player game)
      */
-    private void checkpointHandling( SinglePlayer game, int checkpointnumber) {
+    private void checkpointHandling( SinglePlayer game, int checkpointnumber) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         if (game.getLorenzo().getFaithTrack().hasRights(checkpointnumber))
             game.getLorenzo().getFaithTrack().activateVatican(checkpointnumber);
         else
@@ -111,7 +113,7 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * method that activate the VaticanFigures of the player that has the rights (in a multi player game)
      */
-    private void checkpointHandling( MultiPlayer game, int checkpointnumber) {
+    private void checkpointHandling( MultiPlayer game, int checkpointnumber) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         for (Player p :
                 game.getPlayers()) {
             if (p.getBoard().getFaithtrack().hasRights(checkpointnumber))
@@ -128,7 +130,7 @@ public class FaithTrack implements VictoryPointCalculator {
      * @param n number of steps forward
      * @throws InvalidStepsException if n is negative
      */
-    private void advance(int n) {
+    private void advance(int n) throws InvalidStepsException {
         if (n <= 0) throw new InvalidStepsException();
         if (position + n <= 24)
             this.position += n;
@@ -199,14 +201,14 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * method that activates the vatican figure
      */
-    private void activateVatican(int whichvf) {
+    private void activateVatican(int whichvf) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         this.figures[whichvf - 1].activate();
     }
 
     /**
      * method that discards the vatican figure
      */
-    private void discardVatican(int whichvf) {
+    private void discardVatican(int whichvf) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         this.figures[whichvf - 1].discard();
     }
 

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.model.exception.AlreadyAppliedDiscountForResException;
+import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.game.Resource;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +39,7 @@ public class DevelopCardTest {
         developCard = new DevelopCard(cost, production, Color.BLUE, 2, 4, 0);
     }
 
-    private void applyDiscount(){
+    private void applyDiscount() throws ResourceNotDiscountableException, AlreadyAppliedDiscountForResException {
         assertFalse(developCard.isDiscounted());
         assertEquals(cost, developCard.getCurrentCost());
         developCard.applyDiscount(Resource.ROCK, 1);
@@ -45,12 +47,12 @@ public class DevelopCardTest {
 
 
     @Test
-    public void testApplyDiscount1() {
+    public void testApplyDiscount1() throws ResourceNotDiscountableException, AlreadyAppliedDiscountForResException {
         applyDiscount();
     }
 
     @Test
-    public void testApplyDiscount2(){
+    public void testApplyDiscount2() throws ResourceNotDiscountableException, AlreadyAppliedDiscountForResException {
         developCard.applyDiscount(Resource.ROCK, 2);
         assertTrue(developCard.isDiscounted());
         assertEquals(0, (int) developCard.getCurrentCost().get(Resource.ROCK));
@@ -61,7 +63,7 @@ public class DevelopCardTest {
     }
 
     @Test
-    public void testGetCurrentCost() {
+    public void testGetCurrentCost() throws ResourceNotDiscountableException, AlreadyAppliedDiscountForResException {
         applyDiscount();
         assertTrue(developCard.isDiscounted());
         assertEquals((cost.get(Resource.ROCK) - 1), (int) developCard.getCurrentCost().get(Resource.ROCK));
@@ -73,7 +75,7 @@ public class DevelopCardTest {
     }
 
     @Test
-    public void testRemoveDiscounts() {
+    public void testRemoveDiscounts() throws ResourceNotDiscountableException, AlreadyAppliedDiscountForResException {
         developCard.removeDiscounts();
         assertFalse(developCard.isDiscounted());
         applyDiscount();
@@ -88,7 +90,7 @@ public class DevelopCardTest {
     }
 
     @Test
-    public void testRemoveDiscount() {
+    public void testRemoveDiscount() throws ResourceNotDiscountableException, AlreadyAppliedDiscountForResException {
         assertFalse(developCard.isDiscounted());
         applyDiscount();
         assertTrue(developCard.isDiscounted());

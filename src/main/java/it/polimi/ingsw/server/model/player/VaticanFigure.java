@@ -37,7 +37,7 @@ public class VaticanFigure {
      * @throws FigureAlreadyDiscardedException if the figure is discarded
      * @throws FigureAlreadyActivatedException if the figure is activated
      */
-    public void activate() {
+    public void activate() throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         if(state== FigureState.DISCARDED) throw new FigureAlreadyDiscardedException();
         if(state== FigureState.ACTIVE) throw new FigureAlreadyActivatedException();
         this.state = FigureState.ACTIVE;
@@ -49,7 +49,7 @@ public class VaticanFigure {
      * @throws FigureAlreadyDiscardedException if the figure is discarded
      * @throws FigureAlreadyActivatedException if the figure is activated
      */
-    public void discard() {
+    public void discard() throws FigureAlreadyActivatedException, FigureAlreadyDiscardedException {
         if(state== FigureState.ACTIVE) throw new FigureAlreadyActivatedException();
         if(state== FigureState.DISCARDED) throw new FigureAlreadyDiscardedException();
         this.state = FigureState.DISCARDED;
@@ -62,7 +62,7 @@ public class VaticanFigure {
      * @throws FigureAlreadyDiscardedException if the figure is discarded
      * @throws FigureAlreadyActivatedException if the figure is activated
      */
-    public void setState(FigureState newState) {
+    public void setState(FigureState newState) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         if(this.state== FigureState.ACTIVE) throw new FigureAlreadyActivatedException();
         if(this.state== FigureState.DISCARDED) throw new FigureAlreadyDiscardedException();
         this.state = newState;

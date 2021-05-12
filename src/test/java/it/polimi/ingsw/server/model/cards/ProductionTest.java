@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.server.model.exception.InvalidResourcesByPlayerException;
-import it.polimi.ingsw.server.model.exception.NotEnoughResourcesException;
-import it.polimi.ingsw.server.model.exception.ProductionAlreadyActivatedException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.Resource;
@@ -44,7 +42,7 @@ public class ProductionTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws ModelException {
         toGive = new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 1);
@@ -101,7 +99,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void testApplyProduction() {
+    public void testApplyProduction() throws ModelException {
         try {
             production.applyProduction(chosenByPlayerGive, chosenByPlayerGain, board);
             fail();
@@ -289,7 +287,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void testGetGainedResources() {
+    public void testGetGainedResources() throws ModelException {
         // put in the strongBox
         board.flushGainedResources(Utility.getTotalResources(chosenByPlayerGive), game);
         try {

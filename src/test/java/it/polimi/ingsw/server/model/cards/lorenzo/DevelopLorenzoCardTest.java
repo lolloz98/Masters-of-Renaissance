@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.cards.lorenzo;
 
 import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
@@ -40,7 +42,7 @@ public class DevelopLorenzoCardTest {
     }
 
     @Test
-    public void testApplyEffect() {
+    public void testApplyEffect() throws ModelException {
         card = new DevelopLorenzoCard(0, Color.BLUE);
         card.applyEffect(singlePlayer);
         // two cards removed
