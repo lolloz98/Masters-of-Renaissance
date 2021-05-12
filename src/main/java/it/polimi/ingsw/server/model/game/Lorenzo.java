@@ -21,7 +21,7 @@ public class Lorenzo {
      * @param singlePlayer current game
      * @throws EmptyDeckException if deck is empty
      */
-    public void performLorenzoAction(SinglePlayer singlePlayer) throws ModelException {
+    public void performLorenzoAction(SinglePlayer singlePlayer) throws EmptyDeckException {
         singlePlayer.getLorenzoDeck().drawCard().applyEffect(singlePlayer);
     }
 }

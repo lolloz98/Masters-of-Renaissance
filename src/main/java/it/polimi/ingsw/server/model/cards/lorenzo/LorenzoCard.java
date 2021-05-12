@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.model.cards.lorenzo;
 
 import it.polimi.ingsw.server.model.cards.Card;
-import it.polimi.ingsw.server.model.exception.EmptyDeckException;
-import it.polimi.ingsw.server.model.exception.ModelException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 
 public abstract class LorenzoCard implements Card {
@@ -22,5 +21,5 @@ public abstract class LorenzoCard implements Card {
      *
      * @param game current single game player
      */
-    public abstract void applyEffect(SinglePlayer game) throws ModelException;
+    public abstract void applyEffect(SinglePlayer game) throws EmptyDeckException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException, InvalidStepsException, EndAlreadyReachedException;
 }

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model.cards.lorenzo;
 
-import it.polimi.ingsw.server.model.exception.EndAlreadyReachedException;
-import it.polimi.ingsw.server.model.exception.InvalidStepsException;
-import it.polimi.ingsw.server.model.exception.ModelException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 
 /**
@@ -19,7 +17,7 @@ public class FaithLorenzoCard extends LorenzoCard {
      * @param game current single game player
      */
     @Override
-    public void applyEffect(SinglePlayer game) throws ModelException {
+    public void applyEffect(SinglePlayer game) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException, InvalidStepsException, EndAlreadyReachedException {
         game.getLorenzo().getFaithTrack().move(2, game);
     }
 }
