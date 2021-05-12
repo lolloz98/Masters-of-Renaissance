@@ -32,6 +32,11 @@ public class LocalDevelopmentGrid extends Observable {
         this.developCardsNumber[x][y] = number;
     }
 
+    public synchronized void setDrawnDevelop(int x, int y, LocalDevelopCard topDevelopCard){
+        setDevelopCardNumber(x, y, getDevelopCardsNumber()[x][y]-1);
+        setTopDevelopCard(x, y, topDevelopCard);
+    }
+
     public LocalDevelopmentGrid(){
         topDevelopCards = new LocalDevelopCard[4][3];
         developCardsNumber = new int[4][3];

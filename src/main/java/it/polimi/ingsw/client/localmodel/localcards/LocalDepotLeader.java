@@ -1,18 +1,22 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
-import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.game.Resource;
-import java.util.TreeMap;
 
 public class LocalDepotLeader extends LocalLeaderCard{
-    private Resource resType;
-    private Resource resRequirement;
+    private final Resource resType;
+    private final Resource resRequirement;
     private int numberOfRes;
+    private final int reqQuantity;
 
-    public LocalDepotLeader(int id, int victoryPoints, Resource resType, TreeMap<Color, Integer> prodRequirement) {
+    public LocalDepotLeader(int id, int victoryPoints, Resource resType, Resource resRequirement, int reqQuantity) {
         super(id, victoryPoints);
         this.resType = resType;
         this.resRequirement = resRequirement;
+        this.reqQuantity = reqQuantity;
+    }
+
+    public int getReqQuantity() {
+        return reqQuantity;
     }
 
     public synchronized int getNumberOfRes() {
@@ -24,20 +28,11 @@ public class LocalDepotLeader extends LocalLeaderCard{
         notifyObserver();
     }
 
-    public synchronized Resource getResType() {
+    public Resource getResType() {
         return resType;
     }
 
-    public synchronized void setResType(Resource resType) {
-        this.resType = resType;
-    }
-
-    public synchronized Resource getResRequirement() {
+    public Resource getResRequirement() {
         return resRequirement;
     }
-
-    public synchronized void setResRequirement(Resource resRequirement) {
-        this.resRequirement = resRequirement;
-    }
-
 }

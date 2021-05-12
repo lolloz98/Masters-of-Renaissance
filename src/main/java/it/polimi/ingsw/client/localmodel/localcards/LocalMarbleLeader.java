@@ -5,8 +5,8 @@ import it.polimi.ingsw.server.model.game.Resource;
 import java.util.TreeMap;
 
 public class LocalMarbleLeader extends LocalLeaderCard{
-    private Resource marbleResource;
-    private TreeMap<Color,Integer> prodRequirement;
+    private final Resource marbleResource;
+    private final TreeMap<Color,Integer> prodRequirement;
 
     public LocalMarbleLeader(int id, int victoryPoints, Resource marbleResource, TreeMap<Color, Integer> prodRequirement) {
         super(id, victoryPoints);
@@ -14,19 +14,11 @@ public class LocalMarbleLeader extends LocalLeaderCard{
         this.prodRequirement = prodRequirement;
     }
 
-    public synchronized Resource getMarbleResource() {
+    public Resource getMarbleResource() {
         return marbleResource;
     }
 
-    public synchronized void setMarbleResource(Resource marbleResource) {
-        this.marbleResource = marbleResource;
-    }
-
-    public synchronized TreeMap<Color, Integer> getProdRequirement() {
+    public TreeMap<Color, Integer> getProdRequirement() {
         return prodRequirement;
-    }
-
-    public synchronized void setProdRequirement(TreeMap<Color, Integer> prodRequirement) {
-        this.prodRequirement = prodRequirement;
     }
 }

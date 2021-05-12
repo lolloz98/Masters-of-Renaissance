@@ -6,12 +6,12 @@ import java.util.TreeMap;
 
 public class LocalDevelopCard extends LocalCard{
     private TreeMap<Resource, Integer> cost;
-    private int level;
-    private Color color;
-    private TreeMap<Resource, Integer> resToGive;
-    private TreeMap<Resource, Integer> resToGain;
+    private final int level;
+    private final Color color;
+    private final TreeMap<Resource, Integer> resToGive;
+    private final TreeMap<Resource, Integer> resToGain;
     private TreeMap<Resource, Integer> resToFlush;
-    private int victoryPoints;
+    private final int victoryPoints;
 
     public synchronized TreeMap<Resource, Integer> getResToFlush() {
         return resToFlush;
@@ -22,12 +22,8 @@ public class LocalDevelopCard extends LocalCard{
         notifyObserver();
     }
 
-    public synchronized int getVictoryPoints() {
+    public int getVictoryPoints() {
         return victoryPoints;
-    }
-
-    public synchronized void setVictoryPoints(int victoryPoints) {
-        this.victoryPoints = victoryPoints;
     }
 
     public synchronized TreeMap<Resource, Integer> getCost() {
@@ -39,36 +35,20 @@ public class LocalDevelopCard extends LocalCard{
         notifyObserver();
     }
 
-    public synchronized int getLevel() {
+    public int getLevel() {
         return level;
     }
 
-    public synchronized void setLevel(int level) {
-        this.level = level;
-    }
-
-    public synchronized Color getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public synchronized void setColor(Color color) {
-        this.color = color;
-    }
-
-    public synchronized TreeMap<Resource, Integer> getResToGive() {
+    public TreeMap<Resource, Integer> getResToGive() {
         return resToGive;
     }
 
-    public synchronized void setResToGive(TreeMap<Resource, Integer> resToGive) {
-        this.resToGive = resToGive;
-    }
-
-    public synchronized TreeMap<Resource, Integer> getResToGain() {
+    public TreeMap<Resource, Integer> getResToGain() {
         return resToGain;
-    }
-
-    public synchronized void setResToGain(TreeMap<Resource, Integer> resToGain) {
-        this.resToGain = resToGain;
     }
 
     public LocalDevelopCard(int id, TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) {
