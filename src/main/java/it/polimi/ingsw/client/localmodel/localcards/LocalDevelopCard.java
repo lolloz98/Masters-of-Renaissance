@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.game.Resource;
 import java.util.TreeMap;
 
-public class LocalDevelopCard {
+public class LocalDevelopCard extends LocalCard{
     private TreeMap<Resource, Integer> cost;
     private int level;
     private Color color;

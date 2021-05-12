@@ -1,30 +1,18 @@
 package it.polimi.ingsw.client.localmodel;
 
 public class Error extends Observable{
-    private String errorMsg;
-    /**
-     * if errorId = 0 there are no errors
-     */
-    private int errorId;
+    private ErrorType type;
 
-    public synchronized String getErrorMsg() {
-        return errorMsg;
+    public synchronized ErrorType getType() {
+        return type;
     }
 
-    public synchronized void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
+    public synchronized void setType(ErrorType type) {
+        this.type = type;
         notifyObserver();
     }
 
-    public synchronized void setErrorId(int errorId) {
-        this.errorId = errorId;
-    }
-
-    public synchronized int getErrorId() {
-        return errorId;
-    }
-
     public Error(){
-        errorId = 0;
+        type = ErrorType.NONE;
     }
 }

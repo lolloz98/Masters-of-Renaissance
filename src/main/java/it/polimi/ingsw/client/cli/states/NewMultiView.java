@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class NewMultiView extends View{
@@ -27,6 +28,7 @@ public class NewMultiView extends View{
         }
     }
 
+    @Override
     public void draw(){
         if(localMulti.getState() == LocalGameState.NEW){
             System.out.println("Please wait");
@@ -40,13 +42,28 @@ public class NewMultiView extends View{
         }
     }
 
+    @Override
     public void notifyAction(){
         if(localMulti.getState() == LocalGameState.READY){
-            // todo change cli state
+            ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
+            LocalPlayer mainPlayer = null;
+            for(LocalPlayer p : localPlayers){
+                if(p.getId() == localMulti.getMainPlayerId()) mainPlayer = p;
+            }
+            if(mainPlayer == null){
+                System.out.println("There was an error creating the game");// fixme
+            }
+            else {
+                localMulti.removeObserver();
+                localMulti.getError().removeObserver();
+                cli.setState(new BoardView(cli, localMulti, mainPlayer));
+                cli.getState().draw();
+            }
         }
         else draw();
     }
 
+    @Override
     public void handleCommand(int ans){
         // todo quit command
     }

@@ -1,12 +1,14 @@
 package it.polimi.ingsw.client.cli.states;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.localmodel.ErrorType;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class JoinGameView extends View {
@@ -35,11 +37,24 @@ public class JoinGameView extends View {
 
     @Override
     public void notifyAction() {
-        if (localMulti.getError().getErrorId() == 0) {
+        if (localMulti.getError().getType() == ErrorType.NONE) {
             if (localMulti.getState() == LocalGameState.READY) {
-                // todo change cli state
+                ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
+                LocalPlayer mainPlayer = null;
+                for(LocalPlayer p : localPlayers){
+                    if(p.getId() == localMulti.getMainPlayerId()) mainPlayer = p;
+                }
+                if(mainPlayer == null){
+                    System.out.println("There was an error creating the game");// fixme
+                }
+                else {
+                    localMulti.removeObserver();
+                    localMulti.getError().removeObserver();
+                    cli.setState(new BoardView(cli, localMulti, mainPlayer));
+                    cli.getState().draw();
+                }
             }
-        } else {
+        } else { // todo if gameid is taken or if game is started
             System.out.println("Game not available in this server, enter another id:\n");
             int id = input.nextInt();
             try {

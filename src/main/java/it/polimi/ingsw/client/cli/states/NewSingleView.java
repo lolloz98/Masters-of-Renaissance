@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.cli.states;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 
@@ -29,17 +28,22 @@ public class NewSingleView extends View{
         }
     }
 
+    @Override
     public void draw(){
         System.out.println("Please wait");
     }
 
+    @Override
     public void notifyAction(){
         if(localSingle.getState() == LocalGameState.READY){
-            // todo change cli state
+            localSingle.addObserver(this);
+            localSingle.getError().addObserver(this);
+            cli.setState(new BoardView(cli, localSingle, localSingle.getMainPlayer()));
         }
         else draw();
     }
 
+    @Override
     public void handleCommand(int ans){
         // todo quit command
     }
