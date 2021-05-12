@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
+import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.leaderanswer.ActivateDepotLeaderAnswer;
 import it.polimi.ingsw.messages.answers.leaderanswer.ActivateDiscountLeaderAnswer;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
+import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.cards.leader.*;
@@ -58,12 +60,12 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
 
         if (toActivate instanceof DepotLeaderCard) {
             DepotLeaderCard card = (DepotLeaderCard) toActivate;
-            LocalLeaderCard localCard= new LocalLeaderCard(card.getId(),card.getVictoryPoints());
+            LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
             return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
         if (toActivate instanceof ProductionLeaderCard) {
             ProductionLeaderCard card = (ProductionLeaderCard) toActivate;
-            LocalLeaderCard localCard=new LocalLeaderCard(card.getId(),card.getVictoryPoints());
+            LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
             int whichLeaderProd=board.getProductionLeaders().indexOf(card)+4; //it must be 4 or 5
             return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard,whichLeaderProd);
         }
@@ -71,7 +73,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
 
             TreeMap<Resource,Integer>[][] newCosts= new TreeMap[4][3];
             int i=0,j=0;
-            TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop= new TreeMap<>();
+            TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
             decksDevelop=controllerActions.getGame().getDecksDevelop();
 
             for(Color c: decksDevelop.keySet()){
@@ -79,20 +81,22 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
                     try {
                         newCosts[i][j]= decksDevelop.get(c).get(level).topCard().getCost();
                     } catch (EmptyDeckException e) {
-                        // TODO
+                        newCosts[i][j]=null;
                     }
                     j++;
                 }
                 i++;
             }
 
+            LocalDevelopmentGrid localGrid;
+            localGrid=ConverterToLocalModel.convert(decksDevelop);
             DiscountLeaderCard card = (DiscountLeaderCard) toActivate;
-            LocalLeaderCard localCard=new LocalLeaderCard(card.getId(),card.getVictoryPoints());
-            return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, newCosts);
+            LocalLeaderCard localCard=ConverterToLocalModel.convert(card);
+            return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, localGrid);
         }
         if (toActivate instanceof MarbleLeaderCard) {
             MarbleLeaderCard card = (MarbleLeaderCard) toActivate;
-            LocalLeaderCard localCard=new LocalLeaderCard(card.getId(),card.getVictoryPoints());
+            LocalLeaderCard localCard=ConverterToLocalModel.convert(card);
             return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
         logger.error("toActivate is an unknown type of leader: " + toActivate.getClass());

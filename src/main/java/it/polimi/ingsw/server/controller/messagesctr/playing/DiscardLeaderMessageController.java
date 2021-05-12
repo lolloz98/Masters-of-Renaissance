@@ -7,6 +7,7 @@ import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.player.Player;
@@ -45,7 +46,7 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
             throw new ControllerException("unexpected error");
         }
 
-        LocalLeaderCard localCard=new LocalLeaderCard(card.getId(),card.getVictoryPoints());
+        LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
         return new DiscardLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),localCard);
     }
 }

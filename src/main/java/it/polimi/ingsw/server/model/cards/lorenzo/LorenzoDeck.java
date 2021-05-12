@@ -18,6 +18,10 @@ public class LorenzoDeck {
         this.inUse.shuffle();
     }
 
+    public LorenzoCard getTopCard() throws EmptyDeckException {
+        return inUse.topCard();
+    }
+
     /**
      * Remove and return the card on top of the LorenzoDeck
      *

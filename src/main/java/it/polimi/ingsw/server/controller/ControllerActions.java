@@ -127,4 +127,7 @@ public abstract class ControllerActions<T extends Game<?>> {
             if(a.getPlayerId() == gameStatusAnswer.getPlayerId()) a.sendAnswer(gameStatusAnswer);
         }
     }
+
+
+
 }
