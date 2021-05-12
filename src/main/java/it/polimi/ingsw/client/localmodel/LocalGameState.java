@@ -1,5 +1,5 @@
 package it.polimi.ingsw.client.localmodel;
 
-public enum MultiState {
+public enum LocalGameState {
     NEW, WAITINGPLAYERS, READY, OVER;
 }

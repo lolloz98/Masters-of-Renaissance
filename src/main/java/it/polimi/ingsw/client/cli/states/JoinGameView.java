@@ -3,8 +3,7 @@ package it.polimi.ingsw.client.cli.states;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
-import it.polimi.ingsw.client.localmodel.MultiState;
-import it.polimi.ingsw.messages.requests.CreateGameMessage;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 
 import java.io.IOException;
@@ -19,6 +18,8 @@ public class JoinGameView extends View {
     public JoinGameView(CLI cli, LocalMulti localMulti) {
         this.cli = cli;
         this.localMulti = localMulti;
+        localMulti.addObserver(this);
+        localMulti.getError().addObserver(this);
         this.input = new Scanner(System.in);
         System.out.println("Type your nickname:\n");
         this.nickname = input.nextLine(); // todo: check characters limit
@@ -35,7 +36,7 @@ public class JoinGameView extends View {
     @Override
     public void notifyAction() {
         if (localMulti.getError().getErrorId() == 0) {
-            if (localMulti.getState() == MultiState.READY) {
+            if (localMulti.getState() == LocalGameState.READY) {
                 // todo change cli state
             }
         } else {
@@ -57,9 +58,9 @@ public class JoinGameView extends View {
 
     @Override
     public void draw() {
-        if (localMulti.getState() == MultiState.NEW) {
+        if (localMulti.getState() == LocalGameState.NEW) {
             System.out.println("Please wait");
-        } else if (localMulti.getState() == MultiState.WAITINGPLAYERS) {
+        } else if (localMulti.getState() == LocalGameState.WAITINGPLAYERS) {
             System.out.println("The id of the game is\n" + localMulti.getGameId());
             System.out.println("Players currently connected:");
             for (LocalPlayer p : localMulti.getLocalPlayers()) {

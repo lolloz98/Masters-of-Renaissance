@@ -7,6 +7,7 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable {
     protected int gameId;
     protected T localTurn;
     protected final Error error;
+    protected LocalGameState state;
 
     public Error getError() {
         return error;
@@ -30,6 +31,15 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable {
 
     public T getLocalTurn() {
         return localTurn;
+    }
+
+    public synchronized LocalGameState getState() {
+        return state;
+    }
+
+    public synchronized void setState(LocalGameState state) {
+        this.state = state;
+        notifyObserver();
     }
 
     public LocalGame(){
