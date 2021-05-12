@@ -4,7 +4,10 @@ public class LocalSingle extends LocalGame<LocalTurnSingle>{
     private LocalPlayer mainPlayer;
     private final LocalTrack lorenzoTrack;
 
-    public LocalPlayer getMainPlayer() {
+    public synchronized void setMainPlayer(LocalPlayer mainPlayer) {
+        this.mainPlayer = mainPlayer;
+    }
+    public synchronized LocalPlayer getMainPlayer() {
         return mainPlayer;
     }
 
