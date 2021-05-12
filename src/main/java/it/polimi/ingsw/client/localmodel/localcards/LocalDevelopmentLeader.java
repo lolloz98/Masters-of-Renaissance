@@ -10,8 +10,8 @@ public class LocalDevelopmentLeader extends LocalLeaderCard{
     private Color colorRequirement;
     private int numberOfRes;
 
-    public LocalDevelopmentLeader(int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, Color colorRequirement) {
-        super(victoryPoints);
+    public LocalDevelopmentLeader(int id, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, Color colorRequirement) {
+        super(id, victoryPoints);
         this.resToGive = resToGive;
         this.resToGain = resToGain;
         this.colorRequirement = colorRequirement;

@@ -2,13 +2,13 @@ package it.polimi.ingsw.client.localmodel.localcards;
 
 public class LocalLeaderCard extends LocalCard{
     protected int victoryPoints;
-    protected int id;
 
     public synchronized int getVictoryPoints() {
         return victoryPoints;
     }
 
-    public LocalLeaderCard(int victoryPoints) {
+    public LocalLeaderCard(int id, int victoryPoints) {
+        super(id);
         this.victoryPoints = victoryPoints;
     }
 

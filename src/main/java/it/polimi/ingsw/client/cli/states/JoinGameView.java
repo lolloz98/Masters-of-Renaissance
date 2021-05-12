@@ -36,7 +36,7 @@ public class JoinGameView extends View {
     }
 
     @Override
-    public void notifyAction() {
+    public void notifyUpdate() {
         if (localMulti.getError().getType() == ErrorType.NONE) {
             if (localMulti.getState() == LocalGameState.READY) {
                 ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
@@ -65,6 +65,9 @@ public class JoinGameView extends View {
             }
         }
     }
+
+    @Override
+    public void notifyError() {}
 
     @Override
     public void handleCommand(int ans) {

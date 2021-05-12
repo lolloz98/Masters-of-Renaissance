@@ -6,8 +6,8 @@ public class LocalDiscountLeader extends LocalLeaderCard{
     private Resource resRequirement;
     private Resource discountedRes;
 
-    public LocalDiscountLeader(int victoryPoints, Resource resRequirement, Resource discountedRes) {
-        super(victoryPoints);
+    public LocalDiscountLeader(int id, int victoryPoints, Resource resRequirement, Resource discountedRes) {
+        super(id, victoryPoints);
         this.resRequirement = resRequirement;
         this.discountedRes = discountedRes;
     }

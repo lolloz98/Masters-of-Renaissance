@@ -1,11 +1,10 @@
 package it.polimi.ingsw.client.localmodel;
 
-import it.polimi.ingsw.client.UI;
-import it.polimi.ingsw.client.cli.Observer;
+import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
-import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.game.Resource;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class LocalBoard extends Observable {
@@ -13,10 +12,10 @@ public class LocalBoard extends Observable {
     private int[] developCardsNumber;
     private TreeMap<Resource, Integer> resInStrongBox;
     private TreeMap<Resource, Integer> resInNormalDeposit;
-    private LeaderCard[] leaderCards;
-    private LocalTrack localTrack;
+    private ArrayList<LocalCard> leaderCards;
+    private final LocalTrack localTrack;
 
-    public synchronized LocalTrack getLocalTrack() {
+    public LocalTrack getLocalTrack() {
         return localTrack;
     }
 
@@ -37,11 +36,11 @@ public class LocalBoard extends Observable {
         notifyObserver();
     }
 
-    public synchronized LeaderCard[] getLeaderCards() {
+    public synchronized ArrayList<LocalCard> getLeaderCards() {
         return leaderCards;
     }
 
-    public synchronized void setLeaderCards(LeaderCard[] leaderCards) {
+    public synchronized void setLeaderCards(ArrayList<LocalCard> leaderCards) {
         this.leaderCards = leaderCards;
         notifyObserver();
     }
@@ -49,20 +48,7 @@ public class LocalBoard extends Observable {
     public LocalBoard(){
         developCardsNumber = new int[3];
         topDevelopCards = new LocalDevelopCard[3];
-        leaderCards = new LeaderCard[2];
+        leaderCards = new ArrayList<>();
         localTrack = new LocalTrack();
-        /* todo: modify with real constructor
-        playerName = "firstplayer";
-        resInStrongBox = new TreeMap<>(){{
-            put(Resource.GOLD, 2);
-            put(Resource.SHIELD, 1);
-            put(Resource.SERVANT, 2);
-        }};
-        resInNormalDeposit = new TreeMap<>(){{
-            put(Resource.GOLD, 1);
-            put(Resource.SHIELD, 1);
-            put(Resource.SERVANT, 1);
-        }};
-        */
     }
 }

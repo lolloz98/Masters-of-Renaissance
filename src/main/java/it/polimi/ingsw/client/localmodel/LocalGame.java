@@ -21,11 +21,11 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable {
         return localMarket;
     }
 
-    public int getGameId() {
+    public synchronized int getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public synchronized void setGameId(int gameId) {
         this.gameId = gameId;
     }
 

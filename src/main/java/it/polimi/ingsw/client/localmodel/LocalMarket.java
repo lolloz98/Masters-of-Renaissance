@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.localmodel;
 
-import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 
@@ -39,22 +38,7 @@ public class LocalMarket extends Observable {
     }
 
     public LocalMarket(){
-        // todo substitute with real constructor
         this.marbleMatrix = new Resource[3][4];
-        ArrayList<Resource> resources = new ArrayList<>();
-        int i, j;
-        for (i = 0; i < 4; i++) resources.add(Resource.NOTHING);
-        for (i = 0; i < 2; i++) resources.add(Resource.SHIELD);
-        for (i = 0; i < 2; i++) resources.add(Resource.ROCK);
-        for (i = 0; i < 2; i++) resources.add(Resource.SERVANT);
-        for (i = 0; i < 2; i++) resources.add(Resource.GOLD);
-        resources.add(Resource.FAITH);
-        CollectionsHelper.shuffle(resources);
-        for (j = 0; j < 3; j++) {
-            for (i = 0; i < 4; i++) {
-                marbleMatrix[j][i] = resources.get(i + j * 4);
-            }
-        }
-        freeMarble = resources.get(12);
+        resCombinations = new ArrayList<>();
     }
 }

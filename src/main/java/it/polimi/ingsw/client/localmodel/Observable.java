@@ -14,6 +14,6 @@ public class Observable {
     }
 
     public void notifyObserver(){
-        if (observer != null) observer.notifyAction();
+        if (observer != null) observer.notifyUpdate();
     }
 }

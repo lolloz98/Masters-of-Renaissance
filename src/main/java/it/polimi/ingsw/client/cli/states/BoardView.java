@@ -30,9 +30,12 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public void notifyAction(){
+    public void notifyUpdate(){
         draw();
     }
+
+    @Override
+    public void notifyError() {}
 
     @Override
     public void handleCommand(int ans){

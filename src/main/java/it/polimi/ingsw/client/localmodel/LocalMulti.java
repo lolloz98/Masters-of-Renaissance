@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.localmodel;
 
-import it.polimi.ingsw.server.model.player.Player;
-
 import java.util.ArrayList;
 
 public class LocalMulti extends LocalGame<LocalTurnMulti>{

@@ -1,7 +1,10 @@
 package it.polimi.ingsw.client.localmodel;
 
-public class Error extends Observable{
+import it.polimi.ingsw.client.cli.Observer;
+
+public class Error {
     private ErrorType type;
+    private Observer observer;
 
     public synchronized ErrorType getType() {
         return type;
@@ -9,7 +12,16 @@ public class Error extends Observable{
 
     public synchronized void setType(ErrorType type) {
         this.type = type;
-        notifyObserver();
+        if(type != ErrorType.NONE){
+            observer.notifyError();
+        }
+    }
+    public void addObserver(Observer observer){
+        this.observer = observer;
+    }
+
+    public void removeObserver(){
+        this.observer = null;
     }
 
     public Error(){

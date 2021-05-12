@@ -8,8 +8,8 @@ public class LocalDepotLeader extends LocalLeaderCard{
     private Resource resType;
     private TreeMap<Color,Integer> prodRequirement;
 
-    public LocalDepotLeader(int victoryPoints, Resource resType, TreeMap<Color, Integer> prodRequirement) {
-        super(victoryPoints);
+    public LocalDepotLeader(int id, int victoryPoints, Resource resType, TreeMap<Color, Integer> prodRequirement) {
+        super(id, victoryPoints);
         this.resType = resType;
         this.prodRequirement = prodRequirement;
     }

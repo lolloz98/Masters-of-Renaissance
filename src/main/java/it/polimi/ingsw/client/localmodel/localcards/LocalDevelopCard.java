@@ -12,11 +12,11 @@ public class LocalDevelopCard extends LocalCard{
     private TreeMap<Resource, Integer> resToGain;
     private int victoryPoints;
 
-    public int getVictoryPoints() {
+    public synchronized int getVictoryPoints() {
         return victoryPoints;
     }
 
-    public void setVictoryPoints(int victoryPoints) {
+    public synchronized void setVictoryPoints(int victoryPoints) {
         this.victoryPoints = victoryPoints;
     }
 
@@ -60,7 +60,8 @@ public class LocalDevelopCard extends LocalCard{
         this.resToGain = resToGain;
     }
 
-    public LocalDevelopCard(TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) {
+    public LocalDevelopCard(int id, TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain) {
+        super(id);
         this.cost = cost;
         this.level = level;
         this.color = color;

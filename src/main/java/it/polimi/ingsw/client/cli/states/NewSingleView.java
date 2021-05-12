@@ -34,7 +34,7 @@ public class NewSingleView extends View{
     }
 
     @Override
-    public void notifyAction(){
+    public void notifyUpdate(){
         if(localSingle.getState() == LocalGameState.READY){
             localSingle.addObserver(this);
             localSingle.getError().addObserver(this);
@@ -42,6 +42,9 @@ public class NewSingleView extends View{
         }
         else draw();
     }
+
+    @Override
+    public void notifyError() {}
 
     @Override
     public void handleCommand(int ans){

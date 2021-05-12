@@ -43,7 +43,7 @@ public class NewMultiView extends View{
     }
 
     @Override
-    public void notifyAction(){
+    public void notifyUpdate(){
         if(localMulti.getState() == LocalGameState.READY){
             ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
             LocalPlayer mainPlayer = null;
@@ -62,6 +62,9 @@ public class NewMultiView extends View{
         }
         else draw();
     }
+
+    @Override
+    public void notifyError() {}
 
     @Override
     public void handleCommand(int ans){

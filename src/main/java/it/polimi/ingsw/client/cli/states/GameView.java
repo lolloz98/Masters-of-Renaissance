@@ -7,7 +7,7 @@ public abstract class GameView extends View {
     protected LocalGame localGame;
 
     public abstract void draw();
-    public abstract void notifyAction();
+    public abstract void notifyUpdate();
     public abstract void handleCommand(int ans); // todo generic game commands (moving between views)
 
     public void drawTurn(){
