@@ -38,19 +38,11 @@ public class NewMultiView extends View{
                 System.out.println(p.getName());
             }
         }
-        else if(localMulti.getState() == MultiState.READY){
-            // todo change cli state
-        }
-
     }
 
     public void notifyAction(){
-        if (localMulti.isReady()){
-            localMulti.removeObserver();
-            for (LocalPlayer p : localMulti.getLocalPlayers()){
-                p.removeObserver();
-            }
-            // todo: change cli.setState();
+        if(localMulti.getState() == MultiState.READY){
+            // todo change cli state
         }
         else draw();
     }

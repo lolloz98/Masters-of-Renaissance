@@ -6,15 +6,10 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable {
     protected LocalMarket localMarket;
     protected int gameId;
     protected T localTurn;
-    protected boolean ready;
+    protected final Error error;
 
-    public synchronized boolean isReady() {
-        return ready;
-    }
-
-    public synchronized void setReady(boolean ready) {
-        this.ready = ready;
-        notifyObserver();
+    public Error getError() {
+        return error;
     }
 
     public LocalDevelopmentGrid getLocalDevelopmentGrid() {
@@ -40,6 +35,6 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable {
     public LocalGame(){
         this.localDevelopmentGrid = new LocalDevelopmentGrid();
         this.localMarket = new LocalMarket();
-        ready = false;
+        error = new Error();
     }
 }

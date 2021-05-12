@@ -33,11 +33,7 @@ public class NewSingleView extends View{
     }
 
     public void notifyAction(){
-        if (localSingle.isReady()){
-            localSingle.removeObserver();
-            // todo: change cli.setState();
-        }
-        else draw();
+
     }
 
     public void handleCommand(int ans){
