@@ -8,11 +8,13 @@ import java.util.TreeMap;
 public class LocalDiscountLeader extends LocalLeaderCard{
     private final Resource discountedRes;
     private final TreeMap<Color,Integer> prodRequirement;
+    private final int quantityToDiscount;
 
-    public LocalDiscountLeader(int id, int victoryPoints, TreeMap<Color,Integer> prodRequirement, Resource discountedRes) {
-        super(id, victoryPoints);
+    public LocalDiscountLeader(int id, int victoryPoints, boolean isActive, boolean isDiscarded, TreeMap<Color,Integer> prodRequirement, Resource discountedRes, int quantityToDiscount) {
+        super(id, victoryPoints, isActive, isDiscarded);
         this.discountedRes = discountedRes;
         this.prodRequirement = prodRequirement;
+        this.quantityToDiscount = quantityToDiscount;
     }
 
     public Resource getDiscountedRes() {
@@ -21,5 +23,9 @@ public class LocalDiscountLeader extends LocalLeaderCard{
 
     public TreeMap<Color, Integer> getProdRequirement() {
         return prodRequirement;
+    }
+
+    public int getQuantityToDiscount() {
+        return quantityToDiscount;
     }
 }

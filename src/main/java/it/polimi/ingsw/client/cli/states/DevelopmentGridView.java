@@ -95,8 +95,8 @@ public class DevelopmentGridView extends GameView {
             else CLIutils.append(cardBlock, 3 ," ");
         }
         // fifth row
-        TreeMap<Resource, Integer> toGain = topDevelopCards[x][y].getResToGain();
-        TreeMap<Resource, Integer> toGive = topDevelopCards[x][y].getResToGive();
+        TreeMap<Resource, Integer> toGain = topDevelopCards[x][y].getProduction().getResToGain();
+        TreeMap<Resource, Integer> toGive = topDevelopCards[x][y].getProduction().getResToGive();
         CLIutils.append(cardBlock, 4, "┃ ");
         CLIutils.appendSpaces(cardBlock, 4, -2*size+6);
         size = toGive.size();

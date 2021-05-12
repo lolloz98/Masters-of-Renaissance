@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.player;
 
+import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.model.cards.VictoryPointCalculator;
 import it.polimi.ingsw.server.model.exception.EndAlreadyReachedException;
 import it.polimi.ingsw.server.model.exception.FigureAlreadyActivatedException;
@@ -8,6 +9,8 @@ import it.polimi.ingsw.server.model.exception.InvalidStepsException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
@@ -16,6 +19,8 @@ import java.util.ArrayList;
  */
 
 public class FaithTrack implements VictoryPointCalculator {
+    private static final Logger logger = LogManager.getLogger(FaithTrack.class);
+
     private final VaticanFigure[] figures;
     private int position;
 
@@ -34,11 +39,16 @@ public class FaithTrack implements VictoryPointCalculator {
     /**
      * @return a deep copy of VaticanFigure[]
      */
-    public VaticanFigure[] getFigures() throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+    public VaticanFigure[] getFigures() {
         VaticanFigure[] vaticanFigureCopy = new VaticanFigure[3];
         for(int i=0; i<3; i++) {
             vaticanFigureCopy[i] = new VaticanFigure(figures[i].getLevel());
-            vaticanFigureCopy[i].setState(figures[i].getState());
+            try {
+                // we are just doing a copy: no need for checking for exceptions
+                vaticanFigureCopy[i].setState(figures[i].getState());
+            } catch (FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
+                logger.error("error happened while getting figures");
+            }
         }
         return vaticanFigureCopy;
     }

@@ -13,14 +13,19 @@ import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.controller.states.State;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.Game;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
 /**
  * class that handles the actions of the players and calls the methods of the model
+ *
  * @param <T> the type of the game, it can be single player or multi player
  */
 public abstract class ControllerActions<T extends Game<?>> {
+    private static final Logger logger = LogManager.getLogger(ControllerActions.class);
+
     protected T game;
     private final int gameId;
     private State gameState;
@@ -30,8 +35,9 @@ public abstract class ControllerActions<T extends Game<?>> {
 
     /**
      * method called to create a controller
+     *
      * @param game
-     * @param id gameId
+     * @param id   gameId
      */
     public ControllerActions(T game, int id, AnswerListener answerListener) {
         this.game = game;
@@ -63,15 +69,15 @@ public abstract class ControllerActions<T extends Game<?>> {
 
     public abstract boolean checkToGamePlayState();
 
-    public synchronized void toGamePlayState(){
+    public synchronized void toGamePlayState() {
         this.gameState = new GamePlayState();
     }
 
-    public synchronized void toEndGameState(){
+    public synchronized void toEndGameState() {
         this.gameState = new EndGameState();
     }
 
-    public synchronized State getGameState(){
+    public synchronized State getGameState() {
         return gameState;
     }
 
@@ -85,24 +91,30 @@ public abstract class ControllerActions<T extends Game<?>> {
         answerListener.setPlayerId(answer.getPlayerId());
         addAnswerListener(answerListener);
         sendAnswer(answer);
-        if(game != null){
+        if (game != null) {
             // todo: send to each player a message with the game. CAREFUL: each player cannot see the leader cards of the others
-            for(AnswerListener a: listeners){
+            for (AnswerListener a : listeners) {
                 answerListener.sendAnswer(new GameStatusAnswer(answer.getGameId(), answer.getPlayerId(), a.getPlayerId()));
             }
         }
     }
 
-    private void sendAnswer(Answer answer){
+    private void sendAnswer(Answer answer) {
         // after each message sends answers to all the clients of this game
         listeners.forEach(x -> x.sendAnswer(answer));
     }
 
-    public synchronized void addAnswerListener(AnswerListener answerListener){
+    public synchronized void addAnswerListener(AnswerListener answerListener) {
+        listeners.removeIf(a ->
+        {
+            boolean cond = a.getPlayerId() == answerListener.getPlayerId();
+            if (cond) logger.debug("Removed answerListener (it will be re-added) with playerId: " + a.getPlayerId());
+            return cond;
+        });
         listeners.add(answerListener);
     }
 
-    public synchronized void removeAnswerListener(AnswerListener answerListener){
+    public synchronized void removeAnswerListener(AnswerListener answerListener) {
         listeners.remove(answerListener);
     }
 }

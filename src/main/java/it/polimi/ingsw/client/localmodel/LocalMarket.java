@@ -46,4 +46,9 @@ public class LocalMarket extends Observable {
         this.marbleMatrix = new Resource[3][4];
         resCombinations = new ArrayList<>();
     }
+
+    public LocalMarket(Resource[][] marbleMatrix, ArrayList<TreeMap<Resource, Integer>> resCombinations){
+        this.marbleMatrix = marbleMatrix;
+        this.resCombinations = resCombinations;
+    }
 }

@@ -26,4 +26,9 @@ public class LocalTrack extends Observable{
         figuresState = new LocalFigureState [3];
         for(int i= 0; i<3; i++) figuresState[i] = LocalFigureState.INACTIVE;
     }
+
+    public LocalTrack(LocalFigureState[] figuresStates, int position){
+        this.figuresState = figuresStates;
+        this.position = position;
+    }
 }
