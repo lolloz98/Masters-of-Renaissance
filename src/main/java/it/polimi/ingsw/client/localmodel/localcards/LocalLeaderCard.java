@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
-public class LocalLeaderCard {
+public class LocalLeaderCard extends LocalCard{
     protected int victoryPoints;
     protected int id;
 

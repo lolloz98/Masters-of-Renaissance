@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.cli.states;
 
 import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 
@@ -15,11 +15,11 @@ public class NewSingleView extends View{
     public NewSingleView(CLI cli, LocalSingle localSingle){
         this.cli = cli;
         this.localSingle = localSingle;
+        localSingle.addObserver(this);
+        localSingle.getError().addObserver(this);
         Scanner input = new Scanner(System.in);
         System.out.println("Type your nickname:\n");
         String nickname = input.nextLine(); // todo: check characters limit
-        localSingle.addObserver(this);
-        // todo ask nickname
         try {
             cli.getClient().sendMessage(new CreateGameMessage(1, nickname));
         } catch (IOException e) {
@@ -28,18 +28,22 @@ public class NewSingleView extends View{
         }
     }
 
+    @Override
     public void draw(){
         System.out.println("Please wait");
     }
 
+    @Override
     public void notifyAction(){
-        if (localSingle.isReady()){
-            localSingle.removeObserver();
-            // todo: change cli.setState();
+        if(localSingle.getState() == LocalGameState.READY){
+            localSingle.addObserver(this);
+            localSingle.getError().addObserver(this);
+            cli.setState(new BoardView(cli, localSingle, localSingle.getMainPlayer()));
         }
         else draw();
     }
 
+    @Override
     public void handleCommand(int ans){
         // todo quit command
     }

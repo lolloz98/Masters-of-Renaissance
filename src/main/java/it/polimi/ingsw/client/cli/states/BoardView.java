@@ -13,6 +13,8 @@ public class BoardView extends GameView {
         this.localGame = localGame;
         this.cli = cli;
         this.localPlayer = localPlayer;
+        // todo add observer
+        localGame.getError().addObserver(this);
     }
 
     @Override
