@@ -1,19 +1,9 @@
 package it.polimi.ingsw.client.localmodel;
 
 public class LocalPlayer extends Observable{
-    private LocalBoard localBoard;
+    private final LocalBoard localBoard;
     private int id;
     private String name;
-    private boolean connected;
-
-    public synchronized boolean isConnected() {
-        return connected;
-    }
-
-    public synchronized void setConnected(boolean connected) {
-        this.connected = connected;
-        notifyObserver();
-    }
 
     public LocalBoard getLocalBoard() {
         return localBoard;

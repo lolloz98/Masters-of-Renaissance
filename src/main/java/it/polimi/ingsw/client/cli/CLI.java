@@ -59,15 +59,15 @@ public class CLI extends UI implements Runnable {
 
     void setup(){
         clearScreen();
-        System.out.println("Welcome to Masters of Renaissance");
-        System.out.println("Do you want to play a local single game, or to connect to a server?");
-        System.out.println("1. Play locally");
-        System.out.println("2. Connect to a server\n");
-        System.out.println("Enter your choice:\n");
-        Scanner input = new Scanner(System.in);
-        int choice;
         boolean valid;
+        System.out.println("Welcome to Masters of Renaissance");
         do{
+            System.out.println("Do you want to play a local single game, or to connect to a server?");
+            System.out.println("1. Play locally");
+            System.out.println("2. Connect to a server\n");
+            System.out.println("Enter your choice:\n");
+            Scanner input = new Scanner(System.in);
+            int choice;
             choice = input.nextInt();
             if (choice<1 || choice>2) {
                 System.out.println("Invalid answer, try again:");
@@ -78,11 +78,11 @@ public class CLI extends UI implements Runnable {
                 valid = true;
             } else {
                 input.nextLine(); // needed to use nextLine() after nextInt()
-                System.out.println("Enter server ip");
-                String ip = input.nextLine();
-                System.out.println("Enter server port");
-                int port = input.nextInt();
                 try {
+                    System.out.println("Enter server ip");
+                    String ip = input.nextLine();
+                    System.out.println("Enter server port");
+                    int port = input.nextInt();
                     setClient(new Client(ip, port));
                     valid = true;
                     // choice for join or create game
@@ -98,8 +98,9 @@ public class CLI extends UI implements Runnable {
                             System.out.println("Invalid answer, try again:");
                             valid2 = false;
                         } else if (choice2 == 1) {
-                            state = new JoinGameView();
-                            this.localGame = new LocalMulti();
+                            LocalMulti localMulti = new LocalMulti();
+                            state = new JoinGameView(this, localMulti);
+                            this.localGame = localMulti;
                             valid2 = true;
                         } else {
                             // choice for number of players
@@ -127,12 +128,13 @@ public class CLI extends UI implements Runnable {
                         }
                     } while (valid2 == false);
                 } catch(IOException e){
-                    System.out.println("error connecting to the server");
+                    System.out.println("error connecting to the server, try again");
                     valid = false;
+                    System.out.println(valid);
                 }
             }
         } while (valid == false);
-        // todo initialte server handler passign localgame
+        // todo initiate server handler passing localgame
     }
 
     public static void clearScreen() {
