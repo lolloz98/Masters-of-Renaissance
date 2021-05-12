@@ -3,9 +3,11 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.ErrorAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.messages.requests.GameStatusMessage;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import org.apache.logging.log4j.LogManager;
@@ -58,6 +60,9 @@ public class ClientHandler implements Runnable {
                     controllerManager.getControllerFromMap(((PreGameCreationMessageController) parsedMessage).getClientMessage().getGameId())
                             .doPreGameAction((PreGameCreationMessageController) parsedMessage, answerListener);
 
+            } else if(parsedMessage instanceof GameStatusMessageController){
+                controllerManager.getControllerFromMap(((GameStatusMessageController) parsedMessage).getClientMessage().getGameId())
+                        .doGetStatusAction((GameStatusMessageController) parsedMessage);
             } else if (parsedMessage instanceof ClientMessageController) {
                 controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
                         .doAction((ClientMessageController) parsedMessage);

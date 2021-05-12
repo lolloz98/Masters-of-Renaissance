@@ -48,7 +48,9 @@ public class ControllerManager {
      * @return a pair with the id of the game and of the player
      */
     public synchronized PairId<Integer, Integer> reserveIdForNewGame(CreateGameMessage message, AnswerListener answerListener) throws ControllerException {
-        return reserveId(message.getPlayersNumber(), message.getUserName(), answerListener);
+        PairId<Integer, Integer> p = reserveId(message.getPlayersNumber(), message.getUserName(), answerListener);
+        answerListener.setPlayerId(p.getSecond());
+        return p;
     }
 
     /**

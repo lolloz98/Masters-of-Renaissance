@@ -12,6 +12,10 @@ public abstract class Answer implements Serializable {
      */
     private final int playerId;
 
+    /**
+     * @param gameId current game id
+     * @param playerId id of the player who sent the request
+     */
     public Answer(int gameId, int playerId) {
         this.gameId = gameId;
         this.playerId = playerId;
