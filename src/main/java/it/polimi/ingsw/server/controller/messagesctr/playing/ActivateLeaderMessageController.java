@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
+import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.leaderanswer.ActivateDepotLeaderAnswer;
 import it.polimi.ingsw.messages.answers.leaderanswer.ActivateDiscountLeaderAnswer;
 import it.polimi.ingsw.messages.answers.leaderanswer.ActivateMarbleLeaderAnswer;
@@ -57,12 +58,14 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
 
         if (toActivate instanceof DepotLeaderCard) {
             DepotLeaderCard card = (DepotLeaderCard) toActivate;
-            return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), card.getId());
+            LocalLeaderCard localCard= new LocalLeaderCard(card.getId(),card.getVictoryPoints());
+            return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
         if (toActivate instanceof ProductionLeaderCard) {
             ProductionLeaderCard card = (ProductionLeaderCard) toActivate;
+            LocalLeaderCard localCard=new LocalLeaderCard(card.getId(),card.getVictoryPoints());
             int whichLeaderProd=board.getProductionLeaders().indexOf(card)+4; //it must be 4 or 5
-            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), card.getId(),whichLeaderProd);
+            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard,whichLeaderProd);
         }
         if (toActivate instanceof DiscountLeaderCard) {
 
@@ -83,11 +86,14 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
                 i++;
             }
 
-
-            return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((LeaderMessage) getClientMessage()).getLeaderId(), newCosts);
+            DiscountLeaderCard card = (DiscountLeaderCard) toActivate;
+            LocalLeaderCard localCard=new LocalLeaderCard(card.getId(),card.getVictoryPoints());
+            return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, newCosts);
         }
         if (toActivate instanceof MarbleLeaderCard) {
-            return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((LeaderMessage) getClientMessage()).getLeaderId());
+            MarbleLeaderCard card = (MarbleLeaderCard) toActivate;
+            LocalLeaderCard localCard=new LocalLeaderCard(card.getId(),card.getVictoryPoints());
+            return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
         logger.error("toActivate is an unknown type of leader: " + toActivate.getClass());
         throw new ControllerException("unknown type of leaderCard");

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.answers.leaderanswer;
 
+import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.game.Resource;
 
@@ -12,8 +13,8 @@ public class ActivateDiscountLeaderAnswer extends LeaderAnswer {
     private final TreeMap<Resource,Integer>[][] newCosts;
 
 
-    public ActivateDiscountLeaderAnswer(int gameId, int playerId, int leaderId, TreeMap<Resource,Integer>[][] newCosts) {
-        super(gameId, playerId, leaderId);
+    public ActivateDiscountLeaderAnswer(int gameId, int playerId, LocalLeaderCard leader, TreeMap<Resource,Integer>[][] newCosts) {
+        super(gameId, playerId, leader);
         this.newCosts=newCosts;
     }
 
