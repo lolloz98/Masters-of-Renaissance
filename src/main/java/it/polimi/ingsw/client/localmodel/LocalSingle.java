@@ -2,7 +2,7 @@ package it.polimi.ingsw.client.localmodel;
 
 public class LocalSingle extends LocalGame<LocalTurnSingle>{
     private LocalPlayer mainPlayer;
-    private LocalTrack lorenzoTrack;
+    private final LocalTrack lorenzoTrack;
 
     public LocalPlayer getMainPlayer() {
         return mainPlayer;

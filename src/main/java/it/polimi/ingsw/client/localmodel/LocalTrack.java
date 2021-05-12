@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.localmodel;
 
 public class LocalTrack extends Observable{
-    private LocalFigureState[] figuresState;
+    private final LocalFigureState[] figuresState;
     private int position;
 
     public synchronized int getFaithTrackScore() {

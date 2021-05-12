@@ -8,12 +8,25 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class LocalBoard extends Observable {
-    private LocalDevelopCard[] topDevelopCards;
-    private int[] developCardsNumber;
+    private ArrayList<ArrayList<LocalDevelopCard>> developCards;
     private TreeMap<Resource, Integer> resInStrongBox;
     private TreeMap<Resource, Integer> resInNormalDeposit;
     private ArrayList<LocalCard> leaderCards;
     private final LocalTrack localTrack;
+
+    public synchronized ArrayList<ArrayList<LocalDevelopCard>> getDevelopCards() {
+        return developCards;
+    }
+
+    public synchronized void setDevelopCards(ArrayList<ArrayList<LocalDevelopCard>> developCards) {
+        this.developCards = developCards;
+        notifyObserver();
+    }
+
+    public synchronized void addDevelopCards(int i, LocalDevelopCard developCard) {
+        this.developCards.get(i).add(developCard);
+        notifyObserver();
+    }
 
     public LocalTrack getLocalTrack() {
         return localTrack;
@@ -46,8 +59,8 @@ public class LocalBoard extends Observable {
     }
 
     public LocalBoard(){
-        developCardsNumber = new int[3];
-        topDevelopCards = new LocalDevelopCard[3];
+        developCards = new ArrayList<>();
+        for(int i=0; i<3; i++) developCards.add(new ArrayList<>());
         leaderCards = new ArrayList<>();
         localTrack = new LocalTrack();
     }

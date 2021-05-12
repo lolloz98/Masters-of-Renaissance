@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.server.model.game.Resource;
-import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
