@@ -38,6 +38,7 @@ public class LocalBoard extends Observable {
 
     public synchronized void setResInStrongBox(TreeMap<Resource, Integer> resInStrongBox) {
         this.resInStrongBox = resInStrongBox;
+        notifyObserver();
     }
 
     public synchronized TreeMap<Resource, Integer> getResInNormalDeposit() {

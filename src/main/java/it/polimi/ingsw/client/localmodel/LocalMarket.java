@@ -14,8 +14,14 @@ public class LocalMarket extends Observable {
         return marbleMatrix;
     }
 
-    public synchronized void setMarbleMatrix(Resource[][] marbleMatrix) {
+    private synchronized void setMarbleMatrix(Resource[][] marbleMatrix) {
         this.marbleMatrix = marbleMatrix;
+
+    }
+
+    public synchronized void setMarket(Resource[][] marbleMatrix, Resource freeMarble) {
+        setMarbleMatrix(marbleMatrix);
+        setFreeMarble(freeMarble);
         notifyObserver();
     }
 
@@ -23,7 +29,7 @@ public class LocalMarket extends Observable {
         return freeMarble;
     }
 
-    public synchronized void setFreeMarble(Resource freeMarble) {
+    private synchronized void setFreeMarble(Resource freeMarble) {
         this.freeMarble = freeMarble;
     }
 

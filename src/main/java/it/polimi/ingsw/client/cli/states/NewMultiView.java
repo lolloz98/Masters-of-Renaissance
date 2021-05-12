@@ -64,7 +64,9 @@ public class NewMultiView extends View{
     }
 
     @Override
-    public void notifyError() {}
+    public void notifyError() {
+        // there is no error associated with the new game
+    }
 
     @Override
     public void handleCommand(int ans){

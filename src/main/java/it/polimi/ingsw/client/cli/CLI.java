@@ -130,7 +130,6 @@ public class CLI extends UI implements Runnable {
                 } catch(IOException e){
                     System.out.println("error connecting to the server, try again");
                     valid = false;
-                    System.out.println(valid);
                 }
             }
         } while (valid == false);

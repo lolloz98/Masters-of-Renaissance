@@ -6,12 +6,21 @@ import java.util.TreeMap;
 
 public class LocalDepotLeader extends LocalLeaderCard{
     private Resource resType;
-    private TreeMap<Color,Integer> prodRequirement;
+    private Resource resRequirement;
+    private int numberOfRes;
 
     public LocalDepotLeader(int id, int victoryPoints, Resource resType, TreeMap<Color, Integer> prodRequirement) {
         super(id, victoryPoints);
         this.resType = resType;
-        this.prodRequirement = prodRequirement;
+        this.resRequirement = resRequirement;
+    }
+
+    public synchronized int getNumberOfRes() {
+        return numberOfRes;
+    }
+
+    public synchronized void setNumberOfRes(int numberOfRes) {
+        this.numberOfRes = numberOfRes;
     }
 
     public synchronized Resource getResType() {
@@ -22,11 +31,12 @@ public class LocalDepotLeader extends LocalLeaderCard{
         this.resType = resType;
     }
 
-    public synchronized TreeMap<Color, Integer> getProdRequirement() {
-        return prodRequirement;
+    public synchronized Resource getResRequirement() {
+        return resRequirement;
     }
 
-    public synchronized void setProdRequirement(TreeMap<Color, Integer> prodRequirement) {
-        this.prodRequirement = prodRequirement;
+    public synchronized void setResRequirement(Resource resRequirement) {
+        this.resRequirement = resRequirement;
     }
+
 }

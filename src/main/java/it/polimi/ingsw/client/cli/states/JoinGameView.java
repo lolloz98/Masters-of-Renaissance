@@ -37,24 +37,26 @@ public class JoinGameView extends View {
 
     @Override
     public void notifyUpdate() {
-        if (localMulti.getError().getType() == ErrorType.NONE) {
-            if (localMulti.getState() == LocalGameState.READY) {
-                ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
-                LocalPlayer mainPlayer = null;
-                for(LocalPlayer p : localPlayers){
-                    if(p.getId() == localMulti.getMainPlayerId()) mainPlayer = p;
-                }
-                if(mainPlayer == null){
-                    System.out.println("There was an error creating the game");// fixme
-                }
-                else {
-                    localMulti.removeObserver();
-                    localMulti.getError().removeObserver();
-                    cli.setState(new BoardView(cli, localMulti, mainPlayer));
-                    cli.getState().draw();
-                }
+        if (localMulti.getState() == LocalGameState.READY) {
+            ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
+            LocalPlayer mainPlayer = null;
+            for (LocalPlayer p : localPlayers) {
+                if (p.getId() == localMulti.getMainPlayerId()) mainPlayer = p;
             }
-        } else { // todo if gameid is taken or if game is started
+            if (mainPlayer == null) {
+                System.out.println("There was an error creating the game");// fixme
+            } else {
+                localMulti.removeObserver();
+                localMulti.getError().removeObserver();
+                cli.setState(new BoardView(cli, localMulti, mainPlayer));
+                cli.getState().draw();
+            }
+        }
+    }
+
+    @Override
+    public void notifyError() {
+        if (localMulti.getError().getType()==ErrorType.MISSING_GAME){
             System.out.println("Game not available in this server, enter another id:\n");
             int id = input.nextInt();
             try {
@@ -63,11 +65,18 @@ public class JoinGameView extends View {
                 System.out.println("no connection from server"); // fixme
                 e.printStackTrace();
             }
+        } else if (localMulti.getError().getType()==ErrorType.MISSING_GAME){
+            System.out.println("The game you selected has already started, enter another id:\n");
+            int id = input.nextInt();
+            try {
+                cli.getClient().sendMessage(new JoinGameMessage(id, nickname));
+            } catch (IOException e) {
+                System.out.println("no connection from server"); // fixme
+                e.printStackTrace();
+            }
         }
+        draw();
     }
-
-    @Override
-    public void notifyError() {}
 
     @Override
     public void handleCommand(int ans) {
