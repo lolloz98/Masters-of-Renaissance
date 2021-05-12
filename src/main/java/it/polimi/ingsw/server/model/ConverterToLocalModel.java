@@ -10,17 +10,18 @@ import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.cards.Production;
 import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
-import it.polimi.ingsw.server.model.game.Marble;
-import it.polimi.ingsw.server.model.game.MarketTray;
-import it.polimi.ingsw.server.model.game.Resource;
-import it.polimi.ingsw.server.model.game.SinglePlayer;
+import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * Contains methods to convert from model to localModel
+ */
 public final class ConverterToLocalModel {
     private static final Logger logger = LogManager.getLogger(ConverterToLocalModel.class);
 
@@ -139,6 +140,14 @@ public final class ConverterToLocalModel {
         return new LocalPlayer(player.getPlayerId(), player.getName(), convert(player.getBoard(), playerIdRequiring == player.getPlayerId()));
     }
 
+    public static ArrayList<LocalPlayer> convert(ArrayList<Player> players, int playerIdRequiring) throws UnexpectedControllerException {
+        ArrayList<LocalPlayer> lps = new ArrayList<>();
+        for(Player p: players){
+            lps.add(convert(p, playerIdRequiring));
+        }
+        return lps;
+    }
+
     public static Resource[][] convert(Marble[][] marbleMatrix){
         Resource[][] mt = new Resource[marbleMatrix.length][marbleMatrix[0].length];
         for(int i = 0; i < marbleMatrix.length; i++){
@@ -169,5 +178,50 @@ public final class ConverterToLocalModel {
         return new LocalDevelopmentGrid(topDevelopCards, developCardsNumber);
     }
 
-    // todo convert turn and game
+    private static LocalTurnSingle convert(TurnSingle turn){
+        return new LocalTurnSingle(turn.isMainActionOccurred(), turn.isProductionsActivated(), turn.isMarketActivated());
+    }
+
+    private static LocalTurnMulti convert(TurnMulti turn, int playerIdRequiring) throws UnexpectedControllerException {
+        return new LocalTurnMulti(turn.isMainActionOccurred(), turn.isProductionsActivated(), turn.isMarketActivated(), convert(turn.getCurrentPlayer(), playerIdRequiring));
+    }
+
+    public static LocalTurn convert(Turn turn, int playerIdRequiring) throws UnexpectedControllerException {
+        if(turn instanceof TurnMulti) return convert((TurnMulti) turn, playerIdRequiring);
+        else return convert((TurnSingle) turn);
+    }
+
+    public static LocalSingle convert(SinglePlayer game, int playerIdRequiring, int gameId) throws UnexpectedControllerException {
+        return new LocalSingle(
+                gameId,
+                convert(game.getDecksDevelop()),
+                convert(game.getMarketTray()),
+                convert(game.getTurn()),
+                convert(game.getLorenzo().getFaithTrack()),
+                convert(game.getPlayer(), playerIdRequiring)
+        );
+    }
+
+    public static LocalMulti convert(MultiPlayer game, int playerIdRequiring, int gameId) throws UnexpectedControllerException {
+        return new LocalMulti(
+                gameId,
+                convert(game.getDecksDevelop()),
+                convert(game.getMarketTray()),
+                convert(game.getTurn(), playerIdRequiring),
+                convert(game.getPlayers(), playerIdRequiring),
+                playerIdRequiring
+        );
+    }
+
+    /**
+     * @param game current game
+     * @param playerIdRequiring id of the player who we are sending the local game to
+     * @param gameId current game id
+     * @return localGame as it should be seen by the player with playerIdRequiring
+     * @throws UnexpectedControllerException if something unexpected happens during conversion
+     */
+    public static LocalGame<?> convert(Game<?> game, int playerIdRequiring, int gameId) throws UnexpectedControllerException {
+        if(game instanceof MultiPlayer) return convert((MultiPlayer) game, playerIdRequiring, gameId);
+        else return convert((SinglePlayer) game, playerIdRequiring, gameId);
+    }
 }

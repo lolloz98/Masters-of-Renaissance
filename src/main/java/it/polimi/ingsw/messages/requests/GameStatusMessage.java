@@ -1,9 +1,9 @@
 package it.polimi.ingsw.messages.requests;
 
-public class GetGameStatus extends ClientMessage{
+public class GameStatusMessage extends ClientMessage{
     private static final long serialVersionUID = 114L;
 
-    public GetGameStatus(int gameId, int playerId) {
+    public GameStatusMessage(int gameId, int playerId) {
         super(gameId, playerId);
     }
 }

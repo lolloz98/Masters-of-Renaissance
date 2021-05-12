@@ -3,6 +3,14 @@ package it.polimi.ingsw.client.localmodel;
 public class LocalTurnMulti extends LocalTurn {
     private LocalPlayer currentPlayer;
 
+    public LocalTurnMulti(){
+    }
+
+    public LocalTurnMulti(boolean mainActionOccurred, boolean productionsActivated, boolean marketActivated, LocalPlayer currentPlayer) {
+        super(mainActionOccurred, productionsActivated, marketActivated);
+        this.currentPlayer = currentPlayer;
+    }
+
     public synchronized LocalPlayer getCurrentPlayer() {
         return currentPlayer;
     }
@@ -11,7 +19,5 @@ public class LocalTurnMulti extends LocalTurn {
         this.currentPlayer = currentPlayer;
     }
 
-    public LocalTurnMulti(){
 
-    }
 }

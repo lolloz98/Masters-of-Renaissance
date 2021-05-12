@@ -6,6 +6,7 @@ import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.server.AnswerListener;
+import it.polimi.ingsw.server.controller.AnswerFactory;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.model.utility.PairId;
@@ -32,9 +33,8 @@ public class CreateGameMessageController implements Serializable {
     public Answer doAction(AnswerListener answerListener) throws ControllerException {
         PairId<Integer, Integer> id = ControllerManager.getInstance().reserveIdForNewGame((CreateGameMessage) getClientMessage(), answerListener);
         logger.debug("id " + id.getFirst() + " successfully reserved");
-        answerListener.setPlayerId(id.getSecond());
         if(((CreateGameMessage) getClientMessage()).getPlayersNumber() == 1){
-            return new GameStatusAnswer(id.getFirst(), id.getSecond(), id.getSecond());
+            return AnswerFactory.createGameStatusAnswer(id.getFirst(), id.getSecond(), id.getSecond(), ControllerManager.getInstance().getControllerFromMap(id.getFirst()).getGame());
         }
         return new CreateGameAnswer(id.getFirst(), id.getSecond());
     }

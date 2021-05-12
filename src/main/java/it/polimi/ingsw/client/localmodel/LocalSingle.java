@@ -1,10 +1,15 @@
 package it.polimi.ingsw.client.localmodel;
 
+import java.util.ArrayList;
+
 public class LocalSingle extends LocalGame<LocalTurnSingle>{
     private LocalPlayer mainPlayer;
     private final LocalTrack lorenzoTrack;
 
-    public LocalPlayer getMainPlayer() {
+    public synchronized void setMainPlayer(LocalPlayer mainPlayer) {
+        this.mainPlayer = mainPlayer;
+    }
+    public synchronized LocalPlayer getMainPlayer() {
         return mainPlayer;
     }
 
@@ -16,5 +21,11 @@ public class LocalSingle extends LocalGame<LocalTurnSingle>{
         super();
         this.localTurn = new LocalTurnSingle();
         lorenzoTrack = new LocalTrack();
+    }
+
+    public LocalSingle(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, LocalTurnSingle localTurn, LocalTrack lorenzoTrack, LocalPlayer mainPlayer){
+        super(gameId,localDevelopmentGrid, localMarket, localTurn);
+        this.lorenzoTrack = lorenzoTrack;
+        this.mainPlayer = mainPlayer;
     }
 }

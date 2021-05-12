@@ -5,6 +5,9 @@ public abstract class LocalTurn extends Observable{
     protected boolean productionsActivated;
     protected boolean marketActivated;
 
+    protected LocalTurn() {
+    }
+
     public synchronized boolean isMainActionOccurred() {
         return mainActionOccurred;
     }
@@ -26,6 +29,12 @@ public abstract class LocalTurn extends Observable{
     }
 
     public synchronized void setMarketActivated(boolean marketActivated) {
+        this.marketActivated = marketActivated;
+    }
+
+    protected LocalTurn(boolean mainActionOccurred, boolean productionsActivated, boolean marketActivated){
+        this.mainActionOccurred = mainActionOccurred;
+        this.productionsActivated = productionsActivated;
         this.marketActivated = marketActivated;
     }
 }

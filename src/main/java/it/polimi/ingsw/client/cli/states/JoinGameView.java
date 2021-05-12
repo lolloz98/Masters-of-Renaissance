@@ -14,8 +14,8 @@ import java.util.Scanner;
 public class JoinGameView extends View {
     private LocalMulti localMulti;
     private CLI cli;
-    String nickname;
-    Scanner input;
+    private String nickname;
+    private Scanner input;
 
     public JoinGameView(CLI cli, LocalMulti localMulti) {
         this.cli = cli;

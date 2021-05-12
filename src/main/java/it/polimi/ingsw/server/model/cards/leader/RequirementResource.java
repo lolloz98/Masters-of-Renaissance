@@ -37,7 +37,7 @@ public class RequirementResource implements Requirement {
      * @return true, if the player has enough resources to spend for this requirement
      */
     @Override
-    public boolean checkRequirement(Player player) throws ModelException {
+    public boolean checkRequirement(Player player) throws ResourceNotDiscountableException {
         return player.getBoard().enoughResToActivate(new TreeMap<>() {{
             put(res, quantity);
         }});

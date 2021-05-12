@@ -6,7 +6,7 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable {
     protected LocalMarket localMarket;
     protected int gameId;
     protected T localTurn;
-    protected final Error error;
+    protected final Error error = new Error();
     protected LocalGameState state;
 
     public Error getError() {
@@ -45,6 +45,13 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable {
     public LocalGame(){
         this.localDevelopmentGrid = new LocalDevelopmentGrid();
         this.localMarket = new LocalMarket();
-        error = new Error();
+    }
+
+    // fixme: do we need to set on the server "state"?
+    public LocalGame(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, T localTurn){
+        this.gameId = gameId;
+        this.localDevelopmentGrid = localDevelopmentGrid;
+        this.localMarket = localMarket;
+        this.localTurn = localTurn;
     }
 }

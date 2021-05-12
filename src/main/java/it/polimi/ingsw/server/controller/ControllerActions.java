@@ -2,10 +2,12 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
+import it.polimi.ingsw.messages.requests.GameStatusMessage;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import it.polimi.ingsw.server.controller.states.EndGameState;
 import it.polimi.ingsw.server.controller.states.GamePlayState;
@@ -94,7 +96,7 @@ public abstract class ControllerActions<T extends Game<?>> {
         if (game != null) {
             // todo: send to each player a message with the game. CAREFUL: each player cannot see the leader cards of the others
             for (AnswerListener a : listeners) {
-                answerListener.sendAnswer(new GameStatusAnswer(answer.getGameId(), answer.getPlayerId(), a.getPlayerId()));
+                answerListener.sendAnswer(AnswerFactory.createGameStatusAnswer(answer.getGameId(), answer.getPlayerId(), a.getPlayerId(), game));
             }
         }
     }
@@ -116,5 +118,13 @@ public abstract class ControllerActions<T extends Game<?>> {
 
     public synchronized void removeAnswerListener(AnswerListener answerListener) {
         listeners.remove(answerListener);
+    }
+
+    public void doGetStatusAction(GameStatusMessageController parsedMessage) throws ControllerException {
+        Answer gameStatusAnswer = parsedMessage.doAction(this);
+        for(AnswerListener a: listeners){
+            // we send the game status only to who required it
+            if(a.getPlayerId() == gameStatusAnswer.getPlayerId()) a.sendAnswer(gameStatusAnswer);
+        }
     }
 }
