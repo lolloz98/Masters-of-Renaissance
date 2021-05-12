@@ -31,6 +31,18 @@ public class LocalMulti extends LocalGame<LocalTurnMulti>{
         return localPlayers;
     }
 
+    public synchronized LocalPlayer getMainPlayer(){
+        for(LocalPlayer p : localPlayers){
+            if (p.getId() == mainPlayerId) return p;
+        }
+        return null;
+    }
+
+    public synchronized int getMainPlayerPosition(){
+        LocalPlayer mainPlayer = getMainPlayer();
+        return localPlayers.indexOf(mainPlayer);
+    }
+
     public LocalMulti(){
         super();
         this.localTurn = new LocalTurnMulti();

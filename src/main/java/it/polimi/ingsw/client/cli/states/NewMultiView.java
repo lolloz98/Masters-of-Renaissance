@@ -23,7 +23,7 @@ public class NewMultiView extends View{
         try {
             cli.getClient().sendMessage(new CreateGameMessage(numberOfPlayers, nickname));
         } catch (IOException e) {
-            System.out.println("no connection from server"); // fixme
+            System.out.println("No connection from server");
             e.printStackTrace();
         }
     }
@@ -45,20 +45,10 @@ public class NewMultiView extends View{
     @Override
     public void notifyUpdate(){
         if(localMulti.getState() == LocalGameState.READY){
-            ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
-            LocalPlayer mainPlayer = null;
-            for(LocalPlayer p : localPlayers){
-                if(p.getId() == localMulti.getMainPlayerId()) mainPlayer = p;
-            }
-            if(mainPlayer == null){
-                System.out.println("There was an error creating the game");// fixme
-            }
-            else {
-                localMulti.removeObserver();
-                localMulti.getError().removeObserver();
-                cli.setState(new BoardView(cli, localMulti, mainPlayer));
-                cli.getState().draw();
-            }
+            localMulti.removeObserver();
+            localMulti.getError().removeObserver();
+            cli.setState(new PrepResourcesView(cli, localMulti));
+            cli.getState().draw();
         }
         else draw();
     }
