@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
+import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
 import it.polimi.ingsw.server.AnswerListener;
@@ -61,6 +62,17 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
                 return false;
         }
         return true;
+    }
+
+    @Override
+    public synchronized ArrayList<LocalTrack> getFaithTracks() throws ControllerException {
+        ArrayList<LocalTrack> localTracks=new ArrayList<>();
+
+        for(Player p:game.getPlayers()){
+            LocalTrack localTrack=ConverterToLocalModel.convert(p.getBoard().getFaithtrack());
+            localTracks.add(localTrack);
+        }
+        return localTracks;
     }
 
 

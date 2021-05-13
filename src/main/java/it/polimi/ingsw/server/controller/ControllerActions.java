@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.GameStatusMessage;
@@ -115,6 +116,8 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
             if(a.getPlayerId() == gameStatusAnswer.getPlayerId()) a.sendAnswer(gameStatusAnswer);
         }
     }
+
+    public abstract ArrayList<LocalTrack> getFaithTracks() throws ControllerException;
 
 
 

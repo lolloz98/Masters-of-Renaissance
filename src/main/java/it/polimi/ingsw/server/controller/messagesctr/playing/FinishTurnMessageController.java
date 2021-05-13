@@ -33,6 +33,7 @@ public class FinishTurnMessageController extends PlayingMessageController {
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Game<?> game = controllerActions.getGame();
 
+
         nextTurn(game);
 
         Turn newTurn = controllerActions.getGame().getTurn();
