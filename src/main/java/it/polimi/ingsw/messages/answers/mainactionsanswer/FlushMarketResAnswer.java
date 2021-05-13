@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class FlushMarketResAnswer extends Answer {
 
     private final ArrayList<LocalTrack> localTracks;
-//todo: put res in depots
+//todo: put treemap of res in depots
 
     /**
      * @param gameId   current game id

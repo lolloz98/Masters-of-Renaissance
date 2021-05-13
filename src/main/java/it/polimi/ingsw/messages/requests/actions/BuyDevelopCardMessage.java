@@ -20,15 +20,23 @@ public class BuyDevelopCardMessage extends ClientMessage {
     public final int whichDeck;
 
     /**
+     * on which production slot we want to put the card
+     */
+    public final int whichSlotToStore;
+
+
+
+    /**
      *resources to pay in order to obtain the desired develop card
      */
     public final TreeMap<WarehouseType, TreeMap<Resource,Integer>> toPay;
 
-    public BuyDevelopCardMessage(int gameId, int playerId, int level, Color color, int whichDeck, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
+    public BuyDevelopCardMessage(int gameId, int playerId, int level, Color color, int whichDeck, int whichSlotToStore, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
         super(gameId, playerId);
         this.level = level;
         this.color = color;
         this.whichDeck = whichDeck;
+        this.whichSlotToStore = whichSlotToStore;
         this.toPay = toPay;
     }
 
@@ -42,5 +50,13 @@ public class BuyDevelopCardMessage extends ClientMessage {
 
     public Color getColor() {
         return color;
+    }
+
+    public TreeMap<WarehouseType, TreeMap<Resource, Integer>> getToPay() {
+        return toPay;
+    }
+
+    public int getWhichSlotToStore() {
+        return whichSlotToStore;
     }
 }
