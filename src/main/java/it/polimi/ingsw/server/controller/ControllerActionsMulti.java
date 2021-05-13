@@ -13,6 +13,7 @@ import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.controller.states.WaitingForPlayersState;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
+import it.polimi.ingsw.server.model.cards.leader.Requirement;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.Resource;
@@ -82,7 +83,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
      */
     @Override
     public void removeLeadersEffect() throws ControllerException {
-        for(LeaderCard lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
+        for(LeaderCard<? extends Requirement> lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
             try {
                 lc.removeEffect(game);
             } catch (NoSuchResourceException e) {
@@ -93,7 +94,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
 
     @Override
     public void applyLeadersEffect() throws ControllerException {
-        for(LeaderCard lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
+        for(LeaderCard<? extends Requirement> lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
 
             try {
                 lc.applyEffect(game);
