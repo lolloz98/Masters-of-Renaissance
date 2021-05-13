@@ -89,15 +89,15 @@ public abstract class ControllerActions<T extends Game<?>> {
     }
 
     public synchronized void doPreGameAction(PreGameCreationMessageController clientMessage, AnswerListener answerListener) throws ControllerException {
-        Answer answer = clientMessage.doAction();
+        Answer answer = clientMessage.doAction(this);
         answerListener.setPlayerId(answer.getPlayerId());
         addAnswerListener(answerListener);
-        sendAnswer(answer);
         if (game != null) {
-            // todo: send to each player a message with the game. CAREFUL: each player cannot see the leader cards of the others
             for (AnswerListener a : listeners) {
                 answerListener.sendAnswer(AnswerFactory.createGameStatusAnswer(answer.getGameId(), answer.getPlayerId(), a.getPlayerId(), game));
             }
+        } else{
+            sendAnswer(answer);
         }
     }
 

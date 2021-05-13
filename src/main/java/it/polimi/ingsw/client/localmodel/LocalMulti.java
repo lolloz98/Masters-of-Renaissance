@@ -50,8 +50,8 @@ public class LocalMulti extends LocalGame<LocalTurnMulti>{
         state = LocalGameState.NEW;
     }
 
-    public LocalMulti(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, LocalTurnMulti localTurn, ArrayList<LocalPlayer> localPlayers, int mainPlayerId){
-        super(gameId,localDevelopmentGrid, localMarket, localTurn);
+    public LocalMulti(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, LocalTurnMulti localTurn, LocalGameState state, ArrayList<LocalPlayer> localPlayers, int mainPlayerId){
+        super(gameId,localDevelopmentGrid, localMarket, localTurn, state);
         this.localPlayers = localPlayers;
         this.mainPlayerId = mainPlayerId;
     }

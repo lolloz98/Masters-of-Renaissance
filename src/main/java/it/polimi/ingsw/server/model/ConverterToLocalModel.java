@@ -132,7 +132,7 @@ public final class ConverterToLocalModel {
         }
         LocalTrack localTrack = convert(board.getFaithtrack());
         LocalProduction localBaseProduction = convert(board.getNormalProduction());
-        return new LocalBoard(localDevelopCards, localLeader, localTrack, localBaseProduction);
+        return new LocalBoard(localDevelopCards, localLeader, localTrack, localBaseProduction, board.getInitialRes());
 
     }
 
@@ -197,6 +197,7 @@ public final class ConverterToLocalModel {
                 convert(game.getDecksDevelop()),
                 convert(game.getMarketTray()),
                 convert(game.getTurn()),
+                getGameState(game),
                 convert(game.getLorenzo().getFaithTrack()),
                 convert(game.getPlayer(), playerIdRequiring)
         );
@@ -208,6 +209,7 @@ public final class ConverterToLocalModel {
                 convert(game.getDecksDevelop()),
                 convert(game.getMarketTray()),
                 convert(game.getTurn(), playerIdRequiring),
+                getGameState(game),
                 convert(game.getPlayers(), playerIdRequiring),
                 playerIdRequiring
         );
@@ -223,5 +225,24 @@ public final class ConverterToLocalModel {
     public static LocalGame<?> convert(Game<?> game, int playerIdRequiring, int gameId) throws UnexpectedControllerException {
         if(game instanceof MultiPlayer) return convert((MultiPlayer) game, playerIdRequiring, gameId);
         else return convert((SinglePlayer) game, playerIdRequiring, gameId);
+    }
+
+    public static LocalGameState getGameState(MultiPlayer game){
+        for(Player i: game.getPlayers()){
+            if(i.getBoard().getInitialRes() != 0) return LocalGameState.PREP_RESOURCES;
+        }
+        for(Player i: game.getPlayers()){
+            if(i.getBoard().getLeaderCards().size() != 2) return LocalGameState.PREP_LEADERS;
+        }
+        // todo: check that the condition for gameOver is right
+        if(game.isGameOver()) return LocalGameState.OVER;
+        return LocalGameState.READY;
+    }
+
+    public static LocalGameState getGameState(SinglePlayer game){
+        if(game.getPlayer().getBoard().getInitialRes() != 0) return LocalGameState.PREP_RESOURCES; // It should never happen
+        if(game.getPlayer().getBoard().getLeaderCards().size() != 2) return LocalGameState.PREP_LEADERS;
+        if(game.isGameOver()) return LocalGameState.OVER;
+        return LocalGameState.READY;
     }
 }

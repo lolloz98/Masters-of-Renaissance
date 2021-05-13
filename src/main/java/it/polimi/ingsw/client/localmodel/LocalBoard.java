@@ -14,6 +14,7 @@ public class LocalBoard extends Observable {
     private TreeMap<Resource, Integer> resInNormalDeposit;
     private ArrayList<LocalCard> leaderCards;
     private final LocalTrack localTrack;
+    private int initialRes;
 
     public synchronized ArrayList<ArrayList<LocalDevelopCard>> getDevelopCards() {
         return developCards;
@@ -35,6 +36,16 @@ public class LocalBoard extends Observable {
     public LocalTrack getLocalTrack() {
         return localTrack;
     }
+
+
+    public synchronized int getInitialRes() {
+        return initialRes;
+    }
+
+    public synchronized void setInitialRes(int initialRes) {
+        this.initialRes = initialRes;
+    }
+
 
     public synchronized TreeMap<Resource, Integer> getResInStrongBox() {
         return resInStrongBox;
@@ -75,11 +86,12 @@ public class LocalBoard extends Observable {
 //        }}, new TreeMap<>());
 //    }
 
-    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction){
+    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction, int initialRes){
         this.developCards = developCards;
         this.leaderCards = leaderCards;
         this.localTrack = localTrack;
         this.baseProduction = baseProduction;
+        this.initialRes = initialRes;
     }
 
     public synchronized LocalProduction getBaseProduction() {

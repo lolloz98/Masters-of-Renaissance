@@ -47,11 +47,11 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable {
         this.localMarket = new LocalMarket();
     }
 
-    // fixme: do we need to set on the server "state"?
-    public LocalGame(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, T localTurn){
+    public LocalGame(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, T localTurn, LocalGameState state){
         this.gameId = gameId;
         this.localDevelopmentGrid = localDevelopmentGrid;
         this.localMarket = localMarket;
         this.localTurn = localTurn;
+        this.state = state;
     }
 }

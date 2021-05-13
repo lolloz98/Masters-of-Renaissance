@@ -23,8 +23,8 @@ public class LocalSingle extends LocalGame<LocalTurnSingle>{
         lorenzoTrack = new LocalTrack();
     }
 
-    public LocalSingle(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, LocalTurnSingle localTurn, LocalTrack lorenzoTrack, LocalPlayer mainPlayer){
-        super(gameId,localDevelopmentGrid, localMarket, localTurn);
+    public LocalSingle(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, LocalTurnSingle localTurn, LocalGameState state, LocalTrack lorenzoTrack, LocalPlayer mainPlayer){
+        super(gameId,localDevelopmentGrid, localMarket, localTurn, state);
         this.lorenzoTrack = lorenzoTrack;
         this.mainPlayer = mainPlayer;
     }
