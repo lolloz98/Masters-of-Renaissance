@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.player;
 
 
+import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.*;
@@ -9,6 +10,8 @@ import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.utility.Utility;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -19,6 +22,8 @@ import java.util.TreeSet;
  * class that models the board of each player
  */
 public class Board implements VictoryPointCalculator {
+    private static final Logger logger = LogManager.getLogger(Board.class);
+
     private final FaithTrack faithtrack;
     private final StrongBox strongbox;
     private final ArrayList<LeaderCard<? extends Requirement>> leaderCards;
@@ -813,23 +818,37 @@ public class Board implements VictoryPointCalculator {
      * @param game           current game
      * @param extraResources resources that cannot be stored in depots
      */
-    private void distributeFaithPoints(Game<?> game, TreeMap<Resource, Integer> extraResources) throws InvalidStepsException, EndAlreadyReachedException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+    private void distributeFaithPoints(Game<?> game, TreeMap<Resource, Integer> extraResources) throws InvalidStepsException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         int steps;
         steps = Utility.sumOfValues(extraResources);
         if (game instanceof MultiPlayer) {
             MultiPlayer gamemp = (MultiPlayer) game;
             Player currentPlayer = gamemp.getTurn().getCurrentPlayer();
             for (Player p : gamemp.getPlayers()) {
-                if (!p.equals(currentPlayer))
-                    p.getBoard().moveOnFaithPath(steps, game);
+                if (!p.equals(currentPlayer)) {
+                    try {
+                        p.getBoard().moveOnFaithPath(steps, game);
+                    } catch (EndAlreadyReachedException e) {
+                        logger.info("Player " + p.getPlayerId() + " has already reached the end of faithTrack");
+                    }
+                }
             }
         }
         if (game instanceof SinglePlayer) {//only the player could call this method
             SinglePlayer gamesp = (SinglePlayer) game;
             if (!gamesp.getTurn().isLorenzoPlaying()) {
-                gamesp.getLorenzo().getFaithTrack().move(steps, game);
-            } else
-                gamesp.getPlayer().getBoard().moveOnFaithPath(steps, game);
+                try {
+                    gamesp.getLorenzo().getFaithTrack().move(steps, game);
+                } catch (EndAlreadyReachedException e) {
+                    logger.info("Lorenzo " + " has already reached the end of faithTrack");
+                }
+            } else {
+                try {
+                    gamesp.getPlayer().getBoard().moveOnFaithPath(steps, game);
+                } catch (EndAlreadyReachedException e) {
+                    logger.info("The player " + " has already reached the end of faithTrack");
+                }
+            }
         }
     }
 
