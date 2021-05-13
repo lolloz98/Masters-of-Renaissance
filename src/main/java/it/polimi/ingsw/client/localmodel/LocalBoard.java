@@ -95,6 +95,14 @@ public class LocalBoard extends Observable implements Serializable {
         this.initialRes = initialRes;
     }
 
+    public LocalBoard(){
+        this.developCards = new ArrayList<>();
+        this.leaderCards = new ArrayList<>();
+        this.localTrack = new LocalTrack();
+        this.baseProduction = new LocalProduction();
+        this.initialRes = 0;
+    }
+
     public synchronized LocalProduction getBaseProduction() {
         return baseProduction;
     }

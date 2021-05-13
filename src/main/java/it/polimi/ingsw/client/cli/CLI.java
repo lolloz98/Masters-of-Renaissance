@@ -14,10 +14,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CLI extends UI implements Runnable {
-    private LocalGame localGame;
+    private LocalGame<?> localGame;
     private View state;
     private boolean gameOver;
     private Scanner input;
+    private ServerListener serverListener;
 
     public Client getClient() {
         return client;
@@ -29,11 +30,11 @@ public class CLI extends UI implements Runnable {
 
     private Client client;
 
-    public LocalGame getLocalGame() {
+    public LocalGame<?> getLocalGame() {
         return localGame;
     }
 
-    public void setLocalGame(LocalGame localGame) {
+    public void setLocalGame(LocalGame<?> localGame) {
         this.localGame = localGame;
     }
     public View getState() {
@@ -86,6 +87,8 @@ public class CLI extends UI implements Runnable {
                     System.out.println("Enter server port");
                     int port = input.nextInt();
                     setClient(new Client(ip, port));
+                    serverListener = new ServerListener(client.getServer());
+                    new Thread(serverListener).start();
                     valid = true;
                     // choice for join or create game
                     System.out.println("Do you want to join a game or create a new one?");
@@ -100,42 +103,26 @@ public class CLI extends UI implements Runnable {
                             System.out.println("Invalid answer, try again:");
                             valid2 = false;
                         } else if (choice2 == 1) {
-                            LocalMulti localMulti = new LocalMulti();
-                            state = new JoinGameView(this, localMulti);
-                            this.localGame = localMulti;
+                            joinGame();
                             valid2 = true;
                         } else {
-                            // choice for number of players
-                            System.out.println("Type the number of players:\n");
-                            boolean valid3;
-                            int ans;
-                            do {
-                                ans = input.nextInt();
-                                if (ans < 1 || ans > 4) {
-                                    System.out.println("Invalid answer, try again:");
-                                    valid3 = false;
-                                } else if (ans == 1) {
-                                    LocalSingle localSingle = new LocalSingle();
-                                    state = new NewSingleView(this, localSingle);
-                                    localGame = localSingle;
-                                    valid3 = true;
-                                } else {
-                                    LocalMulti localMulti = new LocalMulti();
-                                    state = new NewMultiView(this, localMulti, ans);
-                                    localGame = localMulti;
-                                    valid3 = true;
-                                }
-                            } while (valid3 == false);
+                            choseNumberOfPlayers();
                             valid2 = true;
                         }
-                    } while (valid2 == false);
-                    new Thread(new ServerListener(client.getServer(), localGame)).run();
+                    } while (!valid2);
                 } catch(IOException e){
                     System.out.println("error connecting to the server, try again");
                     valid = false;
                 }
             }
-        } while (valid == false);
+        } while (!valid);
+    }
+
+    private void joinGame() {
+        LocalMulti localMulti = new LocalMulti();
+        this.localGame = localMulti;
+        serverListener.setLocalGame(localGame);
+        state = new JoinGameView(this, localMulti);
     }
 
     public static void clearScreen() {
@@ -192,5 +179,30 @@ public class CLI extends UI implements Runnable {
         for(String o : out){
             System.out.println(o);
         }
+    }
+
+    private void choseNumberOfPlayers(){
+        System.out.println("Type the number of players:\n");
+        boolean valid;
+        int ans;
+        do {
+            ans = input.nextInt();
+            if (ans < 1 || ans > 4) {
+                System.out.println("Invalid answer, try again:");
+                valid = false;
+            } else if (ans == 1) {
+                LocalSingle localSingle = new LocalSingle();
+                localGame = localSingle;
+                serverListener.setLocalGame(localGame);
+                state = new NewSingleView(this, localSingle);
+                valid = true;
+            } else {
+                LocalMulti localMulti = new LocalMulti();
+                localGame = localMulti;
+                serverListener.setLocalGame(localGame);
+                state = new NewMultiView(this, localMulti, ans);
+                valid = true;
+            }
+        } while (!valid);
     }
 }

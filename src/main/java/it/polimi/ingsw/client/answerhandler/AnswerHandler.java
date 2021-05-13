@@ -14,5 +14,5 @@ public abstract class AnswerHandler {
         return answer;
     }
 
-    public abstract void handleAnswer(LocalGame localGame);
+    public abstract void handleAnswer(LocalGame<?> localGame);
 }

@@ -29,7 +29,11 @@ public class ServerListener implements Runnable{
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
     private final Socket server;
     private ObjectInputStream iStream;
-    private LocalGame localGame;
+    private LocalGame<?> localGame;
+
+    public void setLocalGame(LocalGame<?> localGame) {
+        this.localGame = localGame;
+    }
 
     @Override
     public void run() {
@@ -49,8 +53,7 @@ public class ServerListener implements Runnable{
         closeConnection();
     }
 
-    public ServerListener(Socket server, LocalGame localGame) {
-        this.localGame = localGame;
+    public ServerListener(Socket server) {
         this.server = server;
     }
 

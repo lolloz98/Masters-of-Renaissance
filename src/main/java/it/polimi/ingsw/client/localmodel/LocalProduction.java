@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.TreeMap;
 
 public class LocalProduction implements Serializable {
-    private final TreeMap<Resource, Integer> resToGive;
-    private final TreeMap<Resource, Integer> resToGain;
+    private TreeMap<Resource, Integer> resToGive;
+    private TreeMap<Resource, Integer> resToGain;
     private TreeMap<Resource, Integer> resToFlush;
 
     public synchronized void setResToFlush(TreeMap<Resource, Integer> resToFlush) {
@@ -26,9 +26,23 @@ public class LocalProduction implements Serializable {
         return resToFlush;
     }
 
+    public synchronized void setResToGain(TreeMap<Resource, Integer> resToGain) {
+        this.resToGain = resToGain;
+    }
+
+    public synchronized void setResToGive(TreeMap<Resource, Integer> resToGive) {
+        this.resToGive = resToGive;
+    }
+
     public LocalProduction(TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, TreeMap<Resource, Integer> resToFlush) {
         this.resToGive = resToGive;
         this.resToGain = resToGain;
         this.resToFlush = resToFlush;
+    }
+
+    public  LocalProduction(){
+        this.resToGain = new TreeMap<>();
+        this.resToGive = new TreeMap<>();
+        this.resToFlush = new TreeMap<>();
     }
 }

@@ -67,7 +67,6 @@ public class Client {
     public Client(String address, int port) throws IOException{
         server = new Socket(address, port);
         output = new ObjectOutputStream(server.getOutputStream());
-        input = new ObjectInputStream(server.getInputStream());
     }
 
     public void sendMessage(ClientMessage message) throws IOException {
