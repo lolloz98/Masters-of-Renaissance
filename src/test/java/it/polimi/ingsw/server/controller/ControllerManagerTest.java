@@ -27,12 +27,12 @@ public class ControllerManagerTest {
     @Test
     public void testNewSinglePlayer() throws ControllerException {
         int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(1, "aniello"), new AnswerListener(null)).getFirst();
-        ControllerActions controller = controllerManager.getControllerFromMap(id);
+        ControllerActions<?> controller = controllerManager.getControllerFromMap(id);
         // TODO check if player in singlePlayer is correct
     }
 
     @Test
-    public void testNewMultiPlayer()  {
+    public void testNewMultiPlayer() throws ControllerException {
         int id = 0;
         try {
             id = controllerManager.reserveIdForNewGame(new CreateGameMessage(3,"creator"), new AnswerListener(null)).getFirst();

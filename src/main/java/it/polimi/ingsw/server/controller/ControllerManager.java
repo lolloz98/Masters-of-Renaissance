@@ -84,8 +84,10 @@ public class ControllerManager {
     /**
      * @return the controller corresponding to the id
      */
-    public synchronized ControllerActions<?> getControllerFromMap(int id) {
-        return controllerMap.get(id);
+    public synchronized ControllerActions<?> getControllerFromMap(int id) throws ControllerException {
+        ControllerActions<?> tmp = controllerMap.get(id);
+        if(tmp == null) throw new ControllerException("No game with specified id");
+        return tmp;
     }
 
     /**
