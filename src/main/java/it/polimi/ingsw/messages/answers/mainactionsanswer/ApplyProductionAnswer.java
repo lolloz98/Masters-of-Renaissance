@@ -9,8 +9,6 @@ import java.util.TreeMap;
 
 public class ApplyProductionAnswer extends Answer {
     private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive;
-    //todo: add the local track of all the players
-    //private final LocalTrack localTrack;
 
     public ApplyProductionAnswer(int gameId, int playerId,  TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive) {
         super(gameId, playerId);

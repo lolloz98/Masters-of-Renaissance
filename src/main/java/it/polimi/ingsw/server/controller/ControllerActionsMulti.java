@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
+import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -82,7 +83,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
      * @throws ControllerException
      */
     @Override
-    public void removeLeadersEffect() throws ControllerException {
+    public synchronized void removeLeadersEffect() throws ControllerException {
         for(LeaderCard<? extends Requirement> lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
             try {
                 lc.removeEffect(game);
@@ -93,7 +94,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
     }
 
     @Override
-    public void applyLeadersEffect() throws ControllerException {
+    public synchronized void applyLeadersEffect() throws ControllerException {
         for(LeaderCard<? extends Requirement> lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
 
             try {
@@ -103,6 +104,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
             }
         }
     }
+
 
 
     public synchronized void setGame(MultiPlayer game) throws UnexpectedControllerException {

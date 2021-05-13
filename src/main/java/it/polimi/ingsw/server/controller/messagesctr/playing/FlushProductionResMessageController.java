@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
+import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushProductionResAnswer;
 import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
@@ -17,6 +18,7 @@ import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 
@@ -67,7 +69,8 @@ public class  FlushProductionResMessageController extends PlayingMessageControll
             // todo: handle exceptions
         }
 
-        return new FlushProductionResAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),totGainedResources);
+        ArrayList<LocalTrack> localTracks=controllerActions.getFaithTracks();
+        return new FlushProductionResAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),totGainedResources, localTracks);
     }
 
 }
