@@ -24,6 +24,14 @@ public class LocalBoard extends Observable {
         notifyObserver();
     }
 
+    public synchronized int getResInDepotNumber(){
+        int sum = 0;
+        for(Resource r : Resource.values()){
+            sum = sum + resInNormalDeposit.get(r);
+        }
+        return sum;
+    }
+
     public LocalTrack getLocalTrack() {
         return localTrack;
     }

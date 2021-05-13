@@ -1,7 +1,7 @@
-package it.polimi.ingsw.client.cli.states;
+package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.localmodel.LocalBoard;
+import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 
@@ -38,7 +38,7 @@ public class BoardView extends GameView {
     public void notifyError() {}
 
     @Override
-    public void handleCommand(int ans){
+    public void handleCommand(String ans){
         switch (ans){
             // todo handle activate production (only if loadBoard.getPlayerId() == playerId)
             default:

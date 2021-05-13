@@ -1,14 +1,18 @@
-package it.polimi.ingsw.client.cli.states;
+package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
+import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
+import it.polimi.ingsw.client.cli.states.preparation.PrepResSecondView;
+import it.polimi.ingsw.client.cli.states.preparation.PrepResourcesView;
+import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-public class NewMultiView extends View{
+public class NewMultiView extends View {
     private LocalMulti localMulti;
     private CLI cli;
 
@@ -47,6 +51,12 @@ public class NewMultiView extends View{
         if(localMulti.getState() == LocalGameState.READY){
             localMulti.removeObserver();
             localMulti.getError().removeObserver();
+            switch(localMulti.getMainPlayerPosition()){
+                case 0: cli.setState(new PrepResFirstView(cli, localMulti)); break;
+                case 1: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                case 2: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                case 3: cli.setState(new PrepResFourthView()); break;
+            }
             cli.setState(new PrepResourcesView(cli, localMulti));
             cli.getState().draw();
         }
@@ -59,7 +69,6 @@ public class NewMultiView extends View{
     }
 
     @Override
-    public void handleCommand(int ans){
-        // todo quit command
+    public void handleCommand(String ans){
     }
 }

@@ -1,16 +1,16 @@
-package it.polimi.ingsw.client.cli.states;
+package it.polimi.ingsw.client.cli.states.preparation;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
-import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.server.model.game.Resource;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class PrepResourcesView extends View{
+public class PrepResourcesView extends View {
     private CLI cli;
     private LocalMulti localMulti;
     private Scanner input;
@@ -99,7 +99,7 @@ public class PrepResourcesView extends View{
     }
 
     @Override
-    public void handleCommand(int ans) {
+    public void handleCommand(String ans) {
 
     }
 

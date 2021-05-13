@@ -73,4 +73,8 @@ public class Client {
     public void sendMessage(ClientMessage message) throws IOException {
         output.writeObject(message);
     }
+
+    public Socket getServer(){
+        return server;
+    }
 }

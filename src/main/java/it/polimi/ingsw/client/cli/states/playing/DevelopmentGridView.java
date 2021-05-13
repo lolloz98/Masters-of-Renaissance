@@ -1,7 +1,8 @@
-package it.polimi.ingsw.client.cli.states;
+package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
+import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
@@ -49,7 +50,7 @@ public class DevelopmentGridView extends GameView {
     public void notifyError() {}
 
     @Override
-    public void handleCommand(int ans){
+    public void handleCommand(String ans){
         switch (ans){
             // todo handle buy command
             default:

@@ -1,11 +1,13 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.client.cli.states.*;
+import it.polimi.ingsw.client.cli.states.creation.JoinGameView;
+import it.polimi.ingsw.client.cli.states.creation.NewMultiView;
+import it.polimi.ingsw.client.cli.states.creation.NewSingleView;
 import it.polimi.ingsw.client.localmodel.*;
-import it.polimi.ingsw.messages.answers.CreateGameAnswer;
-import it.polimi.ingsw.messages.requests.CreateGameMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class CLI extends UI implements Runnable {
         setup();
         while(!gameOver){
             state.draw();
-            state.handleCommand(input.nextInt());
+            state.handleCommand(input.nextLine());
         }
     }
 
@@ -127,13 +129,13 @@ public class CLI extends UI implements Runnable {
                             valid2 = true;
                         }
                     } while (valid2 == false);
+                    new Thread(new ServerListener(client.getServer(), localGame)).run();
                 } catch(IOException e){
                     System.out.println("error connecting to the server, try again");
                     valid = false;
                 }
             }
         } while (valid == false);
-        // todo initiate server handler passing localgame
     }
 
     public static void clearScreen() {

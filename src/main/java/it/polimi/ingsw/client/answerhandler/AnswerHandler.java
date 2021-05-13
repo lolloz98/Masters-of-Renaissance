@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.answerhandler;
 
+import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.messages.answers.Answer;
 
 public abstract class AnswerHandler {
@@ -13,5 +14,5 @@ public abstract class AnswerHandler {
         return answer;
     }
 
-    public abstract void handleAnswer();
+    public abstract void handleAnswer(LocalGame localGame);
 }

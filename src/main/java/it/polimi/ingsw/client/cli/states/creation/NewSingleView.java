@@ -1,6 +1,8 @@
-package it.polimi.ingsw.client.cli.states;
+package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.states.playing.BoardView;
+import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
@@ -8,7 +10,7 @@ import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class NewSingleView extends View{
+public class NewSingleView extends View {
     private CLI cli;
     private LocalSingle localSingle;
 
@@ -49,7 +51,6 @@ public class NewSingleView extends View{
     }
 
     @Override
-    public void handleCommand(int ans){
-        // todo quit command
+    public void handleCommand(String ans){
     }
 }

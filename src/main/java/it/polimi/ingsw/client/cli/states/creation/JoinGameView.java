@@ -1,6 +1,8 @@
-package it.polimi.ingsw.client.cli.states;
+package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.states.playing.BoardView;
+import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.ErrorType;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
@@ -79,8 +81,7 @@ public class JoinGameView extends View {
     }
 
     @Override
-    public void handleCommand(int ans) {
-        // todo quit command
+    public void handleCommand(String ans) {
     }
 
     @Override

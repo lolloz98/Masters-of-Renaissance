@@ -1,6 +1,7 @@
-package it.polimi.ingsw.client.cli.states;
+package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
 
@@ -40,7 +41,7 @@ public class MarketView extends GameView {
     public void notifyError() {}
 
     @Override
-    public void handleCommand(int ans){
+    public void handleCommand(String ans){
         switch (ans){
             // todo handle push command
             default:
