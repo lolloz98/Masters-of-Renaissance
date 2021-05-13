@@ -6,12 +6,12 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
+import it.polimi.ingsw.server.controller.states.PrepareGameState;
+import it.polimi.ingsw.server.controller.states.WaitingForPlayersState;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
-import it.polimi.ingsw.server.model.exception.EndAlreadyReachedException;
-import it.polimi.ingsw.server.model.exception.FigureAlreadyActivatedException;
-import it.polimi.ingsw.server.model.exception.FigureAlreadyDiscardedException;
-import it.polimi.ingsw.server.model.exception.InvalidStepsException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.TurnMulti;
@@ -36,6 +36,21 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
         this.numberAndPlayers = new PairId<>(numberOfPlayers, new ArrayList<>(){{
             add(player);
         }});
+        setGameState(new WaitingForPlayersState());
+    }
+
+    /**
+     * method that changes the state of the game: from waitingState to prepareGameState
+     * and prepares the game to be played
+     */
+    public synchronized void toPrepareGameState() throws UnexpectedControllerException {
+        try {
+            game.distributeLeader();
+            distributeBeginningRes();
+        } catch (EmptyDeckException e) {
+            throw new UnexpectedControllerException("The deck of leader is empty before having distributed the cards to the players");
+        }
+        setGameState(new PrepareGameState());
     }
 
     @Override
@@ -49,9 +64,9 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
     }
 
 
-    public synchronized void setGame(MultiPlayer game){
+    public synchronized void setGame(MultiPlayer game) throws UnexpectedControllerException {
         this.game = game;
-        distributeBeginningRes();
+        toPrepareGameState();
     }
 
     public PairId<Integer, ArrayList<Player>> getNumberAndPlayers() {

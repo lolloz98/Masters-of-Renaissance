@@ -4,7 +4,7 @@ import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 
 /**
- * implementation of state pattern. it represents the state in which the game could be
+ * it represents the state in which the game is
  */
 public interface State {
 }

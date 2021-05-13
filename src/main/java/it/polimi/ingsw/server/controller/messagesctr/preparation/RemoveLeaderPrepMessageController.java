@@ -1,11 +1,12 @@
 package it.polimi.ingsw.server.controller.messagesctr.preparation;
 
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.preparationanswer.RemoveLeaderPrepAnswer;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
+import it.polimi.ingsw.server.controller.AnswerFactory;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
+import it.polimi.ingsw.server.controller.exception.LeaderNotRemovedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
@@ -28,7 +29,7 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
     @Override
     public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Board board = getPlayerFromId(controllerActions).getBoard();
-        ArrayList<LeaderCard<?>> toRemove = ((RemoveLeaderPrepMessage) getClientMessage()).getLeadersToDiscard();
+        ArrayList<LeaderCard<?>> toRemove = ((RemoveLeaderPrepMessage) getClientMessage()).getLeadersToRemove();
 
         if (toRemove.size() != 2)
             throw new InvalidActionControllerException("Wrong quantity of leader chosen: you should choose just two leaders");
@@ -37,13 +38,13 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
             board.removeLeaderCards(toRemove);
         } catch (InvalidArgumentException e) {
             logger.error("something unexpected happened in " + this.getClass() + " while removing leaders");
-            throw new ControllerException("not possible to remove these leaders");
+            throw new LeaderNotRemovedControllerException("Not possible to remove these leaders");
         }
 
         if (controllerActions.checkToGamePlayState())
             controllerActions.toGamePlayState();
 
-        return new RemoveLeaderPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), toRemove);
+        return AnswerFactory.createRemoveLeaderPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), toRemove, controllerActions.getGame());
 
     }
 

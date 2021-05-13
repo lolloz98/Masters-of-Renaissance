@@ -1,4 +1,4 @@
 package it.polimi.ingsw.server.controller.exception;
 
-public class NoSuchControllerException extends Exception{
+public class NoSuchControllerException extends ControllerException{
 }

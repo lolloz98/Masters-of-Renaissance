@@ -245,4 +245,9 @@ public final class ConverterToLocalModel {
         if(game.isGameOver()) return LocalGameState.OVER;
         return LocalGameState.READY;
     }
+
+    public static LocalGameState getGameState(Game<?> game){
+        if(game instanceof MultiPlayer) return  getGameState((MultiPlayer) game);
+        else return getGameState((SinglePlayer) game);
+    }
 }

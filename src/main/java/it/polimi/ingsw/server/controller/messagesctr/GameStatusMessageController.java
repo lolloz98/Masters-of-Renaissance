@@ -15,6 +15,7 @@ public class GameStatusMessageController extends ClientMessageController {
 
     @Override
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+        if(controllerActions.getGame() == null) throw new ControllerException("Game not created yet, cannot get the status");
         return AnswerFactory.createGameStatusAnswer(controllerActions.getGameId(),
                 getClientMessage().getPlayerId(), getClientMessage().getPlayerId(), controllerActions.getGame());
     }

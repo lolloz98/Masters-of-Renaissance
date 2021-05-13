@@ -172,8 +172,10 @@ public class ControllerManager {
         // I get the reference to numberAndPlayers
         PairId<Integer, ArrayList<Player>> numberAndPlayers = controllerActionsMulti.getNumberAndPlayers();
 
-        if(numberAndPlayers.getFirst() >= numberAndPlayers.getSecond().size())
+        if(numberAndPlayers.getFirst() <= numberAndPlayers.getSecond().size()) {
             logger.error("player size exceeds the number specified by the creator of the game");
+            throw new UnexpectedControllerException("the game has reached the specified number of players already");
+        }
 
         int playerId = id * 10 + numberAndPlayers.getSecond().size();
         Player player = null;

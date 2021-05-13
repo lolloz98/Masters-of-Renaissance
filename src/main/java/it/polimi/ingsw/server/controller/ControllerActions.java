@@ -9,10 +9,7 @@ import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
-import it.polimi.ingsw.server.controller.states.EndGameState;
-import it.polimi.ingsw.server.controller.states.GamePlayState;
-import it.polimi.ingsw.server.controller.states.PrepareGameState;
-import it.polimi.ingsw.server.controller.states.State;
+import it.polimi.ingsw.server.controller.states.*;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Turn;
@@ -46,7 +43,6 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
         this.game = game;
         this.gameId = id;
         this.listeners.add(answerListener);
-        gameState = new PrepareGameState();
     }
 
     public synchronized T getGame() {
@@ -55,19 +51,6 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
 
     public synchronized int getGameId() {
         return gameId;
-    }
-
-    /**
-     * method that changes the state of the game: from waitingState to prepareGameState
-     * and prepares the game to be played
-     */
-    public synchronized void toPrepareGameState() throws UnexpectedControllerException {
-        try {
-            game.distributeLeader();
-        } catch (EmptyDeckException e) {
-            throw new UnexpectedControllerException("The deck of leader is empty before having distributed the cards to the players");
-        }
-        this.gameState = new PrepareGameState();
     }
 
     public abstract boolean checkToGamePlayState();
@@ -105,6 +88,10 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
     private void sendAnswer(Answer answer) {
         // after each message sends answers to all the clients of this game
         listeners.forEach(x -> x.sendAnswer(answer));
+    }
+
+    protected void setGameState(State gameState) {
+        this.gameState = gameState;
     }
 
     public synchronized void addAnswerListener(AnswerListener answerListener) {

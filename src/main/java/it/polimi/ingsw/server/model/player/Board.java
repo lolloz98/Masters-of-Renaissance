@@ -563,11 +563,13 @@ public class Board implements VictoryPointCalculator {
      * definitely removes cards from the leaderCards of the board
      *
      * @param cards cards to be removed from the board
-     * @throws InvalidArgumentException if the cards was not contained in leaderCards of the board
+     * @throws InvalidArgumentException if the cards was not contained in leaderCards of the board. No card is removed from the board
      */
     public void removeLeaderCards(ArrayList<LeaderCard<? extends Requirement>> cards) throws InvalidArgumentException {
         if (!leaderCards.containsAll(cards)) throw new InvalidArgumentException("Some of the leaderCard selected are not owned by the player");
-        leaderCards.remove(cards);
+        for(LeaderCard<?> card: cards){
+            leaderCards.remove(card);
+        }
     }
 
     /**
@@ -633,7 +635,6 @@ public class Board implements VictoryPointCalculator {
      *                                                 or if the treemap toKeep contains the strongbox as Warehouse type
      */
     public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException, InvalidTypeOfResourceToDepotException, InvalidResourceQuantityToDepotException, DifferentResourceForDepotException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
-
         TreeMap<Resource, Integer> entireToKeep;
         entireToKeep = Utility.getTotalResources(toKeep);
         for (Resource r : entireToKeep.keySet()) {
@@ -665,7 +666,7 @@ public class Board implements VictoryPointCalculator {
             }
         }
 
-        //then append and move on the faithpath
+        // then append and move on the faithPath
         int steps = resGained.getOrDefault(Resource.FAITH, 0);
         if (steps > 0)
             moveOnFaithPath(steps, game);
