@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.localmodel;
 
-public class LocalPlayer extends Observable{
+import java.io.Serializable;
+
+public class LocalPlayer extends Observable implements Serializable {
     private final LocalBoard localBoard;
     private final int id;
     private final String name;

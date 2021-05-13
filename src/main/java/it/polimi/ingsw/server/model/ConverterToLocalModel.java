@@ -169,10 +169,10 @@ public final class ConverterToLocalModel {
             for(Integer i: decksDevelop.get(color).keySet()){
                 DeckDevelop deck = decksDevelop.get(color).get(i);
                 try {
-                    topDevelopCards[color.ordinal()][i] = convert(deck.topCard());
+                    topDevelopCards[color.ordinal()][i - 1] = convert(deck.topCard());
                 } catch (EmptyDeckException ignore) { } // we do nothing
 
-                developCardsNumber[color.ordinal()][i] = deck.howManyCards();
+                developCardsNumber[color.ordinal()][i - 1] = deck.howManyCards();
             }
         }
         return new LocalDevelopmentGrid(topDevelopCards, developCardsNumber);

@@ -2,9 +2,10 @@ package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.server.model.game.Resource;
 
+import java.io.Serializable;
 import java.util.TreeMap;
 
-public class LocalProduction {
+public class LocalProduction implements Serializable {
     private final TreeMap<Resource, Integer> resToGive;
     private final TreeMap<Resource, Integer> resToGain;
     private TreeMap<Resource, Integer> resToFlush;

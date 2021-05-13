@@ -111,6 +111,13 @@ public class ConverterToLocalModelTest {
     }
 
     @Test
+    public void testConvertDevelopDecks() throws ModelException {
+        SinglePlayer singlePlayer = new SinglePlayer(new Player("lollo", 0));
+        ConverterToLocalModel.convert(singlePlayer.getDecksDevelop());
+        // todo checks
+    }
+
+    @Test
     public void testConvertLeader() throws FileNotFoundException, UnexpectedControllerException {
         LeaderCard<?> ld;
         String path;

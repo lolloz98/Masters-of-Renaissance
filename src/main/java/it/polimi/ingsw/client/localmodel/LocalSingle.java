@@ -1,8 +1,9 @@
 package it.polimi.ingsw.client.localmodel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class LocalSingle extends LocalGame<LocalTurnSingle>{
+public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializable {
     private LocalPlayer mainPlayer;
     private final LocalTrack lorenzoTrack;
 

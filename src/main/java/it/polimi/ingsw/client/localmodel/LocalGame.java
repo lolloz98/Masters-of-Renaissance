@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.localmodel;
 
 
-public abstract class LocalGame<T extends LocalTurn> extends Observable {
+import java.io.Serializable;
+
+public abstract class LocalGame<T extends LocalTurn> extends Observable implements Serializable {
     protected LocalDevelopmentGrid localDevelopmentGrid;
     protected LocalMarket localMarket;
     protected int gameId;

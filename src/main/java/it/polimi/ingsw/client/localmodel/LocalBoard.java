@@ -4,10 +4,11 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.server.model.game.Resource;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-public class LocalBoard extends Observable {
+public class LocalBoard extends Observable implements Serializable {
     private final ArrayList<ArrayList<LocalDevelopCard>> developCards;
     private final LocalProduction baseProduction;
     private TreeMap<Resource, Integer> resInStrongBox;

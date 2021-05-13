@@ -33,6 +33,7 @@ public class AnswerListener {
 
     public void sendAnswer(Answer answer){
         try {
+            logger.debug("sending answer " + answer);
             oStream.writeObject(answer);
         } catch (IOException e) {
             logger.error("error while sending an answer: " + Arrays.toString(e.getStackTrace()));

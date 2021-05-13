@@ -55,11 +55,9 @@ public class ClientHandler implements Runnable {
                 // if here -> controllerActions not created yet, thus create it and then
                 Answer answer = ((CreateGameMessageController) parsedMessage).doAction(answerListener);
                 answerListener.sendAnswer(answer);
-
             } else if (parsedMessage instanceof PreGameCreationMessageController) {
                     controllerManager.getControllerFromMap(((PreGameCreationMessageController) parsedMessage).getClientMessage().getGameId())
                             .doPreGameAction((PreGameCreationMessageController) parsedMessage, answerListener);
-
             } else if(parsedMessage instanceof GameStatusMessageController){
                 controllerManager.getControllerFromMap(((GameStatusMessageController) parsedMessage).getClientMessage().getGameId())
                         .doGetStatusAction((GameStatusMessageController) parsedMessage);

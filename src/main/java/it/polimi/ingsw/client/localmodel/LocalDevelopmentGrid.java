@@ -2,7 +2,9 @@ package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 
-public class LocalDevelopmentGrid extends Observable {
+import java.io.Serializable;
+
+public class LocalDevelopmentGrid extends Observable implements Serializable {
     private LocalDevelopCard[][] topDevelopCards;
     private int[][] developCardsNumber;
 

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.localmodel;
 
-public abstract class LocalTurn extends Observable{
+import java.io.Serializable;
+
+public abstract class LocalTurn extends Observable implements Serializable {
     protected boolean mainActionOccurred;
     protected boolean productionsActivated;
     protected boolean marketActivated;

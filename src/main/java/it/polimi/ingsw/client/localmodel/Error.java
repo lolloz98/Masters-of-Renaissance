@@ -2,7 +2,9 @@ package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.client.cli.Observer;
 
-public class Error {
+import java.io.Serializable;
+
+public class Error implements Serializable {
     private ErrorType type;
     private Observer observer;
 

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.localmodel;
 
-public class LocalTurnMulti extends LocalTurn {
+import java.io.Serializable;
+
+public class LocalTurnMulti extends LocalTurn implements Serializable  {
     private LocalPlayer currentPlayer;
 
     public LocalTurnMulti(){

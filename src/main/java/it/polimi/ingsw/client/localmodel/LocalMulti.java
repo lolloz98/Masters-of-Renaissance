@@ -1,8 +1,9 @@
 package it.polimi.ingsw.client.localmodel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class LocalMulti extends LocalGame<LocalTurnMulti>{
+public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializable {
     /**
      * id of the player playing on the specific device
      */

@@ -2,10 +2,11 @@ package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.server.model.game.Resource;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-public class LocalMarket extends Observable {
+public class LocalMarket extends Observable implements Serializable {
     private Resource[][] marbleMatrix;
     private Resource freeMarble;
     private ArrayList<TreeMap<Resource, Integer>> resCombinations;

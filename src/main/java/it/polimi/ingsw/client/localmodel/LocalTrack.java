@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.localmodel;
 
-public class LocalTrack extends Observable{
+import java.io.Serializable;
+
+public class LocalTrack extends Observable implements Serializable {
     private final LocalFigureState[] figuresState;
     private int position;
 
