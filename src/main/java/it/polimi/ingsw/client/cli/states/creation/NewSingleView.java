@@ -31,26 +31,29 @@ public class NewSingleView extends View {
     }
 
     @Override
-    public void draw(){
+    public synchronized void draw(){
         System.out.println("Please wait");
     }
 
     @Override
-    public void notifyUpdate(){
+    public synchronized void notifyUpdate(){
         if(localSingle.getState() == LocalGameState.READY){
             localSingle.addObserver(this);
             localSingle.getError().addObserver(this);
             cli.setState(new BoardView(cli, localSingle, localSingle.getMainPlayer()));
+            localSingle.removeObserver();
+            localSingle.getError().removeObserver();
+            cli.getState().draw();
         }
         else draw();
     }
 
     @Override
-    public void notifyError() {
+    public synchronized void notifyError() {
         // there is no error associated with the new game
     }
 
     @Override
-    public void handleCommand(String ans){
+    public synchronized void handleCommand(String ans){
     }
 }

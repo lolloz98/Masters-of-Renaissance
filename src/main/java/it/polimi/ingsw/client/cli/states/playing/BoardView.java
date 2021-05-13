@@ -18,7 +18,7 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public void draw(){
+    public synchronized void draw(){
         CLI.clearScreen();
         // todo make this good looking
         System.out.println(localPlayer.getName() + "'s board:");
@@ -30,15 +30,15 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public void notifyUpdate(){
+    public synchronized void notifyUpdate(){
         draw();
     }
 
     @Override
-    public void notifyError() {}
+    public synchronized void notifyError() {}
 
     @Override
-    public void handleCommand(String ans){
+    public synchronized void handleCommand(String ans){
         switch (ans){
             // todo handle activate production (only if loadBoard.getPlayerId() == playerId)
             default:

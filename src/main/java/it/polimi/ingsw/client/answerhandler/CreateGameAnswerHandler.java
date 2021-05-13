@@ -20,6 +20,7 @@ public class CreateGameAnswerHandler extends AnswerHandler{
             String name = ((CreateGameAnswer) getAnswer()).getName();
             localMulti.setMainPlayerId(id);
             localMulti.addLocalPlayer(new LocalPlayer(id, name, new LocalBoard()));
+            localMulti.setGameId(getAnswer().getGameId());
         }
         else{
             logger.error("create game answer received by singlePlayer game");

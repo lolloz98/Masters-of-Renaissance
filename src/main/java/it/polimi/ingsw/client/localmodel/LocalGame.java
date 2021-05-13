@@ -11,15 +11,28 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
     protected final Error error = new Error();
     protected LocalGameState state;
 
+    public synchronized void setLocalDevelopmentGrid(LocalDevelopmentGrid localDevelopmentGrid) {
+        this.localDevelopmentGrid = localDevelopmentGrid;
+    }
+
+    public synchronized void setLocalMarket(LocalMarket localMarket) {
+        this.localMarket = localMarket;
+    }
+
+    public synchronized void setLocalTurn(T localTurn) {
+        this.localTurn = localTurn;
+    }
+
+
     public Error getError() {
         return error;
     }
 
-    public LocalDevelopmentGrid getLocalDevelopmentGrid() {
+    public synchronized LocalDevelopmentGrid getLocalDevelopmentGrid() {
         return localDevelopmentGrid;
     }
 
-    public LocalMarket getLocalMarket() {
+    public synchronized LocalMarket getLocalMarket() {
         return localMarket;
     }
 

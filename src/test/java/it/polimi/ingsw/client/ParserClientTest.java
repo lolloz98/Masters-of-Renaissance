@@ -1,9 +1,14 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.answerhandler.CreateGameAnswerHandler;
+import it.polimi.ingsw.client.answerhandler.GameStatusAnswerHandler;
+import it.polimi.ingsw.client.answerhandler.JoinGameAnswerHandler;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.ParserException;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
+import it.polimi.ingsw.messages.answers.GameStatusAnswer;
+import it.polimi.ingsw.messages.answers.JoinGameAnswer;
 import it.polimi.ingsw.messages.requests.*;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
@@ -43,12 +48,23 @@ public class ParserClientTest {
     }
 
     @Test
-    public void parseTest() throws ModelException {
+    public void parseTestCreateGameAnswer() throws ModelException {
         answer = new CreateGameAnswer(1, 0, "player");
         object = check(answer);
         assertEquals(answer, ((CreateGameAnswerHandler) object).getAnswer());
-
-
     }
 
+    @Test
+    public void parseTestGameStatusAnswerHandler() throws ModelException {
+        answer = new GameStatusAnswer(1, 0,  0, new LocalMulti());
+        object = check(answer);
+        assertEquals(answer, ((GameStatusAnswerHandler) object).getAnswer());
+    }
+
+    @Test
+    public void parseTestJoinGameAnswerHandler() throws ModelException {
+        answer = new JoinGameAnswer(1, 1, new ArrayList<>(), new ArrayList<>());
+        object = check(answer);
+        assertEquals(answer, ((JoinGameAnswerHandler) object).getAnswer());
+    }
 }

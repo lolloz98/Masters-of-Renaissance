@@ -5,8 +5,6 @@ import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 
-import java.util.Scanner;
-
 public class PrepResFirstView extends View {
     private CLI cli;
     private LocalMulti localMulti;
@@ -20,7 +18,8 @@ public class PrepResFirstView extends View {
     @Override
     public void notifyUpdate() {
         if(localMulti.getState() == LocalGameState.PREP_LEADERS){
-            // todo load leader prep view
+            localMulti.removeObserver();
+            cli.setState(new PrepLeaderView());
         }
     }
 
