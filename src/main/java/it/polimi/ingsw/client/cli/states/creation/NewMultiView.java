@@ -33,7 +33,7 @@ public class NewMultiView extends View {
     }
 
     @Override
-    public void draw(){
+    public synchronized void draw(){
         if(localMulti.getState() == LocalGameState.NEW){
             System.out.println("Please wait");
         }
@@ -47,7 +47,7 @@ public class NewMultiView extends View {
     }
 
     @Override
-    public void notifyUpdate(){
+    public synchronized void notifyUpdate(){
         if(localMulti.getState() == LocalGameState.READY){
             localMulti.removeObserver();
             localMulti.getError().removeObserver();
@@ -64,11 +64,11 @@ public class NewMultiView extends View {
     }
 
     @Override
-    public void notifyError() {
+    public synchronized void notifyError() {
         // there is no error associated with the new game
     }
 
     @Override
-    public void handleCommand(String ans){
+    public synchronized void handleCommand(String ans){
     }
 }

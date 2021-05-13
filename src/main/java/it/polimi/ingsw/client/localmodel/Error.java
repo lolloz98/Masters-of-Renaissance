@@ -5,18 +5,16 @@ import it.polimi.ingsw.client.cli.Observer;
 import java.io.Serializable;
 
 public class Error implements Serializable {
-    private ErrorType type;
+    private String errorMessage;
     private Observer observer;
 
-    public synchronized ErrorType getType() {
-        return type;
+    public synchronized String getErrorMessage() {
+        return errorMessage;
     }
 
-    public synchronized void setType(ErrorType type) {
-        this.type = type;
-        if(type != ErrorType.NONE){
-            observer.notifyError();
-        }
+    public synchronized void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+        observer.notifyError();
     }
     public void addObserver(Observer observer){
         this.observer = observer;
@@ -27,6 +25,6 @@ public class Error implements Serializable {
     }
 
     public Error(){
-        type = ErrorType.NONE;
+
     }
 }

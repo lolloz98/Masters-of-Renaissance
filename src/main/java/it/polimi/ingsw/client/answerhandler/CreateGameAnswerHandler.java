@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client.answerhandler;
 
 import it.polimi.ingsw.client.localmodel.*;
-import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
-import it.polimi.ingsw.server.ParserServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

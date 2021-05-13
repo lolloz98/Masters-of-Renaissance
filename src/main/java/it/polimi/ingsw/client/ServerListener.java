@@ -26,7 +26,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ServerListener implements Runnable{
-    private static final Logger logger = LogManager.getLogger(ClientHandler.class);
+    private static final Logger logger = LogManager.getLogger(ServerListener.class);
     private final Socket server;
     private ObjectInputStream iStream;
     private LocalGame<?> localGame;

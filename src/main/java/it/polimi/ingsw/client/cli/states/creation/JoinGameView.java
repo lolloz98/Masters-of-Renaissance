@@ -38,8 +38,8 @@ public class JoinGameView extends View {
     }
 
     @Override
-    public void notifyUpdate() {
-        if (localMulti.getState() == LocalGameState.READY) {
+    public void notifyUpdate() { // todo as in newgameview
+        if (localMulti.getState() == LocalGameState.PREP_RESOURCES) {
             ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
             LocalPlayer mainPlayer = null;
             for (LocalPlayer p : localPlayers) {
@@ -58,30 +58,19 @@ public class JoinGameView extends View {
 
     @Override
     public void notifyError() {
-        if (localMulti.getError().getType()==ErrorType.MISSING_GAME){
-            System.out.println("Game not available in this server, enter another id:\n");
-            int id = input.nextInt();
-            try {
-                cli.getClient().sendMessage(new JoinGameMessage(id, nickname));
-            } catch (IOException e) {
-                System.out.println("no connection from server"); // fixme
-                e.printStackTrace();
-            }
-        } else if (localMulti.getError().getType()==ErrorType.MISSING_GAME){
-            System.out.println("The game you selected has already started, enter another id:\n");
-            int id = input.nextInt();
-            try {
-                cli.getClient().sendMessage(new JoinGameMessage(id, nickname));
-            } catch (IOException e) {
-                System.out.println("no connection from server"); // fixme
-                e.printStackTrace();
-            }
-        }
-        draw();
+        System.out.println(localMulti.getError().getErrorMessage());
+        System.out.println("Insert another id:");// fixme
     }
 
     @Override
     public void handleCommand(String ans) {
+        int id = input.nextInt();
+        try {
+            cli.getClient().sendMessage(new JoinGameMessage(id, nickname));
+        } catch (IOException e) {
+            System.out.println("no connection from server"); // fixme
+            e.printStackTrace();
+        }
     }
 
     @Override
