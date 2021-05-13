@@ -15,6 +15,7 @@ import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.controller.states.State;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.Game;
+import it.polimi.ingsw.server.model.game.Turn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  *
  * @param <T> the type of the game, it can be single player or multi player
  */
-public abstract class ControllerActions<T extends Game<?>> {
+public abstract class ControllerActions<T extends Game<? extends Turn>> {
     private static final Logger logger = LogManager.getLogger(ControllerActions.class);
 
     protected T game;
