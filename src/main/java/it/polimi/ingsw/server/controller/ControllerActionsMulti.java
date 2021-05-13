@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.controller.states.WaitingForPlayersState;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
+import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.Resource;
@@ -73,6 +74,33 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
             localTracks.add(localTrack);
         }
         return localTracks;
+    }
+
+    /**
+     * removes the effect of all the leader cards of the current player
+     * @throws ControllerException
+     */
+    @Override
+    public void removeLeadersEffect() throws ControllerException {
+        for(LeaderCard lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
+            try {
+                lc.removeEffect(game);
+            } catch (NoSuchResourceException e) {
+                throw new UnexpectedControllerException(e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void applyLeadersEffect() throws ControllerException {
+        for(LeaderCard lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
+
+            try {
+                lc.applyEffect(game);
+            } catch (AlreadyAppliedLeaderCardException | AlreadyPresentLeaderResException | AlreadyAppliedDiscountForResException | TooManyLeaderResourcesException e) {
+                throw new UnexpectedControllerException(e.getMessage());
+            }
+        }
     }
 
 

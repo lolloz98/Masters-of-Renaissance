@@ -25,10 +25,28 @@ public class ControllerActionsSingle extends ControllerActions<SinglePlayer> {
     }
 
     @Override
-    public ArrayList<LocalTrack> getFaithTracks() throws ControllerException {
+    public synchronized ArrayList<LocalTrack> getFaithTracks() throws ControllerException {
         ArrayList<LocalTrack> localTracks=new ArrayList<>();
         LocalTrack localTrack= ConverterToLocalModel.convert(game.getPlayer().getBoard().getFaithtrack());
         localTracks.add(localTrack);
         return localTracks;
+    }
+
+    /**
+     * this method does nothing
+     * @throws ControllerException
+     */
+    @Override
+    public synchronized void removeLeadersEffect() throws ControllerException {
+
+    }
+
+    /**
+     * this method does nothing
+     * @throws ControllerException
+     */
+    @Override
+    public synchronized void applyLeadersEffect() throws ControllerException {
+
     }
 }

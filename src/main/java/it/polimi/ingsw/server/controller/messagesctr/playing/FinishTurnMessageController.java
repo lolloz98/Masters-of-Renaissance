@@ -33,13 +33,14 @@ public class FinishTurnMessageController extends PlayingMessageController {
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Game<?> game = controllerActions.getGame();
 
-
+        controllerActions.removeLeadersEffect();
         nextTurn(game);
 
         Turn newTurn = controllerActions.getGame().getTurn();
 
         if (newTurn.getIsPlayable()) {
 
+            controllerActions.applyLeadersEffect();
 
             if (game instanceof MultiPlayer) {
 

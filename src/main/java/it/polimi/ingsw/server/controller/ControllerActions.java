@@ -119,6 +119,10 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
 
     public abstract ArrayList<LocalTrack> getFaithTracks() throws ControllerException;
 
+    public abstract void removeLeadersEffect() throws ControllerException;
+
+    public abstract void applyLeadersEffect() throws ControllerException;
+
 
 
 }
