@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
+import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
@@ -13,6 +14,8 @@ import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
 
 public class DiscardLeaderMessageController extends PlayingMessageController {
 
@@ -46,7 +49,8 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
             throw new ControllerException("unexpected error");
         }
 
+        ArrayList<LocalTrack> localTracks= controllerActions.getFaithTracks();
         LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
-        return new DiscardLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),localCard);
+        return new DiscardLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),localCard, localTracks);
     }
 }
