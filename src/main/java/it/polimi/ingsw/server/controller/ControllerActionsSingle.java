@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -47,6 +48,25 @@ public class ControllerActionsSingle extends ControllerActions<SinglePlayer> {
      */
     @Override
     public synchronized void applyLeadersEffect() throws ControllerException {
+
+    }
+
+    /**
+     *
+     * @return null if the winner is lorenzo, returns the player otherwise
+     * @throws ControllerException
+     */
+    @Override
+    public ArrayList<LocalPlayer> getWinners() throws ControllerException {
+        ArrayList<LocalPlayer> localWinners=new ArrayList<>();
+
+        if(game.getHasPlayerWon()){
+            LocalPlayer winner=ConverterToLocalModel.convert(game.getPlayer(),game.getPlayer().getPlayerId());
+            localWinners.add(winner);
+            return localWinners;
+        }
+        else
+            return null;
 
     }
 }

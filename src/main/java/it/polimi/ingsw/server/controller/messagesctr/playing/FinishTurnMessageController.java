@@ -113,10 +113,9 @@ public class FinishTurnMessageController extends PlayingMessageController {
      * @param controllerActions
      * @return
      */
-    private Answer handleEndGame(ControllerActions controllerActions) {
+    private Answer handleEndGame(ControllerActions controllerActions) throws ControllerException {
         controllerActions.toEndGameState();
-        //todo
-        ArrayList<LocalPlayer> winner=new ArrayList<>();
+        ArrayList<LocalPlayer> winner=controllerActions.getWinners();
         return new EndGameAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), winner);
     }
 

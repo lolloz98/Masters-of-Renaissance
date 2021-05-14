@@ -1,8 +1,10 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
+import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
+import it.polimi.ingsw.messages.answers.gameendedanswer.EndGameAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 import it.polimi.ingsw.server.AnswerListener;
@@ -105,6 +107,29 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
         }
     }
 
+    /**
+     *
+     * @return the answer containing the player or the players who won the game
+     * @throws ControllerException
+     */
+    @Override
+    public synchronized ArrayList<LocalPlayer> getWinners() throws ControllerException {
+        ArrayList<Player> winners;
+        ArrayList<LocalPlayer> localWinners=new ArrayList<>();
+
+        try {
+            winners = game.getWinners();
+        } catch (GameNotOverException e) {
+            logger.error("calling getWinners while the game is not over");
+            throw new UnexpectedControllerException(e.getMessage());
+        }
+        for(int i=0;i<winners.size();i++){
+            LocalPlayer localWinner=ConverterToLocalModel.convert(winners.get(i),winners.get(i).getPlayerId());
+            localWinners.add(localWinner);
+        }
+
+        return localWinners;
+    }
 
 
     public synchronized void setGame(MultiPlayer game) throws UnexpectedControllerException {
