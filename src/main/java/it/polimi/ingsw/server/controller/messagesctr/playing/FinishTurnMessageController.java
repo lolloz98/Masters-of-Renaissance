@@ -1,9 +1,10 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
+import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.leaderanswer.EndGameAnswer;
+import it.polimi.ingsw.messages.answers.gameendedanswer.EndGameAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnSingleAnswer;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
@@ -17,6 +18,8 @@ import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
 
 /**
  * class that handles the passage to the next turn, hence the switch of the current player
@@ -105,9 +108,16 @@ public class FinishTurnMessageController extends PlayingMessageController {
         return null;
     }
 
+    /**
+     * method that creates the endGameAnswer for the player and changes the state of the game
+     * @param controllerActions
+     * @return
+     */
     private Answer handleEndGame(ControllerActions controllerActions) {
         controllerActions.toEndGameState();
-        return new EndGameAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId());
+        //todo
+        ArrayList<LocalPlayer> winner=new ArrayList<>();
+        return new EndGameAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), winner);
     }
 
     private void nextTurn(Game<?> game) throws ControllerException {
