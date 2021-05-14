@@ -83,4 +83,14 @@ public class ChooseOneResPrepMessageControllerTest {
         }catch (InvalidArgumentControllerException ignore){}
         assertEquals(1, p.getBoard().getInitialRes());
     }
+
+    @Test
+    public void doActionAllDecided() throws ControllerException, InvalidArgumentException {
+        int gameId = MessageControllerTestHelper.toDecidedInitResMulti();
+        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        MultiPlayer game = ca.getGame();
+        for(Player p: game.getPlayers()){
+            assertEquals(0, p.getBoard().getInitialRes());
+        }
+    }
 }

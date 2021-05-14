@@ -29,7 +29,7 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
     }
 
     @Override
-    public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Board board = getPlayerFromId(controllerActions).getBoard();
         int initRes = board.getInitialRes();
 

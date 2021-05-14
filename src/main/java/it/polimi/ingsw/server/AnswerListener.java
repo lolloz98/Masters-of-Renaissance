@@ -16,10 +16,12 @@ public class AnswerListener {
     private static final Logger logger = LogManager.getLogger(AnswerListener.class);
 
     private int playerId = -1;
+    private int gameId = -1;
     private final ObjectOutputStream oStream;
 
-    public void setPlayerId(int playerId) {
+    public void setIds(int playerId, int gameId) {
         this.playerId = playerId;
+        this.gameId = gameId;
     }
 
     public int getPlayerId() {
@@ -38,5 +40,9 @@ public class AnswerListener {
         } catch (IOException e) {
             logger.error("error while sending an answer: " + Arrays.toString(e.getStackTrace()));
         }
+    }
+
+    public int getGameId() {
+        return gameId;
     }
 }

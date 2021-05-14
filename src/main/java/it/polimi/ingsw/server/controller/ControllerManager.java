@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.exception.*;
@@ -146,7 +145,7 @@ public class ControllerManager {
         } catch (InvalidArgumentException e) {
             throw new UnexpectedControllerException(e.getMessage());
         }
-        answerListener.setPlayerId(playerId);
+        answerListener.setIds(playerId, id);
         if (playersNumber == 1) createNewSinglePlayer(id, answerListener, player);
         else {
             createNewControllerActionsMulti(id, answerListener, playersNumber, player);

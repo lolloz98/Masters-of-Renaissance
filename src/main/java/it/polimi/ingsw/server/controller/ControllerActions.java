@@ -3,19 +3,12 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.GameStatusAnswer;
-import it.polimi.ingsw.messages.answers.gameendedanswer.EndGameAnswer;
-import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushMarketResAnswer;
-import it.polimi.ingsw.messages.requests.GameStatusMessage;
-import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import it.polimi.ingsw.server.controller.states.*;
-import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Turn;
 import org.apache.logging.log4j.LogManager;
@@ -79,7 +72,7 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
 
     public synchronized void doPreGameAction(PreGameCreationMessageController clientMessage, AnswerListener answerListener) throws ControllerException {
         Answer answer = clientMessage.doAction(this);
-        answerListener.setPlayerId(answer.getPlayerId());
+        answerListener.setIds(answer.getPlayerId(), answer.getGameId());
         addAnswerListener(answerListener);
         if (game != null) {
             for (AnswerListener a : listeners) {

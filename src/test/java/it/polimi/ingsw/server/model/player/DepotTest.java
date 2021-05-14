@@ -62,7 +62,7 @@ public class DepotTest {
 
     @Test (expected = InvalidResourceQuantityToDepotException.class)
     public void testAddResourceExceptionTest1() throws ModelException{
-        normalDepot.addResource(Resource.GOLD, 0);
+        normalDepot.addResource(Resource.GOLD, 5);
     }
 
     @Test (expected = InvalidResourceQuantityToDepotException.class)

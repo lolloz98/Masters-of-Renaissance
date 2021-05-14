@@ -90,6 +90,7 @@ public class ClientHandler implements Runnable {
             handleClientConnection();
         } catch (IOException e) {
             logger.warn("client " + client.getInetAddress() + " connection dropped");
+            
         }
 
         closeConnection();

@@ -27,7 +27,7 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
     }
 
     @Override
-    public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Board board = getPlayerFromId(controllerActions).getBoard();
         ArrayList<Integer> toRemove = ((RemoveLeaderPrepMessage) getClientMessage()).getLeadersToRemove();
 

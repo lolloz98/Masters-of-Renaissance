@@ -875,12 +875,17 @@ public class Board implements VictoryPointCalculator {
                         Depot toSwitch = lookForADepotToSwitch(d, depotArrayList, toGain.get(r));
 
                         if (toSwitch != null) {
+                            // logger.debug("toSwitch max res: " + toSwitch.getMaxToStore());
+                            // logger.debug("oldDepot max res: " + d.getMaxToStore());
+                            // logger.debug("switching depots, depot to switch info: type of res " + toSwitch.getTypeOfResource() + " stored: " + toSwitch.getStored());
                             Depot tmp = new Depot(toSwitch.getMaxToStore(), true) {{
                                 addResource(toSwitch.getTypeOfResource(), toSwitch.getStored());
                             }};
                             toSwitch.clear();
+                            // logger.debug("switching depots, depot to switch info: type of res " + d.getTypeOfResource() + " stored: " + d.getStored());
                             toSwitch.addResource(d.getTypeOfResource(), d.getStored() + toGain.get(r));
                             d.clear();
+                            // logger.debug("tmp depot info: type of res " + tmp.getTypeOfResource() + " stored: " + tmp.getStored());
                             d.addResource(tmp.getTypeOfResource(), tmp.getStored());
                             toGain.remove(r);
                             break;

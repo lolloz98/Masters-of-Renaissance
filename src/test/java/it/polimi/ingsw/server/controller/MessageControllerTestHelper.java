@@ -62,7 +62,6 @@ public final class MessageControllerTestHelper {
         return gameId;
     }
 
-    // todo test
     private static void chooseInitRes(int gameId, Player player) throws ControllerException {
         ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
         while(player.getBoard().getInitialRes() != 0){
@@ -75,7 +74,6 @@ public final class MessageControllerTestHelper {
      * create a game with 4 players with init resources already picked by all players
      * @return gameId
      */
-    //todo test
     public static int toDecidedInitResMulti() throws ControllerException{
         int gameId = toPrepStateMulti();
         for(Player p: ((MultiPlayer) ControllerManager.getInstance().getControllerFromMap(gameId).getGame()).getPlayers()){
