@@ -47,7 +47,7 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
     public ControllerActions(T game, int id, AnswerListener answerListener) {
         this.game = game;
         this.gameId = id;
-        this.listeners.add(answerListener);
+        addAnswerListener(answerListener);
     }
 
     public synchronized T getGame() {
@@ -83,7 +83,7 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
         addAnswerListener(answerListener);
         if (game != null) {
             for (AnswerListener a : listeners) {
-                answerListener.sendAnswer(AnswerFactory.createGameStatusAnswer(answer.getGameId(), answer.getPlayerId(), a.getPlayerId(), game));
+                a.sendAnswer(AnswerFactory.createGameStatusAnswer(answer.getGameId(), answer.getPlayerId(), a.getPlayerId(), game));
             }
         } else{
             sendAnswer(answer);
@@ -106,6 +106,7 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
             if (cond) logger.debug("Removed answerListener (it will be re-added) with playerId: " + a.getPlayerId());
             return cond;
         });
+        logger.debug("adding answerListener " + answerListener.getPlayerId());
         listeners.add(answerListener);
     }
 

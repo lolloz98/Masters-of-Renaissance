@@ -3,6 +3,9 @@ package it.polimi.ingsw.client.cli.states.creation;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
+import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
+import it.polimi.ingsw.client.cli.states.preparation.PrepResSecondView;
 import it.polimi.ingsw.client.localmodel.ErrorType;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
@@ -17,14 +20,13 @@ public class JoinGameView extends View {
     private LocalMulti localMulti;
     private CLI cli;
     private String nickname;
-    private Scanner input;
 
     public JoinGameView(CLI cli, LocalMulti localMulti) {
         this.cli = cli;
         this.localMulti = localMulti;
         localMulti.addObserver(this);
         localMulti.getError().addObserver(this);
-        this.input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         System.out.println("Type your nickname:\n");
         this.nickname = input.nextLine(); // todo: check characters limit
         System.out.println("Enter the game id:\n");
@@ -38,7 +40,7 @@ public class JoinGameView extends View {
     }
 
     @Override
-    public void notifyUpdate() { // todo as in newgameview
+    public synchronized void notifyUpdate() { // todo as in newgameview
         if (localMulti.getState() == LocalGameState.PREP_RESOURCES) {
             ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
             LocalPlayer mainPlayer = null;
@@ -50,31 +52,40 @@ public class JoinGameView extends View {
             } else {
                 localMulti.removeObserver();
                 localMulti.getError().removeObserver();
-                cli.setState(new BoardView(cli, localMulti, mainPlayer));
+                switch(localMulti.getMainPlayerPosition()){
+                    case 0: cli.setState(new PrepResFirstView(cli, localMulti)); break;
+                    case 1: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                    case 2: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                    case 3: cli.setState(new PrepResFourthView()); break;
+                }
                 cli.getState().draw();
             }
         }
+        else draw();
     }
 
     @Override
-    public void notifyError() {
+    public synchronized void notifyError() {
         System.out.println(localMulti.getError().getErrorMessage());
-        System.out.println("Insert another id:");// fixme
+        System.out.println("Insert another id:");
     }
 
     @Override
-    public void handleCommand(String ans) {
-        int id = input.nextInt();
-        try {
-            cli.getClient().sendMessage(new JoinGameMessage(id, nickname));
+    public synchronized void handleCommand(String ans) {
+        try{
+            int port = Integer.parseInt(ans);
+            cli.getClient().sendMessage(new JoinGameMessage(port, nickname));
         } catch (IOException e) {
-            System.out.println("no connection from server"); // fixme
+            System.out.println("no connection from server");
             e.printStackTrace();
+        }
+        catch (NumberFormatException ex){
+            ex.printStackTrace();
         }
     }
 
     @Override
-    public void draw() {
+    public synchronized void draw() {
         if (localMulti.getState() == LocalGameState.NEW) {
             System.out.println("Please wait");
         } else if (localMulti.getState() == LocalGameState.WAITINGPLAYERS) {

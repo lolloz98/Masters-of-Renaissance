@@ -24,7 +24,7 @@ public class GameStatusAnswerHandler extends AnswerHandler{
                 localMulti.setLocalTurn(((LocalMulti) gameStatusAnswer.getGame()).getLocalTurn());
                 localMulti.setLocalPlayers(((LocalMulti) gameStatusAnswer.getGame()).getLocalPlayers());
                 localMulti.setMainPlayerId(((LocalMulti) gameStatusAnswer.getGame()).getMainPlayerId());
-                localMulti.setState(LocalGameState.PREP_RESOURCES); // fixme only works when creating a game, not for reloading an ongoing game
+                localMulti.setState(gameStatusAnswer.getGame().getState());
             } else {
                 logger.error("Game type mismatch");
             }
@@ -34,13 +34,14 @@ public class GameStatusAnswerHandler extends AnswerHandler{
                 localSingle.setLocalTurn(((LocalSingle) gameStatusAnswer.getGame()).getLocalTurn());
                 localSingle.setMainPlayer(((LocalSingle) gameStatusAnswer.getGame()).getMainPlayer());
                 localSingle.setLorenzoTrack(((LocalSingle) gameStatusAnswer.getGame()).getLorenzoTrack());
-                localSingle.setState(LocalGameState.READY);
             } else {
                 logger.error("Game type mismatch");
             }
         }
+        localGame.setState(gameStatusAnswer.getGame().getState());
         localGame.setGameId(gameStatusAnswer.getGame().getGameId());
         localGame.setLocalMarket(gameStatusAnswer.getGame().getLocalMarket());
         localGame.setLocalDevelopmentGrid(gameStatusAnswer.getGame().getLocalDevelopmentGrid());
+        System.out.println("Game status received");
     }
 }

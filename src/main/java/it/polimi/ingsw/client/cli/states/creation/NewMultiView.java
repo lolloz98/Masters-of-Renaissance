@@ -48,7 +48,7 @@ public class NewMultiView extends View {
 
     @Override
     public synchronized void notifyUpdate(){
-        if(localMulti.getState() == LocalGameState.READY){
+        if(localMulti.getState() == LocalGameState.PREP_RESOURCES){
             localMulti.removeObserver();
             localMulti.getError().removeObserver();
             switch(localMulti.getMainPlayerPosition()){
@@ -57,7 +57,6 @@ public class NewMultiView extends View {
                 case 2: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
                 case 3: cli.setState(new PrepResFourthView()); break;
             }
-            cli.setState(new PrepResourcesView(cli, localMulti));
             cli.getState().draw();
         }
         else draw();

@@ -87,12 +87,13 @@ public class LocalBoard extends Observable implements Serializable {
 //        }}, new TreeMap<>());
 //    }
 
-    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction, int initialRes){
+    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction, int initialRes, TreeMap<Resource, Integer> resInNormalDeposit){
         this.developCards = developCards;
         this.leaderCards = leaderCards;
         this.localTrack = localTrack;
         this.baseProduction = baseProduction;
         this.initialRes = initialRes;
+        this.resInNormalDeposit = resInNormalDeposit;
     }
 
     public LocalBoard(){
@@ -101,6 +102,7 @@ public class LocalBoard extends Observable implements Serializable {
         this.localTrack = new LocalTrack();
         this.baseProduction = new LocalProduction();
         this.initialRes = 0;
+        this.resInNormalDeposit = new TreeMap<>();
     }
 
     public synchronized LocalProduction getBaseProduction() {

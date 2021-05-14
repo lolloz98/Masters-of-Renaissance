@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model;
 
+import com.sun.source.tree.Tree;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.client.localmodel.localcards.*;
 import it.polimi.ingsw.server.controller.ControllerActions;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.cards.Production;
 import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.*;
 import org.apache.logging.log4j.LogManager;
@@ -124,15 +126,31 @@ public final class ConverterToLocalModel {
             }
             localDevelopCards.add(localSlot);
         }
+
         ArrayList<LocalCard> localLeader = new ArrayList<>();
         for(LeaderCard<?> l: board.getLeaderCards()){
             if(l.isActive() || isBoardOfPlayerRequiring){
                 localLeader.add(convert(l));
             }else localLeader.add(new LocalConcealedCard());
         }
+
         LocalTrack localTrack = convert(board.getFaithtrack());
         LocalProduction localBaseProduction = convert(board.getNormalProduction());
-        return new LocalBoard(localDevelopCards, localLeader, localTrack, localBaseProduction, board.getInitialRes());
+
+        TreeMap<Resource, Integer> depots = new TreeMap<>();
+        for(int i = 0; i < 3; i++){
+            try {
+                TreeMap<Resource, Integer> tmp = board.getResInDepot(i);
+                for(Resource r: tmp.keySet()){
+                    if(depots.containsKey(r)) logger.error("depots already contained " + r);
+                    depots.put(r, tmp.get(r));
+                }
+            } catch (InvalidArgumentException e) {
+                logger.error("Something unexpected happened while getting the depots");
+            }
+        }
+
+        return new LocalBoard(localDevelopCards, localLeader, localTrack, localBaseProduction, board.getInitialRes(), depots);
 
     }
 

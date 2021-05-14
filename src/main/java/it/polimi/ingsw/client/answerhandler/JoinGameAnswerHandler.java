@@ -25,6 +25,7 @@ public class JoinGameAnswerHandler extends AnswerHandler{
             }
             LocalMulti localMulti = (LocalMulti) localGame;
             localMulti.setLocalPlayers(localPlayers);
+            localMulti.setGameId(joinGameAnswer.getGameId());
         }
         else{
             logger.error("create game answer received by singlePlayer game");
