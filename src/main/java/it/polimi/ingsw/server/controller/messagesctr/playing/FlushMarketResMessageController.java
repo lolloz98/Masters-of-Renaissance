@@ -1,20 +1,25 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.client.localmodel.LocalTrack;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushMarketResAnswer;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
+import it.polimi.ingsw.server.model.ConverterToLocalModel;
+import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.MarketTray;
+import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.Board;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 
 public class FlushMarketResMessageController extends PlayingMessageController{
@@ -61,6 +66,13 @@ public class FlushMarketResMessageController extends PlayingMessageController{
         market.removeResources();
 
         ArrayList<LocalTrack> localTracks=controllerActions.getFaithTracks();
-        return new FlushMarketResAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),localTracks);
+        TreeMap<Resource, Integer> resInNormalDeposit= board.getResInNormalDepots();
+        ArrayList<LocalDepotLeader> localDepotLeaders=new ArrayList<>();
+        for(DepotLeaderCard l:board.getDepotLeaders()){
+            LocalDepotLeader localDepotLeader=ConverterToLocalModel.convert(l);
+            localDepotLeaders.add(localDepotLeader);
+        }
+
+        return new FlushMarketResAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),localTracks, resInNormalDeposit, localDepotLeaders);
     }
 }
