@@ -1,19 +1,20 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
+import it.polimi.ingsw.client.localmodel.LocalBoard;
+import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.messages.answers.mainactionsanswer.BuyDevelopCardAnswer;
 import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
+import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-//todo
+
 public class BuyDevelopCardMessageController extends PlayingMessageController{
 
     private static final Logger logger = LogManager.getLogger(BuyDevelopCardMessageController.class);
@@ -22,42 +23,42 @@ public class BuyDevelopCardMessageController extends PlayingMessageController{
         super(clientMessage);
     }
 
+    /**
+     * handles the purchase of a develop card
+     * @param controllerActions controller action of current game
+     * @return an answer to the client an update of the board and of the development grid
+     * @throws ControllerException
+     */
     @Override
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
-        // todo
+
         try {
             controllerActions.getGame().getTurn().setMainActionOccurred();
         } catch (MarketTrayNotEmptyException e) {
-            logger.error("the market tray is not empty while trying to buy a develop card");
-            throw new UnexpectedControllerException(e.getMessage());
+            throw new ControllerException("you have already done the market action");
         } catch (MainActionAlreadyOccurredException e) {
             throw new ControllerException(e.getMessage());
         } catch (ProductionsResourcesNotFlushedException e) {
-            logger.error("the produced resources are not flushed while trying to buy a develop card");
-            throw new UnexpectedControllerException(e.getMessage());
+            throw new ControllerException("you have already done the production action");
         }
 
         Board board=getPlayerFromId(controllerActions).getBoard();
 
-        //todo:handle de exceptions
         BuyDevelopCardMessage clientMessage=(BuyDevelopCardMessage)getClientMessage();
         try {
             board.buyDevelopCard(controllerActions.getGame(),clientMessage.getColor(),clientMessage.getLevel(),clientMessage.whichSlotToStore,clientMessage.toPay );
         } catch (ResourceNotDiscountableException e) {
-            e.printStackTrace();
-        } catch (NotEnoughResourcesException e) {
-            e.printStackTrace();
-        } catch (EmptyDeckException e) {
-            e.printStackTrace();
-        } catch (FullDevelopSlotException e) {
-            e.printStackTrace();
-        } catch (InvalidDevelopCardToSlotException e) {
-            e.printStackTrace();
-        } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+            logger.error("something wrong happened, in the to pay of " + getClientMessage().getClass() + "have been put some not discountable resource");
+            throw new UnexpectedControllerException(e.getMessage());
+        } catch (NotEnoughResourcesException|EmptyDeckException|FullDevelopSlotException|InvalidDevelopCardToSlotException|InvalidArgumentException e) {
+            throw new ControllerException(e.getMessage());
         } catch (InvalidResourceQuantityToDepotException e) {
-            e.printStackTrace();
+            logger.error("we are trying to spend the resources on the depot even if we have not enough. before this it must had been lunched NotEnoughResourcesException");
+            throw new UnexpectedControllerException(e.getMessage());
         }
-        return null;
+
+        LocalBoard localBoard= ConverterToLocalModel.convert(board,true);
+        LocalDevelopmentGrid localGrid=ConverterToLocalModel.convert(controllerActions.getGame().getDecksDevelop());
+        return new BuyDevelopCardAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),localBoard,localGrid);
     }
 }
