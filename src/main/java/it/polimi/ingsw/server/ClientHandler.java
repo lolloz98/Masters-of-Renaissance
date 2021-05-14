@@ -100,7 +100,7 @@ public class ClientHandler implements Runnable {
     public void closeConnection() {
         try {
             // fixme: for now, if a client drop the connection the game is cancelled
-            if(answerListener.getGameId() != -1){
+            if(answerListener != null && answerListener.getGameId() != -1){
                 try {
                     ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(answerListener.getGameId());
                     ca.destroyGame("A player lost the connection", answerListener.getPlayerId(), true);
