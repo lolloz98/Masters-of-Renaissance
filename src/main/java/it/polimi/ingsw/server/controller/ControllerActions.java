@@ -3,8 +3,10 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
+import it.polimi.ingsw.messages.answers.gameendedanswer.DestroyedGameAnswer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
@@ -127,7 +129,25 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
      */
     public abstract ArrayList<LocalPlayer> getWinners() throws ControllerException;
 
+    /**
+     * it "destroys" the game. after this the game nor the controllers are accessible anymore and there is no reference to them
+     * @param message message to be sent in the destruction answer
+     * @param playerId player who called destroyGame
+     * @param removePlayerIdListener if true remove the answerListener related to playerId before sending back the answer
+     */
+    public synchronized void destroyGame(String message, int playerId, boolean removePlayerIdListener) throws NoSuchControllerException {
+        Answer destroyAnswer = new DestroyedGameAnswer(getGameId(), playerId, message);
+        controllerManager.removeGame(getGameId());
 
+        for(AnswerListener answerListener: listeners){
+            // before sending the answer remove the answer listener
+            if(removePlayerIdListener && answerListener.getPlayerId() == playerId) removeAnswerListener(answerListener);
+            answerListener.setIds(-1, -1);
+        }
 
+        sendAnswer(destroyAnswer);
+
+        listeners.clear();
+    }
 
 }

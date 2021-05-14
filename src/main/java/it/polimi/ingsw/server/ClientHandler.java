@@ -4,8 +4,10 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.ErrorAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.messages.requests.GameStatusMessage;
+import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
@@ -90,7 +92,6 @@ public class ClientHandler implements Runnable {
             handleClientConnection();
         } catch (IOException e) {
             logger.warn("client " + client.getInetAddress() + " connection dropped");
-            
         }
 
         closeConnection();
@@ -98,6 +99,15 @@ public class ClientHandler implements Runnable {
 
     public void closeConnection() {
         try {
+            // fixme: for now, if a client drop the connection the game is cancelled
+            if(answerListener.getGameId() != -1){
+                try {
+                    ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(answerListener.getGameId());
+                    ca.destroyGame("A player lost the connection", answerListener.getPlayerId(), true);
+                } catch (NoSuchControllerException e) {
+                    logger.warn("trying to destroy an already destroyed game");
+                }
+            }
             client.close();
         } catch (IOException e) {
             logger.warn("Error happened while closing a connection: " + e.getMessage());
