@@ -48,7 +48,7 @@ public class NewMultiView extends View {
 
     @Override
     public synchronized void notifyUpdate(){
-        if(localMulti.getState() == LocalGameState.READY){
+        if(localMulti.getState() == LocalGameState.PREP_RESOURCES){
             localMulti.removeObserver();
             localMulti.getError().removeObserver();
             switch(localMulti.getMainPlayerPosition()){

@@ -101,6 +101,7 @@ public class LocalBoard extends Observable implements Serializable {
         this.localTrack = new LocalTrack();
         this.baseProduction = new LocalProduction();
         this.initialRes = 0;
+        this.resInNormalDeposit = new TreeMap<>();
     }
 
     public synchronized LocalProduction getBaseProduction() {

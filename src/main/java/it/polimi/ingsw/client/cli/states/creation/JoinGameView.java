@@ -40,7 +40,7 @@ public class JoinGameView extends View {
     }
 
     @Override
-    public void notifyUpdate() { // todo as in newgameview
+    public synchronized void notifyUpdate() { // todo as in newgameview
         if (localMulti.getState() == LocalGameState.PREP_RESOURCES) {
             ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
             LocalPlayer mainPlayer = null;
@@ -65,26 +65,27 @@ public class JoinGameView extends View {
     }
 
     @Override
-    public void notifyError() {
+    public synchronized void notifyError() {
         System.out.println(localMulti.getError().getErrorMessage());
-        System.out.println("Insert another id:");// fixme
+        System.out.println("Insert another id:");
     }
 
     @Override
-    public void handleCommand(String ans) {
+    public synchronized void handleCommand(String ans) {
         try{
             int port = Integer.parseInt(ans);
             cli.getClient().sendMessage(new JoinGameMessage(port, nickname));
         } catch (IOException e) {
             System.out.println("no connection from server");
             e.printStackTrace();
-        }        catch (NumberFormatException ex){
+        }
+        catch (NumberFormatException ex){
             ex.printStackTrace();
         }
     }
 
     @Override
-    public void draw() {
+    public synchronized void draw() {
         if (localMulti.getState() == LocalGameState.NEW) {
             System.out.println("Please wait");
         } else if (localMulti.getState() == LocalGameState.WAITINGPLAYERS) {

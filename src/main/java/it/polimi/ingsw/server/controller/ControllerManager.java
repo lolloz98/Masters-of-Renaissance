@@ -49,7 +49,6 @@ public class ControllerManager {
      */
     public synchronized PairId<Integer, Integer> reserveIdForNewGame(CreateGameMessage message, AnswerListener answerListener) throws ControllerException {
         PairId<Integer, Integer> p = reserveId(message.getPlayersNumber(), message.getUserName(), answerListener);
-        answerListener.setPlayerId(p.getSecond());
         return p;
     }
 
@@ -147,6 +146,7 @@ public class ControllerManager {
         } catch (InvalidArgumentException e) {
             throw new UnexpectedControllerException(e.getMessage());
         }
+        answerListener.setPlayerId(playerId);
         if (playersNumber == 1) createNewSinglePlayer(id, answerListener, player);
         else {
             createNewControllerActionsMulti(id, answerListener, playersNumber, player);

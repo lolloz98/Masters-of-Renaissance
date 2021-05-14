@@ -126,54 +126,10 @@ public class CLI extends UI implements Runnable {
     }
 
     public static void clearScreen() {
-        /* for windows cmd
-        try {
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
         System.out.print("\033[H\033[2J");
         System.out.flush();
         System.out.print(CLIutils.BLACK_BACKGROUND + CLIutils.ANSI_WHITE);
     }
-
-/*    void handleCommand(String line){
-        switch(line) {
-            case "end":
-                gameOver = true;
-                break;
-            case "market":
-                state = new MarketView(localMarket, localGame);
-                break;
-            case "develop":
-                state = new DevelopmentGridView(localDevelopmentGrid, localGame);
-                break;
-            case "board 0":
-                state = new BoardView(localBoards.get(0), localGame);
-                break;
-            case "board 1":
-                state = new BoardView(localBoards.get(1), localGame);
-                break;
-            case "board 2":
-                if(localGame.getNumberOfPlayers() < 3){
-                    System.out.println("there is no player 2");
-                }
-                else state = new BoardView(localBoards.get(2), localGame);
-                break;
-            case "board 3":
-                if(localGame.getNumberOfPlayers() < 3) {
-                    System.out.println("there is no player 3");
-                }
-                else state = new BoardView(localBoards.get(3), localGame);
-                break;
-            default:
-                // case for state-specific commands
-                state.handleCommand(line);
-        }
-    } */
 
     public static void print(ArrayList<String> out){
         for(String o : out){
