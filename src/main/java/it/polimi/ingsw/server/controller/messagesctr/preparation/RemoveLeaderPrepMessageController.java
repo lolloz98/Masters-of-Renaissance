@@ -29,7 +29,7 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
     @Override
     public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Board board = getPlayerFromId(controllerActions).getBoard();
-        ArrayList<LeaderCard<?>> toRemove = ((RemoveLeaderPrepMessage) getClientMessage()).getLeadersToRemove();
+        ArrayList<Integer> toRemove = ((RemoveLeaderPrepMessage) getClientMessage()).getLeadersToRemove();
 
         if (toRemove.size() != 2)
             throw new InvalidActionControllerException("Wrong quantity of leader chosen: you should choose just two leaders");

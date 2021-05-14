@@ -13,10 +13,8 @@ import it.polimi.ingsw.server.model.utility.Utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * class that models the board of each player
@@ -562,11 +560,12 @@ public class Board implements VictoryPointCalculator {
     /**
      * definitely removes cards from the leaderCards of the board
      *
-     * @param cards cards to be removed from the board
+     * @param cardsId cards ids to be removed from the board
      * @throws InvalidArgumentException if the cards was not contained in leaderCards of the board. No card is removed from the board
      */
-    public void removeLeaderCards(ArrayList<LeaderCard<? extends Requirement>> cards) throws InvalidArgumentException {
-        if (!leaderCards.containsAll(cards)) throw new InvalidArgumentException("Some of the leaderCard selected are not owned by the player");
+    public void removeLeaderCards(ArrayList<Integer> cardsId) throws InvalidArgumentException {
+        List<LeaderCard<?>> cards = leaderCards.stream().filter(x -> cardsId.contains(x.getId())).collect(Collectors.toList());
+        if (cards.size() != cardsId.size()) throw new InvalidArgumentException("Some of the leaderCard selected are not owned by the player");
         for(LeaderCard<?> card: cards){
             leaderCards.remove(card);
         }

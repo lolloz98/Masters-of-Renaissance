@@ -26,11 +26,7 @@ public final class AnswerFactory {
         return new ChooseOneResPrepAnswer(gameId, playerId, res, ConverterToLocalModel.getGameState(game));
     }
 
-    public static RemoveLeaderPrepAnswer createRemoveLeaderPrepAnswer(int gameId, int playerId, ArrayList<LeaderCard<?>> toRemove, Game<? extends Turn> game) throws UnexpectedControllerException {
-        ArrayList<LocalLeaderCard> localLeaderCards = new ArrayList<>();
-        for(LeaderCard<?> l : toRemove){
-            localLeaderCards.add(ConverterToLocalModel.convert(l));
-        }
-        return new RemoveLeaderPrepAnswer(gameId, playerId, localLeaderCards, ConverterToLocalModel.getGameState(game));
+    public static RemoveLeaderPrepAnswer createRemoveLeaderPrepAnswer(int gameId, int playerId, ArrayList<Integer> toRemove, Game<? extends Turn> game) throws UnexpectedControllerException {
+        return new RemoveLeaderPrepAnswer(gameId, playerId, toRemove, ConverterToLocalModel.getGameState(game));
     }
 }
