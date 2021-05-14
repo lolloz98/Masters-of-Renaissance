@@ -66,7 +66,7 @@ public final class MessageControllerTestHelper {
         ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
         while(player.getBoard().getInitialRes() != 0){
             ChooseOneResPrepMessageController chooseOneResPrepMessageController = new ChooseOneResPrepMessageController(new ChooseOneResPrepMessage(gameId, player.getPlayerId(), Resource.GOLD));
-            chooseOneResPrepMessageController.doActionNoChecks(ca);
+            chooseOneResPrepMessageController.doAction(ca);
         }
     }
 
