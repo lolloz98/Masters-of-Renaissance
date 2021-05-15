@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class RemoveLeaderPrepMessageController extends ClientMessageController {
     private static final long serialVersionUID = 209L;
 
-    private static final Logger logger = LogManager.getLogger(ChooseOneResPrepMessageController.class);
+    private static final Logger logger = LogManager.getLogger(RemoveLeaderPrepMessageController.class);
 
     public RemoveLeaderPrepMessageController(RemoveLeaderPrepMessage clientMessage) {
         super(clientMessage);
@@ -37,7 +37,6 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
         try {
             board.removeLeaderCards(toRemove);
         } catch (InvalidArgumentException e) {
-            logger.error("something unexpected happened in " + this.getClass() + " while removing leaders");
             throw new LeaderNotRemovedControllerException("Not possible to remove these leaders");
         }
 

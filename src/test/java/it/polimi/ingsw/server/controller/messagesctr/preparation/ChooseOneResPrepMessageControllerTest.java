@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.answers.preparationanswer.ChooseOneResPrepAnswer;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.server.controller.ControllerActionsMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -34,6 +35,14 @@ public class ChooseOneResPrepMessageControllerTest {
             chooseOneResPrepMessageController.doAction(ca);
             fail();
         }catch(WrongStateControllerException ignore){}
+
+        gameId = MessageControllerTestHelper.doActionCreateGameSingle();
+        ControllerActionsSingle cas = (ControllerActionsSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
+        chooseOneResPrepMessageController = new ChooseOneResPrepMessageController(new ChooseOneResPrepMessage(gameId, 0, Resource.GOLD));
+        try {
+            chooseOneResPrepMessageController.doAction(cas);
+            fail();
+        }catch(InvalidActionControllerException ignore){}
     }
 
     @Test

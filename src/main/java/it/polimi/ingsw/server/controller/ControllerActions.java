@@ -36,7 +36,7 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
     /**
      * method called to create a controller
      *
-     * @param game
+     * @param game current game
      * @param id   gameId
      */
     public ControllerActions(T game, int id, AnswerListener answerListener) {
@@ -72,6 +72,13 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
         sendAnswer(answer);
     }
 
+    /**
+     * Do a pregame action: if the game is created send the entire game status to all players (each one will receive a slightly different status )
+     *
+     * @param clientMessage request
+     * @param answerListener answerListener related to the player sending the request
+     * @throws ControllerException if something not wanted happens
+     */
     public synchronized void doPreGameAction(PreGameCreationMessageController clientMessage, AnswerListener answerListener) throws ControllerException {
         Answer answer = clientMessage.doAction(this);
         answerListener.setIds(answer.getPlayerId(), answer.getGameId());
@@ -125,7 +132,7 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
 
     /**
      * creates the end game answer by putting in it the list of the winners
-     * @throws ControllerException
+     * @throws ControllerException if something goes wrong
      */
     public abstract ArrayList<LocalPlayer> getWinners() throws ControllerException;
 

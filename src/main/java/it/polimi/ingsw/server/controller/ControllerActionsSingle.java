@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
+import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Board;
@@ -14,9 +15,10 @@ import java.util.ArrayList;
 
 public class ControllerActionsSingle extends ControllerActions<SinglePlayer> {
 
-    public ControllerActionsSingle(SinglePlayer game, int id, AnswerListener answerListener) {
+    public ControllerActionsSingle(SinglePlayer game, int id, AnswerListener answerListener) throws EmptyDeckException {
         super(game, id, answerListener);
         setGameState(new PrepareGameState());
+        game.distributeLeader();
     }
 
     @Override

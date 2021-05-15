@@ -47,8 +47,6 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
             // once we add initResource to the depot, we diminish the counter
             board.setInitialRes(initRes - 1);
 
-            if (controllerActions.checkToGamePlayState()) // if the preparation state is ended (all the players have discarded 2 leaders and have chosen the beginning resources)
-                controllerActions.toGamePlayState();
 
             return AnswerFactory.createChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((ChooseOneResPrepMessage) getClientMessage()).getRes(), controllerActions.getGame());
 

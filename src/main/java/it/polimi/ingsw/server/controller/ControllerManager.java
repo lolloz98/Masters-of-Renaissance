@@ -102,7 +102,12 @@ public class ControllerManager {
             logger.error("something went wrong with the creation of a singlePlayer");
             throw new UnexpectedControllerException("something went wrong with the creation of a singlePlayer");
         }
-        controllerMap.put(id, new ControllerActionsSingle(singlePlayer, id, answerListener));
+        try {
+            controllerMap.put(id, new ControllerActionsSingle(singlePlayer, id, answerListener));
+        } catch (EmptyDeckException e) {
+            logger.error("something went wrong with the creation of a multiPlayer");
+            throw new UnexpectedControllerException("something went wrong with the creation of a singlePlayer");
+        }
     }
 
     /**
