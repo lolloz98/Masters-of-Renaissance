@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.localmodel;
 
+import it.polimi.ingsw.client.localmodel.exceptions.NoSuchLocalPlayerException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -47,6 +49,13 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
         this.localTurn = new LocalTurnMulti();
         localPlayers = new ArrayList<>();
         state = LocalGameState.NEW;
+    }
+
+    public synchronized LocalPlayer getPlayerById(int id){
+        for(LocalPlayer l : localPlayers){
+            if(l.getId() == id) return l;
+        }
+        throw new NoSuchLocalPlayerException();
     }
 
     public LocalMulti(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, LocalTurnMulti localTurn, LocalGameState state, ArrayList<LocalPlayer> localPlayers, int mainPlayerId){

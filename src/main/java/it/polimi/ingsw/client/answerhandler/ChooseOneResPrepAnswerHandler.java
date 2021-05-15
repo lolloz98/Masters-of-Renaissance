@@ -18,10 +18,14 @@ public class ChooseOneResPrepAnswerHandler extends AnswerHandler {
         ChooseOneResPrepAnswer chooseOneResPrepAnswer = (ChooseOneResPrepAnswer) getAnswer();
         if (localGame instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) localGame;
-            localMulti.getMainPlayer().getLocalBoard().addResInNormalDepot(chooseOneResPrepAnswer.getRes());
-            localMulti.setState(chooseOneResPrepAnswer.getState());
-            // fixme: only notify localgame because i'm not actually looking at the board
-            localMulti.notifyObserver();
+            if(chooseOneResPrepAnswer.getPlayerId() == localMulti.getMainPlayerId()) {
+                localMulti.getMainPlayer().getLocalBoard().addResInNormalDepot(chooseOneResPrepAnswer.getRes());
+                localMulti.notifyObserver();
+            }
+            if(localMulti.getState()!=chooseOneResPrepAnswer.getState()) {
+                localMulti.setState(chooseOneResPrepAnswer.getState());
+                localMulti.notifyObserver();
+            }
         }
         else{
             logger.error("Prep message sent to single player game");

@@ -23,7 +23,6 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
         this.localTurn = localTurn;
     }
 
-
     public Error getError() {
         return error;
     }
