@@ -7,6 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public final class Persist {
     private static final Logger logger = LogManager.getLogger(Persist.class);
@@ -31,7 +33,6 @@ public final class Persist {
             objectOutputStream.close();
         } catch (IOException e) {
             logger.error("Exception happened while writing a file: " + e);
-            throw e;
         }
     }
 
@@ -49,6 +50,18 @@ public final class Persist {
         } catch (IOException | ClassNotFoundException e) {
             logger.warn(e.getClass().getSimpleName() + " while retrieving a game: " + e.getMessage());
             throw new UnexpectedControllerException("error while retrieving the game");
+        }
+    }
+
+    /**
+     * Delete file with game
+     * @param gameId id of game to be deleted
+     */
+    public void remove(int gameId){
+        try {
+            Files.deleteIfExists(Paths.get(PATH + gameId + EXTENSION));
+        } catch (IOException e) {
+            logger.warn("Delete if exist threw an exception");
         }
     }
 }
