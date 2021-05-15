@@ -5,7 +5,6 @@ public class LocalLeaderCard extends LocalCard{
     private boolean isActive;
     private boolean isDiscarded;
 
-
     public synchronized int getVictoryPoints() {
         return victoryPoints;
     }

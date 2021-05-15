@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResSecondView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepResourcesView;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;

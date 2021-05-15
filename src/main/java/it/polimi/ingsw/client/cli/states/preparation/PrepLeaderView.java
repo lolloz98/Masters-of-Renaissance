@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
+import it.polimi.ingsw.client.localmodel.LocalPlayer;
+import it.polimi.ingsw.client.localmodel.localcards.*;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
 import it.polimi.ingsw.server.model.game.Resource;
@@ -84,9 +86,30 @@ public class PrepLeaderView extends View {
     public synchronized void draw() {
         if (leaderCardIds.size()==0) {
             System.out.println("Pick two leader cards to discard:");
-            // todo print the four leaders
+            LocalCard c;
             for (int i = 1; i < 5; i++) {
-                System.out.println(i + ") " + localMulti.getMainPlayer().getLocalBoard().getLeaderCards().get(i-1));
+                c = localMulti.getMainPlayer().getLocalBoard().getLeaderCards().get(i-1);
+                if (c instanceof LocalDiscountLeader){
+                    LocalDiscountLeader localDiscountLeader = (LocalDiscountLeader) c;
+                    System.out.print(i + ") " + localMulti.getMainPlayer().getLocalBoard().getLeaderCards().get(i-1).getClass().getSimpleName());
+                    System.out.print(", prod requirement: "+localDiscountLeader.getProdRequirement());
+                    System.out.print(", discounted res: "+localDiscountLeader.getQuantityToDiscount()+" "+localDiscountLeader.getDiscountedRes());
+                } else if (c instanceof LocalMarbleLeader){
+                    LocalMarbleLeader localMarbleLeader = (LocalMarbleLeader) c;
+                    System.out.print(i + ") " + localMulti.getMainPlayer().getLocalBoard().getLeaderCards().get(i-1).getClass().getSimpleName());
+                    System.out.print(", prod requirement: "+localMarbleLeader.getProdRequirement());
+                    System.out.print(", marble: "+localMarbleLeader.getMarbleResource());
+                } else if (c instanceof LocalDepotLeader){
+                    LocalDepotLeader localDepotLeader = (LocalDepotLeader) c;
+                    System.out.print(i + ") " + localMulti.getMainPlayer().getLocalBoard().getLeaderCards().get(i-1).getClass().getSimpleName());
+                    System.out.print(", requirement: "+localDepotLeader.getReqQuantity()+" "+localDepotLeader.getResRequirement());
+                    System.out.print(", depot: "+localDepotLeader.getNumberOfRes()+" "+localDepotLeader.getResType());
+                } else if (c instanceof LocalProductionLeader){
+                    LocalProductionLeader localProductionLeader = (LocalProductionLeader) c;
+                    System.out.print(", prod requirement: "+localProductionLeader.getColorRequirement()+" at level "+localProductionLeader.getLevelReq());
+                    System.out.print(", production: "+localProductionLeader.getProduction());
+                }
+                System.out.print("\n");
             }
         }
         else if (leaderCardIds.size()==1) {

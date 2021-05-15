@@ -12,7 +12,6 @@ public class LocalDevelopCard extends LocalCard{
     private final LocalProduction production;
     private final int victoryPoints;
 
-
     public synchronized void setResToFlush(TreeMap<Resource, Integer> resToFlush) {
         this.production.setResToFlush(resToFlush);
         notifyObserver();

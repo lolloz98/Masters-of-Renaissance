@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.localmodel;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.server.model.game.Resource;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -15,7 +14,7 @@ public class LocalBoard extends Observable implements Serializable {
     private TreeMap<Resource, Integer> resInNormalDepot;
     private ArrayList<LocalCard> leaderCards;
     private final LocalTrack localTrack;
-    private int initialRes;
+    private int initialRes; // fixme: probably should be removed
 
     public synchronized ArrayList<ArrayList<LocalDevelopCard>> getDevelopCards() {
         return developCards;
