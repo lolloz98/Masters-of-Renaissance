@@ -12,12 +12,10 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
 
     public synchronized void setLocalPlayers(ArrayList<LocalPlayer> localPlayers) {
         this.localPlayers = localPlayers;
-        notifyObserver();
     }
 
     public synchronized void addLocalPlayer(LocalPlayer localPlayer) {
         this.localPlayers.add(localPlayer);
-        notifyObserver();
     }
 
     public synchronized int getMainPlayerId() {

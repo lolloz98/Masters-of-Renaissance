@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.answerhandler;
 
 import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
@@ -42,6 +41,6 @@ public class GameStatusAnswerHandler extends AnswerHandler{
         localGame.setGameId(gameStatusAnswer.getGame().getGameId());
         localGame.setLocalMarket(gameStatusAnswer.getGame().getLocalMarket());
         localGame.setLocalDevelopmentGrid(gameStatusAnswer.getGame().getLocalDevelopmentGrid());
-        System.out.println("Game status received");
+        localGame.notifyObserver();
     }
 }

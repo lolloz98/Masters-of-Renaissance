@@ -12,7 +12,7 @@ public class LocalBoard extends Observable implements Serializable {
     private final ArrayList<ArrayList<LocalDevelopCard>> developCards;
     private final LocalProduction baseProduction;
     private TreeMap<Resource, Integer> resInStrongBox;
-    private TreeMap<Resource, Integer> resInNormalDeposit;
+    private TreeMap<Resource, Integer> resInNormalDepot;
     private ArrayList<LocalCard> leaderCards;
     private final LocalTrack localTrack;
     private int initialRes;
@@ -23,21 +23,24 @@ public class LocalBoard extends Observable implements Serializable {
 
     public synchronized void addDevelopCards(int i, LocalDevelopCard developCard) {
         this.developCards.get(i).add(developCard);
-        notifyObserver();
     }
 
     public synchronized int getResInDepotNumber(){
         int sum = 0;
         for(Resource r : Resource.values()){
-            sum = sum + resInNormalDeposit.get(r);
+            sum = sum + resInNormalDepot.getOrDefault(r,0);
         }
         return sum;
+    }
+
+    public synchronized void addResInNormalDepot(Resource res){
+        int resNumber = getResInNormalDepot().getOrDefault(res, 0);
+        getResInNormalDepot().put(res, resNumber+1);
     }
 
     public LocalTrack getLocalTrack() {
         return localTrack;
     }
-
 
     public synchronized int getInitialRes() {
         return initialRes;
@@ -47,23 +50,20 @@ public class LocalBoard extends Observable implements Serializable {
         this.initialRes = initialRes;
     }
 
-
     public synchronized TreeMap<Resource, Integer> getResInStrongBox() {
         return resInStrongBox;
     }
 
     public synchronized void setResInStrongBox(TreeMap<Resource, Integer> resInStrongBox) {
         this.resInStrongBox = resInStrongBox;
-        notifyObserver();
     }
 
-    public synchronized TreeMap<Resource, Integer> getResInNormalDeposit() {
-        return resInNormalDeposit;
+    public synchronized TreeMap<Resource, Integer> getResInNormalDepot() {
+        return resInNormalDepot;
     }
 
-    public synchronized void setResInNormalDeposit(TreeMap<Resource, Integer> resInNormalDeposit) {
-        this.resInNormalDeposit = resInNormalDeposit;
-        notifyObserver();
+    public synchronized void setResInNormalDepot(TreeMap<Resource, Integer> resInNormalDepot) {
+        this.resInNormalDepot = resInNormalDepot;
     }
 
     public synchronized ArrayList<LocalCard> getLeaderCards() {
@@ -72,28 +72,15 @@ public class LocalBoard extends Observable implements Serializable {
 
     public synchronized void setLeaderCards(ArrayList<LocalCard> leaderCards) {
         this.leaderCards = leaderCards;
-        notifyObserver();
     }
 
-//    public LocalBoard(){
-//        developCards = new ArrayList<>();
-//        for(int i=0; i<3; i++) developCards.add(new ArrayList<>());
-//        leaderCards = new ArrayList<>();
-//        localTrack = new LocalTrack();
-//        baseProduction = new LocalProduction(new TreeMap<>(){{
-//            put(Resource.ANYTHING, 2);
-//        }}, new TreeMap<>(){{
-//            put(Resource.ANYTHING, 1);
-//        }}, new TreeMap<>());
-//    }
-
-    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction, int initialRes, TreeMap<Resource, Integer> resInNormalDeposit){
+    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction, int initialRes, TreeMap<Resource, Integer> resInNormalDepot){
         this.developCards = developCards;
         this.leaderCards = leaderCards;
         this.localTrack = localTrack;
         this.baseProduction = baseProduction;
         this.initialRes = initialRes;
-        this.resInNormalDeposit = resInNormalDeposit;
+        this.resInNormalDepot = resInNormalDepot;
     }
 
     public LocalBoard(){
@@ -102,7 +89,7 @@ public class LocalBoard extends Observable implements Serializable {
         this.localTrack = new LocalTrack();
         this.baseProduction = new LocalProduction();
         this.initialRes = 0;
-        this.resInNormalDeposit = new TreeMap<>();
+        this.resInNormalDepot = new TreeMap<>();
     }
 
     public synchronized LocalProduction getBaseProduction() {

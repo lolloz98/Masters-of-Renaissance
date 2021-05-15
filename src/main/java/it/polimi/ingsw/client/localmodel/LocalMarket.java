@@ -23,7 +23,6 @@ public class LocalMarket extends Observable implements Serializable {
     public synchronized void setMarket(Resource[][] marbleMatrix, Resource freeMarble) {
         setMarbleMatrix(marbleMatrix);
         setFreeMarble(freeMarble);
-        notifyObserver();
     }
 
     public synchronized Resource getFreeMarble() {
@@ -40,7 +39,6 @@ public class LocalMarket extends Observable implements Serializable {
 
     public synchronized void setResCombinations(ArrayList<TreeMap<Resource, Integer>> resCombinations) {
         this.resCombinations = resCombinations;
-        notifyObserver();
     }
 
     public LocalMarket(){

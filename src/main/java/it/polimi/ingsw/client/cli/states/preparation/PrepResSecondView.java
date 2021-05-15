@@ -14,29 +14,38 @@ public class PrepResSecondView extends View {
     private CLI cli;
     private LocalMulti localMulti;
     private LocalBoard localBoard;
+    boolean picked;
 
     public PrepResSecondView(CLI cli, LocalMulti localMulti, LocalBoard localBoard) {
         this.cli = cli;
         this.localMulti = localMulti;
         this.localBoard = localBoard;
+        this.localBoard.addObserver(this);
+        this.localMulti.addObserver(this);
+        this.localMulti.getError().addObserver(this);
+        picked = false;
     }
 
     @Override
     public void notifyUpdate() {
         if(localMulti.getState() == LocalGameState.PREP_LEADERS){
             localMulti.removeObserver();
-            cli.setState(new PrepLeaderView());
+            localBoard.removeObserver();
+            localMulti.getError().removeObserver();
+            cli.setState(new PrepLeaderView(cli, localMulti));
+            cli.getState().draw();
         }
     }
 
     @Override
     public void notifyError() {
         System.out.println(localMulti.getError().getErrorMessage());
+        picked = false;
     }
 
     @Override
     public void handleCommand(String ans) {
-        if(localBoard.getResInDepotNumber() == 0){
+        if(!picked){
             Resource pickedRes = null;
             switch (ans) {
                 case "1": pickedRes = Resource.SHIELD; break;
@@ -46,18 +55,22 @@ public class PrepResSecondView extends View {
                 default:
                     System.out.println("Invalid choice, try again:");
             }
-            try {
-                cli.getClient().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
-            } catch (IOException e) {
-                System.out.println("No connection from server");
-                e.printStackTrace();
+            if(pickedRes != null) {
+                try {
+                    picked = true;
+                    cli.getClient().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
+                } catch (IOException e) {
+                    System.out.println("No connection from server");
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     @Override
     public void draw() {
-        if(localBoard.getResInDepotNumber() == 0){
+        if(!picked){
+            // todo inform player of the order
             System.out.println("Pick a free resource:");
             System.out.println("1. Shield");
             System.out.println("2. Gold");

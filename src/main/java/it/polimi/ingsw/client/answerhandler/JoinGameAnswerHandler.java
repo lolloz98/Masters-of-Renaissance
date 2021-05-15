@@ -26,10 +26,11 @@ public class JoinGameAnswerHandler extends AnswerHandler{
             LocalMulti localMulti = (LocalMulti) localGame;
             localMulti.setLocalPlayers(localPlayers);
             localMulti.setGameId(joinGameAnswer.getGameId());
+            localMulti.setState(LocalGameState.WAITINGPLAYERS);
+            localMulti.notifyObserver();
         }
         else{
             logger.error("create game answer received by singlePlayer game");
         }
-        localGame.setState(LocalGameState.WAITINGPLAYERS);
     }
 }

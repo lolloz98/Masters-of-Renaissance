@@ -14,7 +14,6 @@ public class LocalDevelopmentGrid extends Observable implements Serializable {
 
     public synchronized void setTopDevelopCards(LocalDevelopCard[][] topDevelopCards) {
         this.topDevelopCards = topDevelopCards;
-        notifyObserver();
     }
 
     public synchronized int[][] getDevelopCardsNumber() {
@@ -27,7 +26,6 @@ public class LocalDevelopmentGrid extends Observable implements Serializable {
 
     public synchronized void setTopDevelopCard(int x, int y, LocalDevelopCard topDevelopCard) {
         this.topDevelopCards[x][y] = topDevelopCard;
-        notifyObserver();
     }
 
     public synchronized void setDevelopCardNumber(int x, int y, int number) {

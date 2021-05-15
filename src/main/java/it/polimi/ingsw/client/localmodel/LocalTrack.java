@@ -12,12 +12,10 @@ public class LocalTrack extends Observable implements Serializable {
 
     public synchronized void setFaithTrackScore(int faithTrackScore) {
         this.position = faithTrackScore;
-        notifyObserver();
     }
 
     public synchronized void setFigureState(int i, LocalFigureState state){
         figuresState[i]=state;
-        notifyObserver();
     }
 
     public synchronized LocalFigureState[] getFiguresState() {

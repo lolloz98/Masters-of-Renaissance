@@ -54,7 +54,6 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
 
     public synchronized void setState(LocalGameState state) {
         this.state = state;
-        notifyObserver();
     }
 
     public LocalGame(){

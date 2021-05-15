@@ -10,6 +10,8 @@ import it.polimi.ingsw.server.model.game.Resource;
 import java.io.IOException;
 import java.util.Scanner;
 
+// fixme: deprecated, to be removed soon
+
 public class PrepResourcesView extends View {
     private CLI cli;
     private LocalMulti localMulti;

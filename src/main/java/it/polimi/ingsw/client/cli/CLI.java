@@ -37,12 +37,13 @@ public class CLI extends UI implements Runnable {
     public void setLocalGame(LocalGame<?> localGame) {
         this.localGame = localGame;
     }
+
     public View getState() {
-        return state;
+            return state;
     }
 
     public void setState(View state) {
-        this.state = state;
+            this.state = state;
     }
 
     public static void main(String[] args) {
@@ -52,11 +53,14 @@ public class CLI extends UI implements Runnable {
 
     @Override
     public void run(){
+        gameOver = false;
         this.input = new Scanner(System.in);
         setup();
+        String ans;
         while(!gameOver){
             state.draw();
-            state.handleCommand(input.nextLine());
+            ans = input.nextLine();
+            state.handleCommand(ans);
         }
     }
 

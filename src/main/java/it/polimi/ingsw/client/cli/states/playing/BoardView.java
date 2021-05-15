@@ -23,7 +23,7 @@ public class BoardView extends GameView {
         // todo make this good looking
         System.out.println(localPlayer.getName() + "'s board:");
         System.out.println("");
-        System.out.println("Resources in depot:" + localPlayer.getLocalBoard().getResInNormalDeposit());
+        System.out.println("Resources in depot:" + localPlayer.getLocalBoard().getResInNormalDepot());
         System.out.println("Resources in box:" + localPlayer.getLocalBoard().getResInStrongBox());
         System.out.println("Faith points:" + localPlayer.getLocalBoard().getLocalTrack().getFaithTrackScore());
         super.drawTurn();

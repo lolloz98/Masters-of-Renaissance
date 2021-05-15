@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResSecondView;
-import it.polimi.ingsw.client.localmodel.ErrorType;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
@@ -56,7 +54,7 @@ public class JoinGameView extends View {
                     case 0: cli.setState(new PrepResFirstView(cli, localMulti)); break;
                     case 1: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
                     case 2: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                    case 3: cli.setState(new PrepResFourthView()); break;
+                    case 3: cli.setState(new PrepResFourthView()); break; // todo
                 }
                 cli.getState().draw();
             }
@@ -80,7 +78,7 @@ public class JoinGameView extends View {
             e.printStackTrace();
         }
         catch (NumberFormatException ex){
-            ex.printStackTrace();
+            ex.printStackTrace(); // todo ask again
         }
     }
 

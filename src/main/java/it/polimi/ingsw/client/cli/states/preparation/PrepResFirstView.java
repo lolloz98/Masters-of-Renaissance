@@ -19,7 +19,8 @@ public class PrepResFirstView extends View {
     public void notifyUpdate() {
         if(localMulti.getState() == LocalGameState.PREP_LEADERS){
             localMulti.removeObserver();
-            cli.setState(new PrepLeaderView());
+            cli.setState(new PrepLeaderView(cli, localMulti));
+            cli.getState().draw();
         }
     }
 
@@ -35,6 +36,7 @@ public class PrepResFirstView extends View {
 
     @Override
     public void draw() {
+        // todo inform player of the order
         System.out.println("Please wait");
     }
 }
