@@ -54,7 +54,7 @@ public class JoinGameView extends View {
                     case 0: cli.setState(new PrepResFirstView(cli, localMulti)); break;
                     case 1: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
                     case 2: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                    case 3: cli.setState(new PrepResFourthView()); break; // todo
+                    case 3: cli.setState(new PrepResFourthView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break; // todo
                 }
                 cli.getState().draw();
             }
