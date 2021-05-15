@@ -9,9 +9,20 @@ import it.polimi.ingsw.server.model.player.Player;
  * To be fulfilled, the player needs to have one developCards of a specific color of level 2.
  */
 public class RequirementLevelDevelop implements Requirement {
+    private static final long serialVersionUID = 1006L;
+
     // in all the cards that have this requirement, the level is 2
     private final int level = 2;
     private final Color color;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof RequirementLevelDevelop){
+            RequirementLevelDevelop t = (RequirementLevelDevelop) obj;
+            return color == t.color;
+        }
+        return false;
+    }
 
     public RequirementLevelDevelop(Color color) {
         this.color = color;

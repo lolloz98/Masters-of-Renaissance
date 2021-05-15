@@ -20,6 +20,7 @@ import java.util.TreeMap;
  */
 public final class DiscountLeaderCard extends LeaderCard<RequirementColorsDevelop> {
     private static final Logger logger = LogManager.getLogger(DiscountLeaderCard.class);
+    private static final long serialVersionUID = 1001L;
 
     private final Resource res;
     private final int quantity = 1;

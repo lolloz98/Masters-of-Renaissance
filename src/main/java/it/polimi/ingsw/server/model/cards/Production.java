@@ -7,12 +7,25 @@ import it.polimi.ingsw.server.model.player.Board;
 import it.polimi.ingsw.server.model.player.WarehouseType;
 import it.polimi.ingsw.server.model.utility.Utility;
 
+import java.io.Serializable;
 import java.util.TreeMap;
 
-public class Production {
+public class Production implements Serializable {
+    private static final long serialVersionUID = 1015L;
+
     private final TreeMap<Resource, Integer> resourcesToGive;
     private final TreeMap<Resource, Integer> resourcesToGain;
     private final TreeMap<Resource, Integer> gainedResources;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Production){
+            Production t = (Production) obj;
+            return resourcesToGive.equals(t.resourcesToGive) && resourcesToGain.equals(t.resourcesToGain)
+                    && gainedResources.equals(t.gainedResources);
+        }
+        return false;
+    }
 
     public Production(TreeMap<Resource, Integer> resourcesToGive, TreeMap<Resource, Integer> resourcesToGain) {
         this.resourcesToGain = new TreeMap<>(resourcesToGain);

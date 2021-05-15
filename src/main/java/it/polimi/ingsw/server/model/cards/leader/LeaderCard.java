@@ -7,11 +7,26 @@ import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.player.Player;
 
 public abstract class LeaderCard<T extends Requirement> implements Card, VictoryPointCalculator {
+    private static final long serialVersionUID = 1002L;
+
     private final int victoryPoints;
     private final T requirement;
     private boolean isActive;
     private boolean isDiscarded;
     private final int id;
+
+    /**
+     * @param obj object to compare
+     * @return true if obj is a card with the same id of this
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Card){
+            Card t = (Card) obj;
+            return id == t.getId();
+        }
+        return false;
+    }
 
     public LeaderCard(int victoryPoints, T requirement, int id) {
         this.isActive = false;
@@ -19,17 +34,6 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
         this.victoryPoints = victoryPoints;
         this.requirement = requirement;
         this.id = id;
-    }
-
-    /**
-     * @param obj object to compare
-     * @return true if obj is a LeaderCard with the same id of this
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof LeaderCard<?>)
-            return ((LeaderCard<?>) obj).getId() == getId();
-        return false;
     }
 
     @Override

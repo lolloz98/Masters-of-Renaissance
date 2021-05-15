@@ -13,9 +13,20 @@ import java.util.TreeSet;
  * Deck for DevelopCards.
  */
 public final class DeckDevelop extends Deck<DevelopCard> {
+    private static final long serialVersionUID = 1013L;
+
     private final int level;
     private final Color color;
     private final TreeSet<Resource> resDiscounted = new TreeSet<>();
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof DeckDevelop){
+            DeckDevelop t = (DeckDevelop) obj;
+            return super.equals(obj) && level == t.level && color == t.color && resDiscounted.equals(t.resDiscounted);
+        }
+        return false;
+    }
 
     /**
      * @param cards cards to be inserted in the deck

@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
  * class that models the board of each player
  */
 public class Board implements VictoryPointCalculator {
+    private static final long serialVersionUID = 1027L;
+
     private static final Logger logger = LogManager.getLogger(Board.class);
 
     private final FaithTrack faithtrack;
@@ -35,6 +37,18 @@ public class Board implements VictoryPointCalculator {
      * number of resources Any given at the beginning of the game. It becomes 0 when the player decides how to store them in the board
      */
     private int initialRes = 0;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Board){
+            Board t = (Board) obj;
+            return faithtrack.equals(t.faithtrack) && strongbox.equals(t.strongbox) && leaderCards.equals(t.leaderCards)
+                    && developCardSlots.equals(t.developCardSlots) && productionLeaderSlots.equals(t.productionLeaderSlots)
+                    && normalProduction.equals(t.normalProduction) && depotLeaders.equals(t.depotLeaders)
+                    && depots.equals(t.depots) && initialRes == t.initialRes;
+        }
+        return false;
+    }
 
     public void setInitialRes(int initialRes) {
         this.initialRes = initialRes;

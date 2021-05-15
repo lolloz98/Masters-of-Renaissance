@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards;
 
-public interface Card {
+import java.io.Serializable;
+
+public interface Card extends Serializable {
     int getId();
 }

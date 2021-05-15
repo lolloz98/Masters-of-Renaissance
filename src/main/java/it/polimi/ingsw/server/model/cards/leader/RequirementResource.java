@@ -11,8 +11,19 @@ import java.util.TreeMap;
  * To be fulfilled, the player needs to have 5 resources of a specific type.
  */
 public class RequirementResource implements Requirement {
+    private static final long serialVersionUID = 1007L;
+
     private final Resource res;
     private final int quantity = 5;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof RequirementResource){
+            RequirementResource t = (RequirementResource) obj;
+            return res == t.res;
+        }
+        return false;
+    }
 
     public RequirementResource(Resource resRequired) {
         this.res = resRequired;

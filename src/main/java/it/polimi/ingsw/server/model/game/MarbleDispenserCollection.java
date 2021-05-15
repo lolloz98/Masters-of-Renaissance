@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 
 public class MarbleDispenserCollection implements MarbleDispenserInterface {
+    private static final long serialVersionUID = 1019L;
+
     public ArrayList<Marble> getMarbles(){
         ArrayList<Marble> marbles = new ArrayList<>();
         int i, j;

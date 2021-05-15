@@ -13,16 +13,28 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * class that models the faith path of each player (including Lorenzo)
  */
 
 public class FaithTrack implements VictoryPointCalculator {
+    private static final long serialVersionUID = 1030L;
+
     private static final Logger logger = LogManager.getLogger(FaithTrack.class);
 
     private final VaticanFigure[] figures;
     private int position;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof FaithTrack){
+            FaithTrack t = (FaithTrack) obj;
+            return Arrays.equals(figures, t.figures) && position == t.position;
+        }
+        return false;
+    }
 
     public FaithTrack() {
         this.position = 0;

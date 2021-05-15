@@ -3,12 +3,26 @@ package it.polimi.ingsw.server.model.player;
 import it.polimi.ingsw.server.model.exception.FigureAlreadyActivatedException;
 import it.polimi.ingsw.server.model.exception.FigureAlreadyDiscardedException;
 
+import java.io.Serializable;
+
 /**
  * class to model the Pope's Favor tiles on the faith track
  */
-public class VaticanFigure {
+public class VaticanFigure implements Serializable {
+    private static final long serialVersionUID = 1033L;
+
     private FigureState state;
+
     private final int level;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof VaticanFigure){
+            VaticanFigure tmp = (VaticanFigure) obj;
+            return state.equals(tmp.state) && level == tmp.level;
+        }
+        return false;
+    }
 
     public VaticanFigure(int level) {
         this.state = FigureState.INACTIVE;

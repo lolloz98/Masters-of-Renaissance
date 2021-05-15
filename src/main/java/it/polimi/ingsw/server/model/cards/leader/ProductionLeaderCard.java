@@ -10,6 +10,8 @@ import it.polimi.ingsw.server.model.game.SinglePlayer;
  * To be activated, it requires the fulfillment (and payment) of RequirementLevelDevelop.
  */
 public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevelop> {
+    private static final long serialVersionUID = 1004L;
+
     private final Production production;
 
     public ProductionLeaderCard(int victoryPoints, RequirementLevelDevelop requirement, Production production, int id) {

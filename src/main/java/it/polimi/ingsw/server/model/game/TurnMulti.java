@@ -11,7 +11,19 @@ import java.util.ArrayList;
  */
 
 public class TurnMulti extends Turn {
+    private static final long serialVersionUID = 1025L;
+
     private final Player currentPlayer;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof TurnMulti){
+            TurnMulti t = (TurnMulti) obj;
+            return currentPlayer.equals(t.currentPlayer) &&
+                    super.equals(obj);
+        }
+        return false;
+    }
 
     public TurnMulti(Player currentPlayer) {
         super();

@@ -7,6 +7,8 @@ import it.polimi.ingsw.server.model.game.Resource;
 import java.util.TreeMap;
 
 public class DevelopCard implements Card, VictoryPointCalculator {
+    private static final long serialVersionUID = 1014L;
+
     private final int id;
     private final int level;
     private final Color color;
@@ -14,6 +16,15 @@ public class DevelopCard implements Card, VictoryPointCalculator {
     private final TreeMap<Resource, Integer> cost;
     private final TreeMap<Resource, Integer> discountApplied;
     private final Production production;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Card){
+            Card t = (Card) obj;
+            return id == t.getId();
+        }
+        return false;
+    }
 
     public DevelopCard(TreeMap<Resource, Integer> cost, Production production, Color color, int level, int victoryPoints, int id) {
         this.color = color;

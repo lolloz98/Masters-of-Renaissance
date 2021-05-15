@@ -11,6 +11,8 @@ import java.util.TreeMap;
  * LorenzoCard with effect of discarding 2 developCards of a certain color from the game.
  */
 public class DevelopLorenzoCard extends LorenzoCard {
+    private static final long serialVersionUID = 1008L;
+
     private final Color color;
 
     public DevelopLorenzoCard(int id, Color color) {

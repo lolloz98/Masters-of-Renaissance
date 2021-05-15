@@ -11,7 +11,18 @@ import java.util.TreeMap;
  * To be fulfilled, the player needs to have a certain amount of developCards of specific colors.
  */
 public class RequirementColorsDevelop implements Requirement {
+    private static final long serialVersionUID = 1005L;
+
     private final TreeMap<Color, Integer> requiredDevelops;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Requirement){
+            RequirementColorsDevelop t = (RequirementColorsDevelop) obj;
+            return requiredDevelops.equals(t.requiredDevelops);
+        }
+        return false;
+    }
 
     /**
      * @return required develop cards (how many for each color), for this requirement

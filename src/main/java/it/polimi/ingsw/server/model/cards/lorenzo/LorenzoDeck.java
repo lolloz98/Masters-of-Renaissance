@@ -3,14 +3,26 @@ package it.polimi.ingsw.server.model.cards.lorenzo;
 import it.polimi.ingsw.server.model.cards.Deck;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Handle the deck of LorenzoCard.
  */
-public class LorenzoDeck {
+public class LorenzoDeck implements Serializable {
+    private static final long serialVersionUID = 1011L;
+
     private final ArrayList<LorenzoCard> original;
     private Deck<LorenzoCard> inUse;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof LorenzoDeck){
+            LorenzoDeck t = (LorenzoDeck) obj;
+            return original.equals(t.original) && inUse.equals(t.inUse);
+        }
+        return false;
+    }
 
     public LorenzoDeck(ArrayList<LorenzoCard> cards) throws EmptyDeckException {
         this.original = new ArrayList<>(cards);

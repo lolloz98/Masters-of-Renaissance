@@ -3,8 +3,21 @@ package it.polimi.ingsw.server.model.game;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.FaithTrack;
 
-public class Lorenzo {
+import java.io.Serializable;
+
+public class Lorenzo implements Serializable {
+    private static final long serialVersionUID = 1017L;
+
     private final FaithTrack faithTrack;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Lorenzo){
+            Lorenzo t = (Lorenzo) obj;
+            return faithTrack.equals(t.faithTrack);
+        }
+        return false;
+    }
 
     public Lorenzo() {
         this.faithTrack = new FaithTrack();

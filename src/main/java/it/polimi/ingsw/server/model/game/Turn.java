@@ -5,16 +5,30 @@ import it.polimi.ingsw.server.model.exception.MainActionNotOccurredException;
 import it.polimi.ingsw.server.model.exception.MarketTrayNotEmptyException;
 import it.polimi.ingsw.server.model.exception.ProductionsResourcesNotFlushedException;
 
+import java.io.Serializable;
+
 /**
  * Class that represents the state of the turn. It's abstract as the game must be either a TurnSingle, containing the state
  * of the turn in a SinglePlayer game, or TurnMulti, containing the state of the turn in a MultiPlayer game.
  */
 
-public abstract class Turn {
+public abstract class Turn implements Serializable {
+    private static final long serialVersionUID = 1024L;
+
     private boolean mainActionOccurred;
     private boolean productionsActivated;
     private boolean marketActivated;
     protected boolean isPlayable;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Turn){
+            Turn t = (Turn) obj;
+            return mainActionOccurred == t.mainActionOccurred && productionsActivated == t.productionsActivated
+                    && marketActivated == t.marketActivated && isPlayable == t.isPlayable;
+        }
+        return false;
+    }
 
     public boolean getIsPlayable() {
         return isPlayable;

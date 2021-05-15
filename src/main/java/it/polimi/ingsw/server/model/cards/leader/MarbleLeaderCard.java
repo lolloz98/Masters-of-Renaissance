@@ -12,6 +12,8 @@ import it.polimi.ingsw.server.model.game.Resource;
  * To be activated, it requires the fulfillment of RequirementColorsDevelop.
  */
 public final class MarbleLeaderCard extends LeaderCard<RequirementColorsDevelop> {
+    private static final long serialVersionUID = 1003L;
+
     private final Resource targetRes;
     private boolean hasBeenApplied = false;
 

@@ -7,6 +7,8 @@ import it.polimi.ingsw.server.model.game.SinglePlayer;
  * LorenzoCard with effect of moving Lorenzo of 1 step on the faithTrack and restoring LorenzoDeck.
  */
 public class ReshuffleLorenzoCard extends LorenzoCard {
+    private static final long serialVersionUID = 1011L;
+
     public ReshuffleLorenzoCard(int id) {
         super(id);
     }

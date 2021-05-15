@@ -5,13 +5,24 @@ import it.polimi.ingsw.server.model.exception.NotEnoughResourcesException;
 import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.game.Resource;
 
+import java.io.Serializable;
 import java.util.TreeMap;
 
 /**
  * class that models the lockbox of the player
  */
-public class StrongBox {
+public class StrongBox implements Serializable {
+    private static final long serialVersionUID = 1032L;
+
     private final TreeMap<Resource, Integer> resources;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof StrongBox){
+            return resources.equals(((StrongBox) obj).resources);
+        }
+        return false;
+    }
 
     public StrongBox() {
         resources = new TreeMap<>();

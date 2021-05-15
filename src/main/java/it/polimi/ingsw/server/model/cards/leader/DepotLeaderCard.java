@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.player.Depot;
  * To be activated, it requires the fulfillment (and payment) of RequirementResource.
  */
 public final class DepotLeaderCard extends LeaderCard<RequirementResource> {
+    private static final long serialVersionUID = 1000L;
     private final Depot depot;
 
     public DepotLeaderCard(int victoryPoints, RequirementResource requirement, Depot depot, int id) {

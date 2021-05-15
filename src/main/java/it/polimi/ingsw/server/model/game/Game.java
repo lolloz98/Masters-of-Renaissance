@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.model.player.Player;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,12 +18,27 @@ import java.util.stream.Collectors;
  * Class which represents the state of the game. It's abstract as the game must be either SinglePlayer or MultiPlayer.
  */
 
-public abstract class Game <T extends Turn> {
+public abstract class Game <T extends Turn> implements Serializable {
+    private static final long serialVersionUID = 1016L;
+
     private boolean gameOver;
     private final MarketTray marketTray;
     protected T turn;
     private TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
     private Deck<LeaderCard<? extends Requirement>> deckLeader;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Game<?>){
+            Game<?> t = (Game<?>) obj;
+            return gameOver == t.gameOver &&
+                    marketTray.equals(t.marketTray) &&
+                    turn.equals(t.turn) &&
+                    decksDevelop.equals(t.decksDevelop) &&
+                    deckLeader.equals(t.deckLeader);
+        }
+        return false;
+    }
 
     public Game() throws WrongColorDeckException, WrongLevelDeckException, EmptyDeckException {
         try {

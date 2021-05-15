@@ -9,7 +9,18 @@ import it.polimi.ingsw.server.model.exception.ProductionsResourcesNotFlushedExce
  */
 
 public class TurnSingle extends Turn{
+    private static final long serialVersionUID = 1026L;
+
     private final boolean lorenzoPlaying;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof TurnSingle){
+            TurnSingle t = (TurnSingle) obj;
+            return lorenzoPlaying == t.lorenzoPlaying && super.equals(obj);
+        }
+        return false;
+    }
 
     public TurnSingle(boolean lorenzoPlaying) {
         super();

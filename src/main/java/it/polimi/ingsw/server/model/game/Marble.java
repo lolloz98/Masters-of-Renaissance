@@ -1,6 +1,10 @@
 package it.polimi.ingsw.server.model.game;
 
-public final class Marble {
+import java.io.Serializable;
+
+public final class Marble implements Serializable {
+    private static final long serialVersionUID = 1018L;
+
     private final Resource resource;
 
     public Marble(Resource resource){

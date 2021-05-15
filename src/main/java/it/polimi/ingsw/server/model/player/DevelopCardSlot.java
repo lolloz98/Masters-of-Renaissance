@@ -4,14 +4,26 @@ import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Resource;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 /**
  * class that models the three production slots of each player
  */
-public class DevelopCardSlot {
+public class DevelopCardSlot implements Serializable {
+    private static final long serialVersionUID = 1029L;
+
     private final ArrayList<DevelopCard> cards;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof DevelopCardSlot){
+            DevelopCardSlot t = (DevelopCardSlot) obj;
+            return cards.equals(t.cards);
+        }
+        return false;
+    }
 
     public DevelopCardSlot() {
         this.cards = new ArrayList<>();

@@ -4,7 +4,9 @@ import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.player.Player;
 
-public interface Requirement {
+import java.io.Serializable;
+
+public interface Requirement extends Serializable {
     /**
      * @param player player owning the object with this requirement
      * @return true, if the requirement, otherwise false

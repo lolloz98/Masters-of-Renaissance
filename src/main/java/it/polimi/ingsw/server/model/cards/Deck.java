@@ -5,12 +5,24 @@ import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Deck<T extends Card> {
+public class Deck<T extends Card> implements Serializable {
+    private static final long serialVersionUID = 1012L;
+
     private static final Logger logger = LogManager.getLogger(Deck.class);
 
     protected final ArrayList<T> cards = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Deck<?>){
+            Deck<?> t = (Deck<?>) obj;
+            return cards.equals(t.cards);
+        }
+        return false;
+    }
 
     public Deck(ArrayList<T> cards) {
         this.cards.addAll(cards);

@@ -9,15 +9,29 @@ import java.util.ArrayList;
  */
 
 public class MultiPlayer extends Game<TurnMulti> {
+    private static final long serialVersionUID = 1022L;
+
     private final ArrayList<Player> players;
     private boolean lastRound;
-    private ArrayList<Integer> playerPoints;
+    private final ArrayList<Integer> playerPoints = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof MultiPlayer) {
+            MultiPlayer t = (MultiPlayer) obj;
+            return super.equals(obj) &&
+                    players.equals(t.players) &&
+                    lastRound == t.lastRound &&
+                    playerPoints.equals(t.playerPoints);
+        }
+        return false;
+    }
 
     public MultiPlayer(ArrayList<Player> players) throws PlayersOutOfBoundException, WrongColorDeckException, WrongLevelDeckException, EmptyDeckException {
         super();
         if (players.size()<2 || players.size()>4) throw new PlayersOutOfBoundException();
         this.turn = new TurnMulti(players.get(0));
-        this.players = players;
+        this.players = new ArrayList<>(players);
         this.lastRound = false;
     }
 
@@ -75,7 +89,7 @@ public class MultiPlayer extends Game<TurnMulti> {
      * Computes the points of all the players
      */
     private void computeLeaderBoard(){
-        playerPoints = new ArrayList<>();
+        playerPoints.clear();
         for (Player p : players){
             playerPoints.add(p.getBoard().getVictoryPoints());
         }

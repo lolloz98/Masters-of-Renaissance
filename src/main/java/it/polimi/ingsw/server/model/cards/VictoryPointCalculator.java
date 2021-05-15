@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.cards;
 
-public interface VictoryPointCalculator {
+import java.io.Serializable;
+
+public interface VictoryPointCalculator extends Serializable {
     /**
      * @return number of victoryPoints related to the object implementing this interface
      */

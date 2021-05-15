@@ -2,19 +2,34 @@ package it.polimi.ingsw.server.model.game;
 
 import it.polimi.ingsw.server.model.exception.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.TreeMap;
 
 /**
  * Class which represents the market tray, containing 12 marbles in a matrix and a free one
  */
 
-public class MarketTray {
+public class MarketTray implements Serializable {
+    private static final long serialVersionUID = 1021L;
+
     private final Marble[][] marbleMatrix;
     private Marble freeMarble;
     private final ArrayList<Resource> leaderResources;
     private final ArrayList<TreeMap<Resource, Integer>> resCombinations;
     private boolean isResCombinationsUsed = false;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof MarketTray){
+            MarketTray t = (MarketTray) obj;
+            return Arrays.deepEquals(marbleMatrix, t.marbleMatrix) && freeMarble.equals(t.freeMarble)
+                    && leaderResources.equals(t.leaderResources) && resCombinations.equals(t.resCombinations)
+                    && isResCombinationsUsed == t.isResCombinationsUsed;
+        }
+        return false;
+    }
 
     public MarketTray(MarbleDispenserInterface md) {
         this.marbleMatrix = new Marble[3][4];

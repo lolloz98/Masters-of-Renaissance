@@ -3,13 +3,16 @@ package it.polimi.ingsw.server.model.player;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Resource;
 
+import java.io.Serializable;
 import java.util.TreeMap;
 
 /**
  * class that models a shelf of the warehouse, leaders shelves included
  */
 
-public class Depot {
+public class Depot implements Serializable {
+    private static final long serialVersionUID = 1028L;
+
     private Resource resource;
     private final int maxToStore;
     private int stored;
@@ -17,6 +20,15 @@ public class Depot {
      * true only if the depot is not a leader depot
      */
     private final boolean modifiable;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Depot){
+            Depot t = (Depot) obj;
+            return resource == t.resource && maxToStore == t.maxToStore && stored == t.stored && modifiable == t.modifiable;
+        }
+        return false;
+    }
 
     /**
      * normal depot constructor

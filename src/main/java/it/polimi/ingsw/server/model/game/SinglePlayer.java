@@ -11,12 +11,25 @@ import java.util.ArrayList;
  */
 
 public class SinglePlayer extends Game<TurnSingle>{
+    private static final long serialVersionUID = 1023L;
+
     private final Player player;
     private final Lorenzo lorenzo;
     private LorenzoDeck lorenzoDeck;
     private boolean lastTurn;
     private boolean hasPlayerWon;
     private int playerPoints;
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof SinglePlayer) {
+            SinglePlayer t = (SinglePlayer) obj;
+            return super.equals(obj) && player.equals(t.player) && lorenzo.equals(t.lorenzo)
+                    && lorenzoDeck.equals(t.lorenzoDeck) && lastTurn == t.lastTurn
+                    && hasPlayerWon == t.hasPlayerWon && playerPoints == t.playerPoints;
+        }
+        return false;
+    }
 
     public boolean isLastTurn() {
         return lastTurn;

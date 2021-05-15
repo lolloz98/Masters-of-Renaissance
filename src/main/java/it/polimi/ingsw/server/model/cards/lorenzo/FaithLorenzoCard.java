@@ -7,6 +7,8 @@ import it.polimi.ingsw.server.model.game.SinglePlayer;
  * LorenzoCard with effect of moving Lorenzo of 2 steps on the faithTrack.
  */
 public class FaithLorenzoCard extends LorenzoCard {
+    private static final long serialVersionUID = 1009L;
+
     public FaithLorenzoCard(int id) {
         super(id);
     }
