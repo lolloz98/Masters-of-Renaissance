@@ -11,6 +11,9 @@ public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializa
         this.lorenzoTrack = lorenzoTrack;
     }
 
+    /**
+     * to notify the board for an update of lorenzo track, it doesn't own an observer
+     */
     private LocalTrack lorenzoTrack;
 
     public synchronized void setMainPlayer(LocalPlayer mainPlayer) {

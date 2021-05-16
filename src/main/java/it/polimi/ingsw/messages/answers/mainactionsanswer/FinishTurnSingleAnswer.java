@@ -7,14 +7,26 @@ import it.polimi.ingsw.server.model.cards.lorenzo.LorenzoCard;
 
 public class FinishTurnSingleAnswer extends Answer {
     private final LocalDevelopmentGrid localGrid;
-    private final LocalTrack localTrack;
-    private final LorenzoCard lorenzoCard;
+    private final LocalTrack localLorenzoTrack;
+    private final LocalTrack localPlayerTrack;
 
 
-    public FinishTurnSingleAnswer(int gameId, int playerId, LocalDevelopmentGrid localGrid, LorenzoCard lorenzoCard, LocalTrack localTrack) {
+    public FinishTurnSingleAnswer(int gameId, int playerId, LocalDevelopmentGrid localGrid, LocalTrack localPlayerTrack, LocalTrack localLorenzoTrack) {
         super(gameId, playerId);
         this.localGrid = localGrid;
-        this.lorenzoCard = lorenzoCard;
-        this.localTrack = localTrack;
+        this.localLorenzoTrack = localLorenzoTrack;
+        this.localPlayerTrack = localPlayerTrack;
+    }
+
+    public LocalDevelopmentGrid getLocalGrid() {
+        return localGrid;
+    }
+
+    public LocalTrack getLocalLorenzoTrack() {
+        return localLorenzoTrack;
+    }
+
+    public LocalTrack getLocalPlayerTrack() {
+        return localPlayerTrack;
     }
 }

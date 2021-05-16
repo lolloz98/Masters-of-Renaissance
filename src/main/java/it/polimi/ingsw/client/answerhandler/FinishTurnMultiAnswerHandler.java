@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class FinishTurnMultiAnswerHandler extends AnswerHandler{
 
-    private static final Logger logger = LogManager.getLogger(FinishTurnMultiAnswer.class);
+    private static final Logger logger = LogManager.getLogger(FinishTurnMultiAnswerHandler.class);
 
     public FinishTurnMultiAnswerHandler(FinishTurnMultiAnswer answer) {
         super(answer);
@@ -36,6 +36,6 @@ public class FinishTurnMultiAnswerHandler extends AnswerHandler{
             localTurn.notifyObserver();
         }
         else
-            logger.error("the answer is for a multiplayer game and it has been sent to a single player");
+            logger.error("the answer is for a multi player game and " + logger.getName() + " has been sent to a single player");
     }
 }
