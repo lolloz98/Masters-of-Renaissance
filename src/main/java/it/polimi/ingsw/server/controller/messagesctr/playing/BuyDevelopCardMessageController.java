@@ -60,6 +60,6 @@ public class BuyDevelopCardMessageController extends PlayingMessageController {
 
         LocalBoard localBoard = ConverterToLocalModel.convert(board, true);
         LocalDevelopmentGrid localGrid = ConverterToLocalModel.convert(controllerActions.getGame().getDecksDevelop());
-        return new BuyDevelopCardAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localBoard, localGrid);
+        return new BuyDevelopCardAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localBoard, localGrid, clientMessage.whichSlotToStore);
     }
 }

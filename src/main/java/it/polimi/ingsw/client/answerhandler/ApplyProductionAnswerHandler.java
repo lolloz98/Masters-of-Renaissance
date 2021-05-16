@@ -1,9 +1,6 @@
 package it.polimi.ingsw.client.answerhandler;
 
-import it.polimi.ingsw.client.localmodel.LocalBoard;
-import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalMulti;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
+import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
@@ -25,26 +22,16 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
         ApplyProductionAnswer serverAnswer = (ApplyProductionAnswer) getAnswer();
+        LocalPlayer localPlayer;
+        LocalBoard localBoard;
 
-        if (localGame.getMainPlayer().getId() == serverAnswer.getPlayerId()) {
+        localPlayer = localGame.getPlayerById(serverAnswer.getPlayerId());
+        localBoard = localPlayer.getLocalBoard();
 
-            LocalBoard localBoard = localGame.getMainPlayer().getLocalBoard();
-
-            updateBoard(localBoard, serverAnswer);
-        } else {
-            if (localGame instanceof LocalMulti) {
-                LocalMulti localMulti = (LocalMulti) localGame;
-                LocalPlayer localPlayer = localMulti.getPlayerById(serverAnswer.getPlayerId());
-                LocalBoard localBoard = localPlayer.getLocalBoard();
-
-                updateBoard(localBoard, serverAnswer);
-            } else {
-                logger.error("Answer with wrong player id");
-            }
-        }
-
+        updateBoard(localBoard, serverAnswer);
 
     }
+
 
     private void updateBoard(LocalBoard localBoard, ApplyProductionAnswer serverAnswer) {
 

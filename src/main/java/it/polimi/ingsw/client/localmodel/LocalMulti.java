@@ -51,6 +51,7 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
         state = LocalGameState.NEW;
     }
 
+    @Override
     public synchronized LocalPlayer getPlayerById(int id){
         for(LocalPlayer l : localPlayers){
             if(l.getId() == id) return l;
