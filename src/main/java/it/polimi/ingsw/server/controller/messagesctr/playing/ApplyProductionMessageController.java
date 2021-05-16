@@ -1,24 +1,25 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
-import it.polimi.ingsw.client.localmodel.LocalTrack;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.ApplyProductionAnswer;
-import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.Production;
+import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
-import it.polimi.ingsw.server.model.game.SinglePlayer;
+import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.game.Turn;
 import it.polimi.ingsw.server.model.player.Board;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 /**
  * message that handles the application of a production that owns the player
@@ -79,7 +80,29 @@ public class ApplyProductionMessageController extends PlayingMessageController{
             throw new UnexpectedControllerException(e.getMessage());
         }
 
-        return new ApplyProductionAnswer(clientMessage.getGameId(),clientMessage.getPlayerId(),clientMessage.getResToGive());
+
+        //generating the parameters to construct the answer
+        Production production;
+        try
+        {
+            production= board.getProduction(clientMessage.getWhichProd());
+        } catch(IllegalArgumentException e){
+            logger.error("something unexpected happened in " + logger.getName() + "invalid argument in getProduction that should be already caught");
+            throw new UnexpectedControllerException(e.getMessage());
+        }
+        TreeMap<Resource,Integer> resToFlush =new TreeMap<Resource, Integer>(production.getGainedResources());
+
+        LocalDepotLeader localDepot;
+        ArrayList<LocalDepotLeader> leaderDepots=new ArrayList<>();
+        for(DepotLeaderCard leaderDepot: board.getDepotLeaders()){
+            localDepot=ConverterToLocalModel.convert(leaderDepot);
+            leaderDepots.add(localDepot);
+        }
+
+        TreeMap<Resource, Integer> resInNormalDepots=board.getResInNormalDepots();
+
+
+        return new ApplyProductionAnswer(clientMessage.getGameId(),clientMessage.getPlayerId(), resToFlush, resInNormalDepots, leaderDepots, clientMessage.getWhichProd());
 
     }
 }

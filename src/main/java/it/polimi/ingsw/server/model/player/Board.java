@@ -50,6 +50,48 @@ public class Board implements VictoryPointCalculator {
         return false;
     }
 
+    /**
+     * @param whichProdSlot if 0 --> normal production
+     *                  if 1,2,3 --> a production in the specified development slot
+     *                  if 4,5 --> a leader production
+     * @return the specified production
+     */
+    public Production getProduction(int whichProdSlot){
+        switch (whichProdSlot){
+
+            case 0:{
+                return normalProduction;
+            }
+
+            case 1:
+            case 2:
+            case 3:{
+                if(!getDevelopCardSlots().get(whichProdSlot).isEmpty())
+                    return getDevelopCardSlots().get(whichProdSlot-1).lastCard().getProduction();
+                else
+                    throw new IllegalArgumentException("this production slot is empty");
+            }
+
+            case 4:{
+                if(getProductionLeaders().size()==1)
+                    return getProductionLeaders().get(whichProdSlot-4).getProduction();
+                else
+                    throw new IllegalArgumentException("you have selected a not valid leader production slot");
+            }
+            case 5:{
+                if(getProductionLeaders().size()==2)
+                    return getProductionLeaders().get(whichProdSlot-4).getProduction();
+                else
+                    throw new IllegalArgumentException("you have selected a not valid leader production slot");
+            }
+
+            default:{
+                throw new IllegalArgumentException("you have selected a not valid production slot");
+            }
+
+        }
+    }
+
     public void setInitialRes(int initialRes) {
         this.initialRes = initialRes;
     }
