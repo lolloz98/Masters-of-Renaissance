@@ -42,14 +42,7 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
         localBoard.setResInNormalDepot(serverAnswer.getResInNormalDepots());
 
         //update the leader depots
-        for (LocalCard localLeader : localBoard.getLeaderCards()) {
-            for (LocalDepotLeader updated : serverAnswer.getLeaderDepots()) {
-                if (localLeader.getId() == updated.getId()) {
-                    LocalDepotLeader toUpdate = (LocalDepotLeader) localLeader;
-                    toUpdate.setNumberOfRes(updated.getNumberOfRes());
-                }
-            }
-        }
+        localBoard.updateLeaderDepots(serverAnswer.getLeaderDepots());
 
         //update the production
         int whichProd = serverAnswer.getWhichProdSlot();

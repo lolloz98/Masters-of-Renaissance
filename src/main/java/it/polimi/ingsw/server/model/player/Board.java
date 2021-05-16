@@ -589,32 +589,6 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * definitely discards card from the board
-     * @param card card to discard
-     * @throws InvalidArgumentException the card is not contained in the LeaderCards of the board
-     */
-    public void discardLeaderCard(LeaderCard<? extends Requirement> card) throws InvalidArgumentException {
-        if (!leaderCards.contains(card)) throw new InvalidArgumentException("The leaderCard selected is not owned by the player");
-
-        if(card instanceof DepotLeaderCard){
-            DepotLeaderCard depotCard=(DepotLeaderCard) card;
-            leaderCards.get(leaderCards.indexOf(depotCard)).discard();
-            leaderCards.remove(depotCard);
-            if(depotCard.isActive()) depotLeaders.remove(depotCard);
-        }
-        else if(card instanceof ProductionLeaderCard){
-            ProductionLeaderCard prodCard=(ProductionLeaderCard) card;
-            leaderCards.get(leaderCards.indexOf(prodCard)).discard();
-            leaderCards.remove(prodCard);
-            if(prodCard.isActive()) productionLeaderSlots.remove(prodCard);
-        }
-        else{
-            leaderCards.get(leaderCards.indexOf(card)).discard();
-            leaderCards.remove(card);
-        }
-    }
-
-    /**
      * definitely removes cards from the leaderCards of the board
      *
      * @param cardsId cards ids to be removed from the board

@@ -28,4 +28,16 @@ public class FlushMarketResAnswer extends Answer {
         this.resInNormalDeposit = resInNormalDeposit;
         this.localDepotLeaders = localDepotLeaders;
     }
+
+    public ArrayList<LocalTrack> getLocalTracks() {
+        return localTracks;
+    }
+
+    public TreeMap<Resource, Integer> getResInNormalDeposit() {
+        return resInNormalDeposit;
+    }
+
+    public ArrayList<LocalDepotLeader> getLocalDepotLeaders() {
+        return localDepotLeaders;
+    }
 }

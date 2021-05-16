@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.localmodel;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class LocalGame<T extends LocalTurn> extends Observable implements Serializable {
     protected LocalDevelopmentGrid localDevelopmentGrid;
@@ -22,6 +23,8 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
     public synchronized void setLocalTurn(T localTurn) {
         this.localTurn = localTurn;
     }
+
+    public abstract ArrayList<LocalPlayer> getLocalPlayers();
 
     public Error getError() {
         return error;

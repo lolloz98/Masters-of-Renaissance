@@ -7,10 +7,10 @@ import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
 import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
-import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,16 +40,24 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
         try {
             card = thisPlayer.getBoard().getLeaderCard(((LeaderMessage) getClientMessage()).getLeaderId());
         } catch (InvalidArgumentException e) {
-            throw new ControllerException("you don't own this leader");
+            throw new InvalidArgumentControllerException("The leaderCardId provided was not valid");
         }
 
         try {
-            thisPlayer.getBoard().discardLeaderCard(card);
-        } catch (InvalidArgumentException e) {
-            logger.error("something went wrong in " + this.getClass() + "while discarding a leader card");
-            throw new ControllerException("unexpected error");
+            card.discard();
+        } catch (AlreadyActiveLeaderException e) {
+            throw new AlreadyActiveLeaderControllerException();
+        } catch (ActivateDiscardedCardException e) {
+            throw new AlreadyDiscardedLeaderControllerException();
         }
 
+        try {
+            thisPlayer.getBoard().getFaithtrack().move(1, controllerActions.getGame());
+        } catch (EndAlreadyReachedException | FigureAlreadyActivatedException | InvalidStepsException | FigureAlreadyDiscardedException e) {
+            logger.warn("After discarding leader, moving of one step gave: " + e + " - Continuing normal execution");
+        }
+
+        // All faith tracks might be modified if vatican Figure is activated while moving
         ArrayList<LocalTrack> localTracks = controllerActions.getFaithTracks();
         LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
         return new DiscardLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, localTracks);
