@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.CLIutils;
+import it.polimi.ingsw.client.cli.MapUtils;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalProduction;
@@ -53,20 +55,20 @@ public class ActivateProductionView extends View {
         if (resToMove.containsKey(Resource.ANYTHING)) {
             switch (ans) {
                 case "1":
-                    addToResMap(resToMove, Resource.SHIELD);
-                    removeResFromMap(resToMove, Resource.ANYTHING);
+                    MapUtils.addToResMap(resToMove, Resource.SHIELD);
+                    MapUtils.removeResFromMap(resToMove, Resource.ANYTHING);
                     break;
                 case "2":
-                    addToResMap(resToMove, Resource.GOLD);
-                    removeResFromMap(resToMove, Resource.ANYTHING);
+                    MapUtils.addToResMap(resToMove, Resource.GOLD);
+                    MapUtils.removeResFromMap(resToMove, Resource.ANYTHING);
                     break;
                 case "3":
-                    addToResMap(resToMove, Resource.SERVANT);
-                    removeResFromMap(resToMove, Resource.ANYTHING);
+                    MapUtils.addToResMap(resToMove, Resource.SERVANT);
+                    MapUtils.removeResFromMap(resToMove, Resource.ANYTHING);
                     break;
                 case "4":
-                    addToResMap(resToMove, Resource.ROCK);
-                    removeResFromMap(resToMove, Resource.ANYTHING);
+                    MapUtils.addToResMap(resToMove, Resource.ROCK);
+                    MapUtils.removeResFromMap(resToMove, Resource.ANYTHING);
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");
@@ -74,37 +76,37 @@ public class ActivateProductionView extends View {
         } else if (resToGain.containsKey(Resource.ANYTHING)) {
             switch (ans) {
                 case "1":
-                    addToResMap(resToGain, Resource.SHIELD);
-                    removeResFromMap(resToGain, Resource.ANYTHING);
+                    MapUtils.addToResMap(resToGain, Resource.SHIELD);
+                    MapUtils.removeResFromMap(resToGain, Resource.ANYTHING);
                     break;
                 case "2":
-                    addToResMap(resToGain, Resource.GOLD);
-                    removeResFromMap(resToGain, Resource.ANYTHING);
+                    MapUtils.addToResMap(resToGain, Resource.GOLD);
+                    MapUtils.removeResFromMap(resToGain, Resource.ANYTHING);
                     break;
                 case "3":
-                    addToResMap(resToGain, Resource.SERVANT);
-                    removeResFromMap(resToGain, Resource.ANYTHING);
+                    MapUtils.addToResMap(resToGain, Resource.SERVANT);
+                    MapUtils.removeResFromMap(resToGain, Resource.ANYTHING);
                     break;
                 case "4":
-                    addToResMap(resToGain, Resource.ROCK);
-                    removeResFromMap(resToGain, Resource.ANYTHING);
+                    MapUtils.addToResMap(resToGain, Resource.ROCK);
+                    MapUtils.removeResFromMap(resToGain, Resource.ANYTHING);
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");
             }
-        } else if (!isMapEmpty(resToMove)) {
+        } else if (!MapUtils.isMapEmpty(resToMove)) {
             switch (ans) {
                 case "1":
-                    addToResMapWarehouse(resToGive, resToMove.firstKey(), WarehouseType.NORMAL);
-                    removeResFromMap(resToMove, resToMove.firstKey());
+                    MapUtils.addToResMapWarehouse(resToGive, resToMove.firstKey(), WarehouseType.NORMAL);
+                    MapUtils.removeResFromMap(resToMove, resToMove.firstKey());
                     break;
                 case "2":
-                    addToResMapWarehouse(resToGive, resToMove.firstKey(), WarehouseType.LEADER);
-                    removeResFromMap(resToMove, resToMove.firstKey());
+                    MapUtils.addToResMapWarehouse(resToGive, resToMove.firstKey(), WarehouseType.LEADER);
+                    MapUtils.removeResFromMap(resToMove, resToMove.firstKey());
                     break;
                 case "3":
-                    addToResMapWarehouse(resToGive, resToMove.firstKey(), WarehouseType.STRONGBOX);
-                    removeResFromMap(resToMove, resToMove.firstKey());
+                    MapUtils.addToResMapWarehouse(resToGive, resToMove.firstKey(), WarehouseType.STRONGBOX);
+                    MapUtils.removeResFromMap(resToMove, resToMove.firstKey());
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");
@@ -140,15 +142,15 @@ public class ActivateProductionView extends View {
     public void draw() {
         if (resToMove.containsKey(Resource.ANYTHING)) {
             System.out.println("Pick a res for the ANYTHING resource to give");
-            printResList();
+            CLIutils.printResList();
         } else if (resToGain.containsKey(Resource.ANYTHING)) {
             System.out.println("Pick a res for the ANYTHING resource to gain");
-            printResList();
+            CLIutils.printResList();
         }
         // check if resToMove is empty, if it's not i pick one resource and ask where to put it
-        else if (!isMapEmpty(resToMove)) {
+        else if (!MapUtils.isMapEmpty(resToMove)) {
             System.out.println("Pick where to take a " + resToMove.firstKey() + " from:");
-            printWarehouseList();
+            CLIutils.printWarehouseList();
         } else { // all above are false, i can ask for confirmation
             System.out.println("Res to give: " + resToGive);
             System.out.println("Res to gain: " + resToGain);
@@ -156,46 +158,5 @@ public class ActivateProductionView extends View {
         }
     }
 
-    private void addToResMap(TreeMap<Resource, Integer> resMap, Resource resource) {
-        if (resMap.containsKey(resource)) {
-            resMap.replace(resource, 1 + resMap.get(resource));
-        } else {
-            resMap.put(resource, 1);
-        }
-    }
 
-    private void addToResMapWarehouse(TreeMap<WarehouseType, TreeMap<Resource, Integer>> resMap, Resource resource, WarehouseType warehouseType) {
-        if (!resMap.containsKey(warehouseType)) {
-            resMap.put(warehouseType, new TreeMap<>());
-        }
-        addToResMap(resMap.get(warehouseType), resource);
-    }
-
-    private void removeResFromMap(TreeMap<Resource, Integer> resMap, Resource resource) {
-        resMap.replace(resource, resMap.get(resource) - 1);
-        if (resMap.get(resource) == 0) {
-            resMap.remove(resource);
-        }
-    }
-
-    private void printResList() {
-        System.out.println("1. Shield");
-        System.out.println("2. Gold");
-        System.out.println("3. Servant");
-        System.out.println("4. Rock");
-    }
-
-    private boolean isMapEmpty(TreeMap<Resource, Integer> map) {
-        int sum = 0;
-        for (Resource r : map.keySet()) {
-            sum += map.get(r);
-        }
-        return sum == 0;
-    }
-
-    private void printWarehouseList() {
-        System.out.println("1. Normal depot");
-        System.out.println("2. Leader depot");
-        System.out.println("3. Strongbox");
-    }
 }

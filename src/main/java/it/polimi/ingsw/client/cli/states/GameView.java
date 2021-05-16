@@ -26,23 +26,23 @@ public abstract class GameView extends View {
         int ansNumber;
         try {
             ansNumber = Integer.parseInt(ansList.get(1));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             ansNumber = 0;
         }
-        switch (ansList.get(1)) {
-            case "board":
+        switch (ansList.get(0)) {
+            case "BOARD":
                 moveToBoard(ansNumber);
                 break;
-            case "market":
+            case "MARKET":
                 moveToMarket(ansNumber);
                 break;
-            case "develop":
+            case "DEVELOP":
                 moveToDevelop(ansNumber);
                 break;
-            case "help":
+            case "HELP":
                 helpScreen();
                 break;
-            case "default":
+            default:
                 writeErrText();
         }
     }
@@ -93,10 +93,10 @@ public abstract class GameView extends View {
     public void drawTurn() {
         if (localGame instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) localGame;
-            System.out.print("Playing order: ");
+            System.out.print("Playing order:");
             ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
             for (int i = 0; i < localPlayers.size(); i++) {
-                System.out.print((i + 1) + ") " + localPlayers.get(i).getName());
+                System.out.print(" " + (i + 1) + "," + localPlayers.get(i).getName());
             }
             System.out.print("\n");
             System.out.println("Currently playing: " + localMulti.getLocalTurn().getCurrentPlayer().getName());

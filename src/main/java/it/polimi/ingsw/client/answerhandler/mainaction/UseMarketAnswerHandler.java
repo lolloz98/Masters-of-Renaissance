@@ -22,5 +22,7 @@ public class UseMarketAnswerHandler extends AnswerHandler {
         //update market
         localGame.getLocalMarket().setResCombinations(serverAnswer.getResCombinations());
 
+        //notify
+        localGame.getLocalMarket().notifyObserver();
     }
 }

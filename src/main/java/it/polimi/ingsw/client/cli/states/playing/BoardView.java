@@ -7,12 +7,12 @@ import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalProduction;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.*;
+import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Locale;
 
 public class BoardView extends GameView {
     private final LocalPlayer localPlayer;
@@ -48,7 +48,6 @@ public class BoardView extends GameView {
             System.out.print(", res to gain: " + localPlayer.getLocalBoard().getBaseProduction().getResToGain());
             System.out.print(", res to flush: " + localPlayer.getLocalBoard().getBaseProduction().getResToFlush() + "\n");
             int i;
-            // first production slot
             for (i = 0; i < 3; i++) {
                 if (localPlayer.getLocalBoard().getDevelopCards().get(i).size() == 0) {
                     System.out.println("No cards in " + i + "° slot");
@@ -90,7 +89,10 @@ public class BoardView extends GameView {
                         System.out.print(", prod requirement: " + localProductionLeader.getColorRequirement() + " at level " + localProductionLeader.getLevelReq());
                         System.out.print(", production: " + localProductionLeader.getProduction());
                     }
-                    if (localLeaderCard.isActive()) {
+                    if (localLeaderCard.isDiscarded()){
+                        System.out.print(", this card is discarded");
+                    }
+                    else if (localLeaderCard.isActive()) {
                         System.out.print(", this card is active");
                     } else {
                         System.out.print(", this card is not active");
@@ -116,7 +118,7 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public void helpScreen() {
+    public synchronized void helpScreen() {
         // todo
     }
 
@@ -127,21 +129,23 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public synchronized void handleCommand(String ans) {
+    public synchronized void handleCommand(String s) {
         if (!waiting) {
+            String ans = s.toUpperCase();
             ArrayList<String> ansList = new ArrayList<>(Arrays.asList(ans.split("\\s+")));
             if (localPlayer == localGame.getMainPlayer()) { // if i am on my board i can activate leaders or productions
                 if (ansList.size() > 2) {
                     writeErrText();
                 } else {
                     switch (ansList.get(0)) {
-                        // todo handle activate production (only if loadBoard.getPlayerId() == playerId)
-                        // todo activate leader
-                        case "leader":
+                        case "LEADER":
                             activateLeader(ansList.get(1));
                             break;
-                        case "prod":
+                        case "PROD":
                             activateProduction(ansList.get(1));
+                            break;
+                        case "FLUSH":
+                            flushProduction();
                             break;
                         default:
                             super.handleCommand(ansList);
@@ -154,6 +158,14 @@ public class BoardView extends GameView {
                     super.handleCommand(ansList);
                 }
             }
+        }
+    }
+
+    private void flushProduction() {
+        try {
+            cli.getServerListener().sendMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
