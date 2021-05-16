@@ -29,9 +29,10 @@ public class FlushMarketResAnswerHandler extends AnswerHandler {
         //update normal depots
         localBoard=localGame.getPlayerById(serverAnswer.getPlayerId()).getLocalBoard();
         localBoard.setResInNormalDepot(serverAnswer.getResInNormalDeposit());
-        localBoard.notifyObserver();
 
         //update leader depots
         localBoard.updateLeaderDepots(serverAnswer.getLocalDepotLeaders());
+
+        localBoard.notifyObserver();
     }
 }

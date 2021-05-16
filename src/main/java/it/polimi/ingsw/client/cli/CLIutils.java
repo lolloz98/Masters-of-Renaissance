@@ -63,4 +63,17 @@ public class CLIutils {
         }
         return " ";
     }
+
+    public static void printResList() {
+        System.out.println("1. Shield");
+        System.out.println("2. Gold");
+        System.out.println("3. Servant");
+        System.out.println("4. Rock");
+    }
+
+    public static void printWarehouseList() {
+        System.out.println("1. Normal depot");
+        System.out.println("2. Leader depot");
+        System.out.println("3. Strongbox");
+    }
 }
