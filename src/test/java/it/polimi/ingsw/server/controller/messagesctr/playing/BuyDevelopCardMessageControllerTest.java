@@ -37,6 +37,7 @@ public class BuyDevelopCardMessageControllerTest {
     public static void setUp(){
         CollectionsHelper.setTest();
     }
+
     @Test
     public void doAction() throws ControllerException, EmptyDeckException, FigureAlreadyDiscardedException, ResourceNotDiscountableException, InvalidArgumentException, FigureAlreadyActivatedException, InvalidStepsException, EndAlreadyReachedException {
         gameId = MessageControllerTestHelper.toReadyMulti();
@@ -44,7 +45,6 @@ public class BuyDevelopCardMessageControllerTest {
         MultiPlayer mp = ca.getGame();
         Color color = Color.PURPLE;
         int level = 1;
-        int whichDeck = 1;
         int whichSlot = 1;
         Player player = mp.getPlayers().get(0);
         TreeMap<WarehouseType, TreeMap<Resource, Integer>> rightCost = new TreeMap<>() {{
@@ -52,16 +52,16 @@ public class BuyDevelopCardMessageControllerTest {
         }};
         try {
             // Not enough resources to perform the desired action
-            MessageControllerTestHelper.doBuyDevelopCard(gameId, player, level, color, whichDeck, whichSlot, rightCost);
+            MessageControllerTestHelper.doBuyDevelopCard(gameId, player, level, color, whichSlot, rightCost);
             fail();
         }catch (InvalidArgumentControllerException ignore){}
 
         player.getBoard().flushGainedResources(new TreeMap<>(mp.getDecksDevelop().get(color).get(level).topCard().getCost()), mp);
-        MessageControllerTestHelper.doBuyDevelopCard(gameId, player, level, color, whichDeck, whichSlot, rightCost);
+        MessageControllerTestHelper.doBuyDevelopCard(gameId, player, level, color, whichSlot, rightCost);
 
         try {
-            // Cannot perform main action safter a main action
-            MessageControllerTestHelper.doBuyDevelopCard(gameId, player, level, color, whichDeck, whichSlot, rightCost);
+            // Cannot perform main action after a main action
+            MessageControllerTestHelper.doBuyDevelopCard(gameId, player, level, color, whichSlot, rightCost);
             fail();
         }catch (InvalidActionControllerException ignore){}
     }

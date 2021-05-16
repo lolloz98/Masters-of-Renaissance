@@ -156,7 +156,7 @@ public class Board implements VictoryPointCalculator {
      * @throws InvalidResourcesByPlayerException   if toPay or resourcesToGain contain invalid type of Resources
      * @throws NotEnoughResourcesException         if there are not enough resources topay on the board
      */
-    public void activateProduction(int whichProd, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Game<?> game) throws ModelException {
+    public void activateProduction(int whichProd, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Game<?> game) throws InvalidProductionSlotChosenException, ProductionAlreadyActivatedException, ResourceNotDiscountableException, InvalidArgumentException, InvalidResourceQuantityToDepotException, InvalidResourcesByPlayerException, NotEnoughResourcesException {
         if (whichProd < 0)
             throw new InvalidProductionSlotChosenException();
         if(whichProd > 0 && whichProd <= 3 && whichProd > developCardSlots.size())
@@ -180,7 +180,7 @@ public class Board implements VictoryPointCalculator {
      * flush resources from productions to the board
      * @param game current game
      */
-    public void flushResFromProductions(Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, FigureAlreadyDiscardedException, InvalidArgumentException, FigureAlreadyActivatedException {
+    public void flushResFromProductions(Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException {
         normalProduction.flushGainedToBoard(this,game);
         for(DevelopCardSlot ds: developCardSlots){
             if(!ds.isEmpty())
@@ -469,7 +469,7 @@ public class Board implements VictoryPointCalculator {
      * @param gainedResources are put in the strongbox
      * @param game            current game
      */
-    public void flushGainedResources(TreeMap<Resource, Integer> gainedResources, Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+    public void flushGainedResources(TreeMap<Resource, Integer> gainedResources, Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException {
         if (gainedResources.getOrDefault(Resource.FAITH, 0) > 0)
             this.faithtrack.move(gainedResources.get(Resource.FAITH), game);
         TreeMap<Resource, Integer> c = new TreeMap<>(gainedResources);

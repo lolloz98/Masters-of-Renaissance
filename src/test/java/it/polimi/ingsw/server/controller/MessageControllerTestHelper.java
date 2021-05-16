@@ -5,6 +5,7 @@ import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.*;
+import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
 import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
@@ -15,10 +16,7 @@ import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.playing.ActivateLeaderMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.playing.BuyDevelopCardMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.playing.FlushMarketResMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.playing.UseMarketMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.playing.*;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.RemoveLeaderPrepMessageController;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
@@ -169,9 +167,7 @@ public final class MessageControllerTestHelper {
                 }
                 if(req.get(c) > 3) logger.error("number too big. For RequirementColorsDevelop I considered this number as level, actually is the quantity of given color");
                 for (int i = 1; i <= req.get(c); i++) {
-                    DevelopCard cardToBuy = game.getDecksDevelop().get(c).get(i).topCard();
-                    TreeMap<Resource, Integer> cost = cardToBuy.getCost();
-                    player.getBoard().flushGainedResources(cost, game);
+                    TreeMap<Resource, Integer> cost = setResourcesInStrongBoxForDevelop(game, player,c, i);
                     player.getBoard().buyDevelopCard(game, c, i, whichSlot, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
                         put(WarehouseType.STRONGBOX, new TreeMap<>(cost));
                     }});
@@ -230,8 +226,30 @@ public final class MessageControllerTestHelper {
         flushMarketResMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
     }
 
-    public static void doBuyDevelopCard(int gameId, Player player, int level, Color color, int whichDeck, int whichSlot, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) throws ControllerException {
-        BuyDevelopCardMessageController buyDevelopCardMessageController = new BuyDevelopCardMessageController(new BuyDevelopCardMessage(gameId, player.getPlayerId(), level, color, whichDeck, whichSlot, toPay));
+    public static void doBuyDevelopCard(int gameId, Player player, int level, Color color, int whichSlot, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) throws ControllerException {
+        BuyDevelopCardMessageController buyDevelopCardMessageController = new BuyDevelopCardMessageController(new BuyDevelopCardMessage(gameId, player.getPlayerId(), level, color, whichSlot, toPay));
         buyDevelopCardMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
     }
+
+    public static void doApplyProduction(int gameId, Player player, int whichProd, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toGive, TreeMap<Resource, Integer> toGain) throws ControllerException {
+        ApplyProductionMessageController applyProductionMessageController = new ApplyProductionMessageController(new ApplyProductionMessage(gameId, player.getPlayerId(), whichProd, toGive, toGain));
+        applyProductionMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
+    }
+
+    /**
+     * It set up the resources in the strongBox of the player in order to have the possibility to buy the specified card.
+     * CARE: this method does not use messageControllers, it manages the game directly.
+     * @param game current game
+     * @param player player buying the card
+     * @param c color of the card to be bought
+     * @param level level of the card to be bought
+     * @return the cost of the card to b bought
+     */
+    public static TreeMap<Resource, Integer> setResourcesInStrongBoxForDevelop(Game<?> game, Player player, Color c, int level) throws EmptyDeckException, ResourceNotDiscountableException, InvalidArgumentException, InvalidStepsException, EndAlreadyReachedException {
+        DevelopCard cardToBuy = game.getDecksDevelop().get(c).get(level).topCard();
+        TreeMap<Resource, Integer> cost = cardToBuy.getCost();
+        player.getBoard().flushGainedResources(cost, game);
+        return cost;
+    }
+
 }

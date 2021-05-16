@@ -5,8 +5,7 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.ApplyProductionAnswer;
 import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.Production;
 import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
@@ -32,64 +31,40 @@ public class ApplyProductionMessageController extends PlayingMessageController {
         super(clientMessage);
     }
 
-    /**
-     * method that apply a specified production
-     *
-     * @param controllerActions controller action of current game
-     * @return ApplyProductionAnswer to notify the client with the changes of the model
-     * @throws ControllerException
-     */
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws WrongPlayerIdControllerException, InvalidActionControllerException, UnexpectedControllerException, InvalidArgumentControllerException {
         Player thisPlayer = getPlayerFromId(controllerActions);
         Board board = thisPlayer.getBoard();
         ApplyProductionMessage clientMessage = (ApplyProductionMessage) getClientMessage();
 
         Turn turn = controllerActions.getGame().getTurn();
-
-        if (!turn.isProductionsActivated()) {
-            try {
-                turn.setProductionsActivated(true);
-            } catch (MainActionAlreadyOccurredException e) {
-                throw new ControllerException("you have already done your main action, wait the next turn");
-            } catch (MarketTrayNotEmptyException e) {
-                logger.error("market tray not flushed");
-                throw new ControllerException("The market has resources that needs to be flushed");
-            } catch (ProductionsResourcesNotFlushedException e) {
-                logger.error("productions not flushed");
-                throw new ControllerException("productions have resources that needs to be flushed");
-            }
-        }
+        if(turn.cannotSetProductionActivated())
+            throw new InvalidActionControllerException("Invalid action. At this time you cannot activate productions");
 
         try {
             board.activateProduction(clientMessage.getWhichProd(), clientMessage.getResToGive(), clientMessage.getResToGain(), controllerActions.getGame());
-        } catch (InvalidResourcesByPlayerException e) {
-            throw new ControllerException("you cannot produce or give this type of resources!");
-        } catch (InvalidProductionSlotChosenException e) {
-            throw new ControllerException("you have chosen an invalid production slot!");
-        } catch (ProductionAlreadyActivatedException e) {
-            throw new ControllerException("this production has already been activated!");
-        } catch (NotEnoughResourcesException e) {
-            throw new ControllerException("you don't own enough resources to activate this production");
-        } catch (ResourceNotDiscountableException e) {
-            throw new ControllerException("wrong type of resource chosen");
-        } catch (InvalidArgumentException e) {
-            throw new ControllerException("wrong input");
-        } catch (ModelException e) {
-            // todo: check t
-            logger.error("something unexpected happened in " + logger.getName());
-            throw new UnexpectedControllerException(e.getMessage());
+        } catch (InvalidResourceQuantityToDepotException | InvalidResourcesByPlayerException | InvalidProductionSlotChosenException | ProductionAlreadyActivatedException | NotEnoughResourcesException | ResourceNotDiscountableException | InvalidArgumentException e) {
+            throw new InvalidArgumentControllerException(e.getMessage(), 0);
         }
 
+        try {
+            turn.setProductionsActivated(true);
+        } catch (MainActionAlreadyOccurredException | MarketTrayNotEmptyException | ProductionsResourcesNotFlushedException e) {
+            // Since we have already controlled if it could be set to false marketActivated, we are confident we are never coming here
+            logger.error("setProductionsActivated threw an unexpected exception after checks. This might have corrupted the status of a game: " + e);
+            throw new UnexpectedControllerException("Something unexpected happened. However, the production has been activated: " + e.getMessage());
+        }
 
         //generating the parameters to construct the answer
         Production production;
         try {
-            production = board.getProduction(clientMessage.getWhichProd());
+            production = board.getProduction(clientMessage.getWhichProd() - 1);
         } catch (IllegalArgumentException e) {
-            logger.error("something unexpected happened in " + logger.getName() + "invalid argument in getProduction that should be already caught");
-            throw new UnexpectedControllerException(e.getMessage());
+            // Since we have already used the parameter whichProd, we are confident we are never coming here
+            logger.error("getProduction threw an unexpected exception after checks. This might have corrupted the status of a game: " + e);
+            throw new UnexpectedControllerException("Something unexpected happened. However, the production has been activated: " + e.getMessage());
         }
+
         TreeMap<Resource, Integer> resToFlush = new TreeMap<>(production.getGainedResources());
 
         LocalDepotLeader localDepot;
@@ -101,8 +76,6 @@ public class ApplyProductionMessageController extends PlayingMessageController {
 
         TreeMap<Resource, Integer> resInNormalDepots = board.getResInNormalDepots();
 
-
         return new ApplyProductionAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), resToFlush, resInNormalDepots, leaderDepots, clientMessage.getWhichProd());
-
     }
 }

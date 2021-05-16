@@ -40,7 +40,7 @@ public class BuyDevelopCardMessageController extends PlayingMessageController {
         try {
             board.buyDevelopCard(controllerActions.getGame(), clientMessage.getColor(), clientMessage.getLevel(), clientMessage.whichSlotToStore, clientMessage.toPay);
         }  catch (InvalidResourceQuantityToDepotException | ResourceNotDiscountableException | NotEnoughResourcesException | EmptyDeckException | FullDevelopSlotException | InvalidDevelopCardToSlotException | InvalidArgumentException e) {
-            throw new InvalidArgumentControllerException("While making your choices something went wrong: " + e.getMessage());
+            throw new InvalidArgumentControllerException(e.getMessage(), 0);
         }
 
         try {

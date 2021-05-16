@@ -15,11 +15,6 @@ public class BuyDevelopCardMessage extends ClientMessage {
     public final int level;
     public final Color color;
     /**
-     * on which deck do we have to put the card just bought
-     */
-    public final int whichDeck;
-
-    /**
      * on which production slot we want to put the card
      */
     public final int whichSlotToStore;
@@ -31,17 +26,12 @@ public class BuyDevelopCardMessage extends ClientMessage {
      */
     public final TreeMap<WarehouseType, TreeMap<Resource,Integer>> toPay;
 
-    public BuyDevelopCardMessage(int gameId, int playerId, int level, Color color, int whichDeck, int whichSlotToStore, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
+    public BuyDevelopCardMessage(int gameId, int playerId, int level, Color color, int whichSlotToStore, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
         super(gameId, playerId);
         this.level = level;
         this.color = color;
-        this.whichDeck = whichDeck;
         this.whichSlotToStore = whichSlotToStore;
         this.toPay = toPay;
-    }
-
-    public int getWhichDeck() {
-        return whichDeck;
     }
 
     public int getLevel() {
