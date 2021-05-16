@@ -15,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class UseMarketMessageController extends PlayingMessageController{
+public class UseMarketMessageController extends PlayingMessageController {
 
     private static final Logger logger = LogManager.getLogger(UseMarketMessageController.class);
 
@@ -25,23 +25,23 @@ public class UseMarketMessageController extends PlayingMessageController{
 
     @Override
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
-        Game<?> game= controllerActions.getGame();
+        Game<?> game = controllerActions.getGame();
 
         try {
             game.getTurn().setMarketActivated(true);
         } catch (MainActionAlreadyOccurredException e) {
             throw new ControllerException("you have already done your main action");
         } catch (MarketTrayNotEmptyException e) {
-            logger.error("the market tray is not empty and i'm trying to send "+this.getClass());
+            logger.error("the market tray is not empty and i'm trying to send " + this.getClass());
             throw new UnexpectedControllerException("the market is not empty");
         } catch (ProductionsResourcesNotFlushedException e) {
-            logger.error("there is resources not flushed while sending "+this.getClass());
+            logger.error("there is resources not flushed while sending " + this.getClass());
             throw new UnexpectedControllerException("the productions are not flushed");
         }
 
-        UseMarketMessage clientMessage=(UseMarketMessage) getClientMessage();
+        UseMarketMessage clientMessage = (UseMarketMessage) getClientMessage();
         try {
-            game.getMarketTray().pushMarble(clientMessage.isOnRow(),clientMessage.getIndex());
+            game.getMarketTray().pushMarble(clientMessage.isOnRow(), clientMessage.getIndex());
         } catch (MarketTrayNotEmptyException e) {
             logger.error("the market is not empty and i'm trying to push the marble ");
             throw new UnexpectedControllerException("the market is not empty");
@@ -49,6 +49,6 @@ public class UseMarketMessageController extends PlayingMessageController{
             throw new ControllerException("you have put a wrong matrix index, try again");
         }
 
-        return new UseMarketAnswer(clientMessage.getGameId(),clientMessage.getPlayerId(),game.getMarketTray().getResCombinations());
+        return new UseMarketAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), game.getMarketTray().getResCombinations());
     }
 }

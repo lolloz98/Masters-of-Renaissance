@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 
-public class  FlushProductionResMessageController extends PlayingMessageController{
-    private static final Logger logger= LogManager.getLogger(ChooseOneResPrepMessageController.class);
+public class FlushProductionResMessageController extends PlayingMessageController {
+    private static final Logger logger = LogManager.getLogger(ChooseOneResPrepMessageController.class);
 
     public FlushProductionResMessageController(FlushProductionResMessage clientMessage) {
         super(clientMessage);
@@ -32,8 +32,8 @@ public class  FlushProductionResMessageController extends PlayingMessageControll
     @Override
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Player thisPlayer = getPlayerFromId(controllerActions);
-        Board board=thisPlayer.getBoard();
-        Turn turn=controllerActions.getGame().getTurn();
+        Board board = thisPlayer.getBoard();
+        Turn turn = controllerActions.getGame().getTurn();
 
         try {
             board.flushResFromProductions(controllerActions.getGame());
@@ -42,35 +42,36 @@ public class  FlushProductionResMessageController extends PlayingMessageControll
             throw new ControllerException(e.getMessage());
         }
 
-        TreeMap<Resource,Integer> totGainedResources= new TreeMap<>();
+        TreeMap<Resource, Integer> totGainedResources = new TreeMap<>();
 
         //first flush gained resources from normal production if activated
-        if(board.getNormalProduction().hasBeenActivated()) totGainedResources.putAll(board.getNormalProduction().getGainedResources());
+        if (board.getNormalProduction().hasBeenActivated())
+            totGainedResources.putAll(board.getNormalProduction().getGainedResources());
 
         //second flush develop card gained resources if activated
-        for(DevelopCardSlot slot: board.getDevelopCardSlots()){
-            Production production=slot.getCards().get(slot.getCards().size()-1).getProduction();
-            if(production.hasBeenActivated())
+        for (DevelopCardSlot slot : board.getDevelopCardSlots()) {
+            Production production = slot.getCards().get(slot.getCards().size() - 1).getProduction();
+            if (production.hasBeenActivated())
                 totGainedResources.putAll(production.getGainedResources());
         }
 
         //and then flush production leader card gained resources if activated
-        for(ProductionLeaderCard leader: board.getProductionLeaders()){
-            Production production=leader.getProduction();
-            if(production.hasBeenActivated())
+        for (ProductionLeaderCard leader : board.getProductionLeaders()) {
+            Production production = leader.getProduction();
+            if (production.hasBeenActivated())
                 totGainedResources.putAll(production.getGainedResources());
         }
 
-        try{
+        try {
             turn.setProductionsActivated(false);
-        }catch(MainActionAlreadyOccurredException e){//an idea is to disable the button with this option if there is not been applied any production
-            throw  new ControllerException("error: you cannot flush the resources");
+        } catch (MainActionAlreadyOccurredException e) {//an idea is to disable the button with this option if there is not been applied any production
+            throw new ControllerException("error: you cannot flush the resources");
         } catch (MarketTrayNotEmptyException | ProductionsResourcesNotFlushedException e) {
             // todo: handle exceptions
         }
 
-        ArrayList<LocalTrack> localTracks=controllerActions.getFaithTracks();
-        return new FlushProductionResAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),totGainedResources, localTracks);
+        ArrayList<LocalTrack> localTracks = controllerActions.getFaithTracks();
+        return new FlushProductionResAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), totGainedResources, localTracks);
     }
 
 }

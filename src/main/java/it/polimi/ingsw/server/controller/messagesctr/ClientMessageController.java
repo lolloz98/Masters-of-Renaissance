@@ -29,29 +29,31 @@ public abstract class ClientMessageController implements Serializable {
         return clientMessage;
     }
 
-    protected Player getPlayerFromId(ControllerActions<?> controllerActions) throws ControllerException{
+    protected Player getPlayerFromId(ControllerActions<?> controllerActions) throws ControllerException {
         Game<?> game = controllerActions.getGame();
         Player player;
         int playerId = getClientMessage().getPlayerId();
-        if(game instanceof MultiPlayer){
-            List<Player> players = ((MultiPlayer)game).getPlayers().stream().filter(x -> x.getPlayerId() == playerId).collect(Collectors.toList());
-            if(players.size() != 1) throw new WrongPlayerIdControllerException("number of players with specified id: " + players.size());
+        if (game instanceof MultiPlayer) {
+            List<Player> players = ((MultiPlayer) game).getPlayers().stream().filter(x -> x.getPlayerId() == playerId).collect(Collectors.toList());
+            if (players.size() != 1)
+                throw new WrongPlayerIdControllerException("number of players with specified id: " + players.size());
             player = players.get(0);
-        }else{
+        } else {
             // Do we want to check the player id in this case? -> maybe not
-            player = ((SinglePlayer)game).getPlayer();
+            player = ((SinglePlayer) game).getPlayer();
         }
         return player;
     }
 
     public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
         if (checkState(controllerActions)) {
-                return doActionNoChecks(controllerActions);
+            return doActionNoChecks(controllerActions);
         } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
     }
 
     /**
      * do action without checking for the state and current player
+     *
      * @param controllerActions controller action of current game
      * @return answer of this message
      * @throws ControllerException if something wrong with the message

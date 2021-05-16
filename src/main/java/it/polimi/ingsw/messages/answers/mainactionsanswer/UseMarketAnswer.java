@@ -11,8 +11,8 @@ public class UseMarketAnswer extends Answer {
 
 
     /**
-     * @param gameId   current game id
-     * @param playerId id of the player who sent the request
+     * @param gameId          current game id
+     * @param playerId        id of the player who sent the request
      * @param resCombinations combinations of resources that the player can choose
      */
     public UseMarketAnswer(int gameId, int playerId, ArrayList<TreeMap<Resource, Integer>> resCombinations) {

@@ -5,7 +5,7 @@ import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 
-public class RemoveLeaderEffectsMessageController extends PlayingMessageController{
+public class RemoveLeaderEffectsMessageController extends PlayingMessageController {
     public RemoveLeaderEffectsMessageController(ClientMessage clientMessage) {
         super(clientMessage);
     }

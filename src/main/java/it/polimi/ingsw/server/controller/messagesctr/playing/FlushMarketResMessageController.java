@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 
-public class FlushMarketResMessageController extends PlayingMessageController{
+public class FlushMarketResMessageController extends PlayingMessageController {
     private static final Logger logger = LogManager.getLogger(FlushMarketResMessageController.class);
 
     public FlushMarketResMessageController(FlushMarketResMessage clientMessage) {
@@ -31,18 +31,19 @@ public class FlushMarketResMessageController extends PlayingMessageController{
 
     /**
      * hod that push the chosen resources in the depots
+     *
      * @param controllerActions controller action of current game
      * @return FlushMarketResAnswer
      * @throws ControllerException
      */
     @Override
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
-        Player player=getPlayerFromId(controllerActions);
-        Board board=player.getBoard();
-        FlushMarketResMessage clientMessage=(FlushMarketResMessage) getClientMessage();
+        Player player = getPlayerFromId(controllerActions);
+        Board board = player.getBoard();
+        FlushMarketResMessage clientMessage = (FlushMarketResMessage) getClientMessage();
 
         try {
-            board.gainResources(clientMessage.getChosenCombination(),clientMessage.getToKeep(),controllerActions.getGame());
+            board.gainResources(clientMessage.getChosenCombination(), clientMessage.getToKeep(), controllerActions.getGame());
         } catch (InvalidResourcesToKeepByPlayerException | InvalidResourceQuantityToDepotException | DifferentResourceForDepotException e) {
             throw new ControllerException(e.getMessage());
         } catch (InvalidStepsException e) {
@@ -54,25 +55,25 @@ public class FlushMarketResMessageController extends PlayingMessageController{
         } catch (InvalidTypeOfResourceToDepotException e) {
             logger.error("is given an invalid type of resource to the depot");
             throw new UnexpectedControllerException(e.getMessage());
-        } catch (FigureAlreadyDiscardedException|FigureAlreadyActivatedException e) {
+        } catch (FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
             logger.error("the vatican figure of a player results already discarded/activated");
             throw new UnexpectedControllerException(e.getMessage());
-        } catch(InvalidArgumentException e){
+        } catch (InvalidArgumentException e) {
             logger.error(e.getMessage());
             throw new UnexpectedControllerException(e.getMessage());
         }
 
-        MarketTray market=controllerActions.getGame().getMarketTray();
+        MarketTray market = controllerActions.getGame().getMarketTray();
         market.removeResources();
 
-        ArrayList<LocalTrack> localTracks=controllerActions.getFaithTracks();
-        TreeMap<Resource, Integer> resInNormalDeposit= board.getResInNormalDepots();
-        ArrayList<LocalDepotLeader> localDepotLeaders=new ArrayList<>();
-        for(DepotLeaderCard l:board.getDepotLeaders()){
-            LocalDepotLeader localDepotLeader=ConverterToLocalModel.convert(l);
+        ArrayList<LocalTrack> localTracks = controllerActions.getFaithTracks();
+        TreeMap<Resource, Integer> resInNormalDeposit = board.getResInNormalDepots();
+        ArrayList<LocalDepotLeader> localDepotLeaders = new ArrayList<>();
+        for (DepotLeaderCard l : board.getDepotLeaders()) {
+            LocalDepotLeader localDepotLeader = ConverterToLocalModel.convert(l);
             localDepotLeaders.add(localDepotLeader);
         }
 
-        return new FlushMarketResAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),localTracks, resInNormalDeposit, localDepotLeaders);
+        return new FlushMarketResAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localTracks, resInNormalDeposit, localDepotLeaders);
     }
 }

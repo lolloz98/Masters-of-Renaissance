@@ -29,20 +29,20 @@ public abstract class PlayingMessageController extends ClientMessageController {
             } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
         } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
     }
-    
+
     /**
      * method that checks if the player that has sent the request can do a currentPlayer action
+     *
      * @param controllerActions controllerActions of current game
      * @return true if this.playerId is equal to current player id
      */
-    protected boolean checkCurrentPlayer(ControllerActions<?> controllerActions){
-        Game<?> game=controllerActions.getGame();
-        if(game instanceof SinglePlayer){
-            SinglePlayer singlePlayer=(SinglePlayer) game;
+    protected boolean checkCurrentPlayer(ControllerActions<?> controllerActions) {
+        Game<?> game = controllerActions.getGame();
+        if (game instanceof SinglePlayer) {
+            SinglePlayer singlePlayer = (SinglePlayer) game;
             return !singlePlayer.getTurn().isLorenzoPlaying();
-        }
-        else if(game instanceof MultiPlayer){
-            MultiPlayer multiPlayer=(MultiPlayer) game;
+        } else if (game instanceof MultiPlayer) {
+            MultiPlayer multiPlayer = (MultiPlayer) game;
             return multiPlayer.getTurn().getCurrentPlayer().getPlayerId() == getClientMessage().getPlayerId();
         }
         return true;

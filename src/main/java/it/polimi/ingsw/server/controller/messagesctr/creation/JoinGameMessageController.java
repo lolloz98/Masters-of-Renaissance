@@ -25,12 +25,12 @@ public class JoinGameMessageController extends PreGameCreationMessageController 
         // we add all the ids of the connected players
         ArrayList<Integer> playerIds = new ArrayList<>();
         ArrayList<String> playerNames = new ArrayList<>();
-        if(controllerActions instanceof ControllerActionsMulti){
-            for(Player i: ((ControllerActionsMulti) controllerActions).getNumberAndPlayers().getSecond()){
+        if (controllerActions instanceof ControllerActionsMulti) {
+            for (Player i : ((ControllerActionsMulti) controllerActions).getNumberAndPlayers().getSecond()) {
                 playerIds.add(i.getPlayerId());
                 playerNames.add(i.getName());
             }
-        }else{
+        } else {
             playerIds.add(playerId);
         }
 

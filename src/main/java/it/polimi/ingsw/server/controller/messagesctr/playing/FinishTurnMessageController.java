@@ -103,19 +103,22 @@ public class FinishTurnMessageController extends PlayingMessageController {
                     throw new UnexpectedControllerException("lorenzo is playing");
                 }
             }
-        } else
+
+        } else//the game is over
             return handleEndGame(controllerActions);
         return null;
     }
 
     /**
      * method that creates the endGameAnswer for the player and changes the state of the game
+     *
      * @param controllerActions
      * @return
      */
-    private Answer handleEndGame(ControllerActions controllerActions) throws ControllerException {
+    private Answer handleEndGame(ControllerActions<?> controllerActions) throws ControllerException {
         controllerActions.toEndGameState();
-        ArrayList<LocalPlayer> winner=controllerActions.getWinners();
+        ArrayList<LocalPlayer> winner ;
+        winner=controllerActions.getWinners();
         return new EndGameAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), winner);
     }
 

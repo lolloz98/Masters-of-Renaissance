@@ -28,6 +28,7 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
 
     /**
      * discard the leaderCard from the player's board
+     *
      * @param controllerActions current controller action
      * @return DiscardLeaderCardAnswer to notify the changes
      * @throws ControllerException if the player doesn't own the card
@@ -35,22 +36,22 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
     @Override
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         LeaderCard<?> card;
-        Player thisPlayer=getPlayerFromId(controllerActions);
+        Player thisPlayer = getPlayerFromId(controllerActions);
         try {
-            card=thisPlayer.getBoard().getLeaderCard(((LeaderMessage)getClientMessage()).getLeaderId());
-        }catch(InvalidArgumentException e){
+            card = thisPlayer.getBoard().getLeaderCard(((LeaderMessage) getClientMessage()).getLeaderId());
+        } catch (InvalidArgumentException e) {
             throw new ControllerException("you don't own this leader");
         }
 
-        try{
+        try {
             thisPlayer.getBoard().discardLeaderCard(card);
-        }catch(InvalidArgumentException e){
+        } catch (InvalidArgumentException e) {
             logger.error("something went wrong in " + this.getClass() + "while discarding a leader card");
             throw new ControllerException("unexpected error");
         }
 
-        ArrayList<LocalTrack> localTracks= controllerActions.getFaithTracks();
-        LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
-        return new DiscardLeaderAnswer(getClientMessage().getGameId(),getClientMessage().getPlayerId(),localCard, localTracks);
+        ArrayList<LocalTrack> localTracks = controllerActions.getFaithTracks();
+        LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
+        return new DiscardLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, localTracks);
     }
 }

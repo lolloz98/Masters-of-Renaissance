@@ -24,7 +24,7 @@ import java.util.TreeMap;
 /**
  * message that handles the application of a production that owns the player
  */
-public class ApplyProductionMessageController extends PlayingMessageController{
+public class ApplyProductionMessageController extends PlayingMessageController {
     private static final Logger logger = LogManager.getLogger(ApplyProductionMessageController.class);
 
 
@@ -34,22 +34,23 @@ public class ApplyProductionMessageController extends PlayingMessageController{
 
     /**
      * method that apply a specified production
+     *
      * @param controllerActions controller action of current game
      * @return ApplyProductionAnswer to notify the client with the changes of the model
      * @throws ControllerException
      */
     @Override
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
-        Player thisPlayer=getPlayerFromId(controllerActions);
+        Player thisPlayer = getPlayerFromId(controllerActions);
         Board board = thisPlayer.getBoard();
-        ApplyProductionMessage clientMessage=(ApplyProductionMessage) getClientMessage();
+        ApplyProductionMessage clientMessage = (ApplyProductionMessage) getClientMessage();
 
-        Turn turn= controllerActions.getGame().getTurn();
+        Turn turn = controllerActions.getGame().getTurn();
 
-        if(!turn.isProductionsActivated()){
-            try{
+        if (!turn.isProductionsActivated()) {
+            try {
                 turn.setProductionsActivated(true);
-            }catch (MainActionAlreadyOccurredException e){
+            } catch (MainActionAlreadyOccurredException e) {
                 throw new ControllerException("you have already done your main action, wait the next turn");
             } catch (MarketTrayNotEmptyException e) {
                 logger.error("market tray not flushed");
@@ -61,14 +62,14 @@ public class ApplyProductionMessageController extends PlayingMessageController{
         }
 
         try {
-            board.activateProduction(clientMessage.getWhichProd(),clientMessage.getResToGive() ,clientMessage.getResToGain() ,controllerActions.getGame() );
+            board.activateProduction(clientMessage.getWhichProd(), clientMessage.getResToGive(), clientMessage.getResToGain(), controllerActions.getGame());
         } catch (InvalidResourcesByPlayerException e) {
             throw new ControllerException("you cannot produce or give this type of resources!");
         } catch (InvalidProductionSlotChosenException e) {
             throw new ControllerException("you have chosen an invalid production slot!");
         } catch (ProductionAlreadyActivatedException e) {
             throw new ControllerException("this production has already been activated!");
-        } catch (NotEnoughResourcesException e){
+        } catch (NotEnoughResourcesException e) {
             throw new ControllerException("you don't own enough resources to activate this production");
         } catch (ResourceNotDiscountableException e) {
             throw new ControllerException("wrong type of resource chosen");
@@ -83,26 +84,25 @@ public class ApplyProductionMessageController extends PlayingMessageController{
 
         //generating the parameters to construct the answer
         Production production;
-        try
-        {
-            production= board.getProduction(clientMessage.getWhichProd());
-        } catch(IllegalArgumentException e){
+        try {
+            production = board.getProduction(clientMessage.getWhichProd());
+        } catch (IllegalArgumentException e) {
             logger.error("something unexpected happened in " + logger.getName() + "invalid argument in getProduction that should be already caught");
             throw new UnexpectedControllerException(e.getMessage());
         }
-        TreeMap<Resource,Integer> resToFlush =new TreeMap<Resource, Integer>(production.getGainedResources());
+        TreeMap<Resource, Integer> resToFlush = new TreeMap<>(production.getGainedResources());
 
         LocalDepotLeader localDepot;
-        ArrayList<LocalDepotLeader> leaderDepots=new ArrayList<>();
-        for(DepotLeaderCard leaderDepot: board.getDepotLeaders()){
-            localDepot=ConverterToLocalModel.convert(leaderDepot);
+        ArrayList<LocalDepotLeader> leaderDepots = new ArrayList<>();
+        for (DepotLeaderCard leaderDepot : board.getDepotLeaders()) {
+            localDepot = ConverterToLocalModel.convert(leaderDepot);
             leaderDepots.add(localDepot);
         }
 
-        TreeMap<Resource, Integer> resInNormalDepots=board.getResInNormalDepots();
+        TreeMap<Resource, Integer> resInNormalDepots = board.getResInNormalDepots();
 
 
-        return new ApplyProductionAnswer(clientMessage.getGameId(),clientMessage.getPlayerId(), resToFlush, resInNormalDepots, leaderDepots, clientMessage.getWhichProd());
+        return new ApplyProductionAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), resToFlush, resInNormalDepots, leaderDepots, clientMessage.getWhichProd());
 
     }
 }

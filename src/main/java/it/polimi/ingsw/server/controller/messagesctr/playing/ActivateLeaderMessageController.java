@@ -59,32 +59,32 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
 
         if (toActivate instanceof DepotLeaderCard) {
             DepotLeaderCard card = (DepotLeaderCard) toActivate;
-            LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
+            LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
             return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
 
         if (toActivate instanceof ProductionLeaderCard) {
             ProductionLeaderCard card = (ProductionLeaderCard) toActivate;
-            LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
-            int whichLeaderProd=board.getProductionLeaders().indexOf(card)+4; //it must be 4 or 5
-            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard,whichLeaderProd);
+            LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
+            int whichLeaderProd = board.getProductionLeaders().indexOf(card) + 4; //it must be 4 or 5
+            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, whichLeaderProd);
         }
 
         if (toActivate instanceof DiscountLeaderCard) {
 
             TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
-            decksDevelop=controllerActions.getGame().getDecksDevelop();
+            decksDevelop = controllerActions.getGame().getDecksDevelop();
 
 
             LocalDevelopmentGrid localGrid;
-            localGrid=ConverterToLocalModel.convert(decksDevelop);
+            localGrid = ConverterToLocalModel.convert(decksDevelop);
             DiscountLeaderCard card = (DiscountLeaderCard) toActivate;
-            LocalLeaderCard localCard=ConverterToLocalModel.convert(card);
+            LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
             return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, localGrid);
         }
         if (toActivate instanceof MarbleLeaderCard) {
             MarbleLeaderCard card = (MarbleLeaderCard) toActivate;
-            LocalLeaderCard localCard=ConverterToLocalModel.convert(card);
+            LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
             return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
         logger.error("toActivate is an unknown type of leader: " + toActivate.getClass());

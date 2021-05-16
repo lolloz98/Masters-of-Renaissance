@@ -9,8 +9,8 @@ public class BuyDevelopCardAnswer extends Answer {
     private final LocalDevelopmentGrid localGrid;
 
     /**
-     * @param gameId   current game id
-     * @param playerId id of the player who sent the request
+     * @param gameId     current game id
+     * @param playerId   id of the player who sent the request
      * @param localBoard
      * @param localGrid
      */

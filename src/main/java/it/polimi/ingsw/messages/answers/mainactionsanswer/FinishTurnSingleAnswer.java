@@ -11,10 +11,10 @@ public class FinishTurnSingleAnswer extends Answer {
     private final LorenzoCard lorenzoCard;
 
 
-    public FinishTurnSingleAnswer(int gameId, int playerId, LocalDevelopmentGrid localGrid, LorenzoCard lorenzoCard,LocalTrack localTrack) {
+    public FinishTurnSingleAnswer(int gameId, int playerId, LocalDevelopmentGrid localGrid, LorenzoCard lorenzoCard, LocalTrack localTrack) {
         super(gameId, playerId);
         this.localGrid = localGrid;
         this.lorenzoCard = lorenzoCard;
-        this.localTrack=localTrack;
+        this.localTrack = localTrack;
     }
 }

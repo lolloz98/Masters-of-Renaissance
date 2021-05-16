@@ -33,7 +33,7 @@ public class CreateGameMessageController implements Serializable {
     public Answer doAction(AnswerListener answerListener) throws ControllerException {
         PairId<Integer, Integer> id = ControllerManager.getInstance().reserveIdForNewGame((CreateGameMessage) getClientMessage(), answerListener);
         logger.debug("id " + id.getFirst() + " successfully reserved");
-        if(((CreateGameMessage) getClientMessage()).getPlayersNumber() == 1){
+        if (((CreateGameMessage) getClientMessage()).getPlayersNumber() == 1) {
             return AnswerFactory.createGameStatusAnswer(id.getFirst(), id.getSecond(), id.getSecond(), ControllerManager.getInstance().getControllerFromMap(id.getFirst()).getGame());
         }
         return new CreateGameAnswer(id.getFirst(), id.getSecond(), ((CreateGameMessage) getClientMessage()).getUserName());

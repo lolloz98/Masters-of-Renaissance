@@ -11,7 +11,7 @@ public class FlushProductionResAnswer extends Answer {
     /**
      * total of the resources flushed by the productions activated
      */
-    private final TreeMap<Resource,Integer> totGainedResources;
+    private final TreeMap<Resource, Integer> totGainedResources;
     private final ArrayList<LocalTrack> localTracks;
 
     public FlushProductionResAnswer(int gameId, int playerId, TreeMap<Resource, Integer> totGainedResources, ArrayList<LocalTrack> localTracks) {

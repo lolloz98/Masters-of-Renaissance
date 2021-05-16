@@ -15,10 +15,9 @@ public class FlushMarketResAnswer extends Answer {
     private final ArrayList<LocalDepotLeader> localDepotLeaders;
 
 
-
     /**
-     * @param gameId   current game id
-     * @param playerId id of the player who sent the request
+     * @param gameId             current game id
+     * @param playerId           id of the player who sent the request
      * @param localTracks
      * @param resInNormalDeposit
      * @param localDepotLeaders
