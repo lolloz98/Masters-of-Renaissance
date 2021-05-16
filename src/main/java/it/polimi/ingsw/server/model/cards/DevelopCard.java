@@ -11,6 +11,9 @@ public class DevelopCard implements Card, VictoryPointCalculator {
     private static final long serialVersionUID = 1014L;
 
     private final int id;
+    /**
+     * level must be between 1 and 3
+     */
     private final int level;
     private final Color color;
     private final int victoryPoints;

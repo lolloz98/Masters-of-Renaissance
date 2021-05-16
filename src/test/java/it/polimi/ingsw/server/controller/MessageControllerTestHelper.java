@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.*;
@@ -11,17 +13,29 @@ import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageC
 import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.RemoveLeaderPrepMessageController;
+import it.polimi.ingsw.server.model.cards.DevelopCard;
+import it.polimi.ingsw.server.model.cards.leader.Requirement;
+import it.polimi.ingsw.server.model.cards.leader.RequirementColorsDevelop;
+import it.polimi.ingsw.server.model.cards.leader.RequirementLevelDevelop;
+import it.polimi.ingsw.server.model.cards.leader.RequirementResource;
+import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 /**
  * In this class we ignore the ActionControllers, to test just the messages
  */
 public final class MessageControllerTestHelper {
+    private static final Logger logger = LogManager.getLogger(MessageControllerTestHelper.class);
+
 
     public static ControllerActionsSingle getSingle(int gameId) throws NoSuchControllerException {
         return (ControllerActionsSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
@@ -30,6 +44,7 @@ public final class MessageControllerTestHelper {
     public static ControllerActionsMulti getMulti(int gameId) throws NoSuchControllerException {
         return (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
     }
+
     /**
      * create a 4 player game
      *
@@ -131,5 +146,56 @@ public final class MessageControllerTestHelper {
         ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
         GameStatusMessageController gameStatusMessageController = new GameStatusMessageController(new GameStatusMessage(gameId, playerId));
         return (GameStatusAnswer) gameStatusMessageController.doAction(ca);
+    }
+
+    /**
+     * satisfy either the RequirementColorsDevelop or RequirementLevelDevelop with a bit of a stretch.
+     * @param req developCard needed (Color is the color and the associated integer is the level)
+     * @param game current game
+     * @param player current player
+     * @throws ControllerException something unexpected happens
+     */
+    private static void satisfyReq(TreeMap<Color, Integer> req, Game<?> game, Player player) throws ControllerException {
+        for (Color c : req.keySet()) {
+            try {
+                int whichSlot = 0;
+                while (!player.getBoard().getDevelopCardSlots().get(whichSlot).isEmpty()) {
+                    whichSlot++;
+                }
+                if(req.get(c) > 3) logger.error("number too big. For RequirementColorsDevelop I considered this number as level, actually is the quantity of given color");
+                for (int i = 1; i <= req.get(c); i++) {
+                    DevelopCard cardToBuy = game.getDecksDevelop().get(c).get(i).topCard();
+                    TreeMap<Resource, Integer> cost = cardToBuy.getCost();
+                    player.getBoard().flushGainedResources(cost, game);
+                    player.getBoard().buyDevelopCard(game, c, i, whichSlot, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
+                        put(WarehouseType.STRONGBOX, new TreeMap<>(cost));
+                    }});
+                }
+            } catch (ModelException e) {
+                throw new ControllerException(e.getMessage());
+            }
+        }
+    }
+
+    public static void satisfyReq(Requirement r, Game<?> game, Player p) throws ControllerException {
+        try {
+            if(r.checkRequirement(p)) return;
+        } catch (ResourceNotDiscountableException e) {
+            throw new ControllerException("something unexpected happened while checking the requirement");
+        }
+
+        if(r instanceof RequirementColorsDevelop) satisfyReq(((RequirementColorsDevelop) r).getRequiredDevelop(), game, p);
+        else if(r instanceof RequirementLevelDevelop) satisfyReq(new TreeMap<>(){{
+            put(((RequirementLevelDevelop) r).getColor(), ((RequirementLevelDevelop) r).getLevel());
+        }}, game, p);
+        else if(r instanceof RequirementResource) {
+            try {
+                p.getBoard().flushGainedResources(new TreeMap<>(){{
+                    put(((RequirementResource) r).getRes(), ((RequirementResource) r).getQuantity());
+                }}, game);
+            } catch (ModelException e) {
+               throw new ControllerException("Something happened while flushing resources to the board");
+            }
+        }
     }
 }

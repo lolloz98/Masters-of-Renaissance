@@ -10,7 +10,7 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.enums.Color;
@@ -33,62 +33,50 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
     }
 
     @Override
-    public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Board board;
         board = getPlayerFromId(controllerActions).getBoard();
         LeaderCard<?> toActivate;
         try {
             toActivate = board.getLeaderCard(((LeaderMessage) getClientMessage()).getLeaderId());
         } catch (InvalidArgumentException e) {
-            throw new ControllerException(e.getMessage());
+            throw new InvalidArgumentControllerException(e.getMessage());
         }
 
         try {
             toActivate.activate(controllerActions.getGame(), controllerActions.getGame().getPlayer(getClientMessage().getPlayerId()));
         } catch (RequirementNotSatisfiedException e) {
-            throw new ControllerException("you don't have the requirements to activate this card, try again on the next turn");
+            throw new RequirementNotSatisfiedControllerException();
         } catch (AlreadyActiveLeaderException e) {
-            throw new ControllerException("you have already activated this card");
+            throw new AlreadyActiveLeaderControllerException();
         } catch (ActivateDiscardedCardException e) {
-            throw new ControllerException("you cannot activate a discarded card");
+            throw new AlreadyDiscardedLeaderControllerException();
         } catch (ModelException e) {
-            // todo check
-            logger.warn("something unexpected happened in " + this.getClass() + " while activating a leader card");
-            throw new ControllerException(e.getMessage());
+            logger.error("something unexpected happened in " + this.getClass() + " while activating a leader card");
+            throw new UnexpectedControllerException(e.getMessage());
         }
 
+        LocalLeaderCard localCard = ConverterToLocalModel.convert(toActivate);
+
         if (toActivate instanceof DepotLeaderCard) {
-            DepotLeaderCard card = (DepotLeaderCard) toActivate;
-            LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
             return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
 
         if (toActivate instanceof ProductionLeaderCard) {
-            ProductionLeaderCard card = (ProductionLeaderCard) toActivate;
-            LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
-            int whichLeaderProd = board.getProductionLeaders().indexOf(card) + 4; //it must be 4 or 5
+            int whichLeaderProd = board.getProductionLeaders().indexOf(toActivate) + 4; //it must be 4 or 5
             return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, whichLeaderProd);
         }
 
         if (toActivate instanceof DiscountLeaderCard) {
-
-            TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
-            decksDevelop = controllerActions.getGame().getDecksDevelop();
-
-
-            LocalDevelopmentGrid localGrid;
-            localGrid = ConverterToLocalModel.convert(decksDevelop);
-            DiscountLeaderCard card = (DiscountLeaderCard) toActivate;
-            LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
+            LocalDevelopmentGrid localGrid = ConverterToLocalModel.convert(controllerActions.getGame().getDecksDevelop());
             return new ActivateDiscountLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, localGrid);
         }
         if (toActivate instanceof MarbleLeaderCard) {
-            MarbleLeaderCard card = (MarbleLeaderCard) toActivate;
-            LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
             return new ActivateMarbleLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
+
         logger.error("toActivate is an unknown type of leader: " + toActivate.getClass());
-        throw new ControllerException("unknown type of leaderCard");
+        throw new UnexpectedControllerException("unknown type of leaderCard");
     }
 
 }
