@@ -1,5 +1,6 @@
-package it.polimi.ingsw.client.answerhandler;
+package it.polimi.ingsw.client.answerhandler.mainaction;
 
+import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
@@ -7,7 +8,7 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnSingleAnswer
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class FinishTurnSingleAnswerHandler extends AnswerHandler{
+public class FinishTurnSingleAnswerHandler extends AnswerHandler {
 
     private static final Logger logger = LogManager.getLogger(FinishTurnSingleAnswerHandler.class);
 

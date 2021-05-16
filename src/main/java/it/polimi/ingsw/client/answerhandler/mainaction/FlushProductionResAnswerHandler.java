@@ -1,12 +1,11 @@
-package it.polimi.ingsw.client.answerhandler;
+package it.polimi.ingsw.client.answerhandler.mainaction;
 
+import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
-import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushProductionResAnswer;
 
-public class FlushProductionResAnswerHandler extends AnswerHandler{
+public class FlushProductionResAnswerHandler extends AnswerHandler {
 
     public FlushProductionResAnswerHandler(FlushProductionResAnswer answer) {
         super(answer);
