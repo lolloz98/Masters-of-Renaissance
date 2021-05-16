@@ -28,9 +28,11 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
         this.mainPlayerId = mainPlayerId;
     }
 
+    @Override
     public synchronized ArrayList<LocalPlayer> getLocalPlayers() {
         return localPlayers;
     }
+
 
     public synchronized LocalPlayer getMainPlayer(){
         for(LocalPlayer p : localPlayers){
