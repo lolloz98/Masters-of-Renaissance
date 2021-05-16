@@ -79,21 +79,6 @@ public class BoardTest {
         assertEquals(2, board.getProductionLeaders().size());
     }
 
-    @Test
-    public void discardLeaderCardTest() throws ModelException{
-        DepotLeaderCard toDiscard= (DepotLeaderCard) depotLeaderCards.get(0);
-
-        getVictoryPointsTest();//add and activate 2 depot leaders
-
-        board.discardLeaderCard(toDiscard);
-
-        assertFalse(board.getLeaderCards().contains(toDiscard));
-        assertEquals(1,board.getLeaderCards().size());
-        assertEquals(1,board.getDepotLeaders().size());
-        assertTrue(toDiscard.isDiscarded());
-        assertFalse(board.getDepotLeaders().contains(toDiscard));
-    }
-
     public void buildBoard2() throws ModelException{
 
         fillStrongBox1();

@@ -13,4 +13,7 @@ public class DiscardLeaderAnswer extends LeaderAnswer {
         this.localTracks = localTracks;
     }
 
+    public ArrayList<LocalTrack> getLocalTracks() {
+        return localTracks;
+    }
 }
