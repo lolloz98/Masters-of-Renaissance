@@ -7,9 +7,8 @@ import it.polimi.ingsw.client.localmodel.LocalMarket;
 
 public class MarketView extends GameView {
     private LocalMarket localMarket;
-    private CLI cli;
 
-    public MarketView(CLI cli, LocalGame localGame, LocalMarket localMarket) {
+    public MarketView(CLI cli, LocalGame<?> localGame, LocalMarket localMarket) {
         this.cli = cli;
         this.localMarket = localMarket;
         this.localGame = localGame;

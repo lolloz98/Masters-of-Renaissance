@@ -25,16 +25,6 @@ public class CLI extends UI implements Runnable {
 
     private ServerListener serverListener;
 
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    private Client client;
-
     public LocalGame<?> getLocalGame() {
         return localGame;
     }
