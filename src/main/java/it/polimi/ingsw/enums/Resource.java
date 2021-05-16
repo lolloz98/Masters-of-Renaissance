@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.game;
+package it.polimi.ingsw.enums;
 
 public enum Resource {
     NOTHING,

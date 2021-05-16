@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.requests;
 
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 
 /**
  * ChooseOneResPrepAnswerHandler the type of one resource given at the beginning of the game

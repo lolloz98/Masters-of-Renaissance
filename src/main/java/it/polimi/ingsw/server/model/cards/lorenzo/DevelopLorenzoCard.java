@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.cards.lorenzo;
 
-import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.SinglePlayer;

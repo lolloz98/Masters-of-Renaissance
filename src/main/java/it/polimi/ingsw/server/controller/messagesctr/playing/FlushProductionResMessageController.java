@@ -10,7 +10,7 @@ import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPre
 import it.polimi.ingsw.server.model.cards.Production;
 import it.polimi.ingsw.server.model.cards.leader.ProductionLeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.game.Turn;
 import it.polimi.ingsw.server.model.player.Board;
 import it.polimi.ingsw.server.model.player.DevelopCardSlot;

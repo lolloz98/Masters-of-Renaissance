@@ -1,8 +1,9 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.exception.AlreadyAppliedDiscountForResException;
 import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import org.junit.Before;
 import org.junit.Test;
 

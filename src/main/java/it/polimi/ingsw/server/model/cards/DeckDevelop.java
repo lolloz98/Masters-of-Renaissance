@@ -1,10 +1,11 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.exception.AlreadyAppliedDiscountForResException;
 import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.exception.WrongColorDeckException;
 import it.polimi.ingsw.server.model.exception.WrongLevelDeckException;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 
 import java.util.ArrayList;
 import java.util.TreeSet;

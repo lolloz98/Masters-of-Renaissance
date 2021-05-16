@@ -1,11 +1,11 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
-import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;

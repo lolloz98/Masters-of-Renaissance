@@ -1,15 +1,12 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.answers.preparationanswer.ChooseOneResPrepAnswer;
 import it.polimi.ingsw.messages.answers.preparationanswer.RemoveLeaderPrepAnswer;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
-import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.game.Game;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.game.Turn;
 
 import java.util.ArrayList;

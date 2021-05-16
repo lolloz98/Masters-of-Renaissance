@@ -7,12 +7,8 @@ import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
-import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
-import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
-import it.polimi.ingsw.server.model.cards.leader.RequirementResource;
 import it.polimi.ingsw.server.model.exception.ModelException;
-import it.polimi.ingsw.server.model.game.Resource;
-import it.polimi.ingsw.server.model.player.Depot;
+import it.polimi.ingsw.enums.Resource;
 import org.junit.Test;
 
 import java.util.ArrayList;

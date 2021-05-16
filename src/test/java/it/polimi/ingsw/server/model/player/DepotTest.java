@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.model.exception.DifferentResourceForDepotException
 import it.polimi.ingsw.server.model.exception.InvalidResourceQuantityToDepotException;
 import it.polimi.ingsw.server.model.exception.InvalidTypeOfResourceToDepotException;
 import it.polimi.ingsw.server.model.exception.ModelException;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import org.junit.Before;
 import org.junit.Test;
 

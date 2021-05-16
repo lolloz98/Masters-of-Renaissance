@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.exception.AlreadyPresentLeaderResException;
 import it.polimi.ingsw.server.model.exception.NoSuchResourceException;
 import it.polimi.ingsw.server.model.exception.TooManyLeaderResourcesException;
 import it.polimi.ingsw.server.model.game.Game;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 
 /**
  * LeaderCard with effect of transforming the Marbles of type Resource.NOTHING in the market.

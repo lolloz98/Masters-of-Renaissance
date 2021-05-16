@@ -13,9 +13,8 @@ import it.polimi.ingsw.server.controller.exception.InvalidArgumentControllerExce
 import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.player.Player;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.TreeMap;

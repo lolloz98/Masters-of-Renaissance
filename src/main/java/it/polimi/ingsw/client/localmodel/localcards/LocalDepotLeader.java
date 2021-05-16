@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 
 public class LocalDepotLeader extends LocalLeaderCard{
     private final Resource resType;

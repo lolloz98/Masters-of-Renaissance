@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
-import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.player.DevelopCardSlot;
 import it.polimi.ingsw.server.model.player.Player;

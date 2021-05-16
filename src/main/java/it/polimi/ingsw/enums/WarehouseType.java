@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.player;
+package it.polimi.ingsw.enums;
 
 public enum WarehouseType {
     STRONGBOX, NORMAL, LEADER

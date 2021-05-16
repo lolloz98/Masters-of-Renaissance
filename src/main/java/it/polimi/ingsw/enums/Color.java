@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.cards;
+package it.polimi.ingsw.enums;
 
 public enum Color {
     PURPLE,

@@ -12,7 +12,7 @@ import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.MarketTray;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.player.Board;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;

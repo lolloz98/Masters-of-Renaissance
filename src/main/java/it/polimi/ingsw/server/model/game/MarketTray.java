@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.game;
 
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.exception.*;
 
 import java.io.Serializable;

@@ -6,7 +6,7 @@ import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 
 import java.io.IOException;
 

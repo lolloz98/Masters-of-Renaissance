@@ -117,6 +117,11 @@ public class BoardView extends GameView {
         switch (ansList.get(0)){
             // todo handle activate production (only if loadBoard.getPlayerId() == playerId)
             // todo activate leader
+            case "leader":
+
+            case "prod":
+
+
             default:
                 super.handleCommand(ansList);
         }

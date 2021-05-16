@@ -13,7 +13,7 @@ import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
-import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.*;

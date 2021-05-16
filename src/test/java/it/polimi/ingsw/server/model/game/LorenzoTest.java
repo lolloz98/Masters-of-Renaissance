@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model.game;
 
-import it.polimi.ingsw.server.model.cards.Color;
-import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.exception.ModelException;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;

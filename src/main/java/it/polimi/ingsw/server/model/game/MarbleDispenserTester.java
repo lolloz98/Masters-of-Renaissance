@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.game;
 
+import it.polimi.ingsw.enums.Resource;
+
 import java.util.ArrayList;
 
 /**

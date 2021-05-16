@@ -3,10 +3,9 @@ package it.polimi.ingsw.server.model.cards;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.server.model.exception.AlreadyAppliedDiscountForResException;
-import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.exception.ModelException;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import org.junit.Before;
 import org.junit.Test;
 

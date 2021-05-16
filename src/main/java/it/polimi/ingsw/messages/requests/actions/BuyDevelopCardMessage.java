@@ -1,9 +1,9 @@
 package it.polimi.ingsw.messages.requests.actions;
 
 import it.polimi.ingsw.messages.requests.ClientMessage;
-import it.polimi.ingsw.server.model.cards.Color;
-import it.polimi.ingsw.server.model.game.Resource;
-import it.polimi.ingsw.server.model.player.WarehouseType;
+import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.enums.Resource;
+import it.polimi.ingsw.enums.WarehouseType;
 
 import java.util.TreeMap;
 

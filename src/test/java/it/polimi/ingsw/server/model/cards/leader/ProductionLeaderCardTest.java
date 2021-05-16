@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
-import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.enums.Resource;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.cards.Production;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.*;

@@ -2,9 +2,9 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.player.Board;
-import it.polimi.ingsw.server.model.player.WarehouseType;
+import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.server.model.utility.Utility;
 
 import java.io.Serializable;

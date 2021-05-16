@@ -2,7 +2,7 @@ package it.polimi.ingsw.messages.answers.preparationanswer;
 
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 
 public class ChooseOneResPrepAnswer extends Answer {
     private final Resource res;

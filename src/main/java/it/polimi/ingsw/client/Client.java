@@ -13,13 +13,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+@Deprecated
 public class Client {
     Socket server;
     ObjectOutputStream output;
     ObjectInputStream input;
     private static final Logger logger = LogManager.getLogger(Client.class);
 
-    @Deprecated
+
     public static void main(String[] args)
     {
         Scanner scanner = new Scanner(System.in);

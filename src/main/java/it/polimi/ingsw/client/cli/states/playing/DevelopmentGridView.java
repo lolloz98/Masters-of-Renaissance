@@ -6,7 +6,7 @@ import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -2,7 +2,7 @@ package it.polimi.ingsw.messages.answers.mainactionsanswer;
 
 import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

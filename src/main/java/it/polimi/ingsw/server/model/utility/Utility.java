@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.model.utility;
 
 import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
-import it.polimi.ingsw.server.model.game.Resource;
-import it.polimi.ingsw.server.model.player.WarehouseType;
+import it.polimi.ingsw.enums.Resource;
+import it.polimi.ingsw.enums.WarehouseType;
 
 import java.util.Set;
 import java.util.TreeMap;

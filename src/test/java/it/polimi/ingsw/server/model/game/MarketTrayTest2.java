@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.game;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.junit.Before;

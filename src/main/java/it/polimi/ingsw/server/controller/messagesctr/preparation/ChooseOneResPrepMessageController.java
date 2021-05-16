@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.controller.messagesctr.preparation;
 
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.preparationanswer.ChooseOneResPrepAnswer;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.server.controller.AnswerFactory;
 import it.polimi.ingsw.server.controller.ControllerActions;
@@ -11,9 +10,9 @@ import it.polimi.ingsw.server.controller.exception.InvalidArgumentControllerExce
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.states.PrepareGameState;
 import it.polimi.ingsw.server.model.exception.*;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.player.Board;
-import it.polimi.ingsw.server.model.player.WarehouseType;
+import it.polimi.ingsw.enums.WarehouseType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

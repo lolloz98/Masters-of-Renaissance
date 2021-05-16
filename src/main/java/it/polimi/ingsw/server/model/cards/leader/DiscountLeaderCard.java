@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server.model.cards.leader;
 
-import it.polimi.ingsw.server.Server;
-import it.polimi.ingsw.server.model.cards.Color;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.exception.AlreadyAppliedDiscountForResException;
 import it.polimi.ingsw.server.model.exception.AlreadyAppliedLeaderCardException;
 import it.polimi.ingsw.server.model.exception.ResourceNotDiscountableException;
 import it.polimi.ingsw.server.model.game.Game;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

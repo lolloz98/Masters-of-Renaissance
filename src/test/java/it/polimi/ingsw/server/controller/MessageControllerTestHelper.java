@@ -12,7 +12,7 @@ import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageCon
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.RemoveLeaderPrepMessageController;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
-import it.polimi.ingsw.server.model.game.Resource;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
 
