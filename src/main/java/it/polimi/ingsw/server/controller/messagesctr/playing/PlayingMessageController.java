@@ -3,9 +3,7 @@ package it.polimi.ingsw.server.controller.messagesctr.playing;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.WrongPlayerIdControllerException;
-import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.model.game.Game;
@@ -22,6 +20,16 @@ public abstract class PlayingMessageController extends ClientMessageController {
         super(clientMessage);
     }
 
+    /**
+     * @param controllerActions controllerActions of current game
+     * @return answer related to this.clientMessage
+     * @throws WrongStateControllerException if the state of the game is not the right one
+     * @throws WrongPlayerIdControllerException if the player who sent the request is not the one currently playing
+     * @throws InvalidActionControllerException if the action selected is invalid
+     * @throws InvalidArgumentControllerException if in the client message there are some invalid arguments
+     * @throws UnexpectedControllerException if something unexpected (which might lead to a corrupt game status) happens
+     * @throws ControllerException depends on the concrete class
+     */
     @Override
     public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
         if (checkState(controllerActions)) {

@@ -102,6 +102,10 @@ public abstract class Turn implements Serializable {
         this.mainActionOccurred = true;
     }
 
+    public boolean cannotSetMainActionOccurred(){
+        return mainActionOccurred || productionsActivated || marketActivated;
+    }
+
     public abstract Turn nextTurn(Game<? extends Turn> game) throws MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException;
 
     public Turn(){

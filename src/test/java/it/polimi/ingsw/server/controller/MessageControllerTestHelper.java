@@ -5,6 +5,7 @@ import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.*;
+import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
@@ -15,6 +16,7 @@ import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.playing.ActivateLeaderMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.playing.BuyDevelopCardMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.playing.FlushMarketResMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.playing.UseMarketMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
@@ -204,7 +206,9 @@ public final class MessageControllerTestHelper {
 
     /**
      * It first checks if requirement for activation is met. If not it changes the status of the board of the player (and the game)
-     * to satisfy it. then the card gets activated (if a valid card is passed)
+     * to satisfy it. then the card gets activated (if a valid card is passed).
+     * Careful: to satisfy the requirement (put resources in the board and buy develop cards) it does it all performing actions
+     * directly on the game and passing through messageControllers.
      * @param card to activate
      * @param player who wants to activate the card (must be the current player otherwise exception)
      * @param gameId current gameId
@@ -224,5 +228,10 @@ public final class MessageControllerTestHelper {
     public static void doFlushMarket(int gameId, Player player, TreeMap<Resource, Integer> chosenCombination, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep) throws ControllerException {
         FlushMarketResMessageController flushMarketResMessageController = new FlushMarketResMessageController(new FlushMarketResMessage(gameId, player.getPlayerId(), chosenCombination, toKeep));
         flushMarketResMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
+    }
+
+    public static void doBuyDevelopCard(int gameId, Player player, int level, Color color, int whichDeck, int whichSlot, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) throws ControllerException {
+        BuyDevelopCardMessageController buyDevelopCardMessageController = new BuyDevelopCardMessageController(new BuyDevelopCardMessage(gameId, player.getPlayerId(), level, color, whichDeck, whichSlot, toPay));
+        buyDevelopCardMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
     }
 }
