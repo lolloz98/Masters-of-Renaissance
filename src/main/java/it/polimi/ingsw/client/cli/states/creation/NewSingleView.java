@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.cli.states.creation;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
@@ -37,12 +38,10 @@ public class NewSingleView extends View {
 
     @Override
     public synchronized void notifyUpdate(){
-        if(localSingle.getState() == LocalGameState.READY){
-            localSingle.addObserver(this);
-            localSingle.getError().addObserver(this);
-            cli.setState(new BoardView(cli, localSingle, localSingle.getMainPlayer()));
+        if(localSingle.getState() == LocalGameState.PREP_LEADERS){
             localSingle.removeObserver();
             localSingle.getError().removeObserver();
+            cli.setState(new PrepLeaderView(cli, localSingle));
             cli.getState().draw();
         }
         else draw();

@@ -14,6 +14,7 @@ public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializa
     public synchronized void setMainPlayer(LocalPlayer mainPlayer) {
         this.mainPlayer = mainPlayer;
     }
+
     public synchronized LocalPlayer getMainPlayer() {
         return mainPlayer;
     }

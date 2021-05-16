@@ -55,6 +55,8 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
         this.state = state;
     }
 
+    public abstract LocalPlayer getMainPlayer();
+
     public LocalGame(){
         this.localDevelopmentGrid = new LocalDevelopmentGrid();
         this.localMarket = new LocalMarket();

@@ -17,6 +17,8 @@ public class BoardView extends GameView {
         this.localPlayer = localPlayer;
         // todo add observer
         localGame.getError().addObserver(this);
+        localPlayer.getLocalBoard().addObserver(this);
+        localGame.getLocalTurn().addObserver(this);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class BoardView extends GameView {
                 System.out.println("No cards in "+i+"° slot");
             } else {
                 LocalProduction localProduction = localPlayer.getLocalBoard().getDevelopCards().get(i).get(localPlayer.getLocalBoard().getDevelopCards().get(i).size() - 1).getProduction();
-                System.out.print(i+"° production slot: res to give: " + localProduction.getResToGive());
+                System.out.print((i+1)+"° production slot: res to give: " + localProduction.getResToGive());
                 System.out.print(", res to gain: " + localProduction.getResToGain());
                 System.out.print(", res to flush: " + localProduction.getResToFlush());
                 int sum = 0;
@@ -46,40 +48,41 @@ public class BoardView extends GameView {
                     sum = sum + c.getVictoryPoints();
                 System.out.print(", total vp in this slot: " + sum + "\n");
             }
-            System.out.println("Leader cards");
-            for(LocalCard c : localPlayer.getLocalBoard().getLeaderCards()){
-                if (c instanceof LocalConcealedCard){
-                    System.out.print("This card is not activated yet");
-                } else {
-                    LocalLeaderCard localLeaderCard = (LocalLeaderCard) c;
-                    if (c instanceof LocalDiscountLeader) {
-                        LocalDiscountLeader localDiscountLeader = (LocalDiscountLeader) c;
-                        System.out.print(i + ") " + localPlayer.getLocalBoard().getLeaderCards().get(i - 1).getClass().getSimpleName());
-                        System.out.print(", prod requirement: " + localDiscountLeader.getProdRequirement());
-                        System.out.print(", discounted res: " + localDiscountLeader.getQuantityToDiscount() + " " + localDiscountLeader.getDiscountedRes());
-                    } else if (c instanceof LocalMarbleLeader) {
-                        LocalMarbleLeader localMarbleLeader = (LocalMarbleLeader) c;
-                        System.out.print(i + ") " + localPlayer.getLocalBoard().getLeaderCards().get(i - 1).getClass().getSimpleName());
-                        System.out.print(", prod requirement: " + localMarbleLeader.getProdRequirement());
-                        System.out.print(", marble: " + localMarbleLeader.getMarbleResource());
-                    } else if (c instanceof LocalDepotLeader) {
-                        LocalDepotLeader localDepotLeader = (LocalDepotLeader) c;
-                        System.out.print(i + ") " + localPlayer.getLocalBoard().getLeaderCards().get(i - 1).getClass().getSimpleName());
-                        System.out.print(", requirement: " + localDepotLeader.getReqQuantity() + " " + localDepotLeader.getResRequirement());
-                        System.out.print(", depot: " + localDepotLeader.getNumberOfRes() + " " + localDepotLeader.getResType());
-                    } else if (c instanceof LocalProductionLeader) {
-                        LocalProductionLeader localProductionLeader = (LocalProductionLeader) c;
-                        System.out.print(", prod requirement: " + localProductionLeader.getColorRequirement() + " at level " + localProductionLeader.getLevelReq());
-                        System.out.print(", production: " + localProductionLeader.getProduction());
-                    }
-                    if (localLeaderCard.isActive()){
-                        System.out.print(", this card is active");
-                    } else {
-                        System.out.print(", this card is not active");
-                    }
+        }
+        System.out.println("Leader cards:");
+        for(LocalCard c : localPlayer.getLocalBoard().getLeaderCards()){
+            if (c instanceof LocalConcealedCard){
+                System.out.print("This card is not activated yet");
+            } else {
+                LocalLeaderCard localLeaderCard = (LocalLeaderCard) c;
+                if (c instanceof LocalDiscountLeader) {
+                    LocalDiscountLeader localDiscountLeader = (LocalDiscountLeader) c;
+                    System.out.print("DiscountLeader");
+                    System.out.print(", prod requirement: " + localDiscountLeader.getProdRequirement());
+                    System.out.print(", discounted res: " + localDiscountLeader.getQuantityToDiscount() + " " + localDiscountLeader.getDiscountedRes());
+                } else if (c instanceof LocalMarbleLeader) {
+                    LocalMarbleLeader localMarbleLeader = (LocalMarbleLeader) c;
+                    System.out.print("MarbleLeader");
+                    System.out.print(", prod requirement: " + localMarbleLeader.getProdRequirement());
+                    System.out.print(", marble: " + localMarbleLeader.getMarbleResource());
+                } else if (c instanceof LocalDepotLeader) {
+                    LocalDepotLeader localDepotLeader = (LocalDepotLeader) c;
+                    System.out.print("DepotLeader");
+                    System.out.print(", requirement: " + localDepotLeader.getReqQuantity() + " " + localDepotLeader.getResRequirement());
+                    System.out.print(", depot: " + localDepotLeader.getNumberOfRes() + " " + localDepotLeader.getResType());
+                } else if (c instanceof LocalProductionLeader) {
+                    LocalProductionLeader localProductionLeader = (LocalProductionLeader) c;
+                    System.out.print("ProductionLeader");
+                    System.out.print(", prod requirement: " + localProductionLeader.getColorRequirement() + " at level " + localProductionLeader.getLevelReq());
+                    System.out.print(", production: " + localProductionLeader.getProduction());
                 }
-                System.out.print("\n");
+                if (localLeaderCard.isActive()){
+                    System.out.print(", this card is active");
+                } else {
+                    System.out.print(", this card is not active");
+                }
             }
+            System.out.print("\n");
         }
         super.drawTurn();
     }
@@ -97,7 +100,7 @@ public class BoardView extends GameView {
         switch (ans){
             // todo handle activate production (only if loadBoard.getPlayerId() == playerId)
             default:
-                System.out.println("not valid");
+                super.handleCommand(ans);
         }
     }
 }
