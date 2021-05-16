@@ -266,4 +266,26 @@ public final class ConverterToLocalModel {
         if(game instanceof MultiPlayer) return  getGameState((MultiPlayer) game);
         else return getGameState((SinglePlayer) game);
     }
+
+    public static ArrayList<LocalTrack> getLocalFaithTracks(Game<?> game) throws UnexpectedControllerException {
+        if(game instanceof SinglePlayer) return getLocalFaithTracks((SinglePlayer) game);
+        else return getLocalFaithTracks((MultiPlayer) game);
+    }
+
+    public static ArrayList<LocalTrack> getLocalFaithTracks(SinglePlayer game) throws UnexpectedControllerException {
+        ArrayList<LocalTrack> localTracks=new ArrayList<>();
+        LocalTrack localTrack= ConverterToLocalModel.convert(game.getPlayer().getBoard().getFaithtrack());
+        localTracks.add(localTrack);
+        return localTracks;
+    }
+
+    public static ArrayList<LocalTrack> getLocalFaithTracks(MultiPlayer game) throws UnexpectedControllerException {
+        ArrayList<LocalTrack> localTracks=new ArrayList<>();
+
+        for(Player p:game.getPlayers()){
+            LocalTrack localTrack=ConverterToLocalModel.convert(p.getBoard().getFaithtrack());
+            localTracks.add(localTrack);
+        }
+        return localTracks;
+    }
 }

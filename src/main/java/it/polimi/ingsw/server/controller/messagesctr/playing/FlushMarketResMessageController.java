@@ -6,8 +6,7 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushMarketResAnswer;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
@@ -30,43 +29,44 @@ public class FlushMarketResMessageController extends PlayingMessageController {
     }
 
     /**
-     * hod that push the chosen resources in the depots
+     * Flush a combination of the market in the depots
      *
      * @param controllerActions controller action of current game
      * @return FlushMarketResAnswer
-     * @throws ControllerException
+     * @throws InvalidActionControllerException if the action is not valid
+     * @throws InvalidArgumentControllerException wrong arguments given by the clientMessage
+     * @throws UnexpectedControllerException if something unexpected happened. The status of the game might be corrupted.
      */
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws InvalidActionControllerException, WrongPlayerIdControllerException, InvalidArgumentControllerException, UnexpectedControllerException {
         Player player = getPlayerFromId(controllerActions);
         Board board = player.getBoard();
-        FlushMarketResMessage clientMessage = (FlushMarketResMessage) getClientMessage();
+        FlushMarketResMessage msg = (FlushMarketResMessage) getClientMessage();
+
+        MarketTray marketTray = controllerActions.getGame().getMarketTray();
+
+        if(controllerActions.getGame().getTurn().cannotSetMarketActivated(false) || marketTray.getResCombinations().size() == 0)
+            throw new InvalidActionControllerException("At this time, this action is not valid: cannot flush the market resources in the depots.");
+
+        if(!marketTray.checkResources(msg.getChosenCombination()))
+            throw new InvalidArgumentControllerException("The combination of resources chosen is invalid. Please select a valid combination.");
 
         try {
-            board.gainResources(clientMessage.getChosenCombination(), clientMessage.getToKeep(), controllerActions.getGame());
-        } catch (InvalidResourcesToKeepByPlayerException | InvalidResourceQuantityToDepotException | DifferentResourceForDepotException e) {
-            throw new ControllerException(e.getMessage());
-        } catch (InvalidStepsException e) {
-            logger.error("trying to give and invalid step number to the faith track while flushing the resources from market");
-            throw new UnexpectedControllerException(e.getMessage());
-        } catch (EndAlreadyReachedException e) {
-            logger.error("trying to move on the faith track while the end is already reached");
-            throw new UnexpectedControllerException(e.getMessage());
-        } catch (InvalidTypeOfResourceToDepotException e) {
-            logger.error("is given an invalid type of resource to the depot");
-            throw new UnexpectedControllerException(e.getMessage());
-        } catch (FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
-            logger.error("the vatican figure of a player results already discarded/activated");
-            throw new UnexpectedControllerException(e.getMessage());
-        } catch (InvalidArgumentException e) {
-            logger.error(e.getMessage());
-            throw new UnexpectedControllerException(e.getMessage());
+            board.gainResources(msg.getChosenCombination(), msg.getToKeep(), controllerActions.getGame());
+        } catch (InvalidResourcesToKeepByPlayerException | DifferentResourceForDepotException | InvalidResourceQuantityToDepotException | InvalidArgumentException | InvalidTypeOfResourceToDepotException e) {
+            throw new InvalidArgumentControllerException("Invalid arguments: " + e.getMessage());
+        }
+        marketTray.removeResources();
+
+        try {
+            controllerActions.getGame().getTurn().setMarketActivated(false);
+        } catch (ModelException e) {
+            // Since we already controlled if it could be set to false marketActivated, we are confident we are never coming here
+            logger.error("SetMarketActivate threw an unexpected exception after checks. This might have corrupted the status of a game: " + e);
+            throw new UnexpectedControllerException("Something unexpected happened. However, the resources have been flushed in the depots.");
         }
 
-        MarketTray market = controllerActions.getGame().getMarketTray();
-        market.removeResources();
-
-        ArrayList<LocalTrack> localTracks = controllerActions.getFaithTracks();
+        ArrayList<LocalTrack> localTracks = ConverterToLocalModel.getLocalFaithTracks(controllerActions.getGame());
         TreeMap<Resource, Integer> resInNormalDeposit = board.getResInNormalDepots();
         ArrayList<LocalDepotLeader> localDepotLeaders = new ArrayList<>();
         for (DepotLeaderCard l : board.getDepotLeaders()) {

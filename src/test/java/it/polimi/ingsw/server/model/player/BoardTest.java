@@ -523,7 +523,7 @@ public class BoardTest {
         buyDevelopCards();
         //should have 63 resources-->12 victory points
 
-        board.moveOnFaithPath(3, multiPlayer);
+        board.getFaithtrack().move(3, multiPlayer);
         int pointsFaithTrack = board.getFaithtrack().getVictoryPoints();//should be 1
         int pointsLeader = 3 + 3;//3 victory points for each leadercard that has the board
         int pointsDevelop = 4 + 8 + 12 + 4;//two cards of level 1, one of level 2 and one of level 3

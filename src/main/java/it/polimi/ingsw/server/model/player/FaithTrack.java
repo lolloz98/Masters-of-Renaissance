@@ -100,17 +100,21 @@ public class FaithTrack implements VictoryPointCalculator {
      * @throws EndAlreadyReachedException if the end is already reached
      * @throws InvalidStepsException if the steps are negative, or zero
      */
-    public void move(int steps, Game<?> game) throws EndAlreadyReachedException, InvalidStepsException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+    public void move(int steps, Game<?> game) throws EndAlreadyReachedException, InvalidStepsException {
         if (isEndReached()) throw new EndAlreadyReachedException();
         advance(steps);
         ArrayList<Integer> checkpointnumber = whichCheckpointIsReached(steps);
         if (!checkpointnumber.isEmpty()) {
             for (Integer integer : checkpointnumber) {
                 if (amiTheFirst(integer)) {
-                    if (game instanceof MultiPlayer)
-                        checkpointHandling((MultiPlayer) game, integer);
-                    else
-                        checkpointHandling((SinglePlayer) game, integer);
+                    try {
+                        if (game instanceof MultiPlayer)
+                            checkpointHandling((MultiPlayer) game, integer);
+                        else
+                            checkpointHandling((SinglePlayer) game, integer);
+                    }catch (FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
+                       logger.error("Even after check, exception generated: " + e);
+                    }
                 }
             }
 

@@ -29,7 +29,7 @@ public abstract class ClientMessageController implements Serializable {
         return clientMessage;
     }
 
-    protected Player getPlayerFromId(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Player getPlayerFromId(ControllerActions<?> controllerActions) throws WrongPlayerIdControllerException {
         Game<?> game = controllerActions.getGame();
         Player player;
         int playerId = getClientMessage().getPlayerId();

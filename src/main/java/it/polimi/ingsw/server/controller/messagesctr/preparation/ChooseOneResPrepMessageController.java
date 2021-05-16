@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidArgumentControllerException;
+import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.model.exception.*;
@@ -46,15 +47,9 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
             // once we add initResource to the depot, we diminish the counter
             board.setInitialRes(initRes - 1);
 
-
             return AnswerFactory.createChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((ChooseOneResPrepMessage) getClientMessage()).getRes(), controllerActions.getGame());
-
-        } catch (InvalidTypeOfResourceToDepotException | InvalidArgumentException e) {
-            throw new InvalidArgumentControllerException("not possible to add init resources to the depots");
-        } catch (InvalidResourcesToKeepByPlayerException| FigureAlreadyDiscardedException | FigureAlreadyActivatedException | InvalidStepsException | InvalidResourceQuantityToDepotException | EndAlreadyReachedException | DifferentResourceForDepotException e) {
-            // todo: handle catch clause
-            logger.error("something unexpected happened in " + this.getClass() + " while putting initial resources in depot");
-            throw new ControllerException(e.getMessage());
+        } catch (InvalidTypeOfResourceToDepotException | InvalidArgumentException | InvalidResourcesToKeepByPlayerException | InvalidResourceQuantityToDepotException | DifferentResourceForDepotException e) {
+            throw new InvalidArgumentControllerException("Invalid argument: " + e.getMessage());
         }
     }
 

@@ -53,12 +53,12 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
 
         try {
             thisPlayer.getBoard().getFaithtrack().move(1, controllerActions.getGame());
-        } catch (EndAlreadyReachedException | FigureAlreadyActivatedException | InvalidStepsException | FigureAlreadyDiscardedException e) {
+        } catch (EndAlreadyReachedException | InvalidStepsException e) {
             logger.warn("After discarding leader, moving of one step gave: " + e + " - Continuing normal execution");
         }
 
         // All faith tracks might be modified if vatican Figure is activated while moving
-        ArrayList<LocalTrack> localTracks = controllerActions.getFaithTracks();
+        ArrayList<LocalTrack> localTracks = ConverterToLocalModel.getLocalFaithTracks(controllerActions.getGame());
         LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
         return new DiscardLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, localTracks);
     }

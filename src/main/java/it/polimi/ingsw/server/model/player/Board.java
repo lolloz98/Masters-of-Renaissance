@@ -427,16 +427,6 @@ public class Board implements VictoryPointCalculator {
         removeResFromStrongBoxNoCheck(resToGive);
     }
 
-    /**
-     * advance on the faithpath of the current player
-     *
-     * @param steps
-     * @param game
-     */
-    public void moveOnFaithPath(int steps, Game<?> game) throws InvalidStepsException, EndAlreadyReachedException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
-        this.faithtrack.move(steps, game);
-    }
-
     @Override
     public int getVictoryPoints() {
         int points = 0;
@@ -501,6 +491,9 @@ public class Board implements VictoryPointCalculator {
         return depots.get(whichDepot).getStoredResources();
     }
 
+    /**
+     * @return resources in depots all grouped in a treeMap
+     */
     public TreeMap<Resource, Integer> getResInNormalDepots() {
         TreeMap<Resource, Integer> inDepots = new TreeMap<>();
         for (Depot d : depots) {
@@ -613,23 +606,22 @@ public class Board implements VictoryPointCalculator {
      * @throws InvalidArgumentException                if the treemaps toKeep and resGained contain an irregular type of resource
      *                                                 or if the amount of resources in the toKeep are greater that un the resGained
      */
-    public void gainResourcesSmart(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException, InvalidTypeOfResourceToDepotException, InvalidResourceQuantityToDepotException, DifferentResourceForDepotException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+    public void gainResourcesSmart(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException, InvalidArgumentException, InvalidTypeOfResourceToDepotException, InvalidResourceQuantityToDepotException, DifferentResourceForDepotException, InvalidStepsException {
 
         //check illegal resources in toKeep
         for (Resource r : toKeep.keySet()) {
             if (!Resource.isDiscountable(r) && r != Resource.FAITH)
                 throw new InvalidArgumentException("Invalid resources to keep");
+            if(toKeep.get(r) < 0){
+                throw new InvalidArgumentException("The amount of res toKeep cannot be less than 0.");
+            }
+            if(!resGained.containsKey(r)) throw new InvalidArgumentException("Invalid resources to keep, given what you should gain");
         }
 
         //check illegal resources in resGained and check if to keep is greater than resGained
         for (Resource r : resGained.keySet()) {
-            if ((resGained.getOrDefault(r, 0) < toKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
+            if (resGained.getOrDefault(r, 0) < 0 || (resGained.getOrDefault(r, 0) < toKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
                 throw new InvalidArgumentException("Invalid resources in res to gain");
-        }
-
-        //check if in toKeep there is a different type of resource than in to gain
-        for(Resource r: toKeep.keySet()){
-            if(!resGained.containsKey(r)) throw new InvalidArgumentException("Invalid resources to keep, given what you should gain");
         }
 
         if (cannotAppend(toKeep)) throw new InvalidResourcesToKeepByPlayerException("Invalid resources to keep");
@@ -637,19 +629,27 @@ public class Board implements VictoryPointCalculator {
         TreeMap<Resource, Integer> toGain = new TreeMap<>(toKeep);
         storeInDepotLeaderNoChecks(toGain);
         storeInNormalDepotsNoChecks(toGain, this.depots);
-        if (toKeep.containsKey(Resource.FAITH))
-            moveOnFaithPath(toKeep.get(Resource.FAITH), game);
+        if (toKeep.containsKey(Resource.FAITH)) {
+            try {
+                getFaithtrack().move(toKeep.get(Resource.FAITH), game);
+            } catch (EndAlreadyReachedException e) {
+                logger.warn("An exception was generated while moving on the faith path: " + e);
+            }
+        }
 
         TreeMap<Resource, Integer> toDiscard = new TreeMap<>() {{
             for (Resource r : resGained.keySet()) {
-
                 if (resGained.get(r) - toKeep.getOrDefault(r, 0) > 0)
                     put(r, resGained.get(r) - toKeep.getOrDefault(r, 0));
-
             }
         }};
-        if (!toDiscard.isEmpty())
-            distributeFaithPoints(game, toDiscard);
+        if (!toDiscard.isEmpty()) {
+            try {
+                distributeFaithPoints(game, toDiscard);
+            } catch (FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
+                logger.warn("An exception was generated while distributing faith points: " + e);
+            }
+        }
     }
 
     /**
@@ -664,22 +664,18 @@ public class Board implements VictoryPointCalculator {
      *                                                 or if the amount of resources in the toKeep are greater than in the resGained
      *                                                 or if the treemap toKeep contains the strongbox as Warehouse type
      */
-    public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException, InvalidTypeOfResourceToDepotException, InvalidResourceQuantityToDepotException, DifferentResourceForDepotException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+    public void gainResources(TreeMap<Resource, Integer> resGained, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException, InvalidArgumentException, InvalidTypeOfResourceToDepotException, InvalidResourceQuantityToDepotException, DifferentResourceForDepotException {
         TreeMap<Resource, Integer> entireToKeep;
         entireToKeep = Utility.getTotalResources(toKeep);
         for (Resource r : entireToKeep.keySet()) {
             if (!Resource.isDiscountable(r) && r != Resource.FAITH)
                 throw new InvalidArgumentException("Invalid resources to keep");
+            if(!resGained.containsKey(r)) throw new InvalidArgumentException("Invalid resources to keep, given to gain");
         }
 
         for (Resource r : resGained.keySet()) {
-            if ((resGained.getOrDefault(r, 0) < entireToKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
+            if (resGained.getOrDefault(r, 1) <= 0|| (resGained.getOrDefault(r, 0) < entireToKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
                 throw new InvalidArgumentException("Invalid resources to gain");
-        }
-
-        //check if in toKeep there is a different type of resource than in to gain
-        for(Resource r: entireToKeep.keySet()){
-            if(!resGained.containsKey(r)) throw new InvalidArgumentException("Invalid resources to keep, given to gain");
         }
 
         //before control if i can append resources to depots
@@ -698,8 +694,15 @@ public class Board implements VictoryPointCalculator {
 
         // then append and move on the faithPath
         int steps = resGained.getOrDefault(Resource.FAITH, 0);
-        if (steps > 0)
-            moveOnFaithPath(steps, game);
+        if (steps > 0) {
+            try {
+                getFaithtrack().move(steps, game);
+            } catch ( InvalidStepsException e) {
+                logger.error("Exception was thrown while moving on the faith path: " + e);
+            } catch (EndAlreadyReachedException e) {
+                logger.warn("End reached, not moving but proceeding with normal execution: " + e);
+            }
+        }
 
         for (WarehouseType w : toKeep.keySet()) {
             switch (w) {
@@ -727,8 +730,13 @@ public class Board implements VictoryPointCalculator {
             }
         }};
 
-        if (!toDiscard.isEmpty())
-            distributeFaithPoints(game, toDiscard);
+        if (!toDiscard.isEmpty()) {
+            try {
+                distributeFaithPoints(game, toDiscard);
+            } catch (FigureAlreadyDiscardedException | FigureAlreadyActivatedException | InvalidStepsException e) {
+                logger.error("Exception was thrown while moving on the faith path: " + e);
+            }
+        }
     }
 
 
@@ -858,7 +866,7 @@ public class Board implements VictoryPointCalculator {
             for (Player p : gamemp.getPlayers()) {
                 if (!p.equals(currentPlayer)) {
                     try {
-                        p.getBoard().moveOnFaithPath(steps, game);
+                        p.getBoard().getFaithtrack().move(steps, game);
                     } catch (EndAlreadyReachedException e) {
                         logger.info("Player " + p.getPlayerId() + " has already reached the end of faithTrack");
                     }
@@ -875,7 +883,7 @@ public class Board implements VictoryPointCalculator {
                 }
             } else {
                 try {
-                    gamesp.getPlayer().getBoard().moveOnFaithPath(steps, game);
+                    gamesp.getPlayer().getBoard().getFaithtrack().move(steps, game);
                 } catch (EndAlreadyReachedException e) {
                     logger.info("The player " + " has already reached the end of faithTrack");
                 }

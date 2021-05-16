@@ -55,17 +55,6 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
         return true;
     }
 
-    @Override
-    public synchronized ArrayList<LocalTrack> getFaithTracks() throws ControllerException {
-        ArrayList<LocalTrack> localTracks=new ArrayList<>();
-
-        for(Player p:game.getPlayers()){
-            LocalTrack localTrack=ConverterToLocalModel.convert(p.getBoard().getFaithtrack());
-            localTracks.add(localTrack);
-        }
-        return localTracks;
-    }
-
     /**
      * removes the effect of all the leader cards of the current player
      * @throws ControllerException
@@ -145,16 +134,16 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
                 case 2:
                     b.setInitialRes(1);
                     try {
-                        b.moveOnFaithPath(1, game);
-                    } catch (InvalidStepsException | FigureAlreadyActivatedException | FigureAlreadyDiscardedException | EndAlreadyReachedException e) {
+                        b.getFaithtrack().move(1, game);
+                    } catch (InvalidStepsException | EndAlreadyReachedException e) {
                         logger.error("something unexpected happened in distributeBeginningRes");
                     }
                     break;
                 case 3:
                     b.setInitialRes(2);
                     try {
-                        b.moveOnFaithPath(1, game);
-                    } catch (InvalidStepsException | EndAlreadyReachedException | FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
+                        b.getFaithtrack().move(1, game);
+                    } catch (InvalidStepsException | EndAlreadyReachedException e) {
                         logger.error("something unexpected happened in distributeBeginningRes");
                     }
                     break;

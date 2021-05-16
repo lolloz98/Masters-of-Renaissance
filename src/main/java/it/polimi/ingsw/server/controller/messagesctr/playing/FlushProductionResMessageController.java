@@ -7,13 +7,11 @@ import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
-import it.polimi.ingsw.server.model.cards.Production;
-import it.polimi.ingsw.server.model.cards.leader.ProductionLeaderCard;
+import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.game.Turn;
 import it.polimi.ingsw.server.model.player.Board;
-import it.polimi.ingsw.server.model.player.DevelopCardSlot;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,7 +51,7 @@ public class FlushProductionResMessageController extends PlayingMessageControlle
             // todo: handle exceptions
         }
 
-        ArrayList<LocalTrack> localTracks = controllerActions.getFaithTracks();
+        ArrayList<LocalTrack> localTracks = ConverterToLocalModel.getLocalFaithTracks(controllerActions.getGame());
         return new FlushProductionResAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), resInStrongBox, localTracks);
     }
 
