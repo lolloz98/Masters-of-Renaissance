@@ -53,7 +53,7 @@ public class FinishTurnMessageController extends PlayingMessageController {
 
             }
 
-            if (game instanceof SinglePlayer) {
+            if (game instanceof SinglePlayer) {//we have to manage the turn of lorenzo
 
                 SinglePlayer singlePlayer = (SinglePlayer) game;
 
@@ -85,17 +85,16 @@ public class FinishTurnMessageController extends PlayingMessageController {
                     if (!newTurn.getIsPlayable())
                         return handleEndGame(controllerActions);
                     else {
+                        //build local grid
                         LocalDevelopmentGrid localGrid = ConverterToLocalModel.convert(game.getDecksDevelop());
-                        LocalTrack localTrack = ConverterToLocalModel.convert(singlePlayer.getPlayer().getBoard().getFaithtrack());
-                        LorenzoCard lorenzoCard;
-                        try {
-                            lorenzoCard = singlePlayer.getLorenzoDeck().getTopCard();
-                        } catch (EmptyDeckException e) {
-                            logger.warn("something wrong happened, the lorenzo deck is empty. it should never be empty");
-                            throw new UnexpectedControllerException("lorenzo deck is empty");
-                        }
+                        //build player track
+                        LocalTrack localPlayerTrack = ConverterToLocalModel.convert(singlePlayer.getPlayer().getBoard().getFaithtrack());
+                        //build lorenzo track
+                        LocalTrack localLorenzoTrack=ConverterToLocalModel.convert(singlePlayer.getLorenzo().getFaithTrack());
 
-                        return new FinishTurnSingleAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localGrid, lorenzoCard, localTrack);
+
+
+                        return new FinishTurnSingleAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localGrid, localPlayerTrack, localLorenzoTrack);
                     }
 
                 } else {

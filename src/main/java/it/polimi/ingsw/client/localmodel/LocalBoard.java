@@ -13,7 +13,10 @@ public class LocalBoard extends Observable implements Serializable {
     private TreeMap<Resource, Integer> resInStrongBox;
     private TreeMap<Resource, Integer> resInNormalDepot;
     private ArrayList<LocalCard> leaderCards;
-    private final LocalTrack localTrack;
+    /**
+     * to notify the board for an update of the local track, it doesn't own an observer
+     */
+    private LocalTrack localTrack;
     private int initialRes; // fixme: probably should be removed
 
     public synchronized ArrayList<ArrayList<LocalDevelopCard>> getDevelopCards() {
@@ -22,6 +25,10 @@ public class LocalBoard extends Observable implements Serializable {
 
     public void setDevelopCards(ArrayList<ArrayList<LocalDevelopCard>> developCards) {
         this.developCards = developCards;
+    }
+
+    public void setLocalTrack(LocalTrack localTrack) {
+        this.localTrack = localTrack;
     }
 
     public synchronized void addDevelopCards(int i, LocalDevelopCard developCard) {
