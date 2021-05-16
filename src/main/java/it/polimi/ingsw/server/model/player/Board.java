@@ -41,7 +41,7 @@ public class Board implements VictoryPointCalculator {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Board){
+        if (obj instanceof Board) {
             Board t = (Board) obj;
             return faithtrack.equals(t.faithtrack) && strongbox.equals(t.strongbox) && leaderCards.equals(t.leaderCards)
                     && developCardSlots.equals(t.developCardSlots) && productionLeaderSlots.equals(t.productionLeaderSlots)
@@ -53,40 +53,40 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param whichProdSlot if 0 --> normal production
-     *                  if 1,2,3 --> a production in the specified development slot
-     *                  if 4,5 --> a leader production
+     *                      if 1,2,3 --> a production in the specified development slot
+     *                      if 4,5 --> a leader production
      * @return the specified production
      */
-    public Production getProduction(int whichProdSlot){
-        switch (whichProdSlot){
+    public Production getProduction(int whichProdSlot) {
+        switch (whichProdSlot) {
 
-            case 0:{
+            case 0: {
                 return normalProduction;
             }
 
             case 1:
             case 2:
-            case 3:{
-                if(!getDevelopCardSlots().get(whichProdSlot).isEmpty())
-                    return getDevelopCardSlots().get(whichProdSlot-1).lastCard().getProduction();
+            case 3: {
+                if (!getDevelopCardSlots().get(whichProdSlot - 1).isEmpty())
+                    return getDevelopCardSlots().get(whichProdSlot - 1).lastCard().getProduction();
                 else
                     throw new IllegalArgumentException("this production slot is empty");
             }
 
-            case 4:{
-                if(getProductionLeaders().size()==1)
-                    return getProductionLeaders().get(whichProdSlot-4).getProduction();
+            case 4: {
+                if (getProductionLeaders().size() == 1)
+                    return getProductionLeaders().get(0).getProduction();
                 else
                     throw new IllegalArgumentException("you have selected a not valid leader production slot");
             }
-            case 5:{
-                if(getProductionLeaders().size()==2)
-                    return getProductionLeaders().get(whichProdSlot-4).getProduction();
+            case 5: {
+                if (getProductionLeaders().size() == 2)
+                    return getProductionLeaders().get(1).getProduction();
                 else
                     throw new IllegalArgumentException("you have selected a not valid leader production slot");
             }
 
-            default:{
+            default: {
                 throw new IllegalArgumentException("you have selected a not valid production slot");
             }
 
@@ -159,34 +159,35 @@ public class Board implements VictoryPointCalculator {
     public void activateProduction(int whichProd, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Game<?> game) throws InvalidProductionSlotChosenException, ProductionAlreadyActivatedException, ResourceNotDiscountableException, InvalidArgumentException, InvalidResourceQuantityToDepotException, InvalidResourcesByPlayerException, NotEnoughResourcesException {
         if (whichProd < 0)
             throw new InvalidProductionSlotChosenException();
-        if(whichProd > 0 && whichProd <= 3 && whichProd > developCardSlots.size())
+        if (whichProd > 0 && whichProd <= 3 && whichProd > developCardSlots.size())
             throw new InvalidProductionSlotChosenException();
-        if(whichProd > 3 && whichProd - 3 > productionLeaderSlots.size())
+        if (whichProd > 3 && whichProd - 3 > productionLeaderSlots.size())
             throw new InvalidProductionSlotChosenException();
 
         if (whichProd == 0) {
             normalProduction.applyProduction(resToGive, resToGain, this);
         }
-        if (whichProd > 0 && whichProd <= 3){
-            developCardSlots.get(whichProd-1).applyProduction(resToGive, resToGain, this);
+        if (whichProd > 0 && whichProd <= 3) {
+            developCardSlots.get(whichProd - 1).applyProduction(resToGive, resToGain, this);
         }
         if (whichProd >= 4) { //branch taken if the production chosen is a LeaderProduction
             if (!theLeaderProductionIsActivated(whichProd - 4)) throw new InvalidProductionSlotChosenException();
-            productionLeaderSlots.get(whichProd-4).getProduction().applyProduction(resToGive, resToGain, this);
+            productionLeaderSlots.get(whichProd - 4).getProduction().applyProduction(resToGive, resToGain, this);
         }
     }
 
     /**
      * flush resources from productions to the board
+     *
      * @param game current game
      */
-    public void flushResFromProductions(Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException {
-        normalProduction.flushGainedToBoard(this,game);
-        for(DevelopCardSlot ds: developCardSlots){
-            if(!ds.isEmpty())
+    public void flushResFromProductions(Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, InvalidArgumentException {
+        normalProduction.flushGainedToBoard(this, game);
+        for (DevelopCardSlot ds : developCardSlots) {
+            if (!ds.isEmpty())
                 ds.lastCard().getProduction().flushGainedToBoard(this, game);
         }
-        for(ProductionLeaderCard pl : productionLeaderSlots){
+        for (ProductionLeaderCard pl : productionLeaderSlots) {
             pl.getProduction().flushGainedToBoard(this, game);
         }
     }
@@ -317,7 +318,8 @@ public class Board implements VictoryPointCalculator {
     }
 
     private boolean theLeaderProductionIsActivated(int whichLeader) throws InvalidArgumentException {
-        if (whichLeader >= productionLeaderSlots.size() || whichLeader < 0) throw new InvalidArgumentException("Invalid production slot leader selected");
+        if (whichLeader >= productionLeaderSlots.size() || whichLeader < 0)
+            throw new InvalidArgumentException("Invalid production slot leader selected");
         else
             return productionLeaderSlots.get(whichLeader).isActive();
     }
@@ -469,9 +471,17 @@ public class Board implements VictoryPointCalculator {
      * @param gainedResources are put in the strongbox
      * @param game            current game
      */
-    public void flushGainedResources(TreeMap<Resource, Integer> gainedResources, Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException {
+    public void flushGainedResources(TreeMap<Resource, Integer> gainedResources, Game<?> game) throws ResourceNotDiscountableException, InvalidArgumentException {
         if (gainedResources.getOrDefault(Resource.FAITH, 0) > 0)
-            this.faithtrack.move(gainedResources.get(Resource.FAITH), game);
+            try {
+                this.faithtrack.move(gainedResources.get(Resource.FAITH), game);
+            } catch (EndAlreadyReachedException e){
+                logger.warn("End reached for faith path, continuing normal execution: " + e);
+            } catch (InvalidStepsException e){
+                // we should never go inside here
+                logger.error("InvalidStepsException occurred even after checks: " + e);
+            }
+
         TreeMap<Resource, Integer> c = new TreeMap<>(gainedResources);
         c.remove(Resource.FAITH);
         strongbox.addResources(c);
@@ -487,7 +497,8 @@ public class Board implements VictoryPointCalculator {
      * @throws InvalidArgumentException if whichDepot is lower than 0 or greater than 2
      */
     public TreeMap<Resource, Integer> getResInDepot(int whichDepot) throws InvalidArgumentException {
-        if (whichDepot < 0 || whichDepot > 2) throw new InvalidArgumentException("The number of depot selected is invalid");
+        if (whichDepot < 0 || whichDepot > 2)
+            throw new InvalidArgumentException("The number of depot selected is invalid");
         return depots.get(whichDepot).getStoredResources();
     }
 
@@ -512,12 +523,14 @@ public class Board implements VictoryPointCalculator {
     public TreeMap<Resource, Integer> getResInLeaderDepot(int whichLeaderDepot) throws InvalidArgumentException {
         switch (whichLeaderDepot) {
             case 0: {
-                if (depotLeaders.size() == 0) throw new InvalidArgumentException("The number of depot selected is invalid");
+                if (depotLeaders.size() == 0)
+                    throw new InvalidArgumentException("The number of depot selected is invalid");
                 return depotLeaders.get(whichLeaderDepot).getDepot().getStoredResources();
             }
 
             case 1: {
-                if (depotLeaders.size() == 0 || depotLeaders.size() == 1) throw new InvalidArgumentException("The number of depot selected is invalid");
+                if (depotLeaders.size() == 0 || depotLeaders.size() == 1)
+                    throw new InvalidArgumentException("The number of depot selected is invalid");
                 return depotLeaders.get(whichLeaderDepot).getDepot().getStoredResources();
             }
             default:
@@ -550,8 +563,8 @@ public class Board implements VictoryPointCalculator {
      * @throws InvalidArgumentException if there is no card with this id
      */
     public LeaderCard<? extends Requirement> getLeaderCard(int id) throws InvalidArgumentException {
-        for(LeaderCard<?> i: leaderCards){
-            if(i.getId() == id) return i;
+        for (LeaderCard<?> i : leaderCards) {
+            if (i.getId() == id) return i;
         }
         throw new InvalidArgumentException("Player has no card with such id: " + id);
     }
@@ -577,7 +590,8 @@ public class Board implements VictoryPointCalculator {
      * @throws InvalidArgumentException if the cards was not contained in leaderCards of the board
      */
     public void removeLeaderCard(LeaderCard<? extends Requirement> card) throws InvalidArgumentException {
-        if (!leaderCards.contains(card)) throw new InvalidArgumentException("The leader card selected is not owned by the player");
+        if (!leaderCards.contains(card))
+            throw new InvalidArgumentException("The leader card selected is not owned by the player");
         leaderCards.remove(card);
     }
 
@@ -589,8 +603,9 @@ public class Board implements VictoryPointCalculator {
      */
     public void removeLeaderCards(ArrayList<Integer> cardsId) throws InvalidArgumentException {
         List<LeaderCard<?>> cards = leaderCards.stream().filter(x -> cardsId.contains(x.getId())).collect(Collectors.toList());
-        if (cards.size() != cardsId.size()) throw new InvalidArgumentException("Some of the leaderCard selected are not owned by the player");
-        for(LeaderCard<?> card: cards){
+        if (cards.size() != cardsId.size())
+            throw new InvalidArgumentException("Some of the leaderCard selected are not owned by the player");
+        for (LeaderCard<?> card : cards) {
             leaderCards.remove(card);
         }
     }
@@ -612,10 +627,11 @@ public class Board implements VictoryPointCalculator {
         for (Resource r : toKeep.keySet()) {
             if (!Resource.isDiscountable(r) && r != Resource.FAITH)
                 throw new InvalidArgumentException("Invalid resources to keep");
-            if(toKeep.get(r) < 0){
+            if (toKeep.get(r) < 0) {
                 throw new InvalidArgumentException("The amount of res toKeep cannot be less than 0.");
             }
-            if(!resGained.containsKey(r)) throw new InvalidArgumentException("Invalid resources to keep, given what you should gain");
+            if (!resGained.containsKey(r))
+                throw new InvalidArgumentException("Invalid resources to keep, given what you should gain");
         }
 
         //check illegal resources in resGained and check if to keep is greater than resGained
@@ -670,11 +686,12 @@ public class Board implements VictoryPointCalculator {
         for (Resource r : entireToKeep.keySet()) {
             if (!Resource.isDiscountable(r) && r != Resource.FAITH)
                 throw new InvalidArgumentException("Invalid resources to keep");
-            if(!resGained.containsKey(r)) throw new InvalidArgumentException("Invalid resources to keep, given to gain");
+            if (!resGained.containsKey(r))
+                throw new InvalidArgumentException("Invalid resources to keep, given to gain");
         }
 
         for (Resource r : resGained.keySet()) {
-            if (resGained.getOrDefault(r, 1) <= 0|| (resGained.getOrDefault(r, 0) < entireToKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
+            if (resGained.getOrDefault(r, 1) <= 0 || (resGained.getOrDefault(r, 0) < entireToKeep.getOrDefault(r, 0)) || (!Resource.isDiscountable(r) && r != Resource.FAITH))
                 throw new InvalidArgumentException("Invalid resources to gain");
         }
 
@@ -682,10 +699,12 @@ public class Board implements VictoryPointCalculator {
         for (WarehouseType w : toKeep.keySet()) {
             switch (w) {
                 case LEADER:
-                    if (cannotAppendToLeaderDepots(toKeep.get(w))) throw new InvalidResourcesToKeepByPlayerException("Invalid resources to keep");
+                    if (cannotAppendToLeaderDepots(toKeep.get(w)))
+                        throw new InvalidResourcesToKeepByPlayerException("Invalid resources to keep");
                     break;
                 case NORMAL:
-                    if (cannotAppendToNormalDepots(toKeep.get(w))) throw new InvalidResourcesToKeepByPlayerException("Invalid resources to keep");
+                    if (cannotAppendToNormalDepots(toKeep.get(w)))
+                        throw new InvalidResourcesToKeepByPlayerException("Invalid resources to keep");
                     break;
                 default:
                     throw new InvalidArgumentException("Invalid warehouse type for putting resources to keep " + w.name());
@@ -697,7 +716,7 @@ public class Board implements VictoryPointCalculator {
         if (steps > 0) {
             try {
                 getFaithtrack().move(steps, game);
-            } catch ( InvalidStepsException e) {
+            } catch (InvalidStepsException e) {
                 logger.error("Exception was thrown while moving on the faith path: " + e);
             } catch (EndAlreadyReachedException e) {
                 logger.warn("End reached, not moving but proceeding with normal execution: " + e);
@@ -944,7 +963,7 @@ public class Board implements VictoryPointCalculator {
      */
     private void storeInDepotLeaderNoChecks(TreeMap<Resource, Integer> toGain) throws InvalidTypeOfResourceToDepotException, InvalidResourceQuantityToDepotException, DifferentResourceForDepotException {
         toGain.remove(Resource.FAITH);
-        TreeSet<Resource> resInToGain= new TreeSet<>(toGain.keySet());
+        TreeSet<Resource> resInToGain = new TreeSet<>(toGain.keySet());
         for (Resource r : resInToGain) {
             for (DepotLeaderCard dl : depotLeaders) {
                 Depot d = dl.getDepot();
@@ -953,7 +972,7 @@ public class Board implements VictoryPointCalculator {
                         d.addResource(r, 1);
                         toGain.replace(r, toGain.get(r) - 1);
                     }
-                    if(toGain.get(r)==0)
+                    if (toGain.get(r) == 0)
                         toGain.remove(r);
                 }
             }

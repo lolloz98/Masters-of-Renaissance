@@ -137,7 +137,7 @@ public class Production implements Serializable {
      * @param board board of the player
      * @param game  current game
      */
-    public void flushGainedToBoard(Board board, Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException {
+    public void flushGainedToBoard(Board board, Game<?> game) throws ResourceNotDiscountableException, InvalidArgumentException {
         board.flushGainedResources(gainedResources, game);
         gainedResources.clear();
     }
