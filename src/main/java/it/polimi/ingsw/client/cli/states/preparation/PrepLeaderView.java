@@ -65,7 +65,7 @@ public class PrepLeaderView extends View {
             }
             if(leaderCardIds.size()==2){
                 try {
-                    cli.getClient().sendMessage(new RemoveLeaderPrepMessage(
+                    cli.getServerListener().sendMessage(new RemoveLeaderPrepMessage(
                             localGame.getGameId(),
                             localGame.getMainPlayer().getId(),
                             new ArrayList<>(){{

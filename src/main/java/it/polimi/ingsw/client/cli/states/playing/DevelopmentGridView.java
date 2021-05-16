@@ -18,7 +18,7 @@ public class DevelopmentGridView extends GameView {
     private LocalDevelopCard[][] topDevelopCards;
     private int[][] developCardsNumber;
 
-    public DevelopmentGridView(LocalDevelopmentGrid localDevelopmentGrid, LocalGame localGame){
+    public DevelopmentGridView(CLI cli, LocalGame localGame, LocalDevelopmentGrid localDevelopmentGrid){
         this.localDevelopmentGrid = localDevelopmentGrid;
         this.localGame = localGame;
         draw();
@@ -42,8 +42,18 @@ public class DevelopmentGridView extends GameView {
     }
 
     @Override
+    public void removeObserved() {
+
+    }
+
+    @Override
     public void notifyUpdate() {
         draw();
+    }
+
+    @Override
+    public void helpScreen() {
+
     }
 
     @Override

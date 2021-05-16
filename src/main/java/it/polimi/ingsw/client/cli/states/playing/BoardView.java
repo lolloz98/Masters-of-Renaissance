@@ -6,16 +6,19 @@ import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalProduction;
 import it.polimi.ingsw.client.localmodel.localcards.*;
+import it.polimi.ingsw.server.model.player.StrongBox;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BoardView extends GameView {
     private LocalPlayer localPlayer;
-    private CLI cli;
+    // private CLI cli; // todo remove
 
     public BoardView(CLI cli, LocalGame localGame, LocalPlayer localPlayer){
         this.localGame = localGame;
         this.cli = cli;
         this.localPlayer = localPlayer;
-        // todo add observer
         localGame.getError().addObserver(this);
         localPlayer.getLocalBoard().addObserver(this);
         localGame.getLocalTurn().addObserver(this);
@@ -88,8 +91,20 @@ public class BoardView extends GameView {
     }
 
     @Override
+    public void removeObserved() {
+        localGame.getError().removeObserver();
+        localPlayer.getLocalBoard().removeObserver();
+        localGame.getLocalTurn().removeObserver();
+    }
+
+    @Override
     public synchronized void notifyUpdate(){
         draw();
+    }
+
+    @Override
+    public void helpScreen() {
+        // todo
     }
 
     @Override
@@ -97,10 +112,13 @@ public class BoardView extends GameView {
 
     @Override
     public synchronized void handleCommand(String ans){
-        switch (ans){
+        String delim = "[ ]+";
+        ArrayList<String> ansList = (ArrayList<String>) Arrays.asList(ans.split(delim));
+        switch (ansList.get(0)){
             // todo handle activate production (only if loadBoard.getPlayerId() == playerId)
+            // todo activate leader
             default:
-                super.handleCommand(ans);
+                super.handleCommand(ansList);
         }
     }
 }

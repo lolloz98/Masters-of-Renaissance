@@ -9,21 +9,21 @@ public class MarketView extends GameView {
     private LocalMarket localMarket;
     private CLI cli;
 
-    public MarketView(CLI cli, LocalGame localGame, LocalMarket localMarket){
+    public MarketView(CLI cli, LocalGame localGame, LocalMarket localMarket) {
         this.cli = cli;
         this.localMarket = localMarket;
         this.localGame = localGame;
     }
 
     @Override
-    public void draw(){
+    public void draw() {
         CLI.clearScreen();
         System.out.println("Market:");
         System.out.println("");
-        System.out.println("Free marble: "+ localMarket.getFreeMarble());
+        System.out.println("Free marble: " + localMarket.getFreeMarble());
         System.out.println("");
-        for(int i = 0; i<3; i++){
-            for(int j = 0; j<4; j++){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
                 System.out.print(localMarket.getMarbleMatrix()[i][j] + " ");
             }
             System.out.print("\r\n");
@@ -33,16 +33,27 @@ public class MarketView extends GameView {
     }
 
     @Override
-    public void notifyUpdate(){
+    public void removeObserved() {
+
+    }
+
+    @Override
+    public void notifyUpdate() {
         draw();
     }
 
     @Override
-    public void notifyError() {}
+    public void helpScreen() {
+
+    }
 
     @Override
-    public void handleCommand(String ans){
-        switch (ans){
+    public void notifyError() {
+    }
+
+    @Override
+    public void handleCommand(String ans) {
+        switch (ans) {
             // todo handle push command
             default:
                 System.out.println("not valid");

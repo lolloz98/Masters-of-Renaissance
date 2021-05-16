@@ -19,6 +19,7 @@ public class Client {
     ObjectInputStream input;
     private static final Logger logger = LogManager.getLogger(Client.class);
 
+    @Deprecated
     public static void main(String[] args)
     {
         Scanner scanner = new Scanner(System.in);
@@ -29,8 +30,8 @@ public class Client {
         Socket server;
         try {
             // FIXME: how do we know the server port? -> in prof's project it said not to put constant the number of the port.
-            logger.debug("server port: " + Server.PORT);
-            server = new Socket(ip, Server.PORT);
+            logger.debug("server port: " + Server.getPort());
+            server = new Socket(ip, Server.getPort());
         } catch (IOException e) {
             logger.error("Server unreachable: " + e.getMessage());
             return;
@@ -64,16 +65,4 @@ public class Client {
         }
     }
 
-    public Client(String address, int port) throws IOException{
-        server = new Socket(address, port);
-        output = new ObjectOutputStream(server.getOutputStream());
-    }
-
-    public void sendMessage(ClientMessage message) throws IOException {
-        output.writeObject(message);
-    }
-
-    public Socket getServer(){
-        return server;
-    }
 }

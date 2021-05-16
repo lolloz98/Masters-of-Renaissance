@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class JoinGameView extends View {
     private LocalMulti localMulti;
-    private CLI cli;
+    // private CLI cli; // todo remove
     private String nickname;
 
     public JoinGameView(CLI cli, LocalMulti localMulti) {
@@ -30,7 +30,7 @@ public class JoinGameView extends View {
         System.out.println("Enter the game id:\n");
         int id = input.nextInt();
         try {
-            cli.getClient().sendMessage(new JoinGameMessage(id, nickname));
+            cli.getServerListener().sendMessage(new JoinGameMessage(id, nickname));
         } catch (IOException e) {
             System.out.println("no connection from server"); // fixme
             e.printStackTrace();
@@ -72,7 +72,7 @@ public class JoinGameView extends View {
     public synchronized void handleCommand(String ans) {
         try{
             int port = Integer.parseInt(ans);
-            cli.getClient().sendMessage(new JoinGameMessage(port, nickname));
+            cli.getServerListener().sendMessage(new JoinGameMessage(port, nickname));
         } catch (IOException e) {
             System.out.println("no connection from server");
             e.printStackTrace();

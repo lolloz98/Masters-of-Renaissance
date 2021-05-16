@@ -30,6 +30,7 @@ public class ServerListener implements Runnable{
     private final Socket server;
     private ObjectInputStream iStream;
     private LocalGame<?> localGame;
+    private ObjectOutputStream output;
 
     public void setLocalGame(LocalGame<?> localGame) {
         this.localGame = localGame;
@@ -53,8 +54,9 @@ public class ServerListener implements Runnable{
         closeConnection();
     }
 
-    public ServerListener(Socket server) {
-        this.server = server;
+    public ServerListener(String address, int port) throws IOException {
+        server = new Socket(address, port);
+        output = new ObjectOutputStream(server.getOutputStream());
     }
 
     public void closeConnection() {
@@ -87,5 +89,13 @@ public class ServerListener implements Runnable{
     } catch (HandlerException | ParserException e) {
             logger.error("something went wrong, name of exception: " + e.getClass().getSimpleName() + "\n associated message: " + e.getMessage());
         }
+    }
+
+    public void sendMessage(ClientMessage message) throws IOException {
+        output.writeObject(message);
+    }
+
+    public Socket getServer(){
+        return server;
     }
 }

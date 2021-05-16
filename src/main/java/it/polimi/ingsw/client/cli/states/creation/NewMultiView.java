@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class NewMultiView extends View {
     private LocalMulti localMulti;
-    private CLI cli;
+    // private CLI cli; // todo remove
 
     public NewMultiView(CLI cli, LocalMulti localMulti, int numberOfPlayers){
         this.cli = cli;
@@ -24,7 +24,7 @@ public class NewMultiView extends View {
         System.out.println("Type your nickname:\n");
         String nickname = input.nextLine(); // todo: check characters limit
         try {
-            cli.getClient().sendMessage(new CreateGameMessage(numberOfPlayers, nickname));
+            cli.getServerListener().sendMessage(new CreateGameMessage(numberOfPlayers, nickname));
         } catch (IOException e) {
             System.out.println("No connection from server");
             e.printStackTrace();
