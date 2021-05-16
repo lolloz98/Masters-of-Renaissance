@@ -18,6 +18,11 @@ public class CLI extends UI implements Runnable {
     private View state;
     private boolean gameOver;
     private Scanner input;
+
+    public ServerListener getServerListener() {
+        return serverListener;
+    }
+
     private ServerListener serverListener;
 
     public Client getClient() {
@@ -90,8 +95,7 @@ public class CLI extends UI implements Runnable {
                     String ip = input.nextLine();
                     System.out.println("Enter server port");
                     int port = input.nextInt();
-                    setClient(new Client(ip, port));
-                    serverListener = new ServerListener(client.getServer());
+                    serverListener = new ServerListener(ip, port);
                     new Thread(serverListener).start();
                     valid = true;
                     // choice for join or create game

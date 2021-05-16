@@ -19,6 +19,7 @@ public class Client {
     ObjectInputStream input;
     private static final Logger logger = LogManager.getLogger(Client.class);
 
+    @Deprecated
     public static void main(String[] args)
     {
         Scanner scanner = new Scanner(System.in);
@@ -64,16 +65,4 @@ public class Client {
         }
     }
 
-    public Client(String address, int port) throws IOException{
-        server = new Socket(address, port);
-        output = new ObjectOutputStream(server.getOutputStream());
-    }
-
-    public void sendMessage(ClientMessage message) throws IOException {
-        output.writeObject(message);
-    }
-
-    public Socket getServer(){
-        return server;
-    }
 }

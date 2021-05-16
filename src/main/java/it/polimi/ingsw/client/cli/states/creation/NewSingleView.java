@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class NewSingleView extends View {
-    private CLI cli;
+    // private CLI cli; // todo remove
     private LocalSingle localSingle;
 
     public NewSingleView(CLI cli, LocalSingle localSingle){
@@ -24,7 +24,7 @@ public class NewSingleView extends View {
         System.out.println("Type your nickname:\n");
         String nickname = input.nextLine(); // todo: check characters limit
         try {
-            cli.getClient().sendMessage(new CreateGameMessage(1, nickname));
+            cli.getServerListener().sendMessage(new CreateGameMessage(1, nickname));
         } catch (IOException e) {
             System.out.println("no connection from server"); // fixme
             e.printStackTrace();
