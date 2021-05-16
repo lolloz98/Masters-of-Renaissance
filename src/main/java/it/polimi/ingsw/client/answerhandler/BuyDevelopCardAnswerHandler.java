@@ -24,8 +24,15 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler{
         LocalPlayer player=localGame.getPlayerById(serverAnswer.getPlayerId());
         LocalBoard localBoard= player.getLocalBoard();
 
+        localGame.getLocalTurn().setMainActionOccurred(true);
+
+        //update the slot
+        localBoard.setDevelopCards(serverAnswer.getLocalBoard().getDevelopCards());
+
         //update normal depots
         localBoard.setResInNormalDepot(serverAnswer.getLocalBoard().getResInNormalDepot());
+
+        localBoard.notifyObserver();
 
         //update leader depots
         LocalCard toUpdate,updated;
@@ -34,16 +41,13 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler{
             updated=serverAnswer.getLocalBoard().getLeaderCards().get(i);
 
             if(toUpdate instanceof LocalDepotLeader)
-                ((LocalDepotLeader) toUpdate).setNumberOfRes(((LocalDepotLeader) updated).getNumberOfRes());
+                ((LocalDepotLeader) toUpdate).setNumberOfRes(((LocalDepotLeader) updated).getNumberOfRes());//this method already calls notifyObserver()
 
         }
 
         //update development grid
         localGame.setLocalDevelopmentGrid(serverAnswer.getLocalGrid());
+        localGame.getLocalDevelopmentGrid().notifyObserver();
 
-        //update the slot
-        localBoard.setDevelopCards(serverAnswer.getLocalBoard().getDevelopCards());
-
-        localBoard.notifyObserver();
     }
 }
