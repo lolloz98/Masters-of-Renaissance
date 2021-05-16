@@ -33,9 +33,6 @@ public class FlushMarketResMessageController extends PlayingMessageController {
      *
      * @param controllerActions controller action of current game
      * @return FlushMarketResAnswer
-     * @throws InvalidActionControllerException if the action is not valid
-     * @throws InvalidArgumentControllerException wrong arguments given by the clientMessage
-     * @throws UnexpectedControllerException if something unexpected happened. The status of the game might be corrupted.
      */
     @Override
     protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws InvalidActionControllerException, WrongPlayerIdControllerException, InvalidArgumentControllerException, UnexpectedControllerException {

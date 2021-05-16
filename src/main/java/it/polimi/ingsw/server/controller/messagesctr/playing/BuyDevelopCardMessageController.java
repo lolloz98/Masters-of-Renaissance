@@ -6,8 +6,7 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.BuyDevelopCardAnswer;
 import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Board;
@@ -28,34 +27,28 @@ public class BuyDevelopCardMessageController extends PlayingMessageController {
      *
      * @param controllerActions controller action of current game
      * @return an answer to the client an update of the board and of the development grid
-     * @throws ControllerException
      */
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws InvalidActionControllerException, WrongPlayerIdControllerException, UnexpectedControllerException, InvalidArgumentControllerException {
 
-        try {
-            controllerActions.getGame().getTurn().setMainActionOccurred();
-        } catch (MarketTrayNotEmptyException e) {
-            throw new ControllerException("you have already done the market action");
-        } catch (MainActionAlreadyOccurredException e) {
-            throw new ControllerException(e.getMessage());
-        } catch (ProductionsResourcesNotFlushedException e) {
-            throw new ControllerException("you have already done the production action");
-        }
+        if(controllerActions.getGame().getTurn().cannotSetMainActionOccurred())
+            throw new InvalidActionControllerException("You cannot perform another main action at this time");
 
         Board board = getPlayerFromId(controllerActions).getBoard();
 
         BuyDevelopCardMessage clientMessage = (BuyDevelopCardMessage) getClientMessage();
         try {
             board.buyDevelopCard(controllerActions.getGame(), clientMessage.getColor(), clientMessage.getLevel(), clientMessage.whichSlotToStore, clientMessage.toPay);
-        } catch (ResourceNotDiscountableException e) {
-            logger.error("something wrong happened, in the to pay of " + getClientMessage().getClass() + "have been put some not discountable resource");
-            throw new UnexpectedControllerException(e.getMessage());
-        } catch (NotEnoughResourcesException | EmptyDeckException | FullDevelopSlotException | InvalidDevelopCardToSlotException | InvalidArgumentException e) {
-            throw new ControllerException(e.getMessage());
-        } catch (InvalidResourceQuantityToDepotException e) {
-            logger.error("we are trying to spend the resources on the depot even if we have not enough. before this it must had been lunched NotEnoughResourcesException");
-            throw new UnexpectedControllerException(e.getMessage());
+        }  catch (InvalidResourceQuantityToDepotException | ResourceNotDiscountableException | NotEnoughResourcesException | EmptyDeckException | FullDevelopSlotException | InvalidDevelopCardToSlotException | InvalidArgumentException e) {
+            throw new InvalidArgumentControllerException("While making your choices something went wrong: " + e.getMessage());
+        }
+
+        try {
+            controllerActions.getGame().getTurn().setMainActionOccurred();
+        } catch (ModelException e) {
+            // Since we already controlled if it could be set to true marketActivated, we are confident we are never coming here
+            logger.error("setMainActionOccurred threw an unexpected exception after checks: " + e);
+            throw new UnexpectedControllerException("Something unexpected happened. However, you managed to buy the develop card.");
         }
 
         LocalBoard localBoard = ConverterToLocalModel.convert(board, true);

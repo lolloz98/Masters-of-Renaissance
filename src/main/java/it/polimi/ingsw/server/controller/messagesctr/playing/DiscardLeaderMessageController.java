@@ -27,14 +27,13 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
     }
 
     /**
-     * discard the leaderCard from the player's board
+     * Set leader card to discarded. It also moves the player of one step on their faith track.
      *
      * @param controllerActions current controller action
-     * @return DiscardLeaderCardAnswer to notify the changes
-     * @throws ControllerException if the player doesn't own the card
+     * @return DiscardLeaderCardAnswer
      */
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws WrongPlayerIdControllerException, InvalidArgumentControllerException, AlreadyActiveLeaderControllerException, AlreadyDiscardedLeaderControllerException, UnexpectedControllerException {
         LeaderCard<?> card;
         Player thisPlayer = getPlayerFromId(controllerActions);
         try {
