@@ -165,7 +165,7 @@ public final class MessageControllerTestHelper {
                 if(req.get(c) > 3) logger.error("number too big. For RequirementColorsDevelop I considered this number as level, actually is the quantity of given color");
                 for (int i = 1; i <= req.get(c); i++) {
                     TreeMap<Resource, Integer> cost = setResourcesInStrongBoxForDevelop(game, player,c, i);
-                    player.getBoard().buyDevelopCard(game, c, i, whichSlot, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
+                    player.getBoard().buyDevelopCard(game, c, i, whichSlot, new TreeMap<>() {{
                         put(WarehouseType.STRONGBOX, new TreeMap<>(cost));
                     }});
                 }
@@ -201,7 +201,7 @@ public final class MessageControllerTestHelper {
      * It first checks if requirement for activation is met. If not it changes the status of the board of the player (and the game)
      * to satisfy it. then the card gets activated (if a valid card is passed).
      * Careful: to satisfy the requirement (put resources in the board and buy develop cards) it does it all performing actions
-     * directly on the game and passing through messageControllers.
+     * directly on the game and NOT passing through messageControllers.
      * @param card to activate
      * @param player who wants to activate the card (must be the current player otherwise exception)
      * @param gameId current gameId
@@ -267,11 +267,11 @@ public final class MessageControllerTestHelper {
         Game<?> game = ControllerManager.getInstance().getControllerFromMap(gameId).getGame();
         DevelopCard card = game.getDecksDevelop().get(c).get(level).topCard();
         TreeMap<Resource, Integer> cost = setResourcesInStrongBoxForDevelop(game, player, c, level);
-        player.getBoard().buyDevelopCard(game, c, level, whichSlot, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
+        player.getBoard().buyDevelopCard(game, c, level, whichSlot, new TreeMap<>() {{
             put(WarehouseType.STRONGBOX, new TreeMap<>(cost));
         }});
         player.getBoard().flushGainedResources(new TreeMap<>(card.getProduction().whatResourceToGive()), game);
-        doApplyProduction(gameId, player, whichSlot + 1, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
+        doApplyProduction(gameId, player, whichSlot + 1, new TreeMap<>() {{
             put(WarehouseType.STRONGBOX, new TreeMap<>(card.getProduction().whatResourceToGive()));
         }}, card.getProduction().whatResourceToGain());
     }
