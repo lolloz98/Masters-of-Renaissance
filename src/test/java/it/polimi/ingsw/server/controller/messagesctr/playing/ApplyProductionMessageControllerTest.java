@@ -70,5 +70,7 @@ public class ApplyProductionMessageControllerTest {
         player.getBoard().flushGainedResources(new TreeMap<>(toGive), mp);
 
         MessageControllerTestHelper.doApplyProduction(gameId, player, 2, rightToGive, toGain);
+        assertTrue(mp.getTurn().isProductionsActivated());
+        assertFalse(card.getProduction().getGainedResources().isEmpty());
     }
 }

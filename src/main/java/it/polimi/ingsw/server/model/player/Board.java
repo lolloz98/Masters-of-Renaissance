@@ -181,7 +181,7 @@ public class Board implements VictoryPointCalculator {
      *
      * @param game current game
      */
-    public void flushResFromProductions(Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException {
+    public void flushResFromProductions(Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, InvalidArgumentException {
         normalProduction.flushGainedToBoard(this, game);
         for (DevelopCardSlot ds : developCardSlots) {
             if (!ds.isEmpty())
@@ -471,9 +471,17 @@ public class Board implements VictoryPointCalculator {
      * @param gainedResources are put in the strongbox
      * @param game            current game
      */
-    public void flushGainedResources(TreeMap<Resource, Integer> gainedResources, Game<?> game) throws ResourceNotDiscountableException, InvalidStepsException, EndAlreadyReachedException, InvalidArgumentException {
+    public void flushGainedResources(TreeMap<Resource, Integer> gainedResources, Game<?> game) throws ResourceNotDiscountableException, InvalidArgumentException {
         if (gainedResources.getOrDefault(Resource.FAITH, 0) > 0)
-            this.faithtrack.move(gainedResources.get(Resource.FAITH), game);
+            try {
+                this.faithtrack.move(gainedResources.get(Resource.FAITH), game);
+            } catch (EndAlreadyReachedException e){
+                logger.warn("End reached for faith path, continuing normal execution: " + e);
+            } catch (InvalidStepsException e){
+                // we should never go inside here
+                logger.error("InvalidStepsException occurred even after checks: " + e);
+            }
+
         TreeMap<Resource, Integer> c = new TreeMap<>(gainedResources);
         c.remove(Resource.FAITH);
         strongbox.addResources(c);

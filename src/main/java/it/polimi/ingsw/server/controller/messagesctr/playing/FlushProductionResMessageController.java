@@ -5,7 +5,7 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushProductionResAnswer;
 import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
@@ -28,16 +28,18 @@ public class FlushProductionResMessageController extends PlayingMessageControlle
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws WrongPlayerIdControllerException, InvalidActionControllerException, InvalidArgumentControllerException, UnexpectedControllerException {
         Player thisPlayer = getPlayerFromId(controllerActions);
         Board board = thisPlayer.getBoard();
         Turn turn = controllerActions.getGame().getTurn();
 
+        if(turn.cannotSetProductionActivated())
+            throw new InvalidActionControllerException("At this time, you cannot perform this action");
+
         try {
             board.flushResFromProductions(controllerActions.getGame());
-        } catch (ModelException e) {
-            // todo: handle exceptions
-            throw new ControllerException(e.getMessage());
+        } catch (ResourceNotDiscountableException | InvalidArgumentException | InvalidStepsException e) {
+            throw new InvalidArgumentControllerException(e.getMessage(), 0);
         }
 
         TreeMap<Resource, Integer> resInStrongBox;
@@ -45,10 +47,10 @@ public class FlushProductionResMessageController extends PlayingMessageControlle
 
         try {
             turn.setProductionsActivated(false);
-        } catch (MainActionAlreadyOccurredException e) {//an idea is to disable the button with this option if there is not been applied any production
-            throw new ControllerException("error: you cannot flush the resources");
-        } catch (MarketTrayNotEmptyException | ProductionsResourcesNotFlushedException e) {
-            // todo: handle exceptions
+        } catch (MarketTrayNotEmptyException | ProductionsResourcesNotFlushedException | MainActionAlreadyOccurredException e) {
+            // Since we already controlled if it could be set to false marketActivated, we are confident we are never coming here
+            logger.error("setProductionsActivated threw an unexpected exception after checks. This might have corrupted the status of a game: " + e);
+            throw new UnexpectedControllerException("Something unexpected happened. However, the resources have been flushed in the strongBox successfully.");
         }
 
         ArrayList<LocalTrack> localTracks = ConverterToLocalModel.getLocalFaithTracks(controllerActions.getGame());

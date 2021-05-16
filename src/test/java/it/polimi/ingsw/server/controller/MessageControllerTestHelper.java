@@ -5,10 +5,7 @@ import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.*;
-import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
-import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
-import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
-import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
+import it.polimi.ingsw.messages.requests.actions.*;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -236,6 +233,11 @@ public final class MessageControllerTestHelper {
         applyProductionMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
     }
 
+    public static void doFlushProductionResources(int gameId, Player player) throws ControllerException {
+        FlushProductionResMessageController flushProductionResMessageController = new FlushProductionResMessageController(new FlushProductionResMessage(gameId, player.getPlayerId()));
+        flushProductionResMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
+    }
+
     /**
      * It set up the resources in the strongBox of the player in order to have the possibility to buy the specified card.
      * CARE: this method does not use messageControllers, it manages the game directly.
@@ -268,9 +270,7 @@ public final class MessageControllerTestHelper {
         player.getBoard().buyDevelopCard(game, c, level, whichSlot, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
             put(WarehouseType.STRONGBOX, new TreeMap<>(cost));
         }});
-        player.getBoard().buyDevelopCard(game, c, level, whichSlot, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
-            put(WarehouseType.STRONGBOX, new TreeMap<>(card.getProduction().whatResourceToGive()));
-        }});
+        player.getBoard().flushGainedResources(new TreeMap<>(card.getProduction().whatResourceToGive()), game);
         doApplyProduction(gameId, player, whichSlot + 1, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
             put(WarehouseType.STRONGBOX, new TreeMap<>(card.getProduction().whatResourceToGive()));
         }}, card.getProduction().whatResourceToGain());
