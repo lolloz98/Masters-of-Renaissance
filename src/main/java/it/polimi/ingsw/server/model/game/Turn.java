@@ -53,7 +53,7 @@ public abstract class Turn implements Serializable {
      * @throws MainActionAlreadyOccurredException if it's called twice, if a main action already occurred, or if there are resources not flushed in a production.
      */
     public void setMarketActivated(boolean marketActivated) throws MainActionAlreadyOccurredException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException {
-        if (mainActionOccurred || productionsActivated || (this.marketActivated && marketActivated)) throw new MainActionAlreadyOccurredException();
+        if (cannotSetMarketActivated(marketActivated)) throw new MainActionAlreadyOccurredException();
         else {
             if (this.marketActivated) { // Take if market has been activated and now it is being set to false
                 this.marketActivated = false;
@@ -63,6 +63,10 @@ public abstract class Turn implements Serializable {
         }
     }
 
+    public boolean cannotSetMarketActivated(boolean marketActivated){
+        return mainActionOccurred || productionsActivated || (this.marketActivated && marketActivated);
+    }
+
     /**
      * Sets the productionsActivated flag. If productionsActivated goes from true to false, also sets mainActionOccurred to true.
      *
@@ -70,7 +74,7 @@ public abstract class Turn implements Serializable {
      * @throws MainActionAlreadyOccurredException if a main action already occurred, or if there are resources not flushed in market tray.
      */
     public void setProductionsActivated(boolean productionsActivated) throws MainActionAlreadyOccurredException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException {
-        if (mainActionOccurred || marketActivated) throw new MainActionAlreadyOccurredException();
+        if (cannotSetProductionActivated()) throw new MainActionAlreadyOccurredException();
         else {
             if (this.productionsActivated && !productionsActivated) {
                 this.productionsActivated = false;
@@ -78,6 +82,10 @@ public abstract class Turn implements Serializable {
             }
             this.productionsActivated = productionsActivated;
         }
+    }
+
+    public boolean cannotSetProductionActivated(){
+        return mainActionOccurred || marketActivated;
     }
 
     /**

@@ -1,23 +1,19 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
-import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 import it.polimi.ingsw.server.controller.ControllerActionsMulti;
 import it.polimi.ingsw.server.controller.ControllerActionsSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
-import it.polimi.ingsw.server.model.exception.AlreadyActiveLeaderException;
 import it.polimi.ingsw.server.model.exception.ModelException;
-import it.polimi.ingsw.server.model.exception.RequirementNotSatisfiedException;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -56,7 +52,7 @@ public class ActivateLeaderMessageControllerTest {
         assertTrue(card.isActive());
     }
 
-    public void testDoActionMulti() throws ControllerException, ModelException {
+    public void doActionMultiBaseTest() throws ControllerException, ModelException {
         gameId = MessageControllerTestHelper.toReadyMulti();
         ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer mp = ca.getGame();
@@ -80,30 +76,30 @@ public class ActivateLeaderMessageControllerTest {
     @Test
     public void testDoActionMulti1() throws ControllerException, ModelException {
         CollectionsHelper.setSeedForTest(0);
-        testDoActionMulti();
+        doActionMultiBaseTest();
     }
 
     @Test
     public void testDoActionMulti2() throws ControllerException, ModelException {
         CollectionsHelper.setSeedForTest(1);
-        testDoActionMulti();
+        doActionMultiBaseTest();
     }
 
     @Test
     public void testDoActionMulti3() throws ControllerException, ModelException {
         CollectionsHelper.setSeedForTest(2);
-        testDoActionMulti();
+        doActionMultiBaseTest();
     }
 
     @Test
     public void testDoActionMulti4() throws ControllerException, ModelException {
         CollectionsHelper.setSeedForTest(3);
-        testDoActionMulti();
+        doActionMultiBaseTest();
     }
 
     @Test
     public void testDoActionMulti5() throws ControllerException, ModelException {
         CollectionsHelper.setSeedForTest(4);
-        testDoActionMulti();
+        doActionMultiBaseTest();
     }
 }
