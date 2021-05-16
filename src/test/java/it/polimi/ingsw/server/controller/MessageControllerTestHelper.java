@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 /**
- * In this class we ignore the ActionControllers, to test just the messages
+ * In this class we ignore the ActionControllers, to test just the messageControllers
  */
 public final class MessageControllerTestHelper {
     private static final Logger logger = LogManager.getLogger(MessageControllerTestHelper.class);
