@@ -25,6 +25,9 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
         LocalPlayer localPlayer;
         LocalBoard localBoard;
 
+        localGame.getLocalTurn().setMainActionOccurred(true);
+        localGame.getLocalTurn().setProductionsActivated(true);
+
         localPlayer = localGame.getPlayerById(serverAnswer.getPlayerId());
         localBoard = localPlayer.getLocalBoard();
 
@@ -69,6 +72,7 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
                     logger.error("something wrong happened, illegal which prod parameter in + " + logger.getName());
             }
         }
+
         localBoard.notifyObserver();
     }
 }
