@@ -29,8 +29,8 @@ public class Client {
         Socket server;
         try {
             // FIXME: how do we know the server port? -> in prof's project it said not to put constant the number of the port.
-            logger.debug("server port: " + Server.PORT);
-            server = new Socket(ip, Server.PORT);
+            logger.debug("server port: " + Server.getPort());
+            server = new Socket(ip, Server.getPort());
         } catch (IOException e) {
             logger.error("Server unreachable: " + e.getMessage());
             return;

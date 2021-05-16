@@ -12,7 +12,11 @@ public class Server
     private static final Logger logger = LogManager.getLogger(Server.class);
 
     // fixme: Don't use fixed port number
-    public final static int PORT = 16509;
+    private final static int PORT = 16509;
+
+    public static int getPort(){
+        return PORT;
+    }
 
     public static void main(String[] args)
     {
@@ -25,7 +29,10 @@ public class Server
             System.exit(1);
             return;
         }
+        run_server(socket);
+    }
 
+    public static void run_server(ServerSocket socket){
         while (true) {
             try {
                 Socket client = socket.accept();
