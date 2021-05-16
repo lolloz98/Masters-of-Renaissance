@@ -9,6 +9,7 @@ import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.enums.Resource;
 
 import java.io.IOException;
+import java.util.TreeMap;
 
 public class PrepResSecondView extends View {
     private CLI cli;
@@ -79,6 +80,16 @@ public class PrepResSecondView extends View {
         }
         else {
             System.out.println("Please wait");
+        }
+    }
+
+    private static void addResToTreeMap(TreeMap<Resource, Integer> toBeAdded, TreeMap<Resource, Integer> whereToAdd){
+        for(Resource r: toBeAdded.keySet()){
+            if(whereToAdd.containsKey(r)){
+                whereToAdd.replace(r, whereToAdd.get(r) + toBeAdded.get(r));
+            }else{
+                whereToAdd.put(r, toBeAdded.get(r));
+            }
         }
     }
 }
