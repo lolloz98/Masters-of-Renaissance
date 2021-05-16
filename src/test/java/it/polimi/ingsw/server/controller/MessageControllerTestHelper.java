@@ -252,4 +252,28 @@ public final class MessageControllerTestHelper {
         return cost;
     }
 
+    /**
+     * this method buys a develop card (not using messageController), and apply its production (using messageController).
+     * (It puts the required resources to buy the card and to activate the production in the StrongBox).
+     * @param gameId current gameId
+     * @param player player (must be the current player)
+     * @param c color of the develop to buy
+     * @param level level of the develop
+     * @param whichSlot slot where to put the bought develop
+     */
+    public static void setPlayerAndActivateProduction(int gameId, Player player, Color c, int level, int whichSlot) throws ResourceNotDiscountableException, InvalidArgumentException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FullDevelopSlotException, InvalidDevelopCardToSlotException, InvalidResourceQuantityToDepotException, NotEnoughResourcesException, ControllerException {
+        Game<?> game = ControllerManager.getInstance().getControllerFromMap(gameId).getGame();
+        DevelopCard card = game.getDecksDevelop().get(c).get(level).topCard();
+        TreeMap<Resource, Integer> cost = setResourcesInStrongBoxForDevelop(game, player, c, level);
+        player.getBoard().buyDevelopCard(game, c, level, whichSlot, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(cost));
+        }});
+        player.getBoard().buyDevelopCard(game, c, level, whichSlot, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(card.getProduction().whatResourceToGive()));
+        }});
+        doApplyProduction(gameId, player, whichSlot + 1, new TreeMap<WarehouseType, TreeMap<Resource, Integer>>() {{
+            put(WarehouseType.STRONGBOX, new TreeMap<>(card.getProduction().whatResourceToGive()));
+        }}, card.getProduction().whatResourceToGain());
+    }
+
 }

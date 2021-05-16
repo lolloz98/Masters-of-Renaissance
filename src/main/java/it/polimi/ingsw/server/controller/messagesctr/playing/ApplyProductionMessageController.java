@@ -58,11 +58,11 @@ public class ApplyProductionMessageController extends PlayingMessageController {
         //generating the parameters to construct the answer
         Production production;
         try {
-            production = board.getProduction(clientMessage.getWhichProd() - 1);
+            production = board.getProduction(clientMessage.getWhichProd());
         } catch (IllegalArgumentException e) {
             // Since we have already used the parameter whichProd, we are confident we are never coming here
-            logger.error("getProduction threw an unexpected exception after checks. This might have corrupted the status of a game: " + e);
-            throw new UnexpectedControllerException("Something unexpected happened. However, the production has been activated: " + e.getMessage());
+            logger.error("getProduction threw an unexpected exception after checks. This did not corrupt the game, however, the players do not receive answers: " + e);
+            throw new UnexpectedControllerException("Something unexpected happened (all the players should ask for the status of the game to correctly see it). The production has been activated.");
         }
 
         TreeMap<Resource, Integer> resToFlush = new TreeMap<>(production.getGainedResources());
