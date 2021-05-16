@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class LocalBoard extends Observable implements Serializable {
-    private final ArrayList<ArrayList<LocalDevelopCard>> developCards;
+    private ArrayList<ArrayList<LocalDevelopCard>> developCards;
     private final LocalProduction baseProduction;
     private TreeMap<Resource, Integer> resInStrongBox;
     private TreeMap<Resource, Integer> resInNormalDepot;
@@ -18,6 +18,10 @@ public class LocalBoard extends Observable implements Serializable {
 
     public synchronized ArrayList<ArrayList<LocalDevelopCard>> getDevelopCards() {
         return developCards;
+    }
+
+    public void setDevelopCards(ArrayList<ArrayList<LocalDevelopCard>> developCards) {
+        this.developCards = developCards;
     }
 
     public synchronized void addDevelopCards(int i, LocalDevelopCard developCard) {

@@ -30,7 +30,7 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
 
         updateBoard(localBoard, serverAnswer);
 
-        }
+    }
 
 
     private void updateBoard(LocalBoard localBoard, ApplyProductionAnswer serverAnswer) {
