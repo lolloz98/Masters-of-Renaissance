@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.localmodel;
 
+import it.polimi.ingsw.client.localmodel.exceptions.NoSuchLocalPlayerException;
+
 import java.io.Serializable;
 
 public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializable {
@@ -17,6 +19,14 @@ public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializa
 
     public synchronized LocalPlayer getMainPlayer() {
         return mainPlayer;
+    }
+
+    @Override
+    public synchronized LocalPlayer getPlayerById(int playerId) {
+        if(mainPlayer.getId()==playerId)
+            return mainPlayer;
+        else
+            throw new NoSuchLocalPlayerException();
     }
 
     public LocalTrack getLorenzoTrack() {
