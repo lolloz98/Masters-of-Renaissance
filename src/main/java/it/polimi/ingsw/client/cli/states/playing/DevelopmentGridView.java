@@ -18,7 +18,7 @@ public class DevelopmentGridView extends GameView {
     private LocalDevelopCard[][] topDevelopCards;
     private int[][] developCardsNumber;
 
-    public DevelopmentGridView(CLI cli, LocalGame localGame, LocalDevelopmentGrid localDevelopmentGrid){
+    public DevelopmentGridView(CLI cli, LocalGame<?> localGame, LocalDevelopmentGrid localDevelopmentGrid){
         this.localDevelopmentGrid = localDevelopmentGrid;
         this.localGame = localGame;
         draw();

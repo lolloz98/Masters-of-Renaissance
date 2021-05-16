@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.enums.Resource;
 import java.io.Serializable;
@@ -18,6 +19,23 @@ public class LocalBoard extends Observable implements Serializable {
      */
     private LocalTrack localTrack;
     private int initialRes; // fixme: probably should be removed
+
+    /**
+     * method that updates the leader depots of this localBoard
+     * @param updatedLeaders array list of updated leaders
+     */
+    public void updateLeaderDepots(ArrayList<LocalDepotLeader> updatedLeaders) {
+
+        for (LocalCard localLeader : leaderCards) {
+            for (LocalDepotLeader updated : updatedLeaders) {
+                if (localLeader.getId() == updated.getId()) {
+                    LocalDepotLeader toUpdate = (LocalDepotLeader) localLeader;
+                    toUpdate.setNumberOfRes(updated.getNumberOfRes());
+                }
+            }
+        }
+        notifyObserver();
+    }
 
     public synchronized ArrayList<ArrayList<LocalDevelopCard>> getDevelopCards() {
         return developCards;

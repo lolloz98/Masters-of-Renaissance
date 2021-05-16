@@ -9,18 +9,22 @@ import java.util.TreeMap;
 
 public class FlushProductionResAnswer extends Answer {
     /**
-     * total of the resources flushed by the productions activated
+     * total of the resources flushed by the productions activated, to add to the strongbox
      */
-    private final TreeMap<Resource, Integer> totGainedResources;
+    private final TreeMap<Resource, Integer> resInStrongbox;
     private final ArrayList<LocalTrack> localTracks;
 
-    public FlushProductionResAnswer(int gameId, int playerId, TreeMap<Resource, Integer> totGainedResources, ArrayList<LocalTrack> localTracks) {
+    public FlushProductionResAnswer(int gameId, int playerId, TreeMap<Resource, Integer> resInStrongbox, ArrayList<LocalTrack> localTracks) {
         super(gameId, playerId);
-        this.totGainedResources = new TreeMap<>(totGainedResources);
+        this.resInStrongbox = new TreeMap<>(resInStrongbox);
         this.localTracks = localTracks;
     }
 
-    public TreeMap<Resource, Integer> getTotGainedResources() {
-        return totGainedResources;
+    public ArrayList<LocalTrack> getLocalTracks() {
+        return localTracks;
+    }
+
+    public TreeMap<Resource, Integer> getResInStrongbox() {
+        return resInStrongbox;
     }
 }

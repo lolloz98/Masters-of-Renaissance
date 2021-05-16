@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.localmodel;
 import it.polimi.ingsw.client.localmodel.exceptions.NoSuchLocalPlayerException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializable {
     private LocalPlayer mainPlayer;
@@ -18,6 +19,13 @@ public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializa
 
     public synchronized void setMainPlayer(LocalPlayer mainPlayer) {
         this.mainPlayer = mainPlayer;
+    }
+
+    @Override
+    public synchronized ArrayList<LocalPlayer> getLocalPlayers() {
+        ArrayList<LocalPlayer> localPlayer=new ArrayList<>();
+        localPlayer.add(mainPlayer);
+        return localPlayer;
     }
 
     public synchronized LocalPlayer getMainPlayer() {

@@ -11,7 +11,8 @@ import it.polimi.ingsw.client.localmodel.LocalSingle;
 import java.util.ArrayList;
 
 public abstract class GameView extends View {
-    protected LocalGame localGame;
+    protected LocalGame<?> localGame;
+    protected boolean waiting;
 
     public abstract void draw();
 
@@ -102,7 +103,7 @@ public abstract class GameView extends View {
         }
     }
 
-    private void writeErrText(){
+    protected void writeErrText(){
         System.out.println("Invalid choice, try again. To see the possible commands, write 'help'");
     }
 }
