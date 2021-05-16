@@ -175,7 +175,7 @@ public final class ConverterToLocalModel {
     }
 
     public static LocalMarket convert(MarketTray marketTray){
-        return new LocalMarket(convert(marketTray.getMarbleMatrix()), marketTray.getResCombinations());
+        return new LocalMarket(convert(marketTray.getMarbleMatrix()), marketTray.getResCombinations(), marketTray.getFreeMarble().getResource());
     }
 
     public static LocalDevelopmentGrid convert(TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop){

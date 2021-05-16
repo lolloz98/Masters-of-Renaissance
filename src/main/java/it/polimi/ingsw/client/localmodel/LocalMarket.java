@@ -46,8 +46,9 @@ public class LocalMarket extends Observable implements Serializable {
         resCombinations = new ArrayList<>();
     }
 
-    public LocalMarket(Resource[][] marbleMatrix, ArrayList<TreeMap<Resource, Integer>> resCombinations){
+    public LocalMarket(Resource[][] marbleMatrix, ArrayList<TreeMap<Resource, Integer>> resCombinations, Resource freeMarble){
         this.marbleMatrix = marbleMatrix;
         this.resCombinations = resCombinations;
+        this.freeMarble = freeMarble;
     }
 }
