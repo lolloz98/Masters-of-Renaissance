@@ -41,13 +41,12 @@ public class ActivateLeaderMessageControllerTest {
             } catch (RequirementNotSatisfiedControllerException ignore) {
             }
             try {
-                MessageControllerTestHelper.satisfyReq(card.getRequirement(), game, player);
-                activateLeaderMessageController.doAction(ca);
+                MessageControllerTestHelper.doActivateLeader(card, player, gameId);
             } catch (RequirementNotSatisfiedControllerException ignore) {
             }
         }
         else{
-            activateLeaderMessageController.doAction(ca);
+            MessageControllerTestHelper.doActivateLeader(card, player, gameId);
         }
         assertTrue(card.isActive());
     }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.controller.ControllerActionsSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
@@ -28,16 +29,19 @@ public class UseMarketMessageControllerTest {
         ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer mp = ca.getGame();
         Player player = mp.getPlayers().get(0);
-        useMarketMessageController = new UseMarketMessageController(new UseMarketMessage(gameId, player.getPlayerId(), true, 3));
         try {
-            useMarketMessageController.doAction(ca);
+            MessageControllerTestHelper.doPushMarble(gameId, player, true, 3);
             fail();
         } catch (ControllerException ignore){
         }
 
-        useMarketMessageController = new UseMarketMessageController(new UseMarketMessage(gameId, player.getPlayerId(), true, 2));
-        useMarketMessageController.doAction(ca);
+        MessageControllerTestHelper.doPushMarble(gameId, player, true, 2);
 
         assertEquals(1, mp.getMarketTray().getResCombinations().size());
+
+        try{
+            MessageControllerTestHelper.doPushMarble(gameId, player, false, 1);
+            fail();
+        } catch (InvalidActionControllerException ignore){}
     }
 }

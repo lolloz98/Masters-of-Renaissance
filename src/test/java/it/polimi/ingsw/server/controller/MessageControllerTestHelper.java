@@ -5,19 +5,22 @@ import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.*;
+import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
+import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
+import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.playing.ActivateLeaderMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.playing.FlushMarketResMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.playing.UseMarketMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.RemoveLeaderPrepMessageController;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
-import it.polimi.ingsw.server.model.cards.leader.Requirement;
-import it.polimi.ingsw.server.model.cards.leader.RequirementColorsDevelop;
-import it.polimi.ingsw.server.model.cards.leader.RequirementLevelDevelop;
-import it.polimi.ingsw.server.model.cards.leader.RequirementResource;
+import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
@@ -197,5 +200,29 @@ public final class MessageControllerTestHelper {
                throw new ControllerException("Something happened while flushing resources to the board");
             }
         }
+    }
+
+    /**
+     * It first checks if requirement for activation is met. If not it changes the status of the board of the player (and the game)
+     * to satisfy it. then the card gets activated (if a valid card is passed)
+     * @param card to activate
+     * @param player who wants to activate the card (must be the current player otherwise exception)
+     * @param gameId current gameId
+     * @throws ControllerException something unexpected happens or parameters given are invalid
+     */
+    public static void doActivateLeader(LeaderCard<?> card, Player player, int gameId) throws ControllerException {
+        satisfyReq(card.getRequirement(), ControllerManager.getInstance().getControllerFromMap(gameId).getGame(), player);
+        ActivateLeaderMessageController activateLeaderMessageController = new ActivateLeaderMessageController(new ActivateLeaderMessage(gameId, player.getPlayerId(), card.getId()));
+        activateLeaderMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
+    }
+
+    public static void doPushMarble(int gameId, Player player, boolean onRow, int index) throws ControllerException {
+        UseMarketMessageController useMarketMessageController = new UseMarketMessageController(new UseMarketMessage(gameId, player.getPlayerId(), onRow, index));
+        useMarketMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
+    }
+
+    public static void doFlushMarket(int gameId, Player player, TreeMap<Resource, Integer> chosenCombination, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep) throws ControllerException {
+        FlushMarketResMessageController flushMarketResMessageController = new FlushMarketResMessageController(new FlushMarketResMessage(gameId, player.getPlayerId(), chosenCombination, toKeep));
+        flushMarketResMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
     }
 }
