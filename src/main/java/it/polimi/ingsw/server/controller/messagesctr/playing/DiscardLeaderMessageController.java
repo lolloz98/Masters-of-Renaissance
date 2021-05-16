@@ -45,7 +45,7 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
         try{
             thisPlayer.getBoard().discardLeaderCard(card);
         }catch(InvalidArgumentException e){
-            logger.error("something went wrong in " + this.getClass() + "while discarding a leadercard");
+            logger.error("something went wrong in " + this.getClass() + "while discarding a leader card");
             throw new ControllerException("unexpected error");
         }
 

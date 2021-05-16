@@ -17,7 +17,6 @@ import it.polimi.ingsw.server.model.cards.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.*;
-import it.polimi.ingsw.server.model.game.Resource;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +36,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
     public Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
         Board board;
         board = getPlayerFromId(controllerActions).getBoard();
-        LeaderCard<?> toActivate = null;
+        LeaderCard<?> toActivate;
         try {
             toActivate = board.getLeaderCard(((LeaderMessage) getClientMessage()).getLeaderId());
         } catch (InvalidArgumentException e) {
@@ -63,30 +62,19 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
             LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
             return new ActivateDepotLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
+
         if (toActivate instanceof ProductionLeaderCard) {
             ProductionLeaderCard card = (ProductionLeaderCard) toActivate;
             LocalLeaderCard localCard= ConverterToLocalModel.convert(card);
             int whichLeaderProd=board.getProductionLeaders().indexOf(card)+4; //it must be 4 or 5
             return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard,whichLeaderProd);
         }
+
         if (toActivate instanceof DiscountLeaderCard) {
 
-            TreeMap<Resource,Integer>[][] newCosts= new TreeMap[4][3];
-            int i=0,j=0;
             TreeMap<Color, TreeMap<Integer, DeckDevelop>> decksDevelop;
             decksDevelop=controllerActions.getGame().getDecksDevelop();
 
-            for(Color c: decksDevelop.keySet()){
-                for(Integer level: decksDevelop.get(c).keySet()){
-                    try {
-                        newCosts[i][j]= decksDevelop.get(c).get(level).topCard().getCost();
-                    } catch (EmptyDeckException e) {
-                        newCosts[i][j]=null;
-                    }
-                    j++;
-                }
-                i++;
-            }
 
             LocalDevelopmentGrid localGrid;
             localGrid=ConverterToLocalModel.convert(decksDevelop);
