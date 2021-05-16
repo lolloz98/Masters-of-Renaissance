@@ -17,6 +17,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * class that handles the actions of the players and calls the methods of the model
@@ -31,7 +33,7 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
     private State gameState;
     private static final ControllerManager controllerManager = ControllerManager.getInstance();
 
-    private final ArrayList<AnswerListener> listeners = new ArrayList<>();
+    private final List<AnswerListener> listeners = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * method called to create a controller
@@ -116,7 +118,7 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
         listeners.remove(answerListener);
     }
 
-    public void doGetStatusAction(GameStatusMessageController parsedMessage) throws ControllerException {
+    public synchronized void doGetStatusAction(GameStatusMessageController parsedMessage) throws ControllerException {
         Answer gameStatusAnswer = parsedMessage.doAction(this);
         for(AnswerListener a: listeners){
             // we send the game status only to who required it
@@ -146,9 +148,10 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
         Answer destroyAnswer = new DestroyedGameAnswer(getGameId(), playerId, message);
         controllerManager.removeGame(getGameId());
 
+        listeners.removeIf(x -> removePlayerIdListener && x.getPlayerId() == playerId);
+
         for(AnswerListener answerListener: listeners){
             // before sending the answer remove the answer listener
-            if(removePlayerIdListener && answerListener.getPlayerId() == playerId) removeAnswerListener(answerListener);
             answerListener.setIds(-1, -1);
         }
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.messagesctr;
 
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
@@ -40,9 +41,10 @@ public class GameStatusMessageControllerTest {
         } catch (WrongStateControllerException ignore) {}
     }
 
-    private void checkMulti() throws ControllerException {
+    private void checkMulti(LocalGameState state) throws ControllerException {
         for(Player p: ca.getGame().getPlayers()) {
             lm = (LocalMulti) MessageControllerTestHelper.getGameStatus(gameId, p.getPlayerId()).getGame();
+            assertEquals(state, lm.getState());
             List<LocalPlayer> lps = lm.getLocalPlayers();
             for(LocalPlayer lp: lps) {
                 for (LocalCard lc : lp.getLocalBoard().getLeaderCards()) {
@@ -60,11 +62,11 @@ public class GameStatusMessageControllerTest {
     public void doAction() throws ControllerException {
         gameId = MessageControllerTestHelper.toPrepStateMulti();
         ca = MessageControllerTestHelper.getMulti(gameId);
-        checkMulti();
+        checkMulti(LocalGameState.PREP_RESOURCES);
 
         gameId = MessageControllerTestHelper.toReadyMulti();
         ca = MessageControllerTestHelper.getMulti(gameId);
-        checkMulti();
+        checkMulti(LocalGameState.READY);
     }
 
     @Test
@@ -73,5 +75,6 @@ public class GameStatusMessageControllerTest {
         cas = MessageControllerTestHelper.getSingle(gameId);
         ls = (LocalSingle) MessageControllerTestHelper.getGameStatus(gameId, cas.getGame().getPlayer().getPlayerId()).getGame();
         assertEquals(gameId, ls.getGameId());
+        assertEquals(LocalGameState.PREP_LEADERS, ls.getState());
     }
 }
