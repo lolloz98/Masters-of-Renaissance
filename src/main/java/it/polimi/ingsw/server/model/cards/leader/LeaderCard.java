@@ -65,7 +65,9 @@ public abstract class LeaderCard<T extends Requirement> implements Card, Victory
         applyEffectNoCheckOnActive(game);
     }
 
-    public void discard() {
+    public void discard() throws AlreadyActiveLeaderException, ActivateDiscardedCardException {
+        if(isActive) throw new AlreadyActiveLeaderException();
+        if(isDiscarded) throw new ActivateDiscardedCardException();
         isDiscarded = true;
     }
 

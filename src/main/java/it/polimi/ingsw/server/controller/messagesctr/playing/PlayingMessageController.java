@@ -4,6 +4,7 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import it.polimi.ingsw.server.controller.exception.WrongPlayerIdControllerException;
 import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.State;
@@ -26,8 +27,8 @@ public abstract class PlayingMessageController extends ClientMessageController {
         if (checkState(controllerActions)) {
             if (checkCurrentPlayer(controllerActions)) {
                 return doActionNoChecks(controllerActions);
-            } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
-        } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
+            } else throw new WrongPlayerIdControllerException("Wrong request! It is not your turn, you cannot perform this action");
+        } else throw new WrongStateControllerException("Wrong request! The game is not in the correct state");
     }
 
     /**

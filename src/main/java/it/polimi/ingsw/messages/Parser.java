@@ -20,19 +20,19 @@ public class Parser {
         Reflections reflections = new Reflections(packageName);
         Set<String> allClasses = reflections.getStore().values("SubTypesScanner");
 
-        List<String> controllerClasses = allClasses.stream().filter(x -> x.contains(packageName)).collect(Collectors.toList());
-        List<String> controllerClassName =  controllerClasses.stream().filter(x -> x.endsWith(object.getClass().getSimpleName() + suffix)).collect(Collectors.toList());
-        if(controllerClassName.size() != 1) {
-            logger.error("for the clientMessage we got " + controllerClassName.size() + " controllerMessages corresponding");
-            throw new ParserException("unable to parse the request");
+        List<String> targetClasses = allClasses.stream().filter(x -> x.contains(packageName)).collect(Collectors.toList());
+        List<String> targetClassName =  targetClasses.stream().filter(x -> x.endsWith(object.getClass().getSimpleName() + suffix)).collect(Collectors.toList());
+        if(targetClassName.size() != 1) {
+            logger.error("for the " + object.getClass().getSimpleName() + " we got " + targetClassName.size() + " target classes corresponding");
+            throw new ParserException("unable to parse " + object.getClass().getSimpleName());
         }
 
         try{
-            Class<?> controllerClass = Class.forName(controllerClassName.get(0));
-            Constructor<?> constructor = controllerClass.getConstructor(object.getClass());
+            Class<?> targetClass = Class.forName(targetClassName.get(0));
+            Constructor<?> constructor = targetClass.getConstructor(object.getClass());
             return constructor.newInstance(object);
         }catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
-            throw new ParserException("Unable to parse the request");
+            throw new ParserException("Unable to parse: " + e);
         }
     }
 }
