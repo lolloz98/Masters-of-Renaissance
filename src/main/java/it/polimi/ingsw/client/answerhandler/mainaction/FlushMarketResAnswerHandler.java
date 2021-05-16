@@ -1,5 +1,6 @@
-package it.polimi.ingsw.client.answerhandler;
+package it.polimi.ingsw.client.answerhandler.mainaction;
 
+import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
@@ -7,7 +8,7 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushMarketResAnswer;
 
 import java.util.ArrayList;
 
-public class FlushMarketResAnswerHandler extends AnswerHandler{
+public class FlushMarketResAnswerHandler extends AnswerHandler {
 
     public FlushMarketResAnswerHandler(FlushMarketResAnswer answer) {
         super(answer);

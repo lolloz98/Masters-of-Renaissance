@@ -1,13 +1,12 @@
-package it.polimi.ingsw.client.answerhandler;
+package it.polimi.ingsw.client.answerhandler.mainaction;
 
+import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.*;
-import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.mainactionsanswer.ApplyProductionAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class FinishTurnMultiAnswerHandler extends AnswerHandler{
+public class FinishTurnMultiAnswerHandler extends AnswerHandler {
 
     private static final Logger logger = LogManager.getLogger(FinishTurnMultiAnswerHandler.class);
 

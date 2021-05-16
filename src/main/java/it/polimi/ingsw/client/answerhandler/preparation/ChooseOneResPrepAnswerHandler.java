@@ -1,5 +1,6 @@
-package it.polimi.ingsw.client.answerhandler;
+package it.polimi.ingsw.client.answerhandler.preparation;
 
+import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.answers.preparationanswer.ChooseOneResPrepAnswer;

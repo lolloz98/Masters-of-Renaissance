@@ -1,5 +1,6 @@
-package it.polimi.ingsw.client.answerhandler;
+package it.polimi.ingsw.client.answerhandler.mainaction;
 
+import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
@@ -9,7 +10,7 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.BuyDevelopCardAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class BuyDevelopCardAnswerHandler extends AnswerHandler{
+public class BuyDevelopCardAnswerHandler extends AnswerHandler {
 
     private static final Logger logger = LogManager.getLogger(BuyDevelopCardAnswer.class);
 

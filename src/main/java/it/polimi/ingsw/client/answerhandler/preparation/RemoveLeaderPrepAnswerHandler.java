@@ -1,5 +1,6 @@
-package it.polimi.ingsw.client.answerhandler;
+package it.polimi.ingsw.client.answerhandler.preparation;
 
+import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
@@ -9,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
-public class RemoveLeaderPrepAnswerHandler extends AnswerHandler{
+public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
     private static final Logger logger = LogManager.getLogger(RemoveLeaderPrepAnswerHandler.class);
 
     public RemoveLeaderPrepAnswerHandler(RemoveLeaderPrepAnswer answer) {
