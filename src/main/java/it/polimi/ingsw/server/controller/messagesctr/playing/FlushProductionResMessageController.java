@@ -42,25 +42,8 @@ public class FlushProductionResMessageController extends PlayingMessageControlle
             throw new ControllerException(e.getMessage());
         }
 
-        TreeMap<Resource, Integer> totGainedResources = new TreeMap<>();
-
-        //first flush gained resources from normal production if activated
-        if (board.getNormalProduction().hasBeenActivated())
-            totGainedResources.putAll(board.getNormalProduction().getGainedResources());
-
-        //second flush develop card gained resources if activated
-        for (DevelopCardSlot slot : board.getDevelopCardSlots()) {
-            Production production = slot.getCards().get(slot.getCards().size() - 1).getProduction();
-            if (production.hasBeenActivated())
-                totGainedResources.putAll(production.getGainedResources());
-        }
-
-        //and then flush production leader card gained resources if activated
-        for (ProductionLeaderCard leader : board.getProductionLeaders()) {
-            Production production = leader.getProduction();
-            if (production.hasBeenActivated())
-                totGainedResources.putAll(production.getGainedResources());
-        }
+        TreeMap<Resource, Integer> resInStrongBox;
+        resInStrongBox=board.getResourcesInStrongBox();
 
         try {
             turn.setProductionsActivated(false);
@@ -71,7 +54,7 @@ public class FlushProductionResMessageController extends PlayingMessageControlle
         }
 
         ArrayList<LocalTrack> localTracks = controllerActions.getFaithTracks();
-        return new FlushProductionResAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), totGainedResources, localTracks);
+        return new FlushProductionResAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), resInStrongBox, localTracks);
     }
 
 }

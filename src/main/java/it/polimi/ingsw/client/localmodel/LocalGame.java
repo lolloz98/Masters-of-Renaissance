@@ -62,6 +62,17 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
 
     public abstract LocalPlayer getPlayerById(int playerId);
 
+    public synchronized void updatePlayerFaithTracks(ArrayList<LocalTrack> tracksUpdated){
+        ArrayList<LocalPlayer> localPlayers = getLocalPlayers();
+        LocalBoard localBoard;
+
+        for(int i=0;i<localPlayers.size();i++){
+            localBoard=localPlayers.get(i).getLocalBoard();
+            localBoard.setLocalTrack(tracksUpdated.get(i));
+            localBoard.notifyObserver();
+        }
+    }
+
     public LocalGame(){
         this.localDevelopmentGrid = new LocalDevelopmentGrid();
         this.localMarket = new LocalMarket();

@@ -22,7 +22,7 @@ public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializa
     }
 
     @Override
-    public ArrayList<LocalPlayer> getLocalPlayers() {
+    public synchronized ArrayList<LocalPlayer> getLocalPlayers() {
         ArrayList<LocalPlayer> localPlayer=new ArrayList<>();
         localPlayer.add(mainPlayer);
         return localPlayer;

@@ -23,13 +23,7 @@ public class FlushMarketResAnswerHandler extends AnswerHandler{
         localGame.getLocalTurn().notifyObserver();
 
         //update the faith tracks
-        ArrayList<LocalPlayer> localPlayers;
-        localPlayers= localGame.getLocalPlayers();
-        for(int i=0;i<localPlayers.size();i++){
-            localBoard=localPlayers.get(i).getLocalBoard();
-            localBoard.setLocalTrack(serverAnswer.getLocalTracks().get(i));
-            localBoard.notifyObserver();
-        }
+        localGame.updatePlayerFaithTracks(serverAnswer.getLocalTracks());
 
         //update normal depots
         localBoard=localGame.getPlayerById(serverAnswer.getPlayerId()).getLocalBoard();
