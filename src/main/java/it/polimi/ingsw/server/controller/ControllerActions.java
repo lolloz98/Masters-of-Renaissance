@@ -10,7 +10,6 @@ import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
-import it.polimi.ingsw.server.controller.states.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Turn;
 import org.apache.logging.log4j.LogManager;
@@ -58,11 +57,11 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
     public abstract boolean checkToGamePlayState();
 
     public synchronized void toGamePlayState() {
-        this.gameState = new GamePlayState();
+        this.gameState = State.PLAY;
     }
 
     public synchronized void toEndGameState() {
-        this.gameState = new EndGameState();
+        this.gameState = State.OVER;
     }
 
     public synchronized State getGameState() {

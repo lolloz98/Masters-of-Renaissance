@@ -8,7 +8,7 @@ import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidArgumentControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
-import it.polimi.ingsw.server.controller.states.PrepareGameState;
+import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.player.Board;
@@ -60,6 +60,6 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
 
     @Override
     protected boolean checkState(ControllerActions<?> controllerActions) {
-        return controllerActions.getGameState() instanceof PrepareGameState;
+        return controllerActions.getGameState() == State.PREPARATION;
     }
 }

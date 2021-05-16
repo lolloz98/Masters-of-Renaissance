@@ -8,8 +8,7 @@ import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
 import it.polimi.ingsw.server.controller.exception.LeaderNotRemovedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
-import it.polimi.ingsw.server.controller.states.PrepareGameState;
-import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
+import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
@@ -49,6 +48,6 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController {
 
     @Override
     protected boolean checkState(ControllerActions<?> controllerActions) {
-        return controllerActions.getGameState() instanceof PrepareGameState;
+        return controllerActions.getGameState() == State.PREPARATION;
     }
 }

@@ -5,8 +5,6 @@ import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
-import it.polimi.ingsw.server.controller.states.PrepareGameState;
-import it.polimi.ingsw.server.controller.states.WaitingForPlayersState;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.cards.leader.Requirement;
@@ -30,7 +28,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
         this.numberAndPlayers = new PairId<>(numberOfPlayers, new ArrayList<>(){{
             add(player);
         }});
-        setGameState(new WaitingForPlayersState());
+        setGameState(State.WAITING_FOR_PLAYERS);
     }
 
     /**
@@ -44,7 +42,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
         } catch (EmptyDeckException e) {
             throw new UnexpectedControllerException("The deck of leader is empty before having distributed the cards to the players");
         }
-        setGameState(new PrepareGameState());
+        setGameState(State.PREPARATION);
     }
 
     @Override

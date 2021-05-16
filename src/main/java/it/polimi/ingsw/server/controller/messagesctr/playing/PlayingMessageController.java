@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
-import it.polimi.ingsw.server.controller.states.GamePlayState;
+import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
@@ -50,6 +50,6 @@ public abstract class PlayingMessageController extends ClientMessageController {
 
     @Override
     protected boolean checkState(ControllerActions<?> controllerActions) {
-        return controllerActions.getGameState() instanceof GamePlayState;
+        return controllerActions.getGameState() == State.PLAY;
     }
 }
