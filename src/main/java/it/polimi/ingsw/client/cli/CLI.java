@@ -83,7 +83,6 @@ public class CLI extends UI implements Runnable {
                 valid = false;
             }
             else if (choice == 1) {
-                // todo when implemented local single player
                 valid = true;
                 int port = LocalServer.getInstance().getPort();
                 try {
