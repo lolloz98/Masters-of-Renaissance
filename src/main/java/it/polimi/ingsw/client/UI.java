@@ -59,8 +59,7 @@ public abstract class UI {
         boolean valid = true;
         int port = LocalServer.getInstance().getPort();
         try {
-            serverListener = new ServerListener("localhost", port);
-            new Thread(serverListener).start();
+            setServerListener("localhost", port);
             newSinglePlayer();
         }catch (IOException e){
             logger.error("error connecting to localhost, port: " + port);
@@ -76,5 +75,10 @@ public abstract class UI {
     protected void newMultiPlayer(int numberOfPlayers) {
         localGame = new LocalMulti();
         serverListener.setLocalGame(localGame);
+    }
+
+    protected void setServerListener(String ip, int port) throws IOException {
+        serverListener = new ServerListener(ip, port);
+        new Thread(serverListener).start();
     }
 }

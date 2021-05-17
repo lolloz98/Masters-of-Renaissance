@@ -74,8 +74,7 @@ public class CLI extends UI implements Runnable {
                     String ip = input.nextLine();
                     System.out.println("Enter server port");
                     int port = input.nextInt();
-                    serverListener = new ServerListener(ip, port);
-                    new Thread(serverListener).start();
+                    setServerListener(ip, port);
                     valid = true;
                     // choice for join or create game
                     System.out.println("Do you want to join a game or create a new one?");
