@@ -5,12 +5,11 @@ import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 
-public class PrepResFirstView extends View {
-    private CLI cli;
-    private LocalMulti localMulti;
+public class PrepResFirstView extends View<CLI> {
+    private final LocalMulti localMulti;
 
     public PrepResFirstView(CLI cli, LocalMulti localMulti) {
-        this.cli = cli;
+        this.ui = cli;
         this.localMulti = localMulti;
         localMulti.addObserver(this);
     }
@@ -19,8 +18,8 @@ public class PrepResFirstView extends View {
     public void notifyUpdate() {
         if(localMulti.getState() == LocalGameState.PREP_LEADERS){
             localMulti.removeObserver();
-            cli.setState(new PrepLeaderView(cli, localMulti));
-            cli.getState().draw();
+            ui.setState(new PrepLeaderView(ui, localMulti));
+            ui.getState().draw();
         }
     }
 

@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
-import it.polimi.ingsw.client.localmodel.localcards.LocalProductionLeader;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 
@@ -14,10 +13,10 @@ import java.util.Arrays;
 import java.util.TreeMap;
 
 public class MarketView extends GameView {
-    private LocalMarket localMarket;
+    private final LocalMarket localMarket;
 
     public MarketView(CLI cli, LocalGame<?> localGame, LocalMarket localMarket) {
-        this.cli = cli;
+        this.ui = cli;
         this.localMarket = localMarket;
         this.localGame = localGame;
         waiting = false;
@@ -33,9 +32,9 @@ public class MarketView extends GameView {
         else {
             CLI.clearScreen();
             System.out.println("Market:");
-            System.out.println("");
+            System.out.println();
             System.out.println("Free marble: " + localMarket.getFreeMarble());
-            System.out.println("");
+            System.out.println();
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 4; j++) {
                     System.out.print(localMarket.getMarbleMatrix()[i][j] + " ");
@@ -50,7 +49,7 @@ public class MarketView extends GameView {
                     System.out.println(i + ") " + t);
                 }
             }
-            System.out.println("");
+            System.out.println();
             super.drawTurn();
         }
     }
@@ -140,7 +139,7 @@ public class MarketView extends GameView {
         }
         if (index != -1) {
             try {
-                cli.getServerListener().sendMessage(new UseMarketMessage(
+                ui.getServerListener().sendMessage(new UseMarketMessage(
                         localGame.getGameId(),
                         localGame.getMainPlayer().getId(),
                         onRow,
@@ -162,7 +161,7 @@ public class MarketView extends GameView {
         }
         if (number >= 0 && number < localMarket.getResCombinations().size() + 1) {
             removeObserved();
-            cli.setState(new FlushMarketCombinationView(cli, localGame, localMarket.getResCombinations().get(number - 1)));
+            ui.setState(new FlushMarketCombinationView(ui, localGame, localMarket.getResCombinations().get(number - 1)));
         } else {
             writeErrText();
         }

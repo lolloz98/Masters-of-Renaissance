@@ -11,12 +11,11 @@ import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class NewMultiView extends View {
-    private LocalMulti localMulti;
-    // private CLI cli; // todo remove
+public class NewMultiView extends View<CLI> {
+    private final LocalMulti localMulti;
 
     public NewMultiView(CLI cli, LocalMulti localMulti, int numberOfPlayers){
-        this.cli = cli;
+        this.ui = cli;
         this.localMulti = localMulti;
         localMulti.addObserver(this);
         localMulti.getError().addObserver(this);
@@ -51,12 +50,12 @@ public class NewMultiView extends View {
             localMulti.removeObserver();
             localMulti.getError().removeObserver();
             switch(localMulti.getMainPlayerPosition()){
-                case 0: cli.setState(new PrepResFirstView(cli, localMulti)); break;
-                case 1: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                case 2: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                case 3: cli.setState(new PrepResFourthView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                case 0: ui.setState(new PrepResFirstView(ui, localMulti)); break;
+                case 1: ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                case 2: ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                case 3: ui.setState(new PrepResFourthView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
             }
-            cli.getState().draw();
+            ui.getState().draw();
         }
         else draw();
     }

@@ -15,13 +15,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class DevelopmentGridView extends GameView {
-    private LocalDevelopmentGrid localDevelopmentGrid;
+    private final LocalDevelopmentGrid localDevelopmentGrid;
     private ArrayList<String> out;
     private LocalDevelopCard[][] topDevelopCards;
     private int[][] developCardsNumber;
 
     public DevelopmentGridView(CLI cli, LocalGame<?> localGame, LocalDevelopmentGrid localDevelopmentGrid) {
-        this.cli = cli;
+        this.ui = cli;
         this.localDevelopmentGrid = localDevelopmentGrid;
         this.localGame = localGame;
         waiting = false;
@@ -36,7 +36,7 @@ public class DevelopmentGridView extends GameView {
             System.out.println("Please wait");
         else {
             out = new ArrayList<>();
-            for (int i = 0; i < 29; i++) out.add(new String());
+            for (int i = 0; i < 29; i++) out.add("");
             topDevelopCards = localDevelopmentGrid.getTopDevelopCards();
             developCardsNumber = localDevelopmentGrid.getDevelopCardsNumber();
             buildFrame();
@@ -84,12 +84,10 @@ public class DevelopmentGridView extends GameView {
             if (ansList.size() > 3) {
                 writeErrText();
             } else {
-                switch (ansList.get(0)) {
-                    case "BUY":
-                        buy(ansList.get(1), ansList.get(2));
-                        break;
-                    default:
-                        super.handleCommand(ansList);
+                if ("BUY".equals(ansList.get(0))) {
+                    buy(ansList.get(1), ansList.get(2));
+                } else {
+                    super.handleCommand(ansList);
                 }
             }
         }
@@ -100,7 +98,7 @@ public class DevelopmentGridView extends GameView {
             int slotNumber = Integer.parseInt(whereToPut);
             Color color = null;
             int colorInt = -1;
-            int level = 0;
+            int level;
             if (whatToBuy.length() == 2 && slotNumber > 0 && slotNumber < 4) {
                 char colorChar = whatToBuy.charAt(0);
                 switch (colorChar) {
@@ -125,7 +123,7 @@ public class DevelopmentGridView extends GameView {
                 if (color != null && level > 0 && level < 4) {
                     if (localDevelopmentGrid.getDevelopCardsNumber()[colorInt][level - 1] > 0) {
                         TreeMap<Resource, Integer> cost = localDevelopmentGrid.getTopDevelopCards()[colorInt][level - 1].getCost();
-                        cli.setState(new BuyDevelopmentCardView(cli, localGame, color, level, slotNumber, cost));
+                        ui.setState(new BuyDevelopmentCardView(ui, localGame, color, level, slotNumber, cost));
                     } else {
                         System.out.println("There are no cards in this deck!");
                     }
@@ -143,7 +141,7 @@ public class DevelopmentGridView extends GameView {
 
     private void appendCard(int x, int y) {
         ArrayList<String> cardBlock = new ArrayList<>();
-        for (int i = 0; i < 9; i++) cardBlock.add(new String());
+        for (int i = 0; i < 9; i++) cardBlock.add("");
         // first row
         CLIutils.append(cardBlock, 0, "┏━━━━━━━━━━━━━━━┓");
         for (int i = 0; i < 3; i++) {
@@ -161,7 +159,7 @@ public class DevelopmentGridView extends GameView {
         CLIutils.append(cardBlock, 2, "┃  cost:");
         int size = topDevelopCards[x][y].getCost().size();
         CLIutils.append(cardBlock, 2, CLIutils.ANSI_BLACK);
-        TreeMap<Resource, Integer> cost = new TreeMap<Resource, Integer>(topDevelopCards[x][y].getCost());
+        TreeMap<Resource, Integer> cost = new TreeMap<>(topDevelopCards[x][y].getCost());
         for (int i = 0; i < size; i++) {
             Map.Entry<Resource, Integer> entry = cost.pollFirstEntry();
             CLIutils.append(cardBlock, 2, " " + CLIutils.resourceToAnsi(entry.getKey()) + entry.getValue() + CLIutils.BLACK_BACKGROUND);

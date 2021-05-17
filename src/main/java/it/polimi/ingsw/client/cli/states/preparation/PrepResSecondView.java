@@ -11,14 +11,13 @@ import it.polimi.ingsw.enums.Resource;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class PrepResSecondView extends View {
-    private CLI cli;
-    private LocalMulti localMulti;
-    private LocalBoard localBoard;
+public class PrepResSecondView extends View<CLI> {
+    private final LocalMulti localMulti;
+    private final LocalBoard localBoard;
     boolean picked;
 
-    public PrepResSecondView(CLI cli, LocalMulti localMulti, LocalBoard localBoard) {
-        this.cli = cli;
+    public PrepResSecondView(CLI ui, LocalMulti localMulti, LocalBoard localBoard) {
+        this.ui = ui;
         this.localMulti = localMulti;
         this.localBoard = localBoard;
         this.localBoard.addObserver(this);
@@ -33,8 +32,8 @@ public class PrepResSecondView extends View {
             localMulti.removeObserver();
             localBoard.removeObserver();
             localMulti.getError().removeObserver();
-            cli.setState(new PrepLeaderView(cli, localMulti));
-            cli.getState().draw();
+            ui.setState(new PrepLeaderView(ui, localMulti));
+            ui.getState().draw();
         }
     }
 
@@ -59,7 +58,7 @@ public class PrepResSecondView extends View {
             if(pickedRes != null) {
                 try {
                     picked = true;
-                    cli.getServerListener().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
+                    ui.getServerListener().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
                 } catch (IOException e) {
                     System.out.println("No connection from server");
                     e.printStackTrace();

@@ -14,13 +14,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class JoinGameView extends View {
-    private LocalMulti localMulti;
+public class JoinGameView extends View<CLI> {
+    private final LocalMulti localMulti;
     // private CLI cli; // todo remove
-    private String nickname;
+    private final String nickname;
 
     public JoinGameView(CLI cli, LocalMulti localMulti) {
-        this.cli = cli;
+        this.ui = cli;
         this.localMulti = localMulti;
         localMulti.addObserver(this);
         localMulti.getError().addObserver(this);
@@ -51,12 +51,12 @@ public class JoinGameView extends View {
                 localMulti.removeObserver();
                 localMulti.getError().removeObserver();
                 switch(localMulti.getMainPlayerPosition()){
-                    case 0: cli.setState(new PrepResFirstView(cli, localMulti)); break;
-                    case 1: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                    case 2: cli.setState(new PrepResSecondView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                    case 3: cli.setState(new PrepResFourthView(cli, localMulti, localMulti.getMainPlayer().getLocalBoard())); break; // todo
+                    case 0: ui.setState(new PrepResFirstView(ui, localMulti)); break;
+                    case 1: ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                    case 2: ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                    case 3: ui.setState(new PrepResFourthView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break; // todo
                 }
-                cli.getState().draw();
+                ui.getState().draw();
             }
         }
         else draw();
@@ -72,7 +72,7 @@ public class JoinGameView extends View {
     public synchronized void handleCommand(String ans) {
         try{
             int port = Integer.parseInt(ans);
-            cli.getServerListener().sendMessage(new JoinGameMessage(port, nickname));
+            ui.getServerListener().sendMessage(new JoinGameMessage(port, nickname));
         } catch (IOException e) {
             System.out.println("no connection from server");
             e.printStackTrace();

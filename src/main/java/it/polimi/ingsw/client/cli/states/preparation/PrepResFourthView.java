@@ -10,14 +10,13 @@ import it.polimi.ingsw.enums.Resource;
 
 import java.io.IOException;
 
-public class PrepResFourthView extends View {
-    private CLI cli;
-    private LocalMulti localMulti;
-    private LocalBoard localBoard;
+public class PrepResFourthView extends View<CLI> {
+    private final LocalMulti localMulti;
+    private final LocalBoard localBoard;
     boolean picked;
 
     public PrepResFourthView(CLI cli, LocalMulti localMulti, LocalBoard localBoard) {
-        this.cli = cli;
+        this.ui = cli;
         this.localMulti = localMulti;
         this.localBoard = localBoard;
         this.localBoard.addObserver(this);
@@ -37,8 +36,8 @@ public class PrepResFourthView extends View {
             localMulti.removeObserver();
             localBoard.removeObserver();
             localMulti.getError().removeObserver();
-            cli.setState(new PrepLeaderView(cli, localMulti));
-            cli.getState().draw();
+            ui.setState(new PrepLeaderView(ui, localMulti));
+            ui.getState().draw();
         }
     }
 
@@ -63,7 +62,7 @@ public class PrepResFourthView extends View {
             if(pickedRes != null) {
                 try {
                     picked = true;
-                    cli.getServerListener().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
+                    ui.getServerListener().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
                 } catch (IOException e) {
                     System.out.println("No connection from server");
                     e.printStackTrace();

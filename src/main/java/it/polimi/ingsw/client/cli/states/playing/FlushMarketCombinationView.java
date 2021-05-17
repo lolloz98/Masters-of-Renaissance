@@ -6,22 +6,21 @@ import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
-import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class FlushMarketCombinationView extends View {
+public class FlushMarketCombinationView extends View<CLI> {
     private final LocalGame<?> localGame;
-    private TreeMap<Resource, Integer> resToFlush;
-    private TreeMap<Resource, Integer> chosenCombination;
-    private TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToKeep;
+    private final TreeMap<Resource, Integer> resToFlush;
+    private final TreeMap<Resource, Integer> chosenCombination;
+    private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToKeep;
 
     public FlushMarketCombinationView(CLI cli, LocalGame<?> localGame, TreeMap<Resource, Integer> resToFlush) {
         this.localGame = localGame;
         this.resToFlush = resToFlush;
-        this.cli = cli;
+        this.ui = cli;
         resToKeep = new TreeMap<>();
         chosenCombination = new TreeMap<>(resToFlush);
     }
@@ -59,9 +58,9 @@ public class FlushMarketCombinationView extends View {
             switch (ans) {
                 case "1":
                     // switch view, send message
-                    cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     try {
-                        cli.getServerListener().sendMessage(new FlushMarketResMessage(
+                        ui.getServerListener().sendMessage(new FlushMarketResMessage(
                                 localGame.getGameId(),
                                 localGame.getMainPlayer().getId(),
                                 chosenCombination,
@@ -73,7 +72,7 @@ public class FlushMarketCombinationView extends View {
                     break;
                 case "2":
                     // only switch view
-                    cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");

@@ -9,23 +9,22 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
-import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class BuyDevelopmentCardView extends View {
+public class BuyDevelopmentCardView extends View<CLI> {
     private final LocalGame<?> localGame;
-    private TreeMap<Resource, Integer> cost;
-    private Color color;
-    private int level;
-    private int slotNumber;
-    private TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToPay;
+    private final TreeMap<Resource, Integer> cost;
+    private final Color color;
+    private final int level;
+    private final int slotNumber;
+    private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToPay;
 
     public BuyDevelopmentCardView(CLI cli, LocalGame<?> localGame, Color color, int level, int slotNumber, TreeMap<Resource, Integer> cost) {
         this.localGame = localGame;
         this.cost = new TreeMap<>(cost);
-        this.cli = cli;
+        this.ui = cli;
         this.color = color;
         this.level = level;
         this.slotNumber = slotNumber;
@@ -65,9 +64,9 @@ public class BuyDevelopmentCardView extends View {
             switch (ans) {
                 case "1":
                     // switch view, send message
-                    cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer(), true));
+                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer(), true));
                     try {
-                        cli.getServerListener().sendMessage(new BuyDevelopCardMessage(
+                        ui.getServerListener().sendMessage(new BuyDevelopCardMessage(
                                 localGame.getGameId(),
                                 localGame.getMainPlayer().getId(),
                                 level,
@@ -81,7 +80,7 @@ public class BuyDevelopmentCardView extends View {
                     break;
                 case "2":
                     // only switch view
-                    cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");

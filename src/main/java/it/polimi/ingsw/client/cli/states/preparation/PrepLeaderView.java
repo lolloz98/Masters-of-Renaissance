@@ -5,24 +5,21 @@ import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
-import it.polimi.ingsw.client.localmodel.LocalMulti;
-import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.*;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PrepLeaderView extends View {
-    private CLI cli;
-    private LocalGame localGame;
+public class PrepLeaderView extends View<CLI> {
+    private final LocalGame<?> localGame;
     /**
      * Indicates the id of the leader cards to be removed
      */
     private ArrayList<Integer> leaderCardIds;
 
-    public PrepLeaderView(CLI cli, LocalGame localgame) {
-        this.cli = cli;
+    public PrepLeaderView(CLI cli, LocalGame<?> localgame) {
+        this.ui = cli;
         this.localGame = localgame;
         this.localGame.addObserver(this);
         this.localGame.getError().addObserver(this);
@@ -35,8 +32,8 @@ public class PrepLeaderView extends View {
             localGame.removeObserver();
             localGame.getError().removeObserver();
             // go to local board view
-            cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer()));
-            cli.getState().draw();
+            ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+            ui.getState().draw();
         }
         else draw();
     }
@@ -65,7 +62,7 @@ public class PrepLeaderView extends View {
             }
             if(leaderCardIds.size()==2){
                 try {
-                    cli.getServerListener().sendMessage(new RemoveLeaderPrepMessage(
+                    ui.getServerListener().sendMessage(new RemoveLeaderPrepMessage(
                             localGame.getGameId(),
                             localGame.getMainPlayer().getId(),
                             new ArrayList<>(){{

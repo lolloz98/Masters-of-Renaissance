@@ -20,30 +20,13 @@ import java.util.Scanner;
 public class CLI extends UI implements Runnable {
     private static final Logger logger = LogManager.getLogger(CLI.class);
 
-    private LocalGame<?> localGame;
-    private View state;
-    private boolean gameOver;
-    private Scanner input;
+    private View<CLI> state;
 
-    public ServerListener getServerListener() {
-        return serverListener;
-    }
-
-    private ServerListener serverListener;
-
-    public LocalGame<?> getLocalGame() {
-        return localGame;
-    }
-
-    public void setLocalGame(LocalGame<?> localGame) {
-        this.localGame = localGame;
-    }
-
-    public View getState() {
+    public View<CLI> getState() {
             return state;
     }
 
-    public void setState(View state) {
+    public void setState(View<CLI> state) {
             this.state = state;
     }
 
@@ -83,17 +66,7 @@ public class CLI extends UI implements Runnable {
                 valid = false;
             }
             else if (choice == 1) {
-                valid = true;
-                int port = LocalServer.getInstance().getPort();
-                try {
-                    serverListener = new ServerListener("localhost", port);
-                    new Thread(serverListener).start();
-                    newSinglePlayer();
-                }catch (IOException e){
-                    logger.error("error connecting to localhost, port: " + port);
-                    System.out.println("Error creating a new SinglePlayer locally");
-                    valid = false;
-                }
+                valid = setUpLocalServer();
             } else {
                 input.nextLine(); // needed to use nextLine() after nextInt()
                 try {
@@ -132,11 +105,10 @@ public class CLI extends UI implements Runnable {
         } while (!valid);
     }
 
-    private void joinGame() {
-        LocalMulti localMulti = new LocalMulti();
-        this.localGame = localMulti;
-        serverListener.setLocalGame(localGame);
-        state = new JoinGameView(this, localMulti);
+    @Override
+    protected void joinGame() {
+        super.joinGame();
+        state = new JoinGameView(this, (LocalMulti) localGame);
     }
 
     public static void clearScreen() {
@@ -151,7 +123,8 @@ public class CLI extends UI implements Runnable {
         }
     }
 
-    private void choseNumberOfPlayers(){
+    @Override
+    protected void choseNumberOfPlayers(){
         System.out.println("Type the number of players:\n");
         boolean valid;
         int ans;
@@ -164,19 +137,21 @@ public class CLI extends UI implements Runnable {
                 newSinglePlayer();
                 valid = true;
             } else {
-                LocalMulti localMulti = new LocalMulti();
-                localGame = localMulti;
-                serverListener.setLocalGame(localGame);
-                state = new NewMultiView(this, localMulti, ans);
+                newMultiPlayer(ans);
                 valid = true;
             }
         } while (!valid);
     }
 
-    public void newSinglePlayer(){
-        LocalSingle localSingle = new LocalSingle();
-        localGame = localSingle;
-        serverListener.setLocalGame(localGame);
-        state = new NewSingleView(this, localSingle);
+    @Override
+    protected void newSinglePlayer(){
+        super.newSinglePlayer();
+        state = new NewSingleView(this, (LocalSingle) localGame);
+    }
+
+    @Override
+    protected void newMultiPlayer(int numberOfPlayers){
+        super.newMultiPlayer(numberOfPlayers);
+        state = new NewMultiView(this, (LocalMulti) localGame, numberOfPlayers);
     }
 }

@@ -12,14 +12,13 @@ import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
 public class BoardView extends GameView {
     private final LocalPlayer localPlayer;
 
     public BoardView(CLI cli, LocalGame<?> localGame, LocalPlayer localPlayer) {
         this.localGame = localGame;
-        this.cli = cli;
+        this.ui = cli;
         this.localPlayer = localPlayer;
         localGame.getError().addObserver(this);
         localPlayer.getLocalBoard().addObserver(this);
@@ -29,7 +28,7 @@ public class BoardView extends GameView {
 
     public BoardView(CLI cli, LocalGame<?> localGame, LocalPlayer localPlayer, boolean waiting) {
         this.localGame = localGame;
-        this.cli = cli;
+        this.ui = cli;
         this.localPlayer = localPlayer;
         localGame.getError().addObserver(this);
         localPlayer.getLocalBoard().addObserver(this);
@@ -177,7 +176,7 @@ public class BoardView extends GameView {
 
     private void flushProduction() {
         try {
-            cli.getServerListener().sendMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+            ui.getServerListener().sendMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -193,20 +192,20 @@ public class BoardView extends GameView {
         if (number >= 0 && number < 6) {
             if (number == 0) {
                 removeObserved();
-                cli.setState(new ActivateProductionView(cli, localGame, 0));
+                ui.setState(new ActivateProductionView(ui, localGame, 0));
             } else if (number > 1 && number < 4) {
                 if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
                     writeErrText(); // there are no develop cards in this slot
                 } else {
                     removeObserved();
-                    cli.setState(new ActivateProductionView(cli, localGame, number));
+                    ui.setState(new ActivateProductionView(ui, localGame, number));
                 }
             } else {
                 if ((number - 4) < localPlayer.getLocalBoard().getLeaderCards().size() || !(localPlayer.getLocalBoard().getLeaderCards().get(number - 4) instanceof LocalProductionLeader)) {
                     writeErrText();
                 } else {
                     removeObserved();
-                    cli.setState(new ActivateProductionView(cli, localGame, number));
+                    ui.setState(new ActivateProductionView(ui, localGame, number));
                 }
             }
         }
@@ -221,7 +220,7 @@ public class BoardView extends GameView {
         }
         if (number > 0 && number < localPlayer.getLocalBoard().getLeaderCards().size()) {
             try {
-                cli.getServerListener().sendMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
+                ui.getServerListener().sendMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
             } catch (IOException e) {
                 e.printStackTrace();
             }

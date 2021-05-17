@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
@@ -11,12 +10,11 @@ import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class NewSingleView extends View {
-    // private CLI cli; // todo remove
-    private LocalSingle localSingle;
+public class NewSingleView extends View<CLI> {
+    private final LocalSingle localSingle;
 
     public NewSingleView(CLI cli, LocalSingle localSingle){
-        this.cli = cli;
+        this.ui = cli;
         this.localSingle = localSingle;
         localSingle.addObserver(this);
         localSingle.getError().addObserver(this);
@@ -41,8 +39,8 @@ public class NewSingleView extends View {
         if(localSingle.getState() == LocalGameState.PREP_LEADERS){
             localSingle.removeObserver();
             localSingle.getError().removeObserver();
-            cli.setState(new PrepLeaderView(cli, localSingle));
-            cli.getState().draw();
+            ui.setState(new PrepLeaderView(ui, localSingle));
+            ui.getState().draw();
         }
         else draw();
     }

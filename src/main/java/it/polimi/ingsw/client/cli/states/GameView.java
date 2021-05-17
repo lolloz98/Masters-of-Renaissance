@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.cli.states;
 
+import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.playing.DevelopmentGridView;
 import it.polimi.ingsw.client.cli.states.playing.MarketView;
@@ -12,7 +13,7 @@ import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public abstract class GameView extends View {
+public abstract class GameView extends View<CLI> {
     protected LocalGame<?> localGame;
     protected boolean waiting;
 
@@ -53,7 +54,7 @@ public abstract class GameView extends View {
     private void next() {
         if(localGame instanceof LocalSingle){
             try {
-                cli.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+                ui.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -61,7 +62,7 @@ public abstract class GameView extends View {
             LocalMulti localMulti = (LocalMulti) localGame;
             if(localMulti.getMainPlayerId() == localMulti.getLocalTurn().getCurrentPlayer().getId()){
                 try {
-                    cli.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+                    ui.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -74,14 +75,14 @@ public abstract class GameView extends View {
     private void moveToDevelop(int ansWithoutLetters) {
         if (ansWithoutLetters == 0){
             removeObserved();
-            cli.setState(new DevelopmentGridView(cli, localGame, localGame.getLocalDevelopmentGrid()));
+            ui.setState(new DevelopmentGridView(ui, localGame, localGame.getLocalDevelopmentGrid()));
         } else writeErrText();
     }
 
     private void moveToMarket(int ansWithoutLetters) {
         if (ansWithoutLetters == 0){
             removeObserved();
-            cli.setState(new MarketView(cli, localGame, localGame.getLocalMarket()));
+            ui.setState(new MarketView(ui, localGame, localGame.getLocalMarket()));
         } else writeErrText();
     }
 
@@ -94,11 +95,11 @@ public abstract class GameView extends View {
                 if (ansWithoutLetters == 0) {
                     // go to main board
                     removeObserved();
-                    cli.setState(new BoardView(cli, localMulti, localMulti.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
                 } else {
                     // go to ans-1 board
                     removeObserved();
-                    cli.setState(new BoardView(cli, localMulti, localMulti.getLocalPlayers().get(ansWithoutLetters - 1)));
+                    ui.setState(new BoardView(ui, localMulti, localMulti.getLocalPlayers().get(ansWithoutLetters - 1)));
                 }
             }
         }
@@ -107,7 +108,7 @@ public abstract class GameView extends View {
             if (ansWithoutLetters == 0) {
                 // go to main board
                 removeObserved();
-                cli.setState(new BoardView(cli, localSingle, localSingle.getMainPlayer()));
+                ui.setState(new BoardView(ui, localSingle, localSingle.getMainPlayer()));
             } else {
                 writeErrText();
             }

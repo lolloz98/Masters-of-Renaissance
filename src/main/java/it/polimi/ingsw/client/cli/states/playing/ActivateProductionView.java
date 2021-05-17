@@ -14,18 +14,18 @@ import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class ActivateProductionView extends View {
+public class ActivateProductionView extends View<CLI> {
     private final int whichProd;
     private final LocalGame<?> localGame;
     /**
      * one by one, resources are taken from resToMove and put in resToGive once the player has decided where to take them from
      */
-    private TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive;
-    private TreeMap<Resource, Integer> resToGain;
-    private TreeMap<Resource, Integer> resToMove;
+    private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive;
+    private final TreeMap<Resource, Integer> resToGain;
+    private final TreeMap<Resource, Integer> resToMove;
 
     public ActivateProductionView(CLI cli, LocalGame<?> localGame, int whichProd) {
-        this.cli = cli;
+        this.ui = cli;
         this.localGame = localGame;
         this.whichProd = whichProd;
         this.resToGive = new TreeMap<>();
@@ -115,9 +115,9 @@ public class ActivateProductionView extends View {
             switch (ans) {
                 case "1":
                     // switch view, send message
-                    cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer(), true));
+                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer(), true));
                     try {
-                        cli.getServerListener().sendMessage(new ApplyProductionMessage(
+                        ui.getServerListener().sendMessage(new ApplyProductionMessage(
                                 localGame.getGameId(),
                                 localGame.getMainPlayer().getId(),
                                 whichProd,
@@ -130,7 +130,7 @@ public class ActivateProductionView extends View {
                     break;
                 case "2":
                     // only switch view
-                    cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");
