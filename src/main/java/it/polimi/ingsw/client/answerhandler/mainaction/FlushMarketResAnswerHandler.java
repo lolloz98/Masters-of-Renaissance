@@ -21,7 +21,9 @@ public class FlushMarketResAnswerHandler extends AnswerHandler {
 
         //update the turn
         localGame.getLocalTurn().setMarketActivated(false);
-        localGame.getLocalTurn().notifyObserver();
+
+        //reset market
+        localGame.getLocalMarket().resetCombinations();
 
         //update the faith tracks
         localGame.updatePlayerFaithTracks(serverAnswer.getLocalTracks());
@@ -33,6 +35,7 @@ public class FlushMarketResAnswerHandler extends AnswerHandler {
         //update leader depots
         localBoard.updateLeaderDepots(serverAnswer.getLocalDepotLeaders());
 
+        localGame.getLocalTurn().notifyObserver();
         localBoard.notifyObserver();
     }
 }

@@ -51,4 +51,8 @@ public class LocalMarket extends Observable implements Serializable {
         this.resCombinations = resCombinations;
         this.freeMarble = freeMarble;
     }
+
+    public synchronized void resetCombinations() {
+        this.resCombinations = new ArrayList<>();
+    }
 }

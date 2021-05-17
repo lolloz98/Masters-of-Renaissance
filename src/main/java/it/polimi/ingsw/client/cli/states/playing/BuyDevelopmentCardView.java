@@ -29,6 +29,7 @@ public class BuyDevelopmentCardView extends View {
         this.color = color;
         this.level = level;
         this.slotNumber = slotNumber;
+        resToPay = new TreeMap<>();
     }
 
     @Override

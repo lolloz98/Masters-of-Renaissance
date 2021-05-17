@@ -66,6 +66,7 @@ public class DevelopmentGridView extends GameView {
 
     @Override
     public void helpScreen() {
+        super.helpScreen();
         System.out.println("'buy', followed by a card coordinate, followed by a number that indicates in which slot in the board to put it, to buy a development card (for example: 'buy a1 2')");
     }
 
@@ -160,8 +161,9 @@ public class DevelopmentGridView extends GameView {
         CLIutils.append(cardBlock, 2, "┃  cost:");
         int size = topDevelopCards[x][y].getCost().size();
         CLIutils.append(cardBlock, 2, CLIutils.ANSI_BLACK);
+        TreeMap<Resource, Integer> cost = new TreeMap<Resource, Integer>(topDevelopCards[x][y].getCost());
         for (int i = 0; i < size; i++) {
-            Map.Entry<Resource, Integer> entry = topDevelopCards[x][y].getCost().pollFirstEntry();
+            Map.Entry<Resource, Integer> entry = cost.pollFirstEntry();
             CLIutils.append(cardBlock, 2, " " + CLIutils.resourceToAnsi(entry.getKey()) + entry.getValue() + CLIutils.BLACK_BACKGROUND);
         }
         CLIutils.append(cardBlock, 2, CLIutils.ANSI_WHITE);
@@ -178,8 +180,8 @@ public class DevelopmentGridView extends GameView {
             else CLIutils.append(cardBlock, 3, " ");
         }
         // fifth row
-        TreeMap<Resource, Integer> toGain = topDevelopCards[x][y].getProduction().getResToGain();
-        TreeMap<Resource, Integer> toGive = topDevelopCards[x][y].getProduction().getResToGive();
+        TreeMap<Resource, Integer> toGain = new TreeMap<>(topDevelopCards[x][y].getProduction().getResToGain());
+        TreeMap<Resource, Integer> toGive =  new TreeMap<>(topDevelopCards[x][y].getProduction().getResToGive());
         CLIutils.append(cardBlock, 4, "┃ ");
         CLIutils.appendSpaces(cardBlock, 4, -2 * size + 6);
         size = toGive.size();

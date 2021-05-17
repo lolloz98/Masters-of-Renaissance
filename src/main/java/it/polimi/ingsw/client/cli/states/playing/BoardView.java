@@ -97,7 +97,7 @@ public class BoardView extends GameView {
                         LocalProductionLeader localProductionLeader = (LocalProductionLeader) c;
                         System.out.print("ProductionLeader");
                         System.out.print(", prod requirement: " + localProductionLeader.getColorRequirement() + " at level " + localProductionLeader.getLevelReq());
-                        System.out.print(", production: " + localProductionLeader.getProduction());
+                        System.out.print(", production: " + localProductionLeader.getProduction().getResToGive() +" -> "+localProductionLeader.getProduction().getResToGain());
                     }
                     if (localLeaderCard.isDiscarded()){
                         System.out.print(", this card is discarded");

@@ -17,12 +17,12 @@ public class UseMarketAnswerHandler extends AnswerHandler {
         //update turn
         localGame.getLocalTurn().setMarketActivated(true);
         localGame.getLocalTurn().setMainActionOccurred(true);
-        localGame.getLocalTurn().notifyObserver();
 
         //update market
-        localGame.getLocalMarket().setResCombinations(serverAnswer.getResCombinations());
+        localGame.getLocalMarket().setMarket(serverAnswer.getLocalMarket().getMarbleMatrix(), serverAnswer.getLocalMarket().getFreeMarble());
 
         //notify
         localGame.getLocalMarket().notifyObserver();
+        localGame.getLocalTurn().notifyObserver();
     }
 }
