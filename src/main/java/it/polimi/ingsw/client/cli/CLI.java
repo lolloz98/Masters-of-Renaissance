@@ -123,7 +123,6 @@ public class CLI extends UI implements Runnable {
         }
     }
 
-    @Override
     protected void choseNumberOfPlayers(){
         System.out.println("Type the number of players:\n");
         boolean valid;

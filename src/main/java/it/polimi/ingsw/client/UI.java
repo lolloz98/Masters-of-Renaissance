@@ -50,8 +50,6 @@ public abstract class UI {
         serverListener.setLocalGame(localGame);
     }
 
-    protected abstract void choseNumberOfPlayers();
-
     /**
      * set up the local server and both the server listener and a new game.
      *

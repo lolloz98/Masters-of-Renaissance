@@ -4,8 +4,4 @@ import it.polimi.ingsw.client.UI;
 
 public class GUI extends UI {
 
-    @Override
-    protected void choseNumberOfPlayers() {
-        // TODO
-    }
 }
