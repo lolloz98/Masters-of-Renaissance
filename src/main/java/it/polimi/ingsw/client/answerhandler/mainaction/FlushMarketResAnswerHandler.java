@@ -1,14 +1,14 @@
 package it.polimi.ingsw.client.answerhandler.mainaction;
 
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
-import it.polimi.ingsw.client.localmodel.LocalBoard;
-import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
+import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushMarketResAnswer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 
 public class FlushMarketResAnswerHandler extends AnswerHandler {
+    private static final Logger logger = LogManager.getLogger(FlushMarketResAnswerHandler.class);
 
     public FlushMarketResAnswerHandler(FlushMarketResAnswer answer) {
         super(answer);
@@ -34,6 +34,14 @@ public class FlushMarketResAnswerHandler extends AnswerHandler {
 
         //update leader depots
         localBoard.updateLeaderDepots(serverAnswer.getLocalDepotLeaders());
+
+        //update lorenzo track
+        if(localGame instanceof LocalSingle){
+            LocalTrack lorenzoTrack= serverAnswer.getLorenzoTrack();
+            if(lorenzoTrack==null)
+                logger.error("the localGame is instance of localSingle and it is passed a null lorenzo track to update in "+ logger.getName());
+            ((LocalSingle)localGame).setLorenzoTrack(lorenzoTrack);
+        }
 
         localGame.getLocalTurn().notifyObserver();
         localBoard.notifyObserver();
