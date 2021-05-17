@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.MarketTray;
 import it.polimi.ingsw.enums.Resource;
+import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Board;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
@@ -70,7 +71,11 @@ public class FlushMarketResMessageController extends PlayingMessageController {
             LocalDepotLeader localDepotLeader = ConverterToLocalModel.convert(l);
             localDepotLeaders.add(localDepotLeader);
         }
+        LocalTrack lorenzoTrack=null;
+        if(controllerActions.getGame() instanceof SinglePlayer){//pass also the lorenzo track updated
+            lorenzoTrack=ConverterToLocalModel.convert(((SinglePlayer) controllerActions.getGame()).getLorenzo().getFaithTrack());
+        }
 
-        return new FlushMarketResAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localTracks, resInNormalDeposit, localDepotLeaders);
+        return new FlushMarketResAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localTracks, resInNormalDeposit, localDepotLeaders, lorenzoTrack);
     }
 }
