@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.LocalServer;
 import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.client.cli.states.*;
@@ -8,12 +9,17 @@ import it.polimi.ingsw.client.cli.states.creation.JoinGameView;
 import it.polimi.ingsw.client.cli.states.creation.NewMultiView;
 import it.polimi.ingsw.client.cli.states.creation.NewSingleView;
 import it.polimi.ingsw.client.localmodel.*;
+import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CLI extends UI implements Runnable {
+    private static final Logger logger = LogManager.getLogger(CLI.class);
+
     private LocalGame<?> localGame;
     private View state;
     private boolean gameOver;
@@ -42,6 +48,7 @@ public class CLI extends UI implements Runnable {
     }
 
     public static void main(String[] args) {
+        logger.debug("CLI Started");
         CLI cli = new CLI();
         cli.run();
     }
@@ -78,6 +85,16 @@ public class CLI extends UI implements Runnable {
             else if (choice == 1) {
                 // todo when implemented local single player
                 valid = true;
+                int port = LocalServer.getInstance().getPort();
+                try {
+                    serverListener = new ServerListener("localhost", port);
+                    new Thread(serverListener).start();
+                    newSinglePlayer();
+                }catch (IOException e){
+                    logger.error("error connecting to localhost, port: " + port);
+                    System.out.println("Error creating a new SinglePlayer locally");
+                    valid = false;
+                }
             } else {
                 input.nextLine(); // needed to use nextLine() after nextInt()
                 try {
@@ -145,10 +162,7 @@ public class CLI extends UI implements Runnable {
                 System.out.println("Invalid answer, try again:");
                 valid = false;
             } else if (ans == 1) {
-                LocalSingle localSingle = new LocalSingle();
-                localGame = localSingle;
-                serverListener.setLocalGame(localGame);
-                state = new NewSingleView(this, localSingle);
+                newSinglePlayer();
                 valid = true;
             } else {
                 LocalMulti localMulti = new LocalMulti();
@@ -158,5 +172,12 @@ public class CLI extends UI implements Runnable {
                 valid = true;
             }
         } while (!valid);
+    }
+
+    public void newSinglePlayer(){
+        LocalSingle localSingle = new LocalSingle();
+        localGame = localSingle;
+        serverListener.setLocalGame(localGame);
+        state = new NewSingleView(this, localSingle);
     }
 }

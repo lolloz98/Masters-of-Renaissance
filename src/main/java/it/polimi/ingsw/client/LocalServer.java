@@ -26,7 +26,7 @@ public final class LocalServer {
     private LocalServer() {
         ServerSocket socket;
         try {
-            socket = new ServerSocket();
+            socket = new ServerSocket(0);
         } catch (IOException e) {
             logger.error("Cannot find a port: " + e.getMessage());
             System.exit(1);
