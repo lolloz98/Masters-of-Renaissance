@@ -51,8 +51,9 @@ public class NewMultiView extends View<CLI> {
             localMulti.getError().removeObserver();
             switch(localMulti.getMainPlayerPosition()){
                 case 0: ui.setState(new PrepResFirstView(ui, localMulti)); break;
-                case 1: ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                case 2: ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
+                case 1:
+                case 2:
+                    ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
                 case 3: ui.setState(new PrepResFourthView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
             }
             ui.getState().draw();
