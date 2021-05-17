@@ -5,6 +5,7 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.UseMarketAnswer;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.controller.exception.*;
+import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import org.apache.logging.log4j.LogManager;
@@ -43,6 +44,6 @@ public class UseMarketMessageController extends PlayingMessageController {
             throw new UnexpectedControllerException("Something unexpected happened. The resources are ready to be flushed in the market.");
         }
 
-        return new UseMarketAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), game.getMarketTray().getResCombinations());
+        return new UseMarketAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), game.getMarketTray().getResCombinations(), ConverterToLocalModel.convert(game.getMarketTray()));
     }
 }
