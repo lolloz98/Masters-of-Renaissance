@@ -4,6 +4,8 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.TreeMap;
 
@@ -12,6 +14,7 @@ import java.util.TreeMap;
  */
 public class DevelopLorenzoCard extends LorenzoCard {
     private static final long serialVersionUID = 1008L;
+    private static final Logger logger = LogManager.getLogger(DevelopLorenzoCard.class);
 
     private final Color color;
 
@@ -26,7 +29,7 @@ public class DevelopLorenzoCard extends LorenzoCard {
      * @param game current single game player
      */
     @Override
-    public void applyEffect(SinglePlayer game) throws EmptyDeckException {
+    public void applyEffect(SinglePlayer game) {
         TreeMap<Integer, DeckDevelop> decks = game.getDecksDevelop().get(color);
         for (int i = 0; i < 2; i++) removeCardFromDevelop(decks);
     }
@@ -36,10 +39,14 @@ public class DevelopLorenzoCard extends LorenzoCard {
      *
      * @param decks TreeMap of deck develop of color equal to this.color
      */
-    private void removeCardFromDevelop(TreeMap<Integer, DeckDevelop> decks) throws EmptyDeckException {
+    private void removeCardFromDevelop(TreeMap<Integer, DeckDevelop> decks) {
         for (Integer i : decks.keySet()) {
             if (!decks.get(i).isEmpty()) {
-                decks.get(i).drawCard();
+                try {
+                    decks.get(i).drawCard();
+                } catch (EmptyDeckException e) {
+                    logger.error("Thrown exception after checks: " + e);
+                }
                 return;
             }
         }

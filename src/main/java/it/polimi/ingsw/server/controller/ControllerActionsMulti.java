@@ -57,10 +57,9 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
 
     /**
      * removes the effect of all the leader cards of the current player
-     * @throws ControllerException
      */
     @Override
-    public synchronized void removeLeadersEffect() throws ControllerException {
+    public synchronized void removeLeadersEffect() throws UnexpectedControllerException {
         for(LeaderCard<? extends Requirement> lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
             try {
                 lc.removeEffect(game);
@@ -71,7 +70,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
     }
 
     @Override
-    public synchronized void applyLeadersEffect() throws ControllerException {
+    public synchronized void applyLeadersEffect() throws UnexpectedControllerException {
         for(LeaderCard<? extends Requirement> lc: game.getTurn().getCurrentPlayer().getBoard().getLeaderCards()){
 
             try {
@@ -83,12 +82,11 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
     }
 
     /**
-     *
      * @return the answer containing the player or the players who won the game
-     * @throws ControllerException
+     * @throws UnexpectedControllerException if it's called when the game is not over yet
      */
     @Override
-    public synchronized ArrayList<LocalPlayer> getWinners() throws ControllerException {
+    public synchronized ArrayList<LocalPlayer> getWinners() throws UnexpectedControllerException {
         ArrayList<Player> winners;
         ArrayList<LocalPlayer> localWinners=new ArrayList<>();
 
@@ -96,10 +94,10 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
             winners = game.getWinners();
         } catch (GameNotOverException e) {
             logger.error("calling getWinners while the game is not over");
-            throw new UnexpectedControllerException(e.getMessage());
+            throw new UnexpectedControllerException("The game is not over: you cannot know the winner!");
         }
-        for(int i=0;i<winners.size();i++){
-            LocalPlayer localWinner=ConverterToLocalModel.convert(winners.get(i),winners.get(i).getPlayerId());
+        for (Player winner : winners) {
+            LocalPlayer localWinner = ConverterToLocalModel.convert(winner, winner.getPlayerId());
             localWinners.add(localWinner);
         }
 

@@ -9,8 +9,7 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnSingleAnswer;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
+import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.lorenzo.LorenzoCard;
 import it.polimi.ingsw.server.model.exception.*;
@@ -33,74 +32,64 @@ public class FinishTurnMessageController extends PlayingMessageController {
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws InvalidActionControllerException, UnexpectedControllerException {
         Game<?> game = controllerActions.getGame();
 
-        controllerActions.removeLeadersEffect();
+        // added if statement just for readability
+        if (game instanceof MultiPlayer) controllerActions.removeLeadersEffect();
+
         nextTurn(game);
 
         Turn newTurn = controllerActions.getGame().getTurn();
 
         if (newTurn.getIsPlayable()) {
-
-            controllerActions.applyLeadersEffect();
-
             if (game instanceof MultiPlayer) {
-
+                controllerActions.applyLeadersEffect();
                 LocalDevelopmentGrid localGrid = ConverterToLocalModel.convert(game.getDecksDevelop());
                 Player newCurrentPlayer = ((TurnMulti) newTurn).getCurrentPlayer();
                 return new FinishTurnMultiAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localGrid, newCurrentPlayer.getPlayerId());
-
             }
 
-            if (game instanceof SinglePlayer) {//we have to manage the turn of lorenzo
-
+            if (game instanceof SinglePlayer) {
+                // we have to manage the turn of lorenzo
                 SinglePlayer singlePlayer = (SinglePlayer) game;
 
-                if ((singlePlayer.getTurn()).isLorenzoPlaying()) {//it must be always true
-
-                    try {
-                        singlePlayer.getLorenzo().performLorenzoAction(singlePlayer);
-                    } catch (EmptyDeckException e) {
-                        logger.warn("something wrong happened, the lorenzo deck is empty. it should never be empty");
-                        throw new UnexpectedControllerException("lorenzo deck is empty");
-                    } catch (FigureAlreadyDiscardedException e) {
-                        logger.warn("something wrong happened while performing lorenzo action, the vatican figure has already been discarded");
-                        throw new UnexpectedControllerException("the vatican figure has already been discarded");
-                    } catch (FigureAlreadyActivatedException e) {
-                        logger.warn("something wrong happened while performing lorenzo action, the vatican figure has already been activated");
-                        throw new UnexpectedControllerException("the vatican figure has already been activated");
-                    } catch (InvalidStepsException e) {
-                        logger.warn("something wrong happened while performing lorenzo action, we are trying to pass a negative step parameter to the method move in faithtrack");
-                        throw new UnexpectedControllerException("you are trying to go backward on the faith track");
-                    } catch (EndAlreadyReachedException e) {
-                        logger.warn("something wrong happened while performing lorenzo action, the end has already been reached");
-                        throw new UnexpectedControllerException("you have already reached the end");
-                    }
-
-                    nextTurn(singlePlayer);
-
-                    newTurn = singlePlayer.getTurn();
-
-                    if (!newTurn.getIsPlayable())
-                        return handleEndGame(controllerActions);
-                    else {
-                        //build local grid
-                        LocalDevelopmentGrid localGrid = ConverterToLocalModel.convert(game.getDecksDevelop());
-                        //build player track
-                        LocalTrack localPlayerTrack = ConverterToLocalModel.convert(singlePlayer.getPlayer().getBoard().getFaithtrack());
-                        //build lorenzo track
-                        LocalTrack localLorenzoTrack=ConverterToLocalModel.convert(singlePlayer.getLorenzo().getFaithTrack());
-
-
-
-                        return new FinishTurnSingleAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localGrid, localPlayerTrack, localLorenzoTrack);
-                    }
-
-                } else {
-                    logger.error("something unexpected happened at " + this.getClass() + ": lorenzo is playing");
-                    throw new UnexpectedControllerException("lorenzo is playing");
+                try {
+                    performLorenzoAction(singlePlayer);
+                } catch (GameIsOverException e) {
+                    // we should never execute this code
+                    logger.error("Error while performing Lorenzo's action: the game is already over! Returning right answer anyway");
+                    return handleEndGame(controllerActions);
                 }
+
+                try {
+                    singlePlayer.getTurn().setMainActionOccurred();
+                } catch (MarketTrayNotEmptyException | ProductionsResourcesNotFlushedException | MainActionAlreadyOccurredException e) {
+                    logger.error("We cannot have this after a Lorenzo action: " + e + " - Continuing normal execution");
+                }
+
+                try {
+                    game.nextTurn();
+                } catch (GameIsOverException e) {
+                    return handleEndGame(controllerActions);
+                } catch (MarketTrayNotEmptyException | MainActionNotOccurredException | ProductionsResourcesNotFlushedException e) {
+                    logger.error("We cannot have this after a Lorenzo action: " + e + " - Continuing normal execution");
+                }
+
+                newTurn = singlePlayer.getTurn();
+
+                if (!newTurn.getIsPlayable())
+                    return handleEndGame(controllerActions);
+                else {
+                    //build local grid
+                    LocalDevelopmentGrid localGrid = ConverterToLocalModel.convert(game.getDecksDevelop());
+                    //build player track
+                    LocalTrack localPlayerTrack = ConverterToLocalModel.convert(singlePlayer.getPlayer().getBoard().getFaithtrack());
+                    //build lorenzo track
+                    LocalTrack localLorenzoTrack = ConverterToLocalModel.convert(singlePlayer.getLorenzo().getFaithTrack());
+                    return new FinishTurnSingleAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localGrid, localPlayerTrack, localLorenzoTrack);
+                }
+
             }
 
         } else//the game is over
@@ -110,29 +99,37 @@ public class FinishTurnMessageController extends PlayingMessageController {
 
     /**
      * method that creates the endGameAnswer for the player and changes the state of the game
-     *
-     * @param controllerActions
-     * @return
      */
-    private Answer handleEndGame(ControllerActions<?> controllerActions) throws ControllerException {
+    private Answer handleEndGame(ControllerActions<?> controllerActions) throws UnexpectedControllerException {
         controllerActions.toEndGameState();
-        ArrayList<LocalPlayer> winner ;
-        winner=controllerActions.getWinners();
-        return new EndGameAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), winner);
+        ArrayList<LocalPlayer> winners;
+        winners = controllerActions.getWinners();
+        return new EndGameAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), winners);
     }
 
-    private void nextTurn(Game<?> game) throws ControllerException {
+    private void performLorenzoAction(SinglePlayer singlePlayer) throws UnexpectedControllerException, GameIsOverException {
+        try {
+            singlePlayer.getLorenzo().performLorenzoAction(singlePlayer);
+        } catch (EndAlreadyReachedException e) {
+            logger.warn("The end of the faith track was reached already: keep going on normal execution: " + e);
+        } catch (NotLorenzoTurnException e) {
+            // we should never execute this code
+            logger.error("After player turn is not the turn of Lorenzo. The game status could be corrupted");
+            throw new UnexpectedControllerException("Something unexpected happened. The turn has changed. Try to play or restart the game");
+        }
+    }
+
+    private void nextTurn(Game<?> game) throws InvalidActionControllerException {
         try {
             game.nextTurn();
         } catch (GameIsOverException e) {
-            logger.error("the game is already finished and is called next turn");
-            throw new UnexpectedControllerException("the game is already finished, you cannot have the next turn");
+            throw new InvalidActionControllerException("The game is already finished: there is no next turn.");
         } catch (MarketTrayNotEmptyException e) {
-            throw new ControllerException("the market is not empty! you have to choose the resources to obtain");
+            throw new MarketTrayNotEmptyControllerException();
         } catch (ProductionsResourcesNotFlushedException e) {
-            throw new ControllerException("you have some resource to flush before finish the turn");
+            throw new ProductionsResourcesNotFlushedControllerException();
         } catch (MainActionNotOccurredException e) {
-            throw new ControllerException("you have not done any main action yet");
+            throw new MainActionNotOccurredControllerException();
         }
     }
 }

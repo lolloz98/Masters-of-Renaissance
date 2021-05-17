@@ -238,6 +238,11 @@ public final class MessageControllerTestHelper {
         flushProductionResMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
     }
 
+    public static void doFinishTurn(int gameId, Player player) throws ControllerException {
+        FinishTurnMessageController finishTurnMessageController = new FinishTurnMessageController(new FinishTurnMessage(gameId, player.getPlayerId()));
+        finishTurnMessageController.doAction(ControllerManager.getInstance().getControllerFromMap(gameId));
+    }
+
     /**
      * It set up the resources in the strongBox of the player in order to have the possibility to buy the specified card.
      * CARE: this method does not use messageControllers, it manages the game directly.

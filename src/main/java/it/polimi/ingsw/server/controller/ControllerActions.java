@@ -7,6 +7,7 @@ import it.polimi.ingsw.messages.answers.gameendedanswer.DestroyedGameAnswer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
+import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
@@ -125,15 +126,15 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
         }
     }
 
-    public abstract void removeLeadersEffect() throws ControllerException;
+    public abstract void removeLeadersEffect() throws UnexpectedControllerException;
 
-    public abstract void applyLeadersEffect() throws ControllerException;
+    public abstract void applyLeadersEffect() throws UnexpectedControllerException;
 
     /**
      * creates the end game answer by putting in it the list of the winners
-     * @throws ControllerException if something goes wrong
+     * @throws UnexpectedControllerException if the game is not over
      */
-    public abstract ArrayList<LocalPlayer> getWinners() throws ControllerException;
+    public abstract ArrayList<LocalPlayer> getWinners() throws UnexpectedControllerException;
 
     /**
      * it "destroys" the game. after this the game nor the controllers are accessible anymore and there is no reference to them

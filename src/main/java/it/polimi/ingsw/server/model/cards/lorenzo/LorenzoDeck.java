@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.cards.lorenzo;
 
 import it.polimi.ingsw.server.model.cards.Deck;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
  */
 public class LorenzoDeck implements Serializable {
     private static final long serialVersionUID = 1011L;
+    private static final Logger logger = LogManager.getLogger(LorenzoDeck.class);
 
     private final ArrayList<LorenzoCard> original;
     private Deck<LorenzoCard> inUse;
@@ -46,8 +49,12 @@ public class LorenzoDeck implements Serializable {
     /**
      * Put back in the deck all the cards given to the constructor and shuffle them
      */
-    public void backToOriginalAndShuffle() throws EmptyDeckException {
+    public void backToOriginalAndShuffle() {
         inUse = new Deck<>(original);
-        inUse.shuffle();
+        try {
+            inUse.shuffle();
+        } catch (EmptyDeckException e) {
+            logger.error("Deck just refilled: it cannot be empty");
+        }
     }
 }

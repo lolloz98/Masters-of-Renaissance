@@ -9,10 +9,13 @@ import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Board;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
 public class ControllerActionsSingle extends ControllerActions<SinglePlayer> {
+    private static final Logger logger = LogManager.getLogger(ControllerActionsSingle.class);
 
     public ControllerActionsSingle(SinglePlayer game, int id, AnswerListener answerListener) throws EmptyDeckException {
         super(game, id, answerListener);
@@ -29,30 +32,31 @@ public class ControllerActionsSingle extends ControllerActions<SinglePlayer> {
 
     /**
      * this method does nothing
-     * @throws ControllerException
      */
     @Override
-    public synchronized void removeLeadersEffect() throws ControllerException {
+    public synchronized void removeLeadersEffect() throws UnexpectedControllerException {
 
     }
 
     /**
      * this method does nothing
-     * @throws ControllerException
      */
     @Override
-    public synchronized void applyLeadersEffect() throws ControllerException {
+    public synchronized void applyLeadersEffect() throws UnexpectedControllerException {
 
     }
 
     /**
-     *
      * @return null if the winner is lorenzo, returns the player otherwise
-     * @throws ControllerException
      */
     @Override
-    public ArrayList<LocalPlayer> getWinners() throws ControllerException {
+    public ArrayList<LocalPlayer> getWinners() throws UnexpectedControllerException {
         ArrayList<LocalPlayer> localWinners=new ArrayList<>();
+
+        if(!game.isGameOver()){
+            logger.error("calling getWinners while the game is not over");
+            throw new UnexpectedControllerException("The game is not over: you cannot know the winner!");
+        }
 
         if(game.getHasPlayerWon()){
             LocalPlayer winner=ConverterToLocalModel.convert(game.getPlayer(),game.getPlayer().getPlayerId());

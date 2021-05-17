@@ -15,7 +15,11 @@ public class LorenzoTest {
     @Before
     public void setUp() throws ModelException {
         CollectionsHelper.setTest();
-        singlePlayer = new SinglePlayer(new Player("play", 1));
+        Player player = new Player("play", 1);
+        singlePlayer = new SinglePlayer(player);
+        // we pass the turn, so it's Lorenzo who's playing
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.nextTurn();
     }
 
     @Test

@@ -32,5 +32,5 @@ public abstract class LorenzoCard implements Card {
      *
      * @param game current single game player
      */
-    public abstract void applyEffect(SinglePlayer game) throws EmptyDeckException, FigureAlreadyDiscardedException, FigureAlreadyActivatedException, InvalidStepsException, EndAlreadyReachedException;
+    public abstract void applyEffect(SinglePlayer game) throws EndAlreadyReachedException;
 }
