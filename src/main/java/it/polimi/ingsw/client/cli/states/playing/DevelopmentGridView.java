@@ -66,7 +66,7 @@ public class DevelopmentGridView extends GameView {
 
     @Override
     public void helpScreen() {
-
+        System.out.println("'buy', followed by a card coordinate, followed by a number that indicates in which slot in the board to put it, to buy a development card (for example: 'buy a1 2')");
     }
 
     @Override

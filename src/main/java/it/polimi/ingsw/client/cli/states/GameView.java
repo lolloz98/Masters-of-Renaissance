@@ -7,7 +7,9 @@ import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
+import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class GameView extends View {
@@ -19,8 +21,6 @@ public abstract class GameView extends View {
     public abstract void removeObserved();
 
     public abstract void notifyUpdate();
-
-    public abstract void helpScreen();
 
     public void handleCommand(ArrayList<String> ansList) {
         int ansNumber;
@@ -42,8 +42,32 @@ public abstract class GameView extends View {
             case "HELP":
                 helpScreen();
                 break;
+            case "NEXT":
+                next();
+                break;
             default:
                 writeErrText();
+        }
+    }
+
+    private void next() {
+        if(localGame instanceof LocalSingle){
+            try {
+                cli.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            LocalMulti localMulti = (LocalMulti) localGame;
+            if(localMulti.getMainPlayerId() == localMulti.getLocalTurn().getCurrentPlayer().getId()){
+                try {
+                    cli.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("It's not your turn!");
+            }
         }
     }
 
@@ -70,11 +94,11 @@ public abstract class GameView extends View {
                 if (ansWithoutLetters == 0) {
                     // go to main board
                     removeObserved();
-                    cli.setState(new BoardView(cli, localMulti, localMulti.getLocalPlayers().get(ansWithoutLetters - 1)));
+                    cli.setState(new BoardView(cli, localMulti, localMulti.getMainPlayer()));
                 } else {
                     // go to ans-1 board
                     removeObserved();
-                    cli.setState(new BoardView(cli, localMulti, localMulti.getMainPlayer()));
+                    cli.setState(new BoardView(cli, localMulti, localMulti.getLocalPlayers().get(ansWithoutLetters - 1)));
                 }
             }
         }
@@ -105,5 +129,14 @@ public abstract class GameView extends View {
 
     protected void writeErrText(){
         System.out.println("Invalid choice, try again. To see the possible commands, write 'help'");
+    }
+
+
+    public void helpScreen(){
+        System.out.println("You can type:");
+        System.out.println("'market' to look at the market");
+        System.out.println("'develop' to look at the development decks");
+        System.out.println("'board', followed by a number, to see the corresponding board");
+        System.out.println("'next' to end your turn");
     }
 }

@@ -70,7 +70,8 @@ public class MarketView extends GameView {
 
     @Override
     public synchronized void helpScreen() {
-        // todo
+        System.out.println("'push', followed by a number or a letter indicating where to push the free marble, to use the market");
+        System.out.println("'flush', followed by the number of the combination to pick, to move the resources to the board");
     }
 
     @Override

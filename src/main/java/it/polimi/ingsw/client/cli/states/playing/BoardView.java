@@ -27,6 +27,16 @@ public class BoardView extends GameView {
         waiting = false;
     }
 
+    public BoardView(CLI cli, LocalGame<?> localGame, LocalPlayer localPlayer, boolean waiting) {
+        this.localGame = localGame;
+        this.cli = cli;
+        this.localPlayer = localPlayer;
+        localGame.getError().addObserver(this);
+        localPlayer.getLocalBoard().addObserver(this);
+        localGame.getLocalTurn().addObserver(this);
+        this.waiting = waiting;
+    }
+
     @Override
     public synchronized void draw() {
         if (waiting) {
@@ -119,7 +129,11 @@ public class BoardView extends GameView {
 
     @Override
     public synchronized void helpScreen() {
-        // todo
+        super.helpScreen();
+        System.out.println("'leader', followed by a number, to activate a leader card");
+        System.out.println("'prod', followed by a number, to activate a production");
+        System.out.println("'flush', to move all the resources currently in a production to the strongbox");
+
     }
 
     @Override

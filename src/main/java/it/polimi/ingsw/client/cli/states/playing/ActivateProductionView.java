@@ -115,7 +115,7 @@ public class ActivateProductionView extends View {
             switch (ans) {
                 case "1":
                     // switch view, send message
-                    cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer()));
+                    cli.setState(new BoardView(cli, localGame, localGame.getMainPlayer(), true));
                     try {
                         cli.getServerListener().sendMessage(new ApplyProductionMessage(
                                 localGame.getGameId(),
