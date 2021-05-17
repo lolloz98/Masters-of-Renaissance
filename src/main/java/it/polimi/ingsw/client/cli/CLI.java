@@ -1,15 +1,11 @@
 package it.polimi.ingsw.client.cli;
 
-import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.LocalServer;
-import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.client.cli.states.*;
 import it.polimi.ingsw.client.cli.states.creation.JoinGameView;
 import it.polimi.ingsw.client.cli.states.creation.NewMultiView;
 import it.polimi.ingsw.client.cli.states.creation.NewSingleView;
 import it.polimi.ingsw.client.localmodel.*;
-import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,17 +13,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class CLI extends UI implements Runnable {
+public class CLI extends UI {
     private static final Logger logger = LogManager.getLogger(CLI.class);
-
     private View<CLI> state;
 
     public View<CLI> getState() {
-            return state;
+        return state;
     }
 
     public void setState(View<CLI> state) {
-            this.state = state;
+        this.state = state;
     }
 
     public static void main(String[] args) {
@@ -36,70 +31,83 @@ public class CLI extends UI implements Runnable {
         cli.run();
     }
 
-    @Override
-    public void run(){
+    public void run() {
         gameOver = false;
         this.input = new Scanner(System.in);
         setup();
         String ans;
-        while(!gameOver){
+        while (!gameOver) {
             state.draw();
             ans = input.nextLine();
             state.handleCommand(ans);
         }
     }
 
-    void setup(){
+    void setup() {
         clearScreen();
         boolean valid;
         System.out.println("Welcome to Masters of Renaissance");
-        do{
+        do {
             System.out.println("Do you want to play a local single game, or to connect to a server?");
             System.out.println("1. Play locally");
             System.out.println("2. Connect to a server\n");
             System.out.println("Enter your choice:\n");
             Scanner input = new Scanner(System.in);
-            int choice;
-            choice = input.nextInt();
-            if (choice<1 || choice>2) {
+            String ans = input.nextLine();
+            try {
+                int ansNumber = Integer.parseInt(ans);
+                if (ansNumber < 1 || ansNumber > 2) {
+                    System.out.println("Invalid answer, try again:");
+                    valid = false;
+                } else if (ansNumber == 1) {
+                    valid = setUpLocalServer();
+                } else {
+                    try {
+                        System.out.println("Enter server ip");
+                        String ip = input.nextLine();
+                        System.out.println("Enter server port");
+                        String portString = input.nextLine();
+                        try {
+                            int portNumber = Integer.parseInt(portString);
+                            setServerListener(ip, portNumber);
+                            valid = true;
+                            // choice for join or create game
+                            System.out.println("Do you want to join a game or create a new one?");
+                            System.out.println("1. Join game");
+                            System.out.println("2. Create a new game\n");
+                            System.out.println("Enter your choice:\n");
+                            boolean valid2;
+                            do {
+                                ans = input.nextLine();
+                                try {
+                                    ansNumber = Integer.parseInt(ans);
+                                    if (ansNumber < 1 || ansNumber > 2) {
+                                        System.out.println("Invalid answer, try again:");
+                                        valid2 = false;
+                                    } else if (ansNumber == 1) {
+                                        joinGame();
+                                        valid2 = true;
+                                    } else {
+                                        choseNumberOfPlayers();
+                                        valid2 = true;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Invalid answer, try again:");
+                                    valid2 = false;
+                                }
+                            } while (!valid2);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid answer, try again:");
+                            valid = false;
+                        }
+                    } catch (IOException e) {
+                        System.out.println("error connecting to the server, try again");
+                        valid = false;
+                    }
+                }
+            } catch (NumberFormatException e) {
                 System.out.println("Invalid answer, try again:");
                 valid = false;
-            }
-            else if (choice == 1) {
-                valid = setUpLocalServer();
-            } else {
-                input.nextLine(); // needed to use nextLine() after nextInt()
-                try {
-                    System.out.println("Enter server ip");
-                    String ip = input.nextLine();
-                    System.out.println("Enter server port");
-                    int port = input.nextInt();
-                    setServerListener(ip, port);
-                    valid = true;
-                    // choice for join or create game
-                    System.out.println("Do you want to join a game or create a new one?");
-                    System.out.println("1. Join game");
-                    System.out.println("2. Create a new game\n");
-                    System.out.println("Enter your choice:\n");
-                    int choice2;
-                    boolean valid2;
-                    do {
-                        choice2 = input.nextInt();
-                        if (choice2 < 1 || choice2 > 2) {
-                            System.out.println("Invalid answer, try again:");
-                            valid2 = false;
-                        } else if (choice2 == 1) {
-                            joinGame();
-                            valid2 = true;
-                        } else {
-                            choseNumberOfPlayers();
-                            valid2 = true;
-                        }
-                    } while (!valid2);
-                } catch(IOException e){
-                    System.out.println("error connecting to the server, try again");
-                    valid = false;
-                }
             }
         } while (!valid);
     }
@@ -116,39 +124,44 @@ public class CLI extends UI implements Runnable {
         System.out.print(CLIutils.BLACK_BACKGROUND + CLIutils.ANSI_WHITE);
     }
 
-    public static void print(ArrayList<String> out){
-        for(String o : out){
+    public static void print(ArrayList<String> out) {
+        for (String o : out) {
             System.out.println(o);
         }
     }
 
-    protected void choseNumberOfPlayers(){
+    protected void choseNumberOfPlayers() {
         System.out.println("Type the number of players:\n");
         boolean valid;
-        int ans;
         do {
-            ans = input.nextInt();
-            if (ans < 1 || ans > 4) {
+            String ansString = input.nextLine();
+            try {
+                int ansNumber = Integer.parseInt(ansString);
+                if (ansNumber < 1 || ansNumber > 4) {
+                    System.out.println("Invalid answer, try again:");
+                    valid = false;
+                } else if (ansNumber == 1) {
+                    newSinglePlayer();
+                    valid = true;
+                } else {
+                    newMultiPlayer(ansNumber);
+                    valid = true;
+                }
+            } catch (NumberFormatException e) {
                 System.out.println("Invalid answer, try again:");
                 valid = false;
-            } else if (ans == 1) {
-                newSinglePlayer();
-                valid = true;
-            } else {
-                newMultiPlayer(ans);
-                valid = true;
             }
         } while (!valid);
     }
 
     @Override
-    protected void newSinglePlayer(){
+    protected void newSinglePlayer() {
         super.newSinglePlayer();
         state = new NewSingleView(this, (LocalSingle) localGame);
     }
 
     @Override
-    protected void newMultiPlayer(int numberOfPlayers){
+    protected void newMultiPlayer(int numberOfPlayers) {
         super.newMultiPlayer(numberOfPlayers);
         state = new NewMultiView(this, (LocalMulti) localGame, numberOfPlayers);
     }

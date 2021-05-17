@@ -16,7 +16,6 @@ import java.util.Scanner;
 
 public class JoinGameView extends View<CLI> {
     private final LocalMulti localMulti;
-    // private CLI cli; // todo remove
     private final String nickname;
 
     public JoinGameView(CLI cli, LocalMulti localMulti) {
@@ -27,14 +26,25 @@ public class JoinGameView extends View<CLI> {
         Scanner input = new Scanner(System.in);
         System.out.println("Type your nickname:\n");
         this.nickname = input.nextLine(); // todo: check characters limit
-        System.out.println("Enter the game id:\n");
-        int id = input.nextInt();
-        try {
-            cli.getServerListener().sendMessage(new JoinGameMessage(id, nickname));
-        } catch (IOException e) {
-            System.out.println("no connection from server"); // fixme
-            e.printStackTrace();
-        }
+        boolean valid;
+        do {
+            System.out.println("Enter the game id:\n");
+            String idString = input.nextLine();
+            try {
+                int idNumber = Integer.parseInt(idString);
+                try {
+                    cli.getServerListener().sendMessage(new JoinGameMessage(idNumber, nickname));
+                    valid = true;
+                } catch (IOException e) {
+                    System.out.println("no connection from server");
+                    valid = false;
+                    e.printStackTrace();
+                }
+            } catch (NumberFormatException e){
+                System.out.println("Invalid id, try again:");
+                valid = false;
+            }
+        } while (!valid);
     }
 
     @Override
@@ -50,16 +60,21 @@ public class JoinGameView extends View<CLI> {
             } else {
                 localMulti.removeObserver();
                 localMulti.getError().removeObserver();
-                switch(localMulti.getMainPlayerPosition()){
-                    case 0: ui.setState(new PrepResFirstView(ui, localMulti)); break;
-                    case 1: ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                    case 2: ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                    case 3: ui.setState(new PrepResFourthView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break; // todo
+                switch (localMulti.getMainPlayerPosition()) {
+                    case 0:
+                        ui.setState(new PrepResFirstView(ui, localMulti));
+                        break;
+                    case 1:
+                    case 2:
+                        ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard()));
+                        break;
+                    case 3:
+                        ui.setState(new PrepResFourthView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard()));
+                        break;
                 }
                 ui.getState().draw();
             }
-        }
-        else draw();
+        } else draw();
     }
 
     @Override
@@ -70,15 +85,14 @@ public class JoinGameView extends View<CLI> {
 
     @Override
     public synchronized void handleCommand(String ans) {
-        try{
+        try {
             int port = Integer.parseInt(ans);
             ui.getServerListener().sendMessage(new JoinGameMessage(port, nickname));
         } catch (IOException e) {
             System.out.println("no connection from server");
             e.printStackTrace();
-        }
-        catch (NumberFormatException ex){
-            ex.printStackTrace(); // todo ask again
+        } catch (NumberFormatException ex) {
+            System.out.println("Invalid id, try again:");
         }
     }
 
