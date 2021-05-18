@@ -7,6 +7,11 @@ import java.util.ArrayList;
 
 public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializable {
     private LocalPlayer mainPlayer;
+    private boolean isMainPlayerWinner;
+
+    public synchronized void setMainPlayerWinner(boolean mainPlayerWinner) {
+        isMainPlayerWinner = mainPlayerWinner;
+    }
 
     public synchronized void setLorenzoTrack(LocalTrack lorenzoTrack) {
         this.lorenzoTrack = lorenzoTrack;
@@ -48,10 +53,11 @@ public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializa
         super();
         this.localTurn = new LocalTurnSingle();
         lorenzoTrack = new LocalTrack();
+        isMainPlayerWinner= false;
     }
 
     @Override
-    public boolean isMainPlayerTurn() {
+    public synchronized boolean isMainPlayerTurn() {
         return true;
     }
 

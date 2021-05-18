@@ -1,4 +1,4 @@
-package it.polimi.ingsw.messages.answers.gameendedanswer;
+package it.polimi.ingsw.messages.answers.endgameanswer;
 
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.messages.answers.Answer;

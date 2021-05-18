@@ -1,9 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
-import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.gameendedanswer.DestroyedGameAnswer;
+import it.polimi.ingsw.messages.answers.endgameanswer.DestroyedGameAnswer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
