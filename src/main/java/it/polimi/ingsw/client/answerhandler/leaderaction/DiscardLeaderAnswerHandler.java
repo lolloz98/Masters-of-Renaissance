@@ -4,10 +4,8 @@ import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
-import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
-import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
 
 public class DiscardLeaderAnswerHandler extends AnswerHandler {
