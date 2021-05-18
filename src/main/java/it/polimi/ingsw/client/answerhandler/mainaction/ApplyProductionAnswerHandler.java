@@ -56,6 +56,7 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
             case 3: {
                 ArrayList<LocalDevelopCard> localDevelopSlot = localBoard.getDevelopCards().get(whichProd - 1);
                 localDevelopSlot.get(localDevelopSlot.size() - 1).setResToFlush(serverAnswer.getResToFlush());
+                break;
             }
             case 4:
             case 5: {
@@ -63,8 +64,12 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
                     LocalProductionLeader toUpdate = (LocalProductionLeader) localBoard.getLeaderCards().get(whichProd - 4);
                     toUpdate.setResToFlush(serverAnswer.getResToFlush());
                 } else
-                    logger.error("something wrong happened, illegal which prod parameter in + " + logger.getName());
+                    logger.error("something wrong happened: illegal which prod parameter in + " + logger.getName()+ " the leader at that position is not a production leader");
+            break;
             }
+            default:
+                logger.error("something wrong happened: illegal which prod parameter in + " + logger.getName());
+                break;
         }
 
         localBoard.notifyObserver();
