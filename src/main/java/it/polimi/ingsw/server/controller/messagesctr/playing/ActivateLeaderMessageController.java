@@ -63,8 +63,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
         }
 
         if (toActivate instanceof ProductionLeaderCard) {
-            int whichLeaderProd = board.getProductionLeaders().indexOf(toActivate) + 4; //it must be 4 or 5
-            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, whichLeaderProd);
+            return new ActivateProductionLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard);
         }
 
         if (toActivate instanceof DiscountLeaderCard) {

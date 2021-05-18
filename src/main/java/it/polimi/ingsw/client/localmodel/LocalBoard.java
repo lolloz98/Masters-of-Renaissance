@@ -15,7 +15,7 @@ public class LocalBoard extends Observable implements Serializable {
     private TreeMap<Resource, Integer> resInNormalDepot;
     private ArrayList<LocalCard> leaderCards;
     /**
-     * to notify the board for an update of the local track, it doesn't own an observer
+     * notify the board for an update of the local track, it doesn't own an observer
      */
     private LocalTrack localTrack;
     private int initialRes; // fixme: probably should be removed
