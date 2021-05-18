@@ -18,9 +18,9 @@ public class PrepLeaderView extends View<CLI> {
      */
     private ArrayList<Integer> leaderCardIds;
 
-    public PrepLeaderView(CLI cli, LocalGame<?> localgame) {
+    public PrepLeaderView(CLI cli, LocalGame<?> localGame) {
         this.ui = cli;
-        this.localGame = localgame;
+        this.localGame = localGame;
         this.localGame.addObserver(this);
         this.localGame.getError().addObserver(this);
         leaderCardIds = new ArrayList<>();

@@ -109,8 +109,10 @@ public class BoardView extends GameView {
                 }
                 System.out.print("\n");
             }
+            System.out.println("");
             super.drawTurn();
         }
+        System.out.println("");
     }
 
     @Override
@@ -132,7 +134,7 @@ public class BoardView extends GameView {
         System.out.println("'leader', followed by a number, to activate a leader card");
         System.out.println("'prod', followed by a number, to activate a production");
         System.out.println("'flush', to move all the resources currently in a production to the strongbox");
-
+        System.out.println("");
     }
 
     @Override
