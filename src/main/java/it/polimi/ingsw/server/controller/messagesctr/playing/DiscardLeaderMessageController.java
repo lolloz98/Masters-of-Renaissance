@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +59,14 @@ public class DiscardLeaderMessageController extends PlayingMessageController {
 
         // All faith tracks might be modified if vatican Figure is activated while moving
         ArrayList<LocalTrack> localTracks = ConverterToLocalModel.getLocalFaithTracks(controllerActions.getGame());
-        LocalLeaderCard localCard = ConverterToLocalModel.convert(card);
-        return new DiscardLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localCard, localTracks);
+
+        //pass lorenzo track if single player
+        LocalTrack lorenzoTrack = null;
+        if(controllerActions.getGame() instanceof SinglePlayer)
+            lorenzoTrack = ConverterToLocalModel.convert(((SinglePlayer) controllerActions.getGame()).getLorenzo().getFaithTrack());
+
+        LocalLeaderCard localLeader=ConverterToLocalModel.convert(card);
+
+        return new DiscardLeaderAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(),localLeader, localTracks, lorenzoTrack);
     }
 }
