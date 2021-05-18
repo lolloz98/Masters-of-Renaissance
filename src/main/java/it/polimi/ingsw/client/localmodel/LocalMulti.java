@@ -54,6 +54,13 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
     }
 
     @Override
+    public synchronized boolean isMainPlayerTurn() {
+        if (getLocalTurn().getCurrentPlayer().getId() != getMainPlayerId()) {
+            return false;
+        } else return true;
+    }
+
+    @Override
     public synchronized LocalPlayer getPlayerById(int id){
         for(LocalPlayer l : localPlayers){
             if(l.getId() == id) return l;

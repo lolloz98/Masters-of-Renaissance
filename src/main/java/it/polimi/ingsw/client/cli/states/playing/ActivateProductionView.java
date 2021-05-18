@@ -27,12 +27,12 @@ public class ActivateProductionView extends View<CLI> {
     public ActivateProductionView(CLI cli, LocalGame<?> localGame, int whichProd) {
         this.ui = cli;
         this.localGame = localGame;
-        this.whichProd = whichProd;
+        this.whichProd = whichProd;  //2
         this.resToGive = new TreeMap<>();
         LocalProduction prod;
         if (whichProd == 0) prod = localGame.getMainPlayer().getLocalBoard().getBaseProduction();
         else if (whichProd > 0 && whichProd < 4)
-            prod = localGame.getMainPlayer().getLocalBoard().getDevelopCards().get(whichProd - 1).get(localGame.getMainPlayer().getLocalBoard().getDevelopCards().get(whichProd - 1).size()).getProduction();
+            prod = localGame.getMainPlayer().getLocalBoard().getDevelopCards().get(whichProd - 1).get(localGame.getMainPlayer().getLocalBoard().getDevelopCards().get(whichProd - 1).size() - 1).getProduction();
         else
             // already checked type
             prod = ((LocalProductionLeader) localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(whichProd - 4)).getProduction();

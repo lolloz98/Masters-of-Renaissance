@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
-
 import java.util.ArrayList;
 
 public class CLIutils {

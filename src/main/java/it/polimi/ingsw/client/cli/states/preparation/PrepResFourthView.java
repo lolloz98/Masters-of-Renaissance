@@ -28,11 +28,11 @@ public class PrepResFourthView extends View<CLI> {
 
     @Override
     public void notifyUpdate() {
-        if(localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1){
+        if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1) {
             picked = false;
             draw();
         }
-        if(localMulti.getState() == LocalGameState.PREP_LEADERS){
+        if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
             localMulti.removeObserver();
             localBoard.removeObserver();
             localMulti.getError().removeObserver();
@@ -49,17 +49,25 @@ public class PrepResFourthView extends View<CLI> {
 
     @Override
     public void handleCommand(String ans) {
-        if(!picked){
+        if (!picked) {
             Resource pickedRes = null;
             switch (ans) {
-                case "1": pickedRes = Resource.SHIELD; break;
-                case "2": pickedRes = Resource.GOLD; break;
-                case "3": pickedRes = Resource.SERVANT; break;
-                case "4": pickedRes = Resource.ROCK; break;
+                case "1":
+                    pickedRes = Resource.SHIELD;
+                    break;
+                case "2":
+                    pickedRes = Resource.GOLD;
+                    break;
+                case "3":
+                    pickedRes = Resource.SERVANT;
+                    break;
+                case "4":
+                    pickedRes = Resource.ROCK;
+                    break;
                 default:
                     System.out.println("Invalid choice, try again:");
             }
-            if(pickedRes != null) {
+            if (pickedRes != null) {
                 try {
                     picked = true;
                     ui.getServerListener().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
@@ -73,20 +81,18 @@ public class PrepResFourthView extends View<CLI> {
 
     @Override
     public void draw() {
-        if(!picked){
+        if (!picked) {
             // todo inform player of the order
-            if(localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 0) {
+            if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 0) {
                 System.out.println("Pick a free resource:");
-            }
-            else if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1){
+            } else if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1) {
                 System.out.println("Pick the second free resource:");
             }
             System.out.println("1. Shield");
             System.out.println("2. Gold");
             System.out.println("3. Servant");
             System.out.println("4. Rock");
-        }
-        else {
+        } else {
             System.out.println("Please wait");
         }
     }

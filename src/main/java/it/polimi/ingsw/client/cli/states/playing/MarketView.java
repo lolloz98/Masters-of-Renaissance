@@ -4,6 +4,8 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
+import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 
@@ -31,6 +33,11 @@ public class MarketView extends GameView {
             System.out.println("Please wait");
         else {
             CLI.clearScreen();
+            ArrayList<String> letters = new ArrayList<>(){{
+                add("A");
+                add("B");
+                add("C");
+            }};
             System.out.println("Market:");
             System.out.println();
             System.out.println("Free marble: " + localMarket.getFreeMarble());
@@ -39,8 +46,9 @@ public class MarketView extends GameView {
                 for (int j = 0; j < 4; j++) {
                     System.out.print(localMarket.getMarbleMatrix()[i][j] + " ");
                 }
-                System.out.print("\r\n");
+                System.out.print("  " +letters.get(i)+"\r\n");
             }
+            System.out.println("    1      2      3      4");
             if (localMarket.getResCombinations().size() > 0) {
                 System.out.println("Resources combinations:");
                 int i = 0;
@@ -154,17 +162,21 @@ public class MarketView extends GameView {
     }
 
     private void flush(String s) {
-        int number = -1;
-        try {
-            number = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            writeErrText();
-        }
-        if (number >= 0 && number < localMarket.getResCombinations().size() + 1) {
-            removeObserved();
-            ui.setState(new FlushMarketCombinationView(ui, localGame, localMarket.getResCombinations().get(number - 1)));
+        if(localGame.isMainPlayerTurn()) {
+            int number = -1;
+            try {
+                number = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                writeErrText();
+            }
+            if (number >= 0 && number < localMarket.getResCombinations().size() + 1) {
+                removeObserved();
+                ui.setState(new FlushMarketCombinationView(ui, localGame, new TreeMap<>(localMarket.getResCombinations().get(number - 1))));
+            } else {
+                writeErrText();
+            }
         } else {
-            writeErrText();
+            System.out.println("It's not your turn!");
         }
     }
 }
