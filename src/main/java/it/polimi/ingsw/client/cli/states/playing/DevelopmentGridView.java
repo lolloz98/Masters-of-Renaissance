@@ -94,47 +94,51 @@ public class DevelopmentGridView extends GameView {
     }
 
     private void buy(String whatToBuy, String whereToPut) {
-        try {
-            int slotNumber = Integer.parseInt(whereToPut) - 1;
-            Color color = null;
-            int colorInt = -1;
-            int level;
-            if (whatToBuy.length() == 2 && slotNumber >= 0 && slotNumber <= 2) {
-                char colorChar = whatToBuy.charAt(0);
-                switch (colorChar) {
-                    case 'A':
-                        color = Color.PURPLE;
-                        colorInt = 0;
-                        break;
-                    case 'B':
-                        color = Color.GREEN;
-                        colorInt = 1;
-                        break;
-                    case 'C':
-                        color = Color.GOLD;
-                        colorInt = 2;
-                        break;
-                    case 'D':
-                        color = Color.BLUE;
-                        colorInt = 3;
-                        break;
-                }
-                level = Character.getNumericValue(whatToBuy.charAt(1));
-                if (color != null && level > 0 && level < 4) {
-                    if (localDevelopmentGrid.getDevelopCardsNumber()[colorInt][level - 1] > 0) {
-                        TreeMap<Resource, Integer> cost = localDevelopmentGrid.getTopDevelopCards()[colorInt][level - 1].getCost();
-                        ui.setState(new BuyDevelopmentCardView(ui, localGame, color, level, slotNumber, cost));
+        if(localGame.isMainPlayerTurn()) {
+            try {
+                int slotNumber = Integer.parseInt(whereToPut) - 1;
+                Color color = null;
+                int colorInt = -1;
+                int level;
+                if (whatToBuy.length() == 2 && slotNumber >= 0 && slotNumber <= 2) {
+                    char colorChar = whatToBuy.charAt(0);
+                    switch (colorChar) {
+                        case 'A':
+                            color = Color.PURPLE;
+                            colorInt = 0;
+                            break;
+                        case 'B':
+                            color = Color.GREEN;
+                            colorInt = 1;
+                            break;
+                        case 'C':
+                            color = Color.GOLD;
+                            colorInt = 2;
+                            break;
+                        case 'D':
+                            color = Color.BLUE;
+                            colorInt = 3;
+                            break;
+                    }
+                    level = Character.getNumericValue(whatToBuy.charAt(1));
+                    if (color != null && level > 0 && level < 4) {
+                        if (localDevelopmentGrid.getDevelopCardsNumber()[colorInt][level - 1] > 0) {
+                            TreeMap<Resource, Integer> cost = localDevelopmentGrid.getTopDevelopCards()[colorInt][level - 1].getCost();
+                            ui.setState(new BuyDevelopmentCardView(ui, localGame, color, level, slotNumber, cost));
+                        } else {
+                            System.out.println("There are no cards in this deck!");
+                        }
                     } else {
-                        System.out.println("There are no cards in this deck!");
+                        writeErrText();
                     }
                 } else {
                     writeErrText();
                 }
-            } else {
+            } catch (NumberFormatException e) {
                 writeErrText();
             }
-        } catch (NumberFormatException e) {
-            writeErrText();
+        } else {
+            System.out.println("It's not your turn!");
         }
 
     }

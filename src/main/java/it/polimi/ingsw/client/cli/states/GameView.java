@@ -52,35 +52,22 @@ public abstract class GameView extends View<CLI> {
     }
 
     private void next() {
-        if(localGame instanceof LocalSingle){
-            try {
-                ui.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            LocalMulti localMulti = (LocalMulti) localGame;
-            if(localMulti.getMainPlayerId() == localMulti.getLocalTurn().getCurrentPlayer().getId()){
-                try {
-                    ui.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                System.out.println("It's not your turn!");
-            }
+        try {
+            ui.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private void moveToDevelop(int ansWithoutLetters) {
-        if (ansWithoutLetters == 0){
+        if (ansWithoutLetters == 0) {
             removeObserved();
             ui.setState(new DevelopmentGridView(ui, localGame, localGame.getLocalDevelopmentGrid()));
         } else writeErrText();
     }
 
     private void moveToMarket(int ansWithoutLetters) {
-        if (ansWithoutLetters == 0){
+        if (ansWithoutLetters == 0) {
             removeObserved();
             ui.setState(new MarketView(ui, localGame, localGame.getLocalMarket()));
         } else writeErrText();
@@ -128,12 +115,12 @@ public abstract class GameView extends View<CLI> {
         }
     }
 
-    protected void writeErrText(){
+    protected void writeErrText() {
         System.out.println("Invalid choice, try again. To see the possible commands, write 'help'");
     }
 
 
-    public void helpScreen(){
+    public void helpScreen() {
         System.out.println("You can type:");
         System.out.println("'market' to look at the market");
         System.out.println("'develop' to look at the development decks");

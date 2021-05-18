@@ -185,31 +185,35 @@ public class BoardView extends GameView {
     }
 
     private void activateProduction(String s) {
-        int number = -1;
-        try {
-            number = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            writeErrText();
-        }
-        if (number >= 0 && number < 6) {
-            if (number == 0) {
-                removeObserved();
-                ui.setState(new ActivateProductionView(ui, localGame, 0));
-            } else if (number > 0 && number < 4) {
-                if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
-                    System.out.println("There are no cards in this slot!");// there are no develop cards in this slot
-                } else {
+        if(localGame.isMainPlayerTurn()) {
+            int number = -1;
+            try {
+                number = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                writeErrText();
+            }
+            if (number >= 0 && number < 6) {
+                if (number == 0) {
                     removeObserved();
-                    ui.setState(new ActivateProductionView(ui, localGame, number));
-                }
-            } else {
-                if ((number - 4) < localPlayer.getLocalBoard().getLeaderCards().size() || !(localPlayer.getLocalBoard().getLeaderCards().get(number - 4) instanceof LocalProductionLeader)) {
-                    writeErrText();
+                    ui.setState(new ActivateProductionView(ui, localGame, 0));
+                } else if (number > 0 && number < 4) {
+                    if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
+                        System.out.println("There are no cards in this slot!");// there are no develop cards in this slot
+                    } else {
+                        removeObserved();
+                        ui.setState(new ActivateProductionView(ui, localGame, number));
+                    }
                 } else {
-                    removeObserved();
-                    ui.setState(new ActivateProductionView(ui, localGame, number));
+                    if ((number - 4) < localPlayer.getLocalBoard().getLeaderCards().size() || !(localPlayer.getLocalBoard().getLeaderCards().get(number - 4) instanceof LocalProductionLeader)) {
+                        writeErrText();
+                    } else {
+                        removeObserved();
+                        ui.setState(new ActivateProductionView(ui, localGame, number));
+                    }
                 }
             }
+        } else {
+            System.out.println("It's not your turn!");
         }
     }
 
@@ -223,6 +227,7 @@ public class BoardView extends GameView {
         if (number > 0 && number < localPlayer.getLocalBoard().getLeaderCards().size()) {
             try {
                 ui.getServerListener().sendMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
+                waiting = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }

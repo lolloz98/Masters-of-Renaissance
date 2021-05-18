@@ -85,4 +85,6 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
         this.localTurn = localTurn;
         this.state = state;
     }
+
+    public abstract boolean isMainPlayerTurn();
 }
