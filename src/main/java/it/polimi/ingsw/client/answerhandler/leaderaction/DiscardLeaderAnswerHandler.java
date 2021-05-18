@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
+import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
+import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
 
@@ -21,9 +23,15 @@ public class DiscardLeaderAnswerHandler extends AnswerHandler {
 
         //update the leadercard
         if(localGame.getMainPlayer().getId()==serverAnswer.getPlayerId()){
-
+            for(LocalCard card: localGame.getMainPlayer().getLocalBoard().getLeaderCards()){
+                if(card.getId()==serverAnswer.getLeader().getId())
+                    ((LocalLeaderCard)card).setDiscarded(true);
+            }
         } else{
-
+            for(LocalCard card: localGame.getPlayerById(serverAnswer.getPlayerId()).getLocalBoard().getLeaderCards()){
+                if(card.getId()==0)
+                    ((LocalLeaderCard)card).setDiscarded(true);
+            }
         }
 
         //update the tracks
