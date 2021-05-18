@@ -23,13 +23,13 @@ import java.net.Socket;
 public class ClientHandler implements Runnable {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
 
-    private final ControllerManager controllerManager = ControllerManager.getInstance();
+    protected final ControllerManager controllerManager = ControllerManager.getInstance();
 
     private final Socket client;
     private ObjectOutputStream oStream;
     private ObjectInputStream iStream;
 
-    private AnswerListener answerListener;
+    protected AnswerListener answerListener;
 
     public ClientHandler(Socket client) {
         this.client = client;
@@ -50,7 +50,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private synchronized void handleMessage(ClientMessage clientMessage) throws IOException {
+    protected synchronized void handleMessage(ClientMessage clientMessage) throws IOException {
         try {
             Object parsedMessage = ParserServer.parseRequest(clientMessage);
             if(parsedMessage instanceof CreateGameMessageController){

@@ -86,11 +86,15 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
         answerListener.setIds(answer.getPlayerId(), answer.getGameId());
         addAnswerListener(answerListener);
         if (game != null) {
-            for (AnswerListener a : listeners) {
-                a.sendAnswer(AnswerFactory.createGameStatusAnswer(answer.getGameId(), answer.getPlayerId(), a.getPlayerId(), game));
-            }
+            sendGameStatusToAll(answer.getGameId(), answer.getPlayerId());
         } else{
             sendAnswer(answer);
+        }
+    }
+
+    public synchronized void sendGameStatusToAll(int gameId, int playerIdLastRequest) throws UnexpectedControllerException {
+        for (AnswerListener a : listeners) {
+            a.sendAnswer(AnswerFactory.createGameStatusAnswer(gameId, playerIdLastRequest, a.getPlayerId(), game));
         }
     }
 

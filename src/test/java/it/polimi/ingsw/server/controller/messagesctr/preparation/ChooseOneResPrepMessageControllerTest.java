@@ -47,7 +47,7 @@ public class ChooseOneResPrepMessageControllerTest {
     @Test
     public void doAction() throws ControllerException, InvalidArgumentException {
         Player p;
-        int gameId = MessageControllerTestHelper.toPrepStateMulti();
+        int gameId = MessageControllerTestHelper.doToPrepStateMulti();
         ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer game = ca.getGame();
         chooseOneResPrepMessageController = new ChooseOneResPrepMessageController(new ChooseOneResPrepMessage(gameId, game.getPlayers().get(0).getPlayerId(), Resource.GOLD));
@@ -69,9 +69,9 @@ public class ChooseOneResPrepMessageControllerTest {
     }
 
     @Test
-    public void doActionInvalidRes() throws ControllerException, InvalidArgumentException {
+    public void doActionInvalidRes() throws ControllerException {
         Player p;
-        int gameId = MessageControllerTestHelper.toPrepStateMulti();
+        int gameId = MessageControllerTestHelper.doToPrepStateMulti();
         ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer game = ca.getGame();
 
@@ -93,7 +93,7 @@ public class ChooseOneResPrepMessageControllerTest {
     }
 
     @Test
-    public void doActionAllDecided() throws ControllerException, InvalidArgumentException {
+    public void doActionAllDecided() throws ControllerException {
         int gameId = MessageControllerTestHelper.toDecidedInitResMulti();
         ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer game = ca.getGame();

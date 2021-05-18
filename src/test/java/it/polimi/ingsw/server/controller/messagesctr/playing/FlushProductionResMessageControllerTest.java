@@ -36,8 +36,8 @@ public class FlushProductionResMessageControllerTest {
         MultiPlayer mp = ca.getGame();
         Player player = mp.getPlayers().get(0);
 
-        MessageControllerTestHelper.setPlayerAndActivateProduction(gameId, player, Color.PURPLE, 1, 0);
-        MessageControllerTestHelper.setPlayerAndActivateProduction(gameId, player, Color.BLUE, 1, 1);
+        MessageControllerTestHelper.setPlayerAndDoActivateProduction(gameId, player, Color.PURPLE, 1, 0);
+        MessageControllerTestHelper.setPlayerAndDoActivateProduction(gameId, player, Color.BLUE, 1, 1);
 
         MessageControllerTestHelper.doFlushProductionResources(gameId, player);
         assertTrue(mp.getTurn().isMainActionOccurred());

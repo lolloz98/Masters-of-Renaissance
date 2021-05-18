@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
+import it.polimi.ingsw.client.ManipulateGameUiTestHelper;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
@@ -48,7 +49,7 @@ public class ApplyProductionMessageControllerTest {
 
         Color color = Color.BLUE;
         int level = 1;
-        TreeMap<Resource, Integer> cost = MessageControllerTestHelper.setResourcesInStrongBoxForDevelop(mp, player, color, level);
+        TreeMap<Resource, Integer> cost = ManipulateGameUiTestHelper.setResourcesInStrongBoxForDevelop(mp, player, color, level);
 
         DevelopCard card = ca.getGame().getDecksDevelop().get(color).get(level).topCard();
         TreeMap<Resource, Integer> toGive = card.getProduction().whatResourceToGive();

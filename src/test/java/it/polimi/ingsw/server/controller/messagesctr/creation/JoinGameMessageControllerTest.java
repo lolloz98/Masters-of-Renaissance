@@ -39,7 +39,7 @@ public class JoinGameMessageControllerTest {
 
     @Test
     public void testDoActionOnFullGame() throws ControllerException {
-        int gameId = MessageControllerTestHelper.toPrepStateMulti();
+        int gameId = MessageControllerTestHelper.doToPrepStateMulti();
         ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
 
         JoinGameMessageController joinGameMessageController = new JoinGameMessageController(new JoinGameMessage(gameId, "invalid"));
