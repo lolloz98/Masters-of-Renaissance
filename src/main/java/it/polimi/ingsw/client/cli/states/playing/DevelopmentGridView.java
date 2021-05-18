@@ -95,11 +95,11 @@ public class DevelopmentGridView extends GameView {
 
     private void buy(String whatToBuy, String whereToPut) {
         try {
-            int slotNumber = Integer.parseInt(whereToPut);
+            int slotNumber = Integer.parseInt(whereToPut) - 1;
             Color color = null;
             int colorInt = -1;
             int level;
-            if (whatToBuy.length() == 2 && slotNumber > 0 && slotNumber < 4) {
+            if (whatToBuy.length() == 2 && slotNumber >= 0 && slotNumber <= 2) {
                 char colorChar = whatToBuy.charAt(0);
                 switch (colorChar) {
                     case 'A':

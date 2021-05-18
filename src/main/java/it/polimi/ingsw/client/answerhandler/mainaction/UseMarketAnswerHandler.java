@@ -20,6 +20,7 @@ public class UseMarketAnswerHandler extends AnswerHandler {
 
         //update market
         localGame.getLocalMarket().setMarket(serverAnswer.getLocalMarket().getMarbleMatrix(), serverAnswer.getLocalMarket().getFreeMarble());
+        localGame.getLocalMarket().setResCombinations(serverAnswer.getResCombinations());
 
         //notify
         localGame.getLocalMarket().notifyObserver();

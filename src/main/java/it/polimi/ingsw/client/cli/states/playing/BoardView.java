@@ -59,7 +59,7 @@ public class BoardView extends GameView {
             int i;
             for (i = 0; i < 3; i++) {
                 if (localPlayer.getLocalBoard().getDevelopCards().get(i).size() == 0) {
-                    System.out.println("No cards in " + i + "° slot");
+                    System.out.println("No cards in " + (i+1) + "° slot");
                 } else {
                     LocalProduction localProduction = localPlayer.getLocalBoard().getDevelopCards().get(i).get(localPlayer.getLocalBoard().getDevelopCards().get(i).size() - 1).getProduction();
                     System.out.print((i + 1) + "° production slot: res to give: " + localProduction.getResToGive());
@@ -96,7 +96,7 @@ public class BoardView extends GameView {
                         LocalProductionLeader localProductionLeader = (LocalProductionLeader) c;
                         System.out.print("ProductionLeader");
                         System.out.print(", prod requirement: " + localProductionLeader.getColorRequirement() + " at level " + localProductionLeader.getLevelReq());
-                        System.out.print(", production: " + localProductionLeader.getProduction().getResToGive() +" -> "+localProductionLeader.getProduction().getResToGain());
+                        System.out.print(", production: " + localProductionLeader.getProduction().getResToGive() +" -> "+localProductionLeader.getProduction().getResToGain()+", res to flush: "+localProductionLeader.getProduction().getResToFlush());
                     }
                     if (localLeaderCard.isDiscarded()){
                         System.out.print(", this card is discarded");
@@ -195,9 +195,9 @@ public class BoardView extends GameView {
             if (number == 0) {
                 removeObserved();
                 ui.setState(new ActivateProductionView(ui, localGame, 0));
-            } else if (number > 1 && number < 4) {
+            } else if (number > 0 && number < 4) {
                 if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
-                    writeErrText(); // there are no develop cards in this slot
+                    System.out.println("There are no cards in this slot!");// there are no develop cards in this slot
                 } else {
                     removeObserved();
                     ui.setState(new ActivateProductionView(ui, localGame, number));
