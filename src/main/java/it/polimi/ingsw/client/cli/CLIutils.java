@@ -75,4 +75,17 @@ public class CLIutils {
         System.out.println("2. Leader depot");
         System.out.println("3. Strongbox");
     }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        System.out.print(CLIutils.BLACK_BACKGROUND + CLIutils.ANSI_WHITE);
+    }
+
+    public static void printBlock(ArrayList<String> out) {
+        for (String o : out) {
+            System.out.println(o);
+        }
+    }
+
 }
