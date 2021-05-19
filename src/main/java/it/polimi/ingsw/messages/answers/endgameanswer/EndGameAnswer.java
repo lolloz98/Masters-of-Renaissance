@@ -5,7 +5,7 @@ import it.polimi.ingsw.messages.answers.Answer;
 
 import java.util.ArrayList;
 
-//todo
+
 public class EndGameAnswer extends Answer {
     /**
      * list of winners: if null it means that Lorenzo is the winner
