@@ -245,19 +245,20 @@ public final class ConverterToLocalModel {
 
     public static LocalGameState getGameState(MultiPlayer game){
         for(Player i: game.getPlayers()){
+        if(i.getBoard().getLeaderCards().size() != 2) return LocalGameState.PREP_LEADERS;
+    }
+        for(Player i: game.getPlayers()){
             if(i.getBoard().getInitialRes() != 0) return LocalGameState.PREP_RESOURCES;
         }
-        for(Player i: game.getPlayers()){
-            if(i.getBoard().getLeaderCards().size() != 2) return LocalGameState.PREP_LEADERS;
-        }
+
         // todo: check that the condition for gameOver is right
         if(game.isGameOver()) return LocalGameState.OVER;
         return LocalGameState.READY;
     }
 
     public static LocalGameState getGameState(SinglePlayer game){
-        if(game.getPlayer().getBoard().getInitialRes() != 0) return LocalGameState.PREP_RESOURCES; // It should never happen
         if(game.getPlayer().getBoard().getLeaderCards().size() != 2) return LocalGameState.PREP_LEADERS;
+        if(game.getPlayer().getBoard().getInitialRes() != 0) return LocalGameState.PREP_RESOURCES;
         if(game.isGameOver()) return LocalGameState.OVER;
         return LocalGameState.READY;
     }

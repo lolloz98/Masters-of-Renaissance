@@ -62,7 +62,7 @@ public class GameStatusMessageControllerTest {
     public void doAction() throws ControllerException {
         gameId = MessageControllerTestHelper.doToPrepStateMulti();
         ca = MessageControllerTestHelper.getMulti(gameId);
-        checkMulti(LocalGameState.PREP_RESOURCES);
+        checkMulti(LocalGameState.PREP_LEADERS);
 
         gameId = MessageControllerTestHelper.toReadyMulti();
         ca = MessageControllerTestHelper.getMulti(gameId);

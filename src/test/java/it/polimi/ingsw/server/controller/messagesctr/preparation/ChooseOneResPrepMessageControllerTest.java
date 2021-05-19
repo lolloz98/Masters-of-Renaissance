@@ -64,7 +64,7 @@ public class ChooseOneResPrepMessageControllerTest {
         assertEquals(p.getBoard().getResInDepot(0), new TreeMap<>(){{
             put(Resource.GOLD, 1);
         }});
-        assertEquals(answer.getState(), LocalGameState.PREP_RESOURCES);
+        assertEquals(answer.getState(), LocalGameState.PREP_LEADERS);
         assertEquals(answer.getRes(), Resource.GOLD);
     }
 

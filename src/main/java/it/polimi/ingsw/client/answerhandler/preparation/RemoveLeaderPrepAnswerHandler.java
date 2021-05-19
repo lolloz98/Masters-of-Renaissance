@@ -28,7 +28,7 @@ public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
                 }
             }
             localGame.getMainPlayer().getLocalBoard().getLeaderCards().removeAll(localCardsToRemove);
-            localGame.notifyObserver();
+
         }
         else {
             // if the player id received is not the mainplayer, this must be a multiplayer, i remove two covered cards from the player
@@ -40,9 +40,13 @@ public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
                 logger.error("Answer with wrong player id");
             }
         }
+
         if(localGame.getState()!=removeLeaderPrepAnswer.getState()) {
             localGame.setState(removeLeaderPrepAnswer.getState());
-            localGame.notifyObserver();
         }
+
+        //notify observers
+        localGame.notifyObserver();
+        localGame.getPlayerById(removeLeaderPrepAnswer.getPlayerId()).getLocalBoard().notifyObserver();
     }
 }
