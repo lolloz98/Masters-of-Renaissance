@@ -25,7 +25,6 @@ public class LocalBoard extends Observable implements Serializable {
      * @param updatedLeaders array list of updated leaders
      */
     public void updateLeaderDepots(ArrayList<LocalDepotLeader> updatedLeaders) {
-
         for (LocalCard localLeader : leaderCards) {
             for (LocalDepotLeader updated : updatedLeaders) {
                 if (localLeader.getId() == updated.getId()) {
@@ -34,7 +33,6 @@ public class LocalBoard extends Observable implements Serializable {
                 }
             }
         }
-        notifyObserver();
     }
 
     public synchronized ArrayList<ArrayList<LocalDevelopCard>> getDevelopCards() {
