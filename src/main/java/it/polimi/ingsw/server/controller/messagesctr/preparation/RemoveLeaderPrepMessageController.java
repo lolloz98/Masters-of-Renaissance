@@ -32,6 +32,9 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController i
         Board board = getPlayerFromId(controllerActions).getBoard();
         ArrayList<Integer> toRemove = ((RemoveLeaderPrepMessage) getClientMessage()).getLeadersToRemove();
 
+        if(board.getLeaderCards().size() != 4)
+            throw new InvalidActionControllerException("Wrong action: it seems like you have already removed two leaders!");
+
         if (toRemove.size() != 2)
             throw new InvalidActionControllerException("Wrong quantity of leader chosen: you should choose just two leaders");
 

@@ -82,7 +82,7 @@ public class RemoveLeaderPrepMessageControllerTest {
         try {
             removeLeaderPrepMessageController.doAction(ca);
             fail();
-        }catch(LeaderNotRemovedControllerException ignore){}
+        }catch(InvalidActionControllerException ignore){}
 
         // only one leader
         removeLeaderPrepMessageController = new RemoveLeaderPrepMessageController(new RemoveLeaderPrepMessage(gameId, ca.getNumberAndPlayers().getSecond().get(2).getPlayerId(), new ArrayList<>(){{
