@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.answerhandler;
 
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.answers.JoinGameAnswer;
 import junit.framework.TestCase;
@@ -16,15 +17,26 @@ public class JoinGameAnswerHandlerTest extends TestCase {
     }
 
     public void testHandleAnswer() {
-        JoinGameAnswer serverAnswer=new JoinGameAnswer(2, 3,
+        int gameId=2,creatorId=3;
+        String creatorName="tullio";
+        AnswerHandlerTestHelper.doCreateGameMulti(multiPlayer, gameId, creatorId, creatorName);
+
+        JoinGameAnswer serverAnswer=new JoinGameAnswer(2, 4,
                 new ArrayList<>(){{
-            add(2);
-            add(3);
+            add(creatorId);
+            add(4);
         }},
                 new ArrayList<>(){{
-            add("giulio");
+            add(creatorName);
             add("daniele");
         }});
 
+        for(int i=0;i<multiPlayer.getLocalPlayers().size();i++){
+            assertEquals((int)serverAnswer.getPlayerIds().get(i),multiPlayer.getLocalPlayers().get(i).getId());
+            assertEquals(serverAnswer.getPlayerNames().get(i),multiPlayer.getLocalPlayers().get(i).getName());
+        }
+
+        assertEquals(2, multiPlayer.getGameId());
+        assertEquals(LocalGameState.WAITINGPLAYERS,multiPlayer.getState());
     }
 }
