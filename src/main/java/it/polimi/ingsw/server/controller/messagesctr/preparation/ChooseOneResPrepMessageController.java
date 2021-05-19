@@ -47,6 +47,10 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
             // once we add initResource to the depot, we diminish the counter
             board.setInitialRes(initRes - 1);
 
+            // logger.debug("Checking game state");
+            if (controllerActions.checkToGamePlayState())
+                controllerActions.toGamePlayState();
+
             return AnswerFactory.createChooseOneResPrepAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), ((ChooseOneResPrepMessage) getClientMessage()).getRes(), controllerActions.getGame());
         } catch (InvalidTypeOfResourceToDepotException | InvalidArgumentException | InvalidResourcesToKeepByPlayerException | InvalidResourceQuantityToDepotException | DifferentResourceForDepotException e) {
             throw new InvalidArgumentControllerException("Invalid argument: " + e.getMessage());

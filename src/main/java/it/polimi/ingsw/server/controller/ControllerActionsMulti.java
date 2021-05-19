@@ -52,6 +52,7 @@ public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
             if(!(board.getInitialRes()==0) || board.getLeaderCards().size()!=2)
                 return false;
         }
+        logger.debug("switching to status: gamePlay");
         return true;
     }
 
