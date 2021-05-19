@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CLI extends UI {
@@ -44,7 +43,7 @@ public class CLI extends UI {
     }
 
     void setup() {
-        clearScreen();
+        CLIutils.clearScreen();
         boolean valid;
         System.out.println("Welcome to Masters of Renaissance");
         do {
@@ -116,18 +115,6 @@ public class CLI extends UI {
     protected void joinGame() {
         super.joinGame();
         state = new JoinGameView(this, (LocalMulti) localGame);
-    }
-
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        System.out.print(CLIutils.BLACK_BACKGROUND + CLIutils.ANSI_WHITE);
-    }
-
-    public static void print(ArrayList<String> out) {
-        for (String o : out) {
-            System.out.println(o);
-        }
     }
 
     protected void choseNumberOfPlayers() {

@@ -1,10 +1,11 @@
 package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
+import it.polimi.ingsw.client.cli.states.printers.MarketPrinter;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
-import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 
 import java.io.IOException;
@@ -30,32 +31,8 @@ public class MarketView extends GameView {
         if (waiting)
             System.out.println("Please wait");
         else {
-            CLI.clearScreen();
-            ArrayList<String> letters = new ArrayList<>(){{
-                add("A");
-                add("B");
-                add("C");
-            }};
-            System.out.println("Market:");
-            System.out.println();
-            System.out.println("Free marble: " + localMarket.getFreeMarble());
-            System.out.println();
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 4; j++) {
-                    System.out.print(localMarket.getMarbleMatrix()[i][j] + " ");
-                }
-                System.out.print("  " +letters.get(i)+"\r\n");
-            }
-            System.out.println("    1      2      3      4");
-            if (localMarket.getResCombinations().size() > 0) {
-                System.out.println("Resources combinations:");
-                int i = 0;
-                for (TreeMap<Resource, Integer> t : localMarket.getResCombinations()) {
-                    i++;
-                    System.out.println(i + ") " + t);
-                }
-            }
-            System.out.println();
+            CLIutils.clearScreen();
+            CLIutils.printBlock(MarketPrinter.toStringBlock(localMarket));
             super.drawTurn();
         }
     }
@@ -85,10 +62,10 @@ public class MarketView extends GameView {
             } else {
                 switch (ansList.get(0)) {
                     case "PUSH":
-                        push(ansList.get(1));
+                        push(ansList);
                         break;
                     case "FLUSH":
-                        flush(ansList.get(1));
+                        flush(ansList);
                         break;
                     default:
                         super.handleCommand(ansList);
@@ -97,72 +74,78 @@ public class MarketView extends GameView {
         }
     }
 
-    private void push(String s) {
-        boolean onRow = false;
-        int index = -1;
-        switch (s) {
-            case "A":
-                index = 0;
-                onRow = true;
-                break;
-            case "B":
-                index = 1;
-                onRow = true;
-                break;
-            case "C":
-                index = 2;
-                onRow = true;
-                break;
-            case "1":
-                index = 0;
-                onRow = false;
-                break;
-            case "2":
-                index = 1;
-                onRow = false;
-                break;
-            case "3":
-                index = 2;
-                onRow = false;
-                break;
-            case "4":
-                index = 3;
-                onRow = false;
-                break;
-            default:
-                writeErrText();
-        }
-        if (index != -1) {
-            try {
-                ui.getServerListener().sendMessage(new UseMarketMessage(
-                        localGame.getGameId(),
-                        localGame.getMainPlayer().getId(),
-                        onRow,
-                        index
-                ));
-                waiting = true;
-            } catch (IOException e) {
-                e.printStackTrace();
+    private void push(ArrayList<String> ansList) {
+        if (ansList.size() == 2) {
+            String s = ansList.get(1);
+            boolean onRow = false;
+            int index = -1;
+            switch (s) {
+                case "A":
+                    index = 0;
+                    onRow = true;
+                    break;
+                case "B":
+                    index = 1;
+                    onRow = true;
+                    break;
+                case "C":
+                    index = 2;
+                    onRow = true;
+                    break;
+                case "1":
+                    index = 0;
+                    onRow = false;
+                    break;
+                case "2":
+                    index = 1;
+                    onRow = false;
+                    break;
+                case "3":
+                    index = 2;
+                    onRow = false;
+                    break;
+                case "4":
+                    index = 3;
+                    onRow = false;
+                    break;
+                default:
+                    writeErrText();
             }
-        }
+            if (index != -1) {
+                try {
+                    ui.getServerListener().sendMessage(new UseMarketMessage(
+                            localGame.getGameId(),
+                            localGame.getMainPlayer().getId(),
+                            onRow,
+                            index
+                    ));
+                    waiting = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else writeErrText();
     }
 
-    private void flush(String s) {
-        if(localGame.isMainPlayerTurn()) {
-            int number = -1;
-            try {
-                number = Integer.parseInt(s);
-            } catch (NumberFormatException e) {
-                writeErrText();
-            }
-            if (number >= 0 && number < localMarket.getResCombinations().size() + 1) {
-                removeObserved();
-                ui.setState(new FlushMarketCombinationView(ui, localGame, new TreeMap<>(localMarket.getResCombinations().get(number - 1))));
+    private void flush(ArrayList<String> ansList) {
+        if (ansList.size() == 2) {
+            String ans1 = ansList.get(1);
+            if (localGame.isMainPlayerTurn()) {
+                int number = -1;
+                try {
+                    number = Integer.parseInt(ans1);
+                } catch (NumberFormatException e) {
+                    writeErrText();
+                }
+                if (number >= 0 && number < localMarket.getResCombinations().size() + 1) {
+                    removeObserved();
+                    ui.setState(new FlushMarketCombinationView(ui, localGame, new TreeMap<>(localMarket.getResCombinations().get(number - 1))));
+                } else {
+                    writeErrText();
+                }
             } else {
-                writeErrText();
+                System.out.println("It's not your turn!");
             }
-        } else {
-            System.out.println("It's not your turn!");
-        }
+        } else writeErrText();
     }
 }
