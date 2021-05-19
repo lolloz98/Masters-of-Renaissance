@@ -42,7 +42,8 @@ public class BoardPrinter {
         out.add("Leader cards:");
         for (LocalCard c : localPlayer.getLocalBoard().getLeaderCards()) {
             if (c instanceof LocalConcealedCard) {
-                out.add("This card is not activated yet");
+                if(((LocalConcealedCard) c).isDiscarded()) out.add("This card has been discarded");
+                else out.add("This card is not activated yet");
             } else {
                 LocalLeaderCard localLeaderCard = (LocalLeaderCard) c;
                 if (c instanceof LocalDiscountLeader) {
