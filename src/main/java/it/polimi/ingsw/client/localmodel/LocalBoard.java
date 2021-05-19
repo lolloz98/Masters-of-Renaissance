@@ -35,6 +35,19 @@ public class LocalBoard extends Observable implements Serializable {
         }
     }
 
+    /**
+     * empties the gained resources in all productions
+     */
+    public void flushFromProductions(){
+        baseProduction.setResToFlush(new TreeMap<>());
+        for(ArrayList<LocalDevelopCard> ad: developCards){
+            for(LocalDevelopCard d: ad) d.getProduction().setResToFlush(new TreeMap<>());
+        }
+        for(LocalCard l: leaderCards){
+            if(l instanceof LocalDevelopCard) ((LocalDevelopCard) l).getProduction().setResToFlush(new TreeMap<>());
+        }
+    }
+
     public synchronized ArrayList<ArrayList<LocalDevelopCard>> getDevelopCards() {
         return developCards;
     }

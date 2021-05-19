@@ -23,9 +23,14 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
         //update faith tracks
         localGame.updatePlayerFaithTracks(serverAnswer.getLocalTracks());
 
-        //update strongbox
         localBoard=localGame.getPlayerById(serverAnswer.getPlayerId()).getLocalBoard();
+
+        // update strongbox
         localBoard.setResInStrongBox(serverAnswer.getResInStrongbox());
+
+        // update productions
+        localBoard.flushFromProductions();
+
         localBoard.notifyObserver();
 
     }
