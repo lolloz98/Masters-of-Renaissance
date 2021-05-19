@@ -2,18 +2,21 @@ package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.GameView;
-import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
-import it.polimi.ingsw.client.localmodel.LocalProduction;
-import it.polimi.ingsw.client.localmodel.LocalSingle;
+import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
+import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.client.localmodel.localcards.*;
 import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
+import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BoardView extends GameView {
+    /**
+     * the player to which belongs the board i'm showing
+     */
     private final LocalPlayer localPlayer;
 
     public BoardView(CLI cli, LocalGame<?> localGame, LocalPlayer localPlayer) {
@@ -59,7 +62,7 @@ public class BoardView extends GameView {
             int i;
             for (i = 0; i < 3; i++) {
                 if (localPlayer.getLocalBoard().getDevelopCards().get(i).size() == 0) {
-                    System.out.println("No cards in " + (i+1) + "° slot");
+                    System.out.println("No cards in " + (i + 1) + "° slot");
                 } else {
                     LocalProduction localProduction = localPlayer.getLocalBoard().getDevelopCards().get(i).get(localPlayer.getLocalBoard().getDevelopCards().get(i).size() - 1).getProduction();
                     System.out.print((i + 1) + "° production slot: res to give: " + localProduction.getResToGive());
@@ -96,12 +99,11 @@ public class BoardView extends GameView {
                         LocalProductionLeader localProductionLeader = (LocalProductionLeader) c;
                         System.out.print("ProductionLeader");
                         System.out.print(", prod requirement: " + localProductionLeader.getColorRequirement() + " at level " + localProductionLeader.getLevelReq());
-                        System.out.print(", production: " + localProductionLeader.getProduction().getResToGive() +" -> "+localProductionLeader.getProduction().getResToGain()+", res to flush: "+localProductionLeader.getProduction().getResToFlush());
+                        System.out.print(", production: " + localProductionLeader.getProduction().getResToGive() + " -> " + localProductionLeader.getProduction().getResToGain() + ", res to flush: " + localProductionLeader.getProduction().getResToFlush());
                     }
-                    if (localLeaderCard.isDiscarded()){
+                    if (localLeaderCard.isDiscarded()) {
                         System.out.print(", this card is discarded");
-                    }
-                    else if (localLeaderCard.isActive()) {
+                    } else if (localLeaderCard.isActive()) {
                         System.out.print(", this card is active");
                     } else {
                         System.out.print(", this card is not active");
@@ -123,24 +125,13 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public synchronized void notifyUpdate() {
-        draw();
-        waiting = false;
-    }
-
-    @Override
     public synchronized void helpScreen() {
         super.helpScreen();
         System.out.println("'leader', followed by a number, to activate a leader card");
-        System.out.println("'prod', followed by a number, to activate a production");
+        System.out.println("'discard', followed by a number, to discard a leader card");
+        System.out.println("'develop', followed by a number, to activate a production");
         System.out.println("'flush', to move all the resources currently in a production to the strongbox");
         System.out.println("");
-    }
-
-    @Override
-    public synchronized void notifyError() {
-        System.out.println(localGame.getError().getErrorMessage());
-        waiting = false;
     }
 
     @Override
@@ -156,7 +147,10 @@ public class BoardView extends GameView {
                         case "LEADER":
                             activateLeader(ansList.get(1));
                             break;
-                        case "PROD":
+                        case "DISCARD":
+                            discardLeader(ansList.get(1));
+                            break;
+                        case "DEVELOP":
                             activateProduction(ansList.get(1));
                             break;
                         case "FLUSH":
@@ -176,41 +170,76 @@ public class BoardView extends GameView {
         }
     }
 
+    private void discardLeader(String leaderString) {
+        if (localPlayer == localGame.getMainPlayer()) {
+            int leaderNumber = 0;
+            try {
+                leaderNumber = Integer.parseInt(leaderString);
+            } catch (NumberFormatException e) {
+                writeErrText();
+            }
+            if (leaderNumber > 0 && leaderNumber < localPlayer.getLocalBoard().getLeaderCards().size()) {
+                try {
+                    ui.getServerListener().sendMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
+                    waiting = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                writeErrText();
+            }
+        } else {
+            System.out.println("You can only do this on your board!");
+        }
+    }
+
     private void flushProduction() {
-        try {
-            ui.getServerListener().sendMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (localGame.isMainPlayerTurn()) {
+            try {
+                ui.getServerListener().sendMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("You can only do this on your board!");
         }
     }
 
     private void activateProduction(String s) {
-        if(localGame.isMainPlayerTurn()) {
-            int number = -1;
-            try {
-                number = Integer.parseInt(s);
-            } catch (NumberFormatException e) {
-                writeErrText();
-            }
-            if (number >= 0 && number < 6) {
-                if (number == 0) {
-                    removeObserved();
-                    ui.setState(new ActivateProductionView(ui, localGame, 0));
-                } else if (number > 0 && number < 4) {
-                    if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
-                        System.out.println("There are no cards in this slot!");// there are no develop cards in this slot
-                    } else {
-                        removeObserved();
-                        ui.setState(new ActivateProductionView(ui, localGame, number));
+        if (localGame.isMainPlayerTurn()) {
+            if (localPlayer == localGame.getMainPlayer()) {
+                int number = -1;
+                try {
+                    number = Integer.parseInt(s);
+                    if (number >= 0 && number < 6) {
+                        if (number == 0) {
+                            removeObserved();
+                            ui.setState(new ActivateProductionView(ui, localGame, 0));
+                        } else if (number > 0 && number < 4) {
+                            if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
+                                System.out.println("There are no cards in this slot!");// there are no develop cards in this slot
+                            } else {
+                                removeObserved();
+                                ui.setState(new ActivateProductionView(ui, localGame, number));
+                            }
+                        } else { // activating a leader production
+                            if (!((LocalLeaderCard) localPlayer.getLocalBoard().getLeaderCards().get(number - 4)).isDiscarded() && ((LocalLeaderCard) localPlayer.getLocalBoard().getLeaderCards().get(number - 4)).isActive()) {
+                                if ((number - 4) < localPlayer.getLocalBoard().getLeaderCards().size() || !(localPlayer.getLocalBoard().getLeaderCards().get(number - 4) instanceof LocalProductionLeader)) {
+                                    writeErrText();
+                                } else {
+                                    removeObserved();
+                                    ui.setState(new ActivateProductionView(ui, localGame, number));
+                                }
+                            } else {
+                                System.out.println("This leader card is not active");
+                            }
+                        }
                     }
-                } else {
-                    if ((number - 4) < localPlayer.getLocalBoard().getLeaderCards().size() || !(localPlayer.getLocalBoard().getLeaderCards().get(number - 4) instanceof LocalProductionLeader)) {
-                        writeErrText();
-                    } else {
-                        removeObserved();
-                        ui.setState(new ActivateProductionView(ui, localGame, number));
-                    }
+                } catch (NumberFormatException e) {
+                    writeErrText();
                 }
+            } else {
+                System.out.println("You can only do this on your board!");
             }
         } else {
             System.out.println("It's not your turn!");
@@ -218,20 +247,23 @@ public class BoardView extends GameView {
     }
 
     private void activateLeader(String s) {
-        int number = 0;
-        try {
-            number = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            writeErrText();
-        }
-        if (number > 0 && number < localPlayer.getLocalBoard().getLeaderCards().size()) {
+        if (localPlayer == localGame.getMainPlayer()) {
+            int number = 0;
             try {
-                ui.getServerListener().sendMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
-                waiting = true;
-            } catch (IOException e) {
-                e.printStackTrace();
+                number = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                writeErrText();
             }
+            if (number > 0 && number < localPlayer.getLocalBoard().getLeaderCards().size()) {
+                try {
+                    ui.getServerListener().sendMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
+                    waiting = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            System.out.println("You can only do this on your board!");
         }
-        waiting = true;
     }
 }

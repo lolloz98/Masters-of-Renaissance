@@ -4,8 +4,6 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
-import it.polimi.ingsw.client.localmodel.LocalMulti;
-import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 
@@ -70,23 +68,11 @@ public class MarketView extends GameView {
     }
 
     @Override
-    public synchronized void notifyUpdate() {
-        draw();
-        waiting = false;
-    }
-
-    @Override
     public synchronized void helpScreen() {
         super.helpScreen();
         System.out.println("'push', followed by a number or a letter indicating where to push the free marble, to use the market");
         System.out.println("'flush', followed by the number of the combination to pick, to move the resources to the board");
         System.out.println("");
-    }
-
-    @Override
-    public synchronized void notifyError() {
-        System.out.println(localGame.getError().getErrorMessage());
-        waiting = false;
     }
 
     @Override

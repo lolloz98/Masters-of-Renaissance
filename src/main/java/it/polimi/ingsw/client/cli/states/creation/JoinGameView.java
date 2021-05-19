@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResSecondView;
@@ -40,7 +41,7 @@ public class JoinGameView extends View<CLI> {
                     valid = false;
                     e.printStackTrace();
                 }
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.println("Invalid id, try again:");
                 valid = false;
             }
@@ -48,18 +49,12 @@ public class JoinGameView extends View<CLI> {
     }
 
     @Override
-    public synchronized void notifyUpdate() { // todo as in newgameview
-        if (localMulti.getState() == LocalGameState.PREP_RESOURCES) {
-            ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
-            LocalPlayer mainPlayer = null;
-            for (LocalPlayer p : localPlayers) {
-                if (p.getId() == localMulti.getMainPlayerId()) mainPlayer = p;
-            }
-            if (mainPlayer == null) {
-                System.out.println("There was an error creating the game");// fixme
-            } else {
-                localMulti.removeObserver();
-                localMulti.getError().removeObserver();
+    public synchronized void notifyUpdate() {
+        if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
+            localMulti.removeObserver();
+            localMulti.getError().removeObserver();
+            ui.setState(new PrepLeaderView(ui, localMulti));
+                /*
                 switch (localMulti.getMainPlayerPosition()) {
                     case 0:
                         ui.setState(new PrepResFirstView(ui, localMulti));
@@ -72,10 +67,11 @@ public class JoinGameView extends View<CLI> {
                         ui.setState(new PrepResFourthView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard()));
                         break;
                 }
-                ui.getState().draw();
-            }
+                */
+            ui.getState().draw();
         } else draw();
     }
+
 
     @Override
     public synchronized void notifyError() {

@@ -4,10 +4,7 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.playing.DevelopmentGridView;
 import it.polimi.ingsw.client.cli.states.playing.MarketView;
-import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalMulti;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
-import it.polimi.ingsw.client.localmodel.LocalSingle;
+import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 
 import java.io.IOException;
@@ -21,7 +18,24 @@ public abstract class GameView extends View<CLI> {
 
     public abstract void removeObserved();
 
-    public abstract void notifyUpdate();
+    @Override
+    public synchronized void notifyUpdate() {
+        if(localGame.getState() == LocalGameState.OVER) goToWinnerScreen();
+        else {
+            draw();
+            waiting = false;
+        }
+    }
+
+    private void goToWinnerScreen() {
+        // todo
+    }
+
+    @Override
+    public void notifyError() {
+        System.out.println(localGame.getError().getErrorMessage());
+        waiting = false;
+    }
 
     public void handleCommand(ArrayList<String> ansList) {
         int ansNumber;
@@ -37,7 +51,7 @@ public abstract class GameView extends View<CLI> {
             case "MARKET":
                 moveToMarket(ansNumber);
                 break;
-            case "DEVELOP":
+            case "DECKS":
                 moveToDevelop(ansNumber);
                 break;
             case "HELP":
@@ -123,7 +137,7 @@ public abstract class GameView extends View<CLI> {
     public void helpScreen() {
         System.out.println("You can type:");
         System.out.println("'market' to look at the market");
-        System.out.println("'develop' to look at the development decks");
+        System.out.println("'decks' to look at the development decks");
         System.out.println("'board', followed by a number, to see the corresponding board");
         System.out.println("'next' to end your turn");
     }

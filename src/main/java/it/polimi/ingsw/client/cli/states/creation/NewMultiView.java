@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResSecondView;
@@ -46,16 +47,10 @@ public class NewMultiView extends View<CLI> {
 
     @Override
     public synchronized void notifyUpdate(){
-        if(localMulti.getState() == LocalGameState.PREP_RESOURCES){
+        if(localMulti.getState() == LocalGameState.PREP_LEADERS){
             localMulti.removeObserver();
             localMulti.getError().removeObserver();
-            switch(localMulti.getMainPlayerPosition()){
-                case 0: ui.setState(new PrepResFirstView(ui, localMulti)); break;
-                case 1:
-                case 2:
-                    ui.setState(new PrepResSecondView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-                case 3: ui.setState(new PrepResFourthView(ui, localMulti, localMulti.getMainPlayer().getLocalBoard())); break;
-            }
+            ui.setState(new PrepLeaderView(ui, localMulti));
             ui.getState().draw();
         }
         else draw();

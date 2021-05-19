@@ -59,21 +59,9 @@ public class DevelopmentGridView extends GameView {
     }
 
     @Override
-    public void notifyUpdate() {
-        draw();
-        waiting = false;
-    }
-
-    @Override
     public void helpScreen() {
         super.helpScreen();
         System.out.println("'buy', followed by a card coordinate, followed by a number that indicates in which slot in the board to put it, to buy a development card (for example: 'buy a1 2')");
-    }
-
-    @Override
-    public void notifyError() {
-        System.out.println(localGame.getError().getErrorMessage());
-        waiting = false;
     }
 
     @Override

@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.cli.states.preparation;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
@@ -26,11 +27,11 @@ public class PrepResSecondView extends View<CLI> {
 
     @Override
     public void notifyUpdate() {
-        if(localMulti.getState() == LocalGameState.PREP_LEADERS){
+        if(localMulti.getState() == LocalGameState.READY){
             localMulti.removeObserver();
             localBoard.removeObserver();
             localMulti.getError().removeObserver();
-            ui.setState(new PrepLeaderView(ui, localMulti));
+            ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
             ui.getState().draw();
         }
     }
