@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
+import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.preparationanswer.RemoveLeaderPrepAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,18 +21,17 @@ public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
         RemoveLeaderPrepAnswer removeLeaderPrepAnswer = (RemoveLeaderPrepAnswer) getAnswer();
-        if(localGame.getMainPlayer().getId() == removeLeaderPrepAnswer.getPlayerId()) {
+        if (localGame.getMainPlayer().getId() == removeLeaderPrepAnswer.getPlayerId()) {
             ArrayList<LocalCard> localCardsToRemove = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                if (removeLeaderPrepAnswer.getRemovedLeaderIds().contains(localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(i).getId())) {
-                    localCardsToRemove.add(localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(i));
+            for (LocalCard card : localGame.getMainPlayer().getLocalBoard().getLeaderCards()) {
+                if (removeLeaderPrepAnswer.getRemovedLeaderIds().contains(card.getId())) {
+                    localCardsToRemove.add(card);
                 }
             }
             localGame.getMainPlayer().getLocalBoard().getLeaderCards().removeAll(localCardsToRemove);
 
-        }
-        else {
-            // if the player id received is not the mainplayer, this must be a multiplayer, i remove two covered cards from the player
+        } else {
+            // if the player id received is not the mainPlayer, this must be a multiplayer, i remove two covered cards from the player
             if (localGame instanceof LocalMulti) {
                 LocalMulti localMulti = (LocalMulti) localGame;
                 localMulti.getPlayerById(removeLeaderPrepAnswer.getPlayerId()).getLocalBoard().getLeaderCards().remove(0);
@@ -41,7 +41,7 @@ public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
             }
         }
 
-        if(localGame.getState()!=removeLeaderPrepAnswer.getState()) {
+        if (localGame.getState() != removeLeaderPrepAnswer.getState()) {
             localGame.setState(removeLeaderPrepAnswer.getState());
         }
 

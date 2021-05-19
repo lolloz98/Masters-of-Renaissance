@@ -1,6 +1,9 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.client.localmodel.localcards.LocalConcealedCard;
+import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
+import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
 import it.polimi.ingsw.messages.answers.preparationanswer.ChooseOneResPrepAnswer;
 import it.polimi.ingsw.messages.answers.preparationanswer.RemoveLeaderPrepAnswer;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
@@ -25,5 +28,13 @@ public final class AnswerFactory {
 
     public static RemoveLeaderPrepAnswer createRemoveLeaderPrepAnswer(int gameId, int playerId, ArrayList<Integer> toRemove, Game<? extends Turn> game) throws UnexpectedControllerException {
         return new RemoveLeaderPrepAnswer(gameId, playerId, toRemove, ConverterToLocalModel.getGameState(game));
+    }
+
+    public static RemoveLeaderPrepAnswer createConcealedRemoveLeaderPrepAnswer(RemoveLeaderPrepAnswer answer) {
+        return new RemoveLeaderPrepAnswer(answer.getGameId(), answer.getPlayerId(), new ArrayList<>(){{add(0); add(0);}}, answer.getState());
+    }
+
+    public static DiscardLeaderAnswer createConcealedDiscardLeaderAnswer(DiscardLeaderAnswer answer) {
+        return new DiscardLeaderAnswer(answer.getGameId(), answer.getPlayerId(), new LocalConcealedCard(true), answer.getLocalTracks(), answer.getLorenzoTrack());
     }
 }

@@ -3,6 +3,8 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.endgameanswer.DestroyedGameAnswer;
+import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
+import it.polimi.ingsw.messages.answers.preparationanswer.RemoveLeaderPrepAnswer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
@@ -18,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * class that handles the actions of the players and calls the methods of the model
@@ -78,7 +81,6 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
      *
      * @param clientMessage request
      * @param answerListener answerListener related to the player sending the request
-     * @throws ControllerException if something not wanted happens
      */
     public synchronized void doPreGameAction(PreGameCreationMessageController clientMessage, AnswerListener answerListener) throws ControllerException {
         Answer answer = clientMessage.doAction(this);
@@ -88,6 +90,29 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
             sendGameStatusToAll(answer.getGameId(), answer.getPlayerId());
         } else{
             sendAnswer(answer);
+        }
+    }
+
+    /**
+     * Do a discardLeader or removeLeader action.
+     * @param parsedMessage request
+     */
+    public void doDiscardOrRemoveLeader(ClientMessageController parsedMessage) throws ControllerException {
+        Answer answer = parsedMessage.doAction(this);
+        Answer answer2;
+
+        if(answer instanceof RemoveLeaderPrepAnswer){
+            answer2 = AnswerFactory.createConcealedRemoveLeaderPrepAnswer((RemoveLeaderPrepAnswer) answer);
+        }else if(answer instanceof DiscardLeaderAnswer){
+            answer2 = AnswerFactory.createConcealedDiscardLeaderAnswer((DiscardLeaderAnswer) answer);
+        }else{
+            logger.error("The answer to a " + parsedMessage.getClass().getSimpleName() + " is neither DiscardLeaderAnswer nor RemoveLeaderPrepAnswer");
+            throw new UnexpectedControllerException("Something unexpected happened while prepararing the answer to your request");
+        }
+
+        for(AnswerListener answerListener: listeners){
+            if(answerListener.getPlayerId() == answer.getPlayerId()) answerListener.sendAnswer(answer);
+            else answerListener.sendAnswer(answer2);
         }
     }
 
@@ -160,5 +185,4 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
 
         listeners.clear();
     }
-
 }

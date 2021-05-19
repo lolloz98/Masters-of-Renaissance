@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.playing.ConcealedLeaderMessageInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +64,11 @@ public class ClientHandler implements Runnable {
             } else if(parsedMessage instanceof GameStatusMessageController){
                 controllerManager.getControllerFromMap(((GameStatusMessageController) parsedMessage).getClientMessage().getGameId())
                         .doGetStatusAction((GameStatusMessageController) parsedMessage);
-            } else if (parsedMessage instanceof ClientMessageController) {
+            } else if(parsedMessage instanceof ClientMessageController && parsedMessage instanceof ConcealedLeaderMessageInterface){
+                controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
+                        .doDiscardOrRemoveLeader((ClientMessageController) parsedMessage);
+            }
+            else if (parsedMessage instanceof ClientMessageController) {
                 controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
                         .doAction((ClientMessageController) parsedMessage);
 

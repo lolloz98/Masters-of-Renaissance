@@ -77,7 +77,8 @@ public class BoardView extends GameView {
             System.out.println("Leader cards:");
             for (LocalCard c : localPlayer.getLocalBoard().getLeaderCards()) {
                 if (c instanceof LocalConcealedCard) {
-                    System.out.print("This card is not activated yet");
+                    if(((LocalConcealedCard) c).isDiscarded()) System.out.print("This card has been discarded");
+                    else System.out.print("This card is not activated yet");
                 } else {
                     LocalLeaderCard localLeaderCard = (LocalLeaderCard) c;
                     if (c instanceof LocalDiscountLeader) {

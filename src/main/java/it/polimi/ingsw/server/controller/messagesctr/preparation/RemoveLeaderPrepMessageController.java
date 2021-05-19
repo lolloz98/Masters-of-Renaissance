@@ -9,6 +9,8 @@ import it.polimi.ingsw.server.controller.exception.InvalidActionControllerExcept
 import it.polimi.ingsw.server.controller.exception.LeaderNotRemovedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.State;
+import it.polimi.ingsw.server.controller.messagesctr.playing.ConcealedLeaderMessageInterface;
+import it.polimi.ingsw.server.controller.messagesctr.playing.PlayingMessageController;
 import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
-public class RemoveLeaderPrepMessageController extends ClientMessageController {
+public class RemoveLeaderPrepMessageController extends ClientMessageController implements ConcealedLeaderMessageInterface {
     private static final long serialVersionUID = 209L;
 
     private static final Logger logger = LogManager.getLogger(RemoveLeaderPrepMessageController.class);

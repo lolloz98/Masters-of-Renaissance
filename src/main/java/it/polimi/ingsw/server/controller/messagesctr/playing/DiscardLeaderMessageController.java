@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
-public class DiscardLeaderMessageController extends PlayingMessageController {
+public class DiscardLeaderMessageController extends PlayingMessageController implements ConcealedLeaderMessageInterface {
 
     private static final Logger logger = LogManager.getLogger(DiscardLeaderMessageController.class);
 
