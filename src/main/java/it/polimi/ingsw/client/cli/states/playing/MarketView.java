@@ -24,6 +24,7 @@ public class MarketView extends GameView {
         localMarket.addObserver(this);
         localGame.getError().addObserver(this);
         localGame.getLocalTurn().addObserver(this);
+        localGame.addObserver(this);
     }
 
     @Override
@@ -42,13 +43,14 @@ public class MarketView extends GameView {
         localGame.getError().removeObserver();
         localMarket.removeObserver();
         localGame.getLocalTurn().removeObserver();
+        localGame.removeObserver();
     }
 
     @Override
     public synchronized void helpScreen() {
         super.helpScreen();
-        System.out.println("'push', followed by a number or a letter indicating where to push the free marble, to use the market");
-        System.out.println("'flush', followed by the number of the combination to pick, to move the resources to the board");
+        System.out.println("'pm', followed by a number or a letter indicating where to push the free marble, to use the market");
+        System.out.println("'fm', followed by the number of the combination to pick, to flush the resources to the board");
         System.out.println("");
     }
 
@@ -57,19 +59,15 @@ public class MarketView extends GameView {
         if (!waiting) {
             String ans = s.toUpperCase();
             ArrayList<String> ansList = new ArrayList<>(Arrays.asList(ans.split("\\s+")));
-            if (ansList.size() > 2) {
-                writeErrText();
-            } else {
-                switch (ansList.get(0)) {
-                    case "PUSH":
-                        push(ansList);
-                        break;
-                    case "FLUSH":
-                        flush(ansList);
-                        break;
-                    default:
-                        super.handleCommand(ansList);
-                }
+            switch (ansList.get(0)) {
+                case "PM": // PUSH MARBLE
+                    push(ansList);
+                    break;
+                case "FM": // FLUSH MARKET
+                    flush(ansList);
+                    break;
+                default:
+                    super.handleCommand(ansList);
             }
         }
     }

@@ -28,17 +28,8 @@ public class BoardView extends GameView {
         localGame.getError().addObserver(this);
         localPlayer.getLocalBoard().addObserver(this);
         localGame.getLocalTurn().addObserver(this);
+        localGame.addObserver(this);
         waiting = false;
-    }
-
-    public BoardView(CLI cli, LocalGame<?> localGame, LocalPlayer localPlayer, boolean waiting) {
-        this.localGame = localGame;
-        this.ui = cli;
-        this.localPlayer = localPlayer;
-        localGame.getError().addObserver(this);
-        localPlayer.getLocalBoard().addObserver(this);
-        localGame.getLocalTurn().addObserver(this);
-        this.waiting = waiting;
     }
 
     @Override
@@ -59,15 +50,16 @@ public class BoardView extends GameView {
         localGame.getError().removeObserver();
         localPlayer.getLocalBoard().removeObserver();
         localGame.getLocalTurn().removeObserver();
+        localGame.removeObserver();
     }
 
     @Override
     public synchronized void helpScreen() {
         super.helpScreen();
-        System.out.println("'leader', followed by a number, to activate a leader card");
-        System.out.println("'discard', followed by a number, to discard a leader card");
-        System.out.println("'develop', followed by a number, to activate a production");
-        System.out.println("'flush', to move all the resources currently in a production to the strongbox");
+        System.out.println("'al', followed by a number, to activate a leader card");
+        System.out.println("'dl', followed by a number, to discard a leader card");
+        System.out.println("'ad', followed by a number, to activate a production");
+        System.out.println("'fd', to move all the resources currently in a production to the strongbox");
         System.out.println("");
     }
 
@@ -77,32 +69,25 @@ public class BoardView extends GameView {
             String ans = s.toUpperCase();
             ArrayList<String> ansList = new ArrayList<>(Arrays.asList(ans.split("\\s+")));
             if (localPlayer == localGame.getMainPlayer()) {
-                if (ansList.size() > 2) {
-                    writeErrText();
-                } else {
-                    switch (ansList.get(0)) {
-                        case "LEADER":
-                            activateLeader(ansList);
-                            break;
-                        case "DISCARD":
-                            discardLeader(ansList);
-                            break;
-                        case "DEVELOP":
-                            activateProduction(ansList);
-                            break;
-                        case "FLUSH":
-                            flushProduction();
-                            break;
-                        default:
-                            super.handleCommand(ansList);
-                    }
+                switch (ansList.get(0)) { // todo check command lenght in every method
+                    case "AL": // activate leader
+                        activateLeader(ansList);
+                        break;
+                    case "DL": // discard leader
+                        discardLeader(ansList);
+                        break;
+                    case "AD": // activate development
+                        activateProduction(ansList);
+                        break;
+                    case "FP": // flush development
+                        flushProduction();
+                        break;
+                    default:
+                        super.handleCommand(ansList);
                 }
             } else {
-                if (ansList.size() > 2) {
-                    writeErrText();
-                } else {
-                    super.handleCommand(ansList);
-                }
+                super.handleCommand(ansList);
+
             }
         }
     }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
@@ -53,7 +54,7 @@ public class JoinGameView extends View<CLI> {
         if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
             localMulti.removeObserver();
             localMulti.getError().removeObserver();
-            ui.setState(new PrepLeaderView(ui, localMulti));
+            ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
             ui.getState().draw();
         } else draw();
     }

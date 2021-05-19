@@ -38,6 +38,7 @@ public class CLI extends UI {
         while (!gameOver) {
             state.draw();
             ans = input.nextLine();
+            System.out.println(localGame.getState());
             state.handleCommand(ans);
         }
     }

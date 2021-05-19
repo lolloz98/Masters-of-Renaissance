@@ -10,6 +10,7 @@ public class BoardPrinter {
     public static ArrayList<String> toStringBlock(LocalGame localGame, LocalPlayer localPlayer) {
         ArrayList<String> out = new ArrayList<>();
         // todo make this good looking
+        String line;
         out.add(localPlayer.getName() + "'s board:");
         out.add("Resources in depot:" + localPlayer.getLocalBoard().getResInNormalDepot());
         out.add("Resources in box:" + localPlayer.getLocalBoard().getResInStrongBox());
@@ -20,9 +21,9 @@ public class BoardPrinter {
         } else
             out.add("Faith points:" + localPlayer.getLocalBoard().getLocalTrack().getFaithTrackScore());
         // base production
-        out.add("Base production: res to give: " + localPlayer.getLocalBoard().getBaseProduction().getResToGive());
-        out.add(", res to gain: " + localPlayer.getLocalBoard().getBaseProduction().getResToGain());
-        out.add(", res to flush: " + localPlayer.getLocalBoard().getBaseProduction().getResToFlush() + "\n");
+        out.add("Base production: res to give: " + localPlayer.getLocalBoard().getBaseProduction().getResToGive() +
+                ", res to gain: " + localPlayer.getLocalBoard().getBaseProduction().getResToGain() +
+                ", res to flush: " + localPlayer.getLocalBoard().getBaseProduction().getResToFlush());
         int i;
         for (i = 0; i < 3; i++) {
             if (localPlayer.getLocalBoard().getDevelopCards().get(i).size() == 0) {
@@ -40,40 +41,44 @@ public class BoardPrinter {
             }
         }
         out.add("Leader cards:");
+        int count = 1;
         for (LocalCard c : localPlayer.getLocalBoard().getLeaderCards()) {
+            line = count + ". ";
             if (c instanceof LocalConcealedCard) {
-                if(((LocalConcealedCard) c).isDiscarded()) out.add("This card has been discarded");
-                else out.add("This card is not activated yet");
+                if (((LocalConcealedCard) c).isDiscarded()) line = line + ("This card has been discarded");
+                else line = line + ("This card is not activated yet");
             } else {
                 LocalLeaderCard localLeaderCard = (LocalLeaderCard) c;
                 if (c instanceof LocalDiscountLeader) {
                     LocalDiscountLeader localDiscountLeader = (LocalDiscountLeader) c;
-                    out.add("DiscountLeader" +
-                    ", prod requirement: " + localDiscountLeader.getProdRequirement() +
-                    ", discounted res: " + localDiscountLeader.getQuantityToDiscount() + " " + localDiscountLeader.getDiscountedRes());
+                    line = line + ("DiscountLeader" +
+                            ", prod requirement: " + localDiscountLeader.getProdRequirement() +
+                            ", discounted res: " + localDiscountLeader.getQuantityToDiscount() + " " + localDiscountLeader.getDiscountedRes());
                 } else if (c instanceof LocalMarbleLeader) {
                     LocalMarbleLeader localMarbleLeader = (LocalMarbleLeader) c;
-                    out.add("MarbleLeader" +
-                    ", prod requirement: " + localMarbleLeader.getProdRequirement() +
-                    ", marble: " + localMarbleLeader.getMarbleResource());
+                    line = line + ("MarbleLeader" +
+                            ", prod requirement: " + localMarbleLeader.getProdRequirement() +
+                            ", marble: " + localMarbleLeader.getMarbleResource());
                 } else if (c instanceof LocalDepotLeader) {
                     LocalDepotLeader localDepotLeader = (LocalDepotLeader) c;
-                    out.add("DepotLeader" +
-                    ", requirement: " + localDepotLeader.getReqQuantity() + " " + localDepotLeader.getResRequirement() +
-                    ", depot: " + localDepotLeader.getNumberOfRes() + " " + localDepotLeader.getResType());
+                    line = line + ("DepotLeader" +
+                            ", requirement: " + localDepotLeader.getReqQuantity() + " " + localDepotLeader.getResRequirement() +
+                            ", depot: " + localDepotLeader.getNumberOfRes() + " " + localDepotLeader.getResType());
                 } else if (c instanceof LocalProductionLeader) {
                     LocalProductionLeader localProductionLeader = (LocalProductionLeader) c;
-                    out.add("ProductionLeader" +
-                    ", prod requirement: " + localProductionLeader.getColorRequirement() + " at level " + localProductionLeader.getLevelReq() +
-                    ", production: " + localProductionLeader.getProduction().getResToGive() + " -> " + localProductionLeader.getProduction().getResToGain() + ", res to flush: " + localProductionLeader.getProduction().getResToFlush());
+                    line = line + ("ProductionLeader" +
+                            ", prod requirement: " + localProductionLeader.getColorRequirement() + " at level " + localProductionLeader.getLevelReq() +
+                            ", production: " + localProductionLeader.getProduction().getResToGive() + " -> " + localProductionLeader.getProduction().getResToGain() + ", res to flush: " + localProductionLeader.getProduction().getResToFlush());
                 }
                 if (localLeaderCard.isDiscarded()) {
-                    out.add(", this card is discarded");
+                    line = line + ", this card is discarded";
                 } else if (localLeaderCard.isActive()) {
-                    out.add(", this card is active");
+                    line = line + (", this card is active");
                 } else {
-                    out.add(", this card is not active");
+                    line = line + (", this card is not active");
                 }
+                out.add(line);
+                count++;
             }
         }
         return out;

@@ -1,24 +1,32 @@
 package it.polimi.ingsw.client.cli.states.preparation;
 
 import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
+import it.polimi.ingsw.client.cli.states.printers.BoardPrinter;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
-import it.polimi.ingsw.client.localmodel.localcards.*;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class PrepLeaderView extends View<CLI> {
-    private final LocalGame<?> localGame;
+public class PrepLeaderView extends PreparationView {
     /**
      * Indicates the id of the leader cards to be removed
      */
     private ArrayList<Integer> leaderCardIds;
+    /**
+     * Position of the first card to be removed, just to show it
+     */
+    private int firstLeaderCardPosition;
+    /**
+     * boolean to store if it's the first time in this view, in this case show the board
+     */
+    private boolean showBoard;
 
     public PrepLeaderView(CLI cli, LocalGame<?> localGame) {
         this.ui = cli;
@@ -26,6 +34,8 @@ public class PrepLeaderView extends View<CLI> {
         this.localGame.addObserver(this);
         this.localGame.getError().addObserver(this);
         leaderCardIds = new ArrayList<>();
+        waiting = false;
+        showBoard = true;
     }
 
     @Override
@@ -66,12 +76,35 @@ public class PrepLeaderView extends View<CLI> {
 
 
     @Override
-    public synchronized void handleCommand(String ansString) {
-        discardLeader(ansString);
+    public synchronized void handleCommand(String s) {
+        String ans = s.toUpperCase();
+        ArrayList<String> ansList = new ArrayList<>(Arrays.asList(ans.split("\\s+")));
+        if (ansList.get(0) == "DL") {
+            discardLeader(ansList);
+        } else {
+            if (ansList.size() > 1) {
+                writeErrText();
+            } else {
+                super.handleCommand(ansList);
+            }
+        }
+
     }
+
 
     @Override
     public synchronized void draw() {
+        CLIutils.clearScreen();
+        CLIutils.printBlock(BoardPrinter.toStringBlock(localGame, localGame.getMainPlayer()));
+        if (leaderCardIds.size() == 0) {
+            System.out.println("Pick two leader cards to discard: type dl and the number of the leader wou want to discard");
+            System.out.println("Type sm to show the market, sd for the development decks, sb to come back to the board");
+        } else if (leaderCardIds.size() == 1) {
+            System.out.println("You picked " + firstLeaderCardPosition + " to be discarded, pick another one");
+        } else { // already picked two cards
+            System.out.println("Please wait");
+        }
+        /*
         if (leaderCardIds.size() == 0) {
             System.out.println("Pick two leader cards to discard:");
             LocalCard c;
@@ -106,35 +139,41 @@ public class PrepLeaderView extends View<CLI> {
         } else { // already picked two cards
             System.out.println("Please wait");
         }
+
+         */
     }
 
-    private void discardLeader(String ansString){
-        if (leaderCardIds.size() < 2) { // there are still leaders to be picked
-            try {
-                int ans = Integer.parseInt(ansString);
-                if (ans < 5 && ans > 0) {
-                    leaderCardIds.add(localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(ans - 1).getId());
-                } else {
-                    System.out.println("Invalid choice, try again:");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid choice, try again:");
-            }
-            if (leaderCardIds.size() == 2) {
+    private void discardLeader(ArrayList<String> ansList) {
+        if (ansList.size() != 2) {
+            if (leaderCardIds.size() < 2) { // there are still leaders to be picked
                 try {
-                    ui.getServerListener().sendMessage(new RemoveLeaderPrepMessage(
-                            localGame.getGameId(),
-                            localGame.getMainPlayer().getId(),
-                            new ArrayList<>() {{
-                                add(leaderCardIds.get(0));
-                                add(leaderCardIds.get(1));
-                            }}
-                    ));
-                } catch (IOException e) {
-                    System.out.println("no connection from server"); // fixme
-                    e.printStackTrace();
+                    int ans = Integer.parseInt(ansList.get(1));
+                    if (ans < 5 && ans > 0) {
+                        firstLeaderCardPosition = ans;
+                        leaderCardIds.add(localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(ans - 1).getId());
+                    } else {
+                        writeErrText();
+                    }
+                } catch (NumberFormatException e) {
+                    writeErrText();
+                }
+                if (leaderCardIds.size() == 2) {
+                    try {
+                        ui.getServerListener().sendMessage(new RemoveLeaderPrepMessage(
+                                localGame.getGameId(),
+                                localGame.getMainPlayer().getId(),
+                                new ArrayList<>() {{
+                                    add(leaderCardIds.get(0));
+                                    add(leaderCardIds.get(1));
+                                }}
+                        ));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
+        } else writeErrText();
     }
+
+
 }

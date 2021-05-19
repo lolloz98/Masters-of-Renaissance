@@ -11,6 +11,30 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
     protected T localTurn;
     protected final Error error = new Error();
     protected LocalGameState state;
+    /**
+     * boolean indicating if the main player has picked the resources for the preparation phase
+     */
+    protected boolean pickedResources;
+    /**
+     * boolean indicating if the main player has picked the leaders for the preparation phase
+     */
+    protected boolean pickedLeaders;
+
+    public synchronized boolean isPickedResources() {
+        return pickedResources;
+    }
+
+    public synchronized void setPickedResources(boolean pickedResources) {
+        this.pickedResources = pickedResources;
+    }
+
+    public synchronized boolean isPickedLeaders() {
+        return pickedLeaders;
+    }
+
+    public synchronized void setPickedLeaders(boolean pickedLeaders) {
+        this.pickedLeaders = pickedLeaders;
+    }
 
     public synchronized void setLocalDevelopmentGrid(LocalDevelopmentGrid localDevelopmentGrid) {
         this.localDevelopmentGrid = localDevelopmentGrid;
@@ -76,6 +100,8 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
     public LocalGame(){
         this.localDevelopmentGrid = new LocalDevelopmentGrid();
         this.localMarket = new LocalMarket();
+        pickedResources = false;
+        pickedLeaders = false;
     }
 
     public LocalGame(int gameId, LocalDevelopmentGrid localDevelopmentGrid, LocalMarket localMarket, T localTurn, LocalGameState state){
@@ -84,6 +110,8 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
         this.localMarket = localMarket;
         this.localTurn = localTurn;
         this.state = state;
+        pickedResources = false;
+        pickedLeaders = false;
     }
 
     public abstract boolean isMainPlayerTurn();

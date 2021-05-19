@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
@@ -39,7 +40,7 @@ public class NewSingleView extends View<CLI> {
         if(localSingle.getState() == LocalGameState.PREP_LEADERS){
             localSingle.removeObserver();
             localSingle.getError().removeObserver();
-            ui.setState(new PrepLeaderView(ui, localSingle));
+            ui.setState(new BoardView(ui, localSingle, localSingle.getMainPlayer()));
             ui.getState().draw();
         }
         else draw();
