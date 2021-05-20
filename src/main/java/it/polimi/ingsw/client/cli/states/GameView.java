@@ -85,7 +85,7 @@ public abstract class GameView extends View<CLI> {
             try {
                 ansNumbers.add(Integer.parseInt(ansList.get(1)));
                 ansNumbers.add(Integer.parseInt(ansList.get(2)));
-                if (ansNumbers.get(0) < 5 && ansNumbers.get(0) > 0 && ansNumbers.get(1) < 5 && ansNumbers.get(1) > 0 && ansNumbers.get(1) != ansNumbers.get(0)) {
+                if (ansNumbers.get(0) < 5 && ansNumbers.get(0) > 0 && ansNumbers.get(1) < 5 && ansNumbers.get(1) > 0) {
                     for (Integer ansNumber : ansNumbers) {
                         Resource pickedRes = intToRes(ansNumber);
                         ui.getServerListener().sendMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
@@ -222,17 +222,27 @@ public abstract class GameView extends View<CLI> {
             System.out.print("\n");
             System.out.println(localMulti.getState() + " " + localMulti.getMainPlayerPosition());
             if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
-                if (localMulti.isPickedLeaders()) {
+                if (localMulti.getMainPlayer().getLocalBoard().getLeaderCards().size()==2) {
                     System.out.println("Please wait");
                 } else
                     System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
             } else if (localMulti.getState() == LocalGameState.PREP_RESOURCES) {
-                if (localMulti.getMainPlayerPosition() == 0 || localMulti.isPickedResources())
+                if (localMulti.getMainPlayerPosition() == 0)
                     System.out.println("Please wait");
                 else if (localMulti.getMainPlayerPosition() == 1 || localMulti.getMainPlayerPosition() == 2)
-                    System.out.println("Pick a free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
+                    if(localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1){
+                        System.out.println("Please wait");
+                    }
+                    else
+                        System.out.println("Pick a free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
                 else if (localMulti.getMainPlayerPosition() == 3)
-                    System.out.println("Pick two free resources: type pr followed by two numbers, 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
+                    if(localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1){
+                        System.out.println("Pick another free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
+                    } else if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 2){
+                        System.out.println("Please wait");
+                    }
+                     else
+                         System.out.println("Pick two free resources: type pr followed by two numbers, 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
             } else {
                 System.out.println("Currently playing: " + localMulti.getLocalTurn().getCurrentPlayer().getName());
             }

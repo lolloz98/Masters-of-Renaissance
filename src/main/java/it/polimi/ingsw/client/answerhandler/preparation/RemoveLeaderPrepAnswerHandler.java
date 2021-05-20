@@ -29,7 +29,6 @@ public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
                 }
             }
             localGame.getMainPlayer().getLocalBoard().getLeaderCards().removeAll(localCardsToRemove);
-            localGame.setPickedLeaders(true);
         } else {
             // if the player id received is not the mainPlayer, this must be a multiplayer, i remove two covered cards from the player
             if (localGame instanceof LocalMulti) {

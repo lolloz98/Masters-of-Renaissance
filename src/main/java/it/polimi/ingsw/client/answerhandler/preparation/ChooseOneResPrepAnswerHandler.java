@@ -22,7 +22,6 @@ public class ChooseOneResPrepAnswerHandler extends AnswerHandler {
             LocalMulti localMulti = (LocalMulti) localGame;
             if(chooseOneResPrepAnswer.getPlayerId() == localMulti.getMainPlayerId()) {
                 localMulti.getMainPlayer().getLocalBoard().addResInNormalDepot(chooseOneResPrepAnswer.getRes());
-                localMulti.setPickedResources(true);
             }
             if(localMulti.getState()!=chooseOneResPrepAnswer.getState()) {
                 localMulti.setState(chooseOneResPrepAnswer.getState());
