@@ -54,16 +54,6 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public synchronized void helpScreen() {
-        super.helpScreen();
-        System.out.println("'al', followed by a number, to activate a leader card");
-        System.out.println("'dl', followed by a number, to discard a leader card");
-        System.out.println("'ad', followed by a number, to activate a production");
-        System.out.println("'fd', to move all the resources currently in a production to the strongbox");
-        System.out.println("");
-    }
-
-    @Override
     public synchronized void handleCommand(String s) {
         if (!waiting) {
             String ans = s.toUpperCase();

@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.cli.states;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.playing.DevelopmentGridView;
+import it.polimi.ingsw.client.cli.states.playing.HelpView;
 import it.polimi.ingsw.client.cli.states.playing.MarketView;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.enums.Resource;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class GameView extends View<CLI> {
     protected LocalGame<?> localGame;
@@ -38,6 +40,12 @@ public abstract class GameView extends View<CLI> {
     public void notifyError() {
         System.out.println(localGame.getError().getErrorMessage());
         waiting = false;
+    }
+
+    public void handleCommand(String s) {
+        String ans = s.toUpperCase();
+        ArrayList<String> ansList = new ArrayList<>(Arrays.asList(ans.split("\\s+")));
+        handleCommand(ansList);
     }
 
     public void handleCommand(ArrayList<String> ansList) {
@@ -131,7 +139,7 @@ public abstract class GameView extends View<CLI> {
                 ansNumbers.add(Integer.parseInt(ansList.get(1)));
                 ansNumbers.add(Integer.parseInt(ansList.get(2)));
                 if (ansNumbers.get(0) < 5 && ansNumbers.get(0) > 0 && ansNumbers.get(1) < 5 && ansNumbers.get(1) > 0 && ansNumbers.get(1) != ansNumbers.get(0)) {
-                    ArrayList<Integer> leadersPositions = new ArrayList<>(){{ // position of leaders to be removed
+                    ArrayList<Integer> leadersPositions = new ArrayList<>() {{ // position of leaders to be removed
                         add(1);
                         add(2);
                         add(3);
@@ -217,10 +225,9 @@ public abstract class GameView extends View<CLI> {
             System.out.print("\n");
             System.out.println(localMulti.getState() + " " + localMulti.getMainPlayerPosition());
             if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
-                if (localMulti.isPickedLeaders()){
+                if (localMulti.isPickedLeaders()) {
                     System.out.println("Please wait");
-                }
-                else
+                } else
                     System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
             } else if (localMulti.getState() == LocalGameState.PREP_RESOURCES) {
                 if (localMulti.getMainPlayerPosition() == 0 || localMulti.isPickedResources())
@@ -244,10 +251,7 @@ public abstract class GameView extends View<CLI> {
     }
 
     public void helpScreen() {
-        System.out.println("You can type:");
-        System.out.println("'sm' to look at the market");
-        System.out.println("'sd' to look at the development decks");
-        System.out.println("'sb', followed by a number, to see the corresponding board");
-        System.out.println("'next' to end your turn");
+        removeObserved();
+        ui.setState(new HelpView(ui, localGame));
     }
 }

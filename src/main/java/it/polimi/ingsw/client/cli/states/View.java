@@ -3,6 +3,8 @@ package it.polimi.ingsw.client.cli.states;
 import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.client.cli.Observer;
 
+import java.util.ArrayList;
+
 public abstract class View<T extends UI> implements Observer {
     protected T ui;
 
