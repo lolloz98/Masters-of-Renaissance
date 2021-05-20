@@ -57,7 +57,6 @@ public class DevelopmentGridView extends GameView {
                 super.handleCommand(ansList);
             }
         }
-
     }
 
     private void buy(ArrayList<String> ansList) {

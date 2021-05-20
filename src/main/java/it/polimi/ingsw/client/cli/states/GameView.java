@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.playing.DevelopmentGridView;
 import it.polimi.ingsw.client.cli.states.playing.HelpView;
 import it.polimi.ingsw.client.cli.states.playing.MarketView;
+import it.polimi.ingsw.client.cli.states.playing.WinnerView;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
@@ -30,10 +31,6 @@ public abstract class GameView extends View<CLI> {
             draw();
             waiting = false;
         }
-    }
-
-    private void goToWinnerScreen() {
-        // todo
     }
 
     @Override
@@ -253,5 +250,10 @@ public abstract class GameView extends View<CLI> {
     public void helpScreen() {
         removeObserved();
         ui.setState(new HelpView(ui, localGame));
+    }
+
+    private void goToWinnerScreen() {
+        removeObserved();
+        ui.setState(new WinnerView(ui, localGame));
     }
 }

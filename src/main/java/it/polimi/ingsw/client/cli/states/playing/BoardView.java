@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.cli.states.printers.BoardPrinter;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.client.localmodel.localcards.*;
@@ -92,7 +91,7 @@ public class BoardView extends GameView {
                 } catch (NumberFormatException e) {
                     writeErrText();
                 }
-                if (leaderNumber > 0 && leaderNumber < localPlayer.getLocalBoard().getLeaderCards().size()) {
+                if (leaderNumber > 0 && leaderNumber <= localPlayer.getLocalBoard().getLeaderCards().size()) {
                     try {
                         ui.getServerListener().sendMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
                         waiting = true;
