@@ -2,6 +2,9 @@ package it.polimi.ingsw.client.localmodel;
 
 import java.io.Serializable;
 
+/**
+ * notify localGame observer for an update of this class
+ */
 public abstract class LocalTurn extends Observable implements Serializable {
     protected boolean mainActionOccurred;
     protected boolean productionsActivated;

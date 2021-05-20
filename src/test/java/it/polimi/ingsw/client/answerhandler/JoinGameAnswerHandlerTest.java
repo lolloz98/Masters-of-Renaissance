@@ -5,10 +5,11 @@ import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.answers.JoinGameAnswer;
 import junit.framework.TestCase;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class JoinGameAnswerHandlerTest extends TestCase {
+public class JoinGameAnswerHandlerTest extends TestCase{
     private LocalMulti multiPlayer;
 
     @Before
@@ -16,6 +17,7 @@ public class JoinGameAnswerHandlerTest extends TestCase {
         multiPlayer=new LocalMulti();
     }
 
+    @Test
     public void testHandleAnswer() {
         int gameId=2,creatorId=3;
         String creatorName="tullio";
@@ -30,6 +32,10 @@ public class JoinGameAnswerHandlerTest extends TestCase {
             add(creatorName);
             add("daniele");
         }});
+
+        JoinGameAnswerHandler handler =new JoinGameAnswerHandler(serverAnswer);
+
+        handler.handleAnswer(multiPlayer);
 
         for(int i=0;i<multiPlayer.getLocalPlayers().size();i++){
             assertEquals((int)serverAnswer.getPlayerIds().get(i),multiPlayer.getLocalPlayers().get(i).getId());

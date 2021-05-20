@@ -19,4 +19,5 @@ public class AnswerHandlerTestHelper {
         CreateGameAnswerHandler handler=new CreateGameAnswerHandler(new CreateGameAnswer(gameId,playerId,playerName));
         handler.handleAnswer(multiPlayer);
     }
+
 }

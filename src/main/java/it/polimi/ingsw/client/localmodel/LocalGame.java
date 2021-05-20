@@ -8,6 +8,9 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
     protected LocalDevelopmentGrid localDevelopmentGrid;
     protected LocalMarket localMarket;
     protected int gameId;
+    /**
+     * notify localGame observer for an update of localTurn
+     */
     protected T localTurn;
     protected final Error error = new Error();
     protected LocalGameState state;
