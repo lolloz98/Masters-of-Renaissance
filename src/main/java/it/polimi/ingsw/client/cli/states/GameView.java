@@ -88,7 +88,7 @@ public abstract class GameView extends View<CLI> {
                 if (ansNumbers.get(0) < 5 && ansNumbers.get(0) > 0 && ansNumbers.get(1) < 5 && ansNumbers.get(1) > 0) {
                     for (Integer ansNumber : ansNumbers) {
                         Resource pickedRes = intToRes(ansNumber);
-                        ui.getServerListener().sendMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
+                        ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
                         waiting = true;
                     }
                 } else writeErrText();
@@ -102,7 +102,7 @@ public abstract class GameView extends View<CLI> {
                 int ansNumber = Integer.parseInt(ansList.get(1));
                 if (ansNumber < 5 && ansNumber > 0) {
                     Resource pickedRes = intToRes(ansNumber);
-                    ui.getServerListener().sendMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
+                    ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
                     waiting = true;
                 } else writeErrText();
             } catch (NumberFormatException e) {
@@ -146,7 +146,7 @@ public abstract class GameView extends View<CLI> {
                     ArrayList<Integer> leaderCardIds = new ArrayList<>(); // ids of leaders to be removed
                     leaderCardIds.add(localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(leadersPositions.get(0) - 1).getId());
                     leaderCardIds.add(localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(leadersPositions.get(1) - 1).getId());
-                    ui.getServerListener().sendMessage(new RemoveLeaderPrepMessage(
+                    ui.getGameHandler().dealWithMessage(new RemoveLeaderPrepMessage(
                             localGame.getGameId(),
                             localGame.getMainPlayer().getId(),
                             leaderCardIds
@@ -162,7 +162,7 @@ public abstract class GameView extends View<CLI> {
 
     private void next() {
         try {
-            ui.getServerListener().sendMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+            ui.getGameHandler().dealWithMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
         } catch (IOException e) {
             e.printStackTrace();
         }

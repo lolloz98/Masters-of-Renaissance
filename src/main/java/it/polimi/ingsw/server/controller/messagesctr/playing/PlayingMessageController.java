@@ -2,7 +2,8 @@ package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.State;
@@ -31,7 +32,7 @@ public abstract class PlayingMessageController extends ClientMessageController {
      * @throws ControllerException depends on the concrete class
      */
     @Override
-    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
+    public Answer doAction(ControllerActionsBase<?> controllerActions) throws ControllerException {
         if (checkState(controllerActions)) {
             if (checkCurrentPlayer(controllerActions)) {
                 return doActionNoChecks(controllerActions);
@@ -45,7 +46,7 @@ public abstract class PlayingMessageController extends ClientMessageController {
      * @param controllerActions controllerActions of current game
      * @return true if this.playerId is equal to current player id
      */
-    protected boolean checkCurrentPlayer(ControllerActions<?> controllerActions) {
+    protected boolean checkCurrentPlayer(ControllerActionsBase<?> controllerActions) {
         Game<?> game = controllerActions.getGame();
         if (game instanceof SinglePlayer) {
             SinglePlayer singlePlayer = (SinglePlayer) game;
@@ -58,7 +59,7 @@ public abstract class PlayingMessageController extends ClientMessageController {
     }
 
     @Override
-    protected boolean checkState(ControllerActions<?> controllerActions) {
+    protected boolean checkState(ControllerActionsBase<?> controllerActions) {
         return controllerActions.getGameState() == State.PLAY;
     }
 }

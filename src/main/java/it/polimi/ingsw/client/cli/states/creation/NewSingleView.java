@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.cli.states.creation;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
@@ -19,11 +18,14 @@ public class NewSingleView extends View<CLI> {
         this.localSingle = localSingle;
         localSingle.addObserver(this);
         localSingle.getError().addObserver(this);
-        Scanner input = new Scanner(System.in);
-        System.out.println("Type your nickname:\n");
-        String nickname = input.nextLine(); // todo: check characters limit
+    }
+
+    public void launch(CLI cli){
         try {
-            cli.getServerListener().sendMessage(new CreateGameMessage(1, nickname));
+            Scanner input = new Scanner(System.in);
+            System.out.println("Type your nickname:\n");
+            String nickname = input.nextLine(); // todo: check characters limit
+            cli.getGameHandler().dealWithMessage(new CreateGameMessage(1, nickname));
         } catch (IOException e) {
             System.out.println("no connection from server"); // fixme
             e.printStackTrace();

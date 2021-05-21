@@ -26,7 +26,7 @@ public class ControllerManager {
     /**
      * treemap containing the id of the game and the ControllerActions associated
      */
-    private final TreeMap<Integer, ControllerActions<?>> controllerMap;
+    private final TreeMap<Integer, ControllerActionsServer<?>> controllerMap;
 
     private ControllerManager() {
         controllerMap = new TreeMap<>();
@@ -82,8 +82,8 @@ public class ControllerManager {
     /**
      * @return the controller corresponding to the id
      */
-    public synchronized ControllerActions<?> getControllerFromMap(int id) throws NoSuchControllerException {
-        ControllerActions<?> tmp = controllerMap.get(id);
+    public synchronized ControllerActionsServer<?> getControllerFromMap(int id) throws NoSuchControllerException {
+        ControllerActionsServer<?> tmp = controllerMap.get(id);
         if(tmp == null) throw new NoSuchControllerException();
         return tmp;
     }
@@ -103,7 +103,7 @@ public class ControllerManager {
             throw new UnexpectedControllerException("something went wrong with the creation of a singlePlayer");
         }
         try {
-            controllerMap.put(id, new ControllerActionsSingle(singlePlayer, id, answerListener));
+            controllerMap.put(id, new ControllerActionsServerSingle(singlePlayer, id, answerListener));
         } catch (EmptyDeckException e) {
             logger.error("something went wrong with the creation of a multiPlayer");
             throw new UnexpectedControllerException("something went wrong with the creation of a singlePlayer");
@@ -118,7 +118,7 @@ public class ControllerManager {
      * @param player the player who asked for the creation of the game
      */
     private synchronized void createNewControllerActionsMulti(int id, AnswerListener answerListener, int numberOfPlayers, Player player) {
-        controllerMap.put(id, new ControllerActionsMulti(id, answerListener, numberOfPlayers, player));
+        controllerMap.put(id, new ControllerActionsServerMulti(id, answerListener, numberOfPlayers, player));
     }
 
     /**
@@ -172,7 +172,7 @@ public class ControllerManager {
         if (controllerMap.get(id).getGame() != null) throw new GameAlreadyStartedControllerException();
 
         // if I am here the game is surely multiplayer (otherwise the game cannot be null)
-        ControllerActionsMulti controllerActionsMulti = (ControllerActionsMulti) controllerMap.get(id);
+        ControllerActionsServerMulti controllerActionsMulti = (ControllerActionsServerMulti) controllerMap.get(id);
         // I get the reference to numberAndPlayers
         PairId<Integer, ArrayList<Player>> numberAndPlayers = controllerActionsMulti.getNumberAndPlayers();
 

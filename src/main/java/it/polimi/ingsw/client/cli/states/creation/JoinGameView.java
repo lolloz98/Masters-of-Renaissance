@@ -3,17 +3,12 @@ package it.polimi.ingsw.client.cli.states.creation;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepResSecondView;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class JoinGameView extends View<CLI> {
@@ -35,7 +30,7 @@ public class JoinGameView extends View<CLI> {
             try {
                 int idNumber = Integer.parseInt(idString);
                 try {
-                    cli.getServerListener().sendMessage(new JoinGameMessage(idNumber, nickname));
+                    cli.getGameHandler().dealWithMessage(new JoinGameMessage(idNumber, nickname));
                     valid = true;
                 } catch (IOException e) {
                     System.out.println("no connection from server");
@@ -69,7 +64,7 @@ public class JoinGameView extends View<CLI> {
     public synchronized void handleCommand(String ans) {
         try {
             int port = Integer.parseInt(ans);
-            ui.getServerListener().sendMessage(new JoinGameMessage(port, nickname));
+            ui.getGameHandler().dealWithMessage(new JoinGameMessage(port, nickname));
         } catch (IOException e) {
             System.out.println("no connection from server");
             e.printStackTrace();

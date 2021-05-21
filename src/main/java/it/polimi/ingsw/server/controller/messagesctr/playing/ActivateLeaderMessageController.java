@@ -9,19 +9,16 @@ import it.polimi.ingsw.messages.answers.leaderanswer.ActivateProductionLeaderAns
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
-import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.server.model.cards.DeckDevelop;
 import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.TreeMap;
 
 public class ActivateLeaderMessageController extends PlayingMessageController {
     private static final long serialVersionUID = 208L;
@@ -33,7 +30,7 @@ public class ActivateLeaderMessageController extends PlayingMessageController {
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws ControllerException {
         Board board;
         board = getPlayerFromId(controllerActions).getBoard();
         LeaderCard<?> toActivate;

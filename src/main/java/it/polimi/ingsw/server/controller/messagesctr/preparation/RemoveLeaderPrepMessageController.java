@@ -3,14 +3,14 @@ package it.polimi.ingsw.server.controller.messagesctr.preparation;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
 import it.polimi.ingsw.server.controller.AnswerFactory;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
 import it.polimi.ingsw.server.controller.exception.LeaderNotRemovedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.controller.messagesctr.playing.ConcealedLeaderMessageInterface;
-import it.polimi.ingsw.server.controller.messagesctr.playing.PlayingMessageController;
 import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController i
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws ControllerException {
         Board board = getPlayerFromId(controllerActions).getBoard();
         ArrayList<Integer> toRemove = ((RemoveLeaderPrepMessage) getClientMessage()).getLeadersToRemove();
 
@@ -52,7 +52,7 @@ public class RemoveLeaderPrepMessageController extends ClientMessageController i
     }
 
     @Override
-    protected boolean checkState(ControllerActions<?> controllerActions) {
+    protected boolean checkState(ControllerActionsBase<?> controllerActions) {
         return controllerActions.getGameState() == State.PREPARATION;
     }
 }

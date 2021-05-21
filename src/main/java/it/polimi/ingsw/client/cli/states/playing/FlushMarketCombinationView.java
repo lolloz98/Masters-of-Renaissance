@@ -60,7 +60,7 @@ public class FlushMarketCombinationView extends View<CLI> {
                     // switch view, send message
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     try {
-                        ui.getServerListener().sendMessage(new FlushMarketResMessage(
+                        ui.getGameHandler().dealWithMessage(new FlushMarketResMessage(
                                 localGame.getGameId(),
                                 localGame.getMainPlayer().getId(),
                                 chosenCombination,

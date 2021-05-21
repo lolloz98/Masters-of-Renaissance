@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 /**
- * LocalServer is used only for singlePlayer games which do not require connection to the internet
+ * LocalServer is used only for singlePlayer games which do not require connection to the internet.
+ * Unfortunately it is not considered valid for the exam to use this class.
  */
+@Deprecated
 public final class LocalServer {
     private static final Logger logger = LogManager.getLogger(LocalServer.class);
 

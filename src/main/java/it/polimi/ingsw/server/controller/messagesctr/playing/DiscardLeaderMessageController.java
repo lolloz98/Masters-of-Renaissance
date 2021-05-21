@@ -6,7 +6,8 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
 import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
@@ -34,7 +35,7 @@ public class DiscardLeaderMessageController extends PlayingMessageController imp
      * @return DiscardLeaderCardAnswer
      */
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws WrongPlayerIdControllerException, InvalidArgumentControllerException, AlreadyActiveLeaderControllerException, AlreadyDiscardedLeaderControllerException, UnexpectedControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws WrongPlayerIdControllerException, InvalidArgumentControllerException, AlreadyActiveLeaderControllerException, AlreadyDiscardedLeaderControllerException, UnexpectedControllerException {
         LeaderCard<?> card;
         Player thisPlayer = getPlayerFromId(controllerActions);
         try {

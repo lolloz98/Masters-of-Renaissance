@@ -2,10 +2,6 @@ package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepResFirstView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepResFourthView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepResSecondView;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
@@ -25,7 +21,7 @@ public class NewMultiView extends View<CLI> {
         System.out.println("Type your nickname:\n");
         String nickname = input.nextLine(); // todo: check characters limit
         try {
-            cli.getServerListener().sendMessage(new CreateGameMessage(numberOfPlayers, nickname));
+            cli.getGameHandler().dealWithMessage(new CreateGameMessage(numberOfPlayers, nickname));
         } catch (IOException e) {
             System.out.println("No connection from server");
             e.printStackTrace();

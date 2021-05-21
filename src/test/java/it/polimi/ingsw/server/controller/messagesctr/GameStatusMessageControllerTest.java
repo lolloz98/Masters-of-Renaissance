@@ -8,8 +8,8 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalConcealedCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -25,8 +25,8 @@ public class GameStatusMessageControllerTest {
     GameStatusMessageController gameStatusMessageController;
     GameStatusAnswer gameStatusAnswer;
     int gameId;
-    ControllerActionsMulti ca;
-    ControllerActionsSingle cas;
+    ControllerActionsServerMulti ca;
+    ControllerActionsServerSingle cas;
 
     LocalMulti lm;
     LocalSingle ls;
@@ -34,7 +34,7 @@ public class GameStatusMessageControllerTest {
     @Test
     public void doActionWrongState() throws ControllerException {
         gameId = MessageControllerTestHelper.doActionCreateGameMulti();
-        ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         try {
             gameStatusAnswer = MessageControllerTestHelper.getGameStatus(gameId, ca.getNumberAndPlayers().getSecond().get(0).getPlayerId());
             fail();

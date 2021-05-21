@@ -70,7 +70,7 @@ public class PrepResFourthView extends View<CLI> {
             if (pickedRes != null) {
                 try {
                     picked = true;
-                    ui.getServerListener().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
+                    ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
                 } catch (IOException e) {
                     System.out.println("No connection from server");
                     e.printStackTrace();

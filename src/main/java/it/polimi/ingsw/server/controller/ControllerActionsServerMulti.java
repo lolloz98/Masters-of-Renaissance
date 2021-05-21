@@ -1,9 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
-import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.server.AnswerListener;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.LeaderCard;
@@ -18,12 +16,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
-public class ControllerActionsMulti extends ControllerActions<MultiPlayer> {
-    private static final Logger logger = LogManager.getLogger(ControllerActionsMulti.class);
+public class ControllerActionsServerMulti extends ControllerActionsServer<MultiPlayer> {
+    private static final Logger logger = LogManager.getLogger(ControllerActionsServerMulti.class);
 
     private final PairId<Integer, ArrayList<Player>> numberAndPlayers;
 
-    public ControllerActionsMulti(int id, AnswerListener answerListener, int numberOfPlayers, Player player) {
+    public ControllerActionsServerMulti(int id, AnswerListener answerListener, int numberOfPlayers, Player player) {
         super(null, id, answerListener);
         this.numberAndPlayers = new PairId<>(numberOfPlayers, new ArrayList<>(){{
             add(player);

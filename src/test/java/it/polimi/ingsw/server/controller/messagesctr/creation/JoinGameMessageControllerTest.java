@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.messagesctr.creation;
 
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -15,7 +15,7 @@ public class JoinGameMessageControllerTest {
     @Test
     public void doAction() throws ControllerException {
         int gameId = MessageControllerTestHelper.doActionCreateGameMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
 
         String name = "2";
         JoinGameMessageController joinGameMessageController = new JoinGameMessageController(new JoinGameMessage(gameId, name));
@@ -40,7 +40,7 @@ public class JoinGameMessageControllerTest {
     @Test
     public void testDoActionOnFullGame() throws ControllerException {
         int gameId = MessageControllerTestHelper.doToPrepStateMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
 
         JoinGameMessageController joinGameMessageController = new JoinGameMessageController(new JoinGameMessage(gameId, "invalid"));
 
@@ -58,7 +58,7 @@ public class JoinGameMessageControllerTest {
     @Test
     public void testDoActionOnSingleGame() throws ControllerException {
         int gameId = MessageControllerTestHelper.doActionCreateGameSingle();
-        ControllerActionsSingle ca = (ControllerActionsSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerSingle ca = (ControllerActionsServerSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
         String name = "1";
 
         JoinGameMessageController joinGameMessageController = new JoinGameMessageController(new JoinGameMessage(gameId, name));

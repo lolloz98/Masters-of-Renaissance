@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.player;
 
-import it.polimi.ingsw.server.controller.ControllerActions;
 import it.polimi.ingsw.server.model.cards.VictoryPointCalculator;
 import it.polimi.ingsw.server.model.exception.EndAlreadyReachedException;
 import it.polimi.ingsw.server.model.exception.FigureAlreadyActivatedException;

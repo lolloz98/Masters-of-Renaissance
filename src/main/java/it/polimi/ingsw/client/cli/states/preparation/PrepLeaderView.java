@@ -159,7 +159,7 @@ public class PrepLeaderView extends PreparationView {
                 }
                 if (leaderCardIds.size() == 2) {
                     try {
-                        ui.getServerListener().sendMessage(new RemoveLeaderPrepMessage(
+                        ui.getGameHandler().dealWithMessage(new RemoveLeaderPrepMessage(
                                 localGame.getGameId(),
                                 localGame.getMainPlayer().getId(),
                                 new ArrayList<>() {{

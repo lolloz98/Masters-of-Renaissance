@@ -103,13 +103,13 @@ public class MarketView extends GameView {
             }
             if (index != -1) {
                 try {
-                    ui.getServerListener().sendMessage(new UseMarketMessage(
+                    waiting = true;
+                    ui.getGameHandler().dealWithMessage(new UseMarketMessage(
                             localGame.getGameId(),
                             localGame.getMainPlayer().getId(),
                             onRow,
                             index
                     ));
-                    waiting = true;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -39,12 +39,12 @@ import java.util.TreeMap;
 public final class MessageControllerTestHelper {
     private static final Logger logger = LogManager.getLogger(MessageControllerTestHelper.class);
 
-    public static ControllerActionsSingle getSingle(int gameId) throws NoSuchControllerException {
-        return (ControllerActionsSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
+    public static ControllerActionsServerSingle getSingle(int gameId) throws NoSuchControllerException {
+        return (ControllerActionsServerSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
     }
 
-    public static ControllerActionsMulti getMulti(int gameId) throws NoSuchControllerException {
-        return (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+    public static ControllerActionsServerMulti getMulti(int gameId) throws NoSuchControllerException {
+        return (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
     }
 
     /**
@@ -96,7 +96,7 @@ public final class MessageControllerTestHelper {
     }
 
     private static void doChooseInitRes(int gameId, Player player) throws ControllerException {
-        ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServer<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
         while (player.getBoard().getInitialRes() != 0) {
             ChooseOneResPrepMessageController chooseOneResPrepMessageController = new ChooseOneResPrepMessageController(new ChooseOneResPrepMessage(gameId, player.getPlayerId(), Resource.GOLD));
             chooseOneResPrepMessageController.doAction(ca);
@@ -117,7 +117,7 @@ public final class MessageControllerTestHelper {
     }
 
     private static void doRemoveLeaders(int gameId, Player player) throws ControllerException {
-        ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServer<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
         RemoveLeaderPrepMessageController removeLeaderPrepMessageController = new RemoveLeaderPrepMessageController(new RemoveLeaderPrepMessage(gameId, player.getPlayerId(), new ArrayList<>() {{
             add(player.getBoard().getLeaderCards().get(0).getId());
             add(player.getBoard().getLeaderCards().get(1).getId());
@@ -145,7 +145,7 @@ public final class MessageControllerTestHelper {
     }
 
     public static GameStatusAnswer getGameStatus(int gameId, int playerId) throws ControllerException {
-        ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServer<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
         GameStatusMessageController gameStatusMessageController = new GameStatusMessageController(new GameStatusMessage(gameId, playerId));
         return (GameStatusAnswer) gameStatusMessageController.doAction(ca);
     }

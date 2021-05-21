@@ -3,8 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.ErrorAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
-import it.polimi.ingsw.messages.requests.GameStatusMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
@@ -107,7 +106,7 @@ public class ClientHandler implements Runnable {
             // fixme: for now, if a client drop the connection the game is cancelled
             if(answerListener != null && answerListener.getGameId() != -1){
                 try {
-                    ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(answerListener.getGameId());
+                    ControllerActionsServer<?> ca = ControllerManager.getInstance().getControllerFromMap(answerListener.getGameId());
                     ca.destroyGame("A player lost the connection", answerListener.getPlayerId(), true);
                     answerListener.setIds(-1, -1);
                 } catch (NoSuchControllerException e) {

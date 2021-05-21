@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server.controller.messagesctr.preparation;
 
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
-import it.polimi.ingsw.server.controller.exception.LeaderNotRemovedControllerException;
 import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
@@ -25,7 +24,7 @@ public class RemoveLeaderPrepMessageControllerTest {
     @Test
     public void testDoAction() throws ControllerException {
         int gameId = MessageControllerTestHelper.toReadyMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer game = ca.getGame();
         assertEquals(State.PLAY, ca.getGameState());
         for(Player p: game.getPlayers()){
@@ -42,7 +41,7 @@ public class RemoveLeaderPrepMessageControllerTest {
         }catch(WrongStateControllerException ignore){}
 
         gameId = MessageControllerTestHelper.toReadySingle();
-        ControllerActionsSingle cas = (ControllerActionsSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerSingle cas = (ControllerActionsServerSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
         SinglePlayer gameS = cas.getGame();
         assertEquals(State.PLAY, cas.getGameState());
         assertEquals(2, gameS.getPlayer().getBoard().getLeaderCards().size());
@@ -51,7 +50,7 @@ public class RemoveLeaderPrepMessageControllerTest {
     @Test
     public void testDoActionWrongState() throws ControllerException{
         int gameId = MessageControllerTestHelper.doActionCreateGameMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         removeLeaderPrepMessageController = new RemoveLeaderPrepMessageController(new RemoveLeaderPrepMessage(gameId, 0, new ArrayList<>(){{
             add(50);
             add(51);
@@ -65,7 +64,7 @@ public class RemoveLeaderPrepMessageControllerTest {
     @Test
     public void testDoAction2() throws ControllerException{
         int gameId = MessageControllerTestHelper.toDecidedInitResMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         removeLeaderPrepMessageController = new RemoveLeaderPrepMessageController(new RemoveLeaderPrepMessage(gameId, ca.getNumberAndPlayers().getSecond().get(0).getPlayerId(), new ArrayList<>(){{
             add(ca.getNumberAndPlayers().getSecond().get(0).getBoard().getLeaderCards().get(0).getId());
             add(ca.getNumberAndPlayers().getSecond().get(0).getBoard().getLeaderCards().get(1).getId());

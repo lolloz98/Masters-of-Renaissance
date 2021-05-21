@@ -20,19 +20,15 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * class that handles the actions of the players and calls the methods of the model
  *
  * @param <T> the type of the game, it can be single player or multi player
  */
-public abstract class ControllerActions<T extends Game<? extends Turn>> {
-    private static final Logger logger = LogManager.getLogger(ControllerActions.class);
+public abstract class ControllerActionsServer<T extends Game<? extends Turn>> extends ControllerActionsBase<T> {
+    private static final Logger logger = LogManager.getLogger(ControllerActionsServer.class);
 
-    protected T game;
-    private final int gameId;
-    private State gameState;
     private static final ControllerManager controllerManager = ControllerManager.getInstance();
 
     private final List<AnswerListener> listeners = Collections.synchronizedList(new ArrayList<>());
@@ -43,32 +39,9 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
      * @param game current game
      * @param id   gameId
      */
-    public ControllerActions(T game, int id, AnswerListener answerListener) {
-        this.game = game;
-        this.gameId = id;
+    public ControllerActionsServer(T game, int id, AnswerListener answerListener) {
+        super(game, id);
         addAnswerListener(answerListener);
-    }
-
-    public synchronized T getGame() {
-        return game;
-    }
-
-    public synchronized int getGameId() {
-        return gameId;
-    }
-
-    public abstract boolean checkToGamePlayState();
-
-    public synchronized void toGamePlayState() {
-        this.gameState = State.PLAY;
-    }
-
-    public synchronized void toEndGameState() {
-        this.gameState = State.OVER;
-    }
-
-    public synchronized State getGameState() {
-        return gameState;
     }
 
     public synchronized void doAction(ClientMessageController clientMessage) throws ControllerException {
@@ -127,10 +100,6 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
         listeners.forEach(x -> x.sendAnswer(answer));
     }
 
-    protected void setGameState(State gameState) {
-        this.gameState = gameState;
-    }
-
     public synchronized void addAnswerListener(AnswerListener answerListener) {
         listeners.removeIf(a ->
         {
@@ -153,16 +122,6 @@ public abstract class ControllerActions<T extends Game<? extends Turn>> {
             if(a.getPlayerId() == gameStatusAnswer.getPlayerId()) a.sendAnswer(gameStatusAnswer);
         }
     }
-
-    public abstract void removeLeadersEffect() throws UnexpectedControllerException;
-
-    public abstract void applyLeadersEffect() throws UnexpectedControllerException;
-
-    /**
-     * creates the end game answer by putting in it the list of the winners
-     * @throws UnexpectedControllerException if the game is not over
-     */
-    public abstract ArrayList<LocalPlayer> getWinners() throws UnexpectedControllerException;
 
     /**
      * it "destroys" the game. after this the game nor the controllers are accessible anymore and there is no reference to them

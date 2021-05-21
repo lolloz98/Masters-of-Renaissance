@@ -93,7 +93,7 @@ public class BoardView extends GameView {
                 }
                 if (leaderNumber > 0 && leaderNumber <= localPlayer.getLocalBoard().getLeaderCards().size()) {
                     try {
-                        ui.getServerListener().sendMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
+                        ui.getGameHandler().dealWithMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
                         waiting = true;
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -110,7 +110,7 @@ public class BoardView extends GameView {
     private void flushProduction() {
         if (localGame.isMainPlayerTurn()) {
             try {
-                ui.getServerListener().sendMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+                ui.getGameHandler().dealWithMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -175,7 +175,7 @@ public class BoardView extends GameView {
                 }
                 if (number > 0 && number < localPlayer.getLocalBoard().getLeaderCards().size()) {
                     try {
-                        ui.getServerListener().sendMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
+                        ui.getGameHandler().dealWithMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
                         waiting = true;
                     } catch (IOException e) {
                         e.printStackTrace();
