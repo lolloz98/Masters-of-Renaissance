@@ -27,7 +27,7 @@ public class ActivateProductionView extends View<CLI> {
     public ActivateProductionView(CLI cli, LocalGame<?> localGame, int whichProd) {
         this.ui = cli;
         this.localGame = localGame;
-        this.whichProd = whichProd;  //2
+        this.whichProd = whichProd;  
         this.resToGive = new TreeMap<>();
         LocalProduction prod;
         if (whichProd == 0) prod = localGame.getMainPlayer().getLocalBoard().getBaseProduction();

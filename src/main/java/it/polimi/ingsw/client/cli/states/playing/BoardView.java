@@ -173,7 +173,7 @@ public class BoardView extends GameView {
                 } catch (NumberFormatException e) {
                     writeErrText();
                 }
-                if (number > 0 && number < localPlayer.getLocalBoard().getLeaderCards().size()) {
+                if (number > 0 && number <= localPlayer.getLocalBoard().getLeaderCards().size()) {
                     try {
                         ui.getGameHandler().dealWithMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
                         waiting = true;

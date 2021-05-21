@@ -88,8 +88,8 @@ public abstract class GameView extends View<CLI> {
                 if (ansNumbers.get(0) < 5 && ansNumbers.get(0) > 0 && ansNumbers.get(1) < 5 && ansNumbers.get(1) > 0) {
                     for (Integer ansNumber : ansNumbers) {
                         Resource pickedRes = intToRes(ansNumber);
-                        ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
                         waiting = true;
+                        ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
                     }
                 } else writeErrText();
             } catch (NumberFormatException e) {
@@ -102,8 +102,8 @@ public abstract class GameView extends View<CLI> {
                 int ansNumber = Integer.parseInt(ansList.get(1));
                 if (ansNumber < 5 && ansNumber > 0) {
                     Resource pickedRes = intToRes(ansNumber);
-                    ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
                     waiting = true;
+                    ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
                 } else writeErrText();
             } catch (NumberFormatException e) {
                 writeErrText();
