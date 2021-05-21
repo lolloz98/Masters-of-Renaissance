@@ -17,7 +17,6 @@ public class LocalMarket extends Observable implements Serializable {
 
     private synchronized void setMarbleMatrix(Resource[][] marbleMatrix) {
         this.marbleMatrix = marbleMatrix;
-
     }
 
     public synchronized void setMarket(Resource[][] marbleMatrix, Resource freeMarble) {

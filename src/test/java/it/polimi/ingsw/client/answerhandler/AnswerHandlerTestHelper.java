@@ -15,6 +15,7 @@ import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.junit.Ignore;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class AnswerHandlerTestHelper {
     }
 
     public static LocalSingle getLocalSingle() throws ModelException, UnexpectedControllerException {
+        CollectionsHelper.setTest();
         SinglePlayer singlePlayer;
         try{
             singlePlayer=new SinglePlayer(new Player("aniello", 1));
@@ -60,6 +62,7 @@ public class AnswerHandlerTestHelper {
      * @throws PlayersOutOfBoundException
      */
     public static LocalMulti getLocalMulti(int playerIdRequiring) throws ModelException, UnexpectedControllerException {
+        CollectionsHelper.setTest();
         MultiPlayer multiPlayer;
         try{
             multiPlayer=new MultiPlayer(new ArrayList<>(){{
@@ -109,6 +112,32 @@ public class AnswerHandlerTestHelper {
         localSingle.setState(LocalGameState.PREP_RESOURCES);
 
         return localSingle;
+    }
+
+    /**
+     *
+     * @param playerRequiring
+     * @return a multiplayer in the playing state
+     */
+    public static LocalMulti getGameInReadyState(int playerRequiring) throws ModelException, UnexpectedControllerException {
+        LocalMulti localMulti=doRemoveLeadersPrepActionOnMulti(playerRequiring);
+
+        localMulti.setState(LocalGameState.READY);
+
+        return localMulti;
+    }
+
+    /**
+     *
+     * @return a singleplayer in the playing state
+     */
+    public static LocalSingle getGameInReadyState() throws ModelException, UnexpectedControllerException {
+        LocalSingle localSingle=doRemoveLeadersActionOnSingle();
+
+        localSingle.setState(LocalGameState.READY);
+
+        return  localSingle;
+
     }
 
 }
