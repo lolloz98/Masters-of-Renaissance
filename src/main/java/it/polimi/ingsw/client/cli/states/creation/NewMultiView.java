@@ -15,7 +15,7 @@ public class NewMultiView extends View<CLI> {
     public NewMultiView(CLI cli, LocalMulti localMulti){
         this.ui = cli;
         this.localMulti = localMulti;
-        localMulti.addObserver(this);
+        localMulti.overrideObserver(this);
         localMulti.getError().addObserver(this);
     }
 
@@ -48,7 +48,7 @@ public class NewMultiView extends View<CLI> {
     @Override
     public synchronized void notifyUpdate(){
         if(localMulti.getState() == LocalGameState.PREP_LEADERS){
-            localMulti.removeObserver();
+            localMulti.removeObservers();
             localMulti.getError().removeObserver();
             ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
             ui.getState().draw();

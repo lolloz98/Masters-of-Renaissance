@@ -21,10 +21,10 @@ public class MarketView extends GameView {
         this.localMarket = localMarket;
         this.localGame = localGame;
         waiting = false;
-        localMarket.addObserver(this);
+        localMarket.overrideObserver(this);
         localGame.getError().addObserver(this);
-        localGame.getLocalTurn().addObserver(this);
-        localGame.addObserver(this);
+        localGame.getLocalTurn().overrideObserver(this);
+        localGame.overrideObserver(this);
     }
 
     @Override
@@ -41,9 +41,9 @@ public class MarketView extends GameView {
     @Override
     public synchronized void removeObserved() {
         localGame.getError().removeObserver();
-        localMarket.removeObserver();
-        localGame.getLocalTurn().removeObserver();
-        localGame.removeObserver();
+        localMarket.removeObservers();
+        localGame.getLocalTurn().removeObservers();
+        localGame.removeObservers();
     }
 
     @Override

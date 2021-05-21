@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalMarket;
 
 public class HelpView extends GameView {
 
@@ -12,8 +11,8 @@ public class HelpView extends GameView {
         this.localGame = localGame;
         waiting = false;
         localGame.getError().addObserver(this);
-        localGame.getLocalTurn().addObserver(this);
-        localGame.addObserver(this);
+        localGame.getLocalTurn().overrideObserver(this);
+        localGame.overrideObserver(this);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class HelpView extends GameView {
     @Override
     public void removeObserved() {
         localGame.getError().removeObserver();
-        localGame.getLocalTurn().removeObserver();
-        localGame.removeObserver();
+        localGame.getLocalTurn().removeObservers();
+        localGame.removeObservers();
     }
 }

@@ -18,7 +18,7 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
 
         //update turn
         localGame.getLocalTurn().setProductionsActivated(false);
-        localGame.getLocalTurn().notifyObserver();
+        localGame.getLocalTurn().notifyObservers();
 
         //update faith tracks
         localGame.updatePlayerFaithTracks(serverAnswer.getLocalTracks());
@@ -31,7 +31,7 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
         // update productions
         localBoard.flushFromProductions();
 
-        localBoard.notifyObserver();
+        localBoard.notifyObservers();
 
     }
 }

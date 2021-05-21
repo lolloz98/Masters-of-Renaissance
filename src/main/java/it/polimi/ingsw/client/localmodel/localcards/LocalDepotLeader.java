@@ -25,7 +25,7 @@ public class LocalDepotLeader extends LocalLeaderCard{
 
     public synchronized void setNumberOfRes(int numberOfRes) {
         this.numberOfRes = numberOfRes;
-        notifyObserver();
+        notifyObservers();
     }
 
     public Resource getResType() {

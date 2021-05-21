@@ -18,7 +18,7 @@ public class JoinGameView extends View<CLI> {
     public JoinGameView(CLI cli, LocalMulti localMulti) {
         this.ui = cli;
         this.localMulti = localMulti;
-        localMulti.addObserver(this);
+        localMulti.overrideObserver(this);
         localMulti.getError().addObserver(this);
         Scanner input = new Scanner(System.in);
         System.out.println("Type your nickname:\n");
@@ -47,7 +47,7 @@ public class JoinGameView extends View<CLI> {
     @Override
     public synchronized void notifyUpdate() {
         if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
-            localMulti.removeObserver();
+            localMulti.removeObservers();
             localMulti.getError().removeObserver();
             ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
             ui.getState().draw();

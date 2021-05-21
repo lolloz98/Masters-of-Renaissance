@@ -31,7 +31,7 @@ public class PrepLeaderView extends PreparationView {
     public PrepLeaderView(CLI cli, LocalGame<?> localGame) {
         this.ui = cli;
         this.localGame = localGame;
-        this.localGame.addObserver(this);
+        this.localGame.overrideObserver(this);
         this.localGame.getError().addObserver(this);
         leaderCardIds = new ArrayList<>();
         waiting = false;
@@ -42,7 +42,7 @@ public class PrepLeaderView extends PreparationView {
     public synchronized void notifyUpdate() {
         if (localGame instanceof LocalSingle) {
             if (localGame.getState() == LocalGameState.READY) {
-                localGame.removeObserver();
+                localGame.removeObservers();
                 localGame.getError().removeObserver();
                 ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                 ui.getState().draw();

@@ -16,7 +16,7 @@ public class NewSingleView extends View<CLI> {
     public NewSingleView(CLI cli, LocalSingle localSingle){
         this.ui = cli;
         this.localSingle = localSingle;
-        localSingle.addObserver(this);
+        localSingle.overrideObserver(this);
         localSingle.getError().addObserver(this);
     }
 
@@ -40,7 +40,7 @@ public class NewSingleView extends View<CLI> {
     @Override
     public synchronized void notifyUpdate(){
         if(localSingle.getState() == LocalGameState.PREP_LEADERS){
-            localSingle.removeObserver();
+            localSingle.removeObservers();
             localSingle.getError().removeObserver();
             ui.setState(new BoardView(ui, localSingle, localSingle.getMainPlayer()));
             ui.getState().draw();

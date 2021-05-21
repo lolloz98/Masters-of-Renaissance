@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.answerhandler;
 
 import it.polimi.ingsw.client.localmodel.*;
-import it.polimi.ingsw.messages.answers.CreateGameAnswer;
 import it.polimi.ingsw.messages.answers.JoinGameAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +26,7 @@ public class JoinGameAnswerHandler extends AnswerHandler{
             localMulti.setLocalPlayers(localPlayers);
             localMulti.setGameId(joinGameAnswer.getGameId());
             localMulti.setState(LocalGameState.WAITINGPLAYERS);
-            localMulti.notifyObserver();
+            localMulti.notifyObservers();
         }
         else{
             logger.error("create game answer received by singlePlayer game");

@@ -14,7 +14,7 @@ public class LocalDevelopCard extends LocalCard{
 
     public synchronized void setResToFlush(TreeMap<Resource, Integer> resToFlush) {
         this.production.setResToFlush(resToFlush);
-        notifyObserver();
+        notifyObservers();
     }
 
     public int getVictoryPoints() {
@@ -27,7 +27,7 @@ public class LocalDevelopCard extends LocalCard{
 
     public synchronized void setCost(TreeMap<Resource, Integer> cost) {
         this.cost = cost;
-        notifyObserver();
+        notifyObservers();
     }
 
     public int getLevel() {

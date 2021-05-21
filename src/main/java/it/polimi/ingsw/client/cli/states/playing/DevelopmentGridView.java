@@ -21,10 +21,10 @@ public class DevelopmentGridView extends GameView {
         this.localDevelopmentGrid = localDevelopmentGrid;
         this.localGame = localGame;
         waiting = false;
-        localGame.addObserver(this);
+        localGame.overrideObserver(this);
         localGame.getError().addObserver(this);
-        localGame.getLocalTurn().addObserver(this);
-        localDevelopmentGrid.addObserver(this);
+        localGame.getLocalTurn().overrideObserver(this);
+        localDevelopmentGrid.overrideObserver(this);
     }
 
     @Override
@@ -40,10 +40,10 @@ public class DevelopmentGridView extends GameView {
 
     @Override
     public void removeObserved() {
-        localGame.removeObserver();
+        localGame.removeObservers();
         localGame.getError().removeObserver();
-        localDevelopmentGrid.removeObserver();
-        localGame.getLocalTurn().removeObserver();
+        localDevelopmentGrid.removeObservers();
+        localGame.getLocalTurn().removeObservers();
     }
 
     @Override

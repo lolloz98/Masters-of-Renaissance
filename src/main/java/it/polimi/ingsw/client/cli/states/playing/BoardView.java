@@ -25,9 +25,9 @@ public class BoardView extends GameView {
         this.ui = cli;
         this.localPlayer = localPlayer;
         localGame.getError().addObserver(this);
-        localPlayer.getLocalBoard().addObserver(this);
-        localGame.getLocalTurn().addObserver(this);
-        localGame.addObserver(this);
+        localPlayer.getLocalBoard().overrideObserver(this);
+        localGame.getLocalTurn().overrideObserver(this);
+        localGame.overrideObserver(this);
         waiting = false;
     }
 
@@ -47,9 +47,9 @@ public class BoardView extends GameView {
     @Override
     public void removeObserved() {
         localGame.getError().removeObserver();
-        localPlayer.getLocalBoard().removeObserver();
-        localGame.getLocalTurn().removeObserver();
-        localGame.removeObserver();
+        localPlayer.getLocalBoard().removeObservers();
+        localGame.getLocalTurn().removeObservers();
+        localGame.removeObservers();
     }
 
     @Override

@@ -19,8 +19,8 @@ public class PrepResSecondView extends View<CLI> {
         this.ui = ui;
         this.localMulti = localMulti;
         this.localBoard = localBoard;
-        this.localBoard.addObserver(this);
-        this.localMulti.addObserver(this);
+        this.localBoard.overrideObserver(this);
+        this.localMulti.overrideObserver(this);
         this.localMulti.getError().addObserver(this);
         picked = false;
     }
@@ -28,8 +28,8 @@ public class PrepResSecondView extends View<CLI> {
     @Override
     public void notifyUpdate() {
         if(localMulti.getState() == LocalGameState.READY){
-            localMulti.removeObserver();
-            localBoard.removeObserver();
+            localMulti.removeObservers();
+            localBoard.removeObservers();
             localMulti.getError().removeObserver();
             ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
             ui.getState().draw();

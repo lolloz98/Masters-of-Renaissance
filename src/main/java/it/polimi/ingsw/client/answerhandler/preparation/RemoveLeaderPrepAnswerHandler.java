@@ -44,7 +44,7 @@ public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
         }
 
         //notify observers
-        localGame.notifyObserver();
-        localGame.getPlayerById(removeLeaderPrepAnswer.getPlayerId()).getLocalBoard().notifyObserver();
+        localGame.notifyObservers();
+        localGame.getPlayerById(removeLeaderPrepAnswer.getPlayerId()).getLocalBoard().notifyObservers();
     }
 }

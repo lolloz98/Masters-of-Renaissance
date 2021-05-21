@@ -41,6 +41,6 @@ public class GameStatusAnswerHandler extends AnswerHandler{
         localGame.setGameId(gameStatusAnswer.getGame().getGameId());
         localGame.setLocalMarket(gameStatusAnswer.getGame().getLocalMarket());
         localGame.setLocalDevelopmentGrid(gameStatusAnswer.getGame().getLocalDevelopmentGrid());
-        localGame.notifyObserver();
+        localGame.notifyObservers();
     }
 }
