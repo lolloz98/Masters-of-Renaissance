@@ -47,14 +47,6 @@ public class MarketView extends GameView {
     }
 
     @Override
-    public synchronized void helpScreen() {
-        super.helpScreen();
-        System.out.println("'pm', followed by a number or a letter indicating where to push the free marble, to use the market");
-        System.out.println("'fm', followed by the number of the combination to pick, to flush the resources to the board");
-        System.out.println("");
-    }
-
-    @Override
     public synchronized void handleCommand(String s) {
         if (!waiting) {
             String ans = s.toUpperCase();

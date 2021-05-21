@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
-import it.polimi.ingsw.client.cli.states.preparation.PrepLeaderView;
 import it.polimi.ingsw.client.cli.states.printers.BoardPrinter;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.client.localmodel.localcards.*;
@@ -54,16 +53,6 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public synchronized void helpScreen() {
-        super.helpScreen();
-        System.out.println("'al', followed by a number, to activate a leader card");
-        System.out.println("'dl', followed by a number, to discard a leader card");
-        System.out.println("'ad', followed by a number, to activate a production");
-        System.out.println("'fd', to move all the resources currently in a production to the strongbox");
-        System.out.println("");
-    }
-
-    @Override
     public synchronized void handleCommand(String s) {
         if (!waiting) {
             String ans = s.toUpperCase();
@@ -102,7 +91,7 @@ public class BoardView extends GameView {
                 } catch (NumberFormatException e) {
                     writeErrText();
                 }
-                if (leaderNumber > 0 && leaderNumber < localPlayer.getLocalBoard().getLeaderCards().size()) {
+                if (leaderNumber > 0 && leaderNumber <= localPlayer.getLocalBoard().getLeaderCards().size()) {
                     try {
                         ui.getServerListener().sendMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
                         waiting = true;

@@ -47,12 +47,6 @@ public class DevelopmentGridView extends GameView {
     }
 
     @Override
-    public void helpScreen() {
-        super.helpScreen();
-        System.out.println("'bd', followed by a card coordinate, followed by a number that indicates in which slot in the board to put it, to buy a development card (for example: 'buy a1 2')");
-    }
-
-    @Override
     public void handleCommand(String s) {
         if (!waiting) {
             String ans = s.toUpperCase();
@@ -63,7 +57,6 @@ public class DevelopmentGridView extends GameView {
                 super.handleCommand(ansList);
             }
         }
-
     }
 
     private void buy(ArrayList<String> ansList) {

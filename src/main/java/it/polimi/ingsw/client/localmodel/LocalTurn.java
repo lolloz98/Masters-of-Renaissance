@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.localmodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * notify localGame observer for an update of this class
@@ -9,6 +10,16 @@ public abstract class LocalTurn extends Observable implements Serializable {
     protected boolean mainActionOccurred;
     protected boolean productionsActivated;
     protected boolean marketActivated;
+
+    public synchronized ArrayList<String> getHistory() {
+        return history;
+    }
+
+    public synchronized void setHistory(ArrayList<String> history) {
+        this.history = history;
+    }
+
+    protected ArrayList<String> history;
 
     protected LocalTurn() {
     }

@@ -13,6 +13,9 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
     private ArrayList<LocalPlayer> localPlayers;
     private ArrayList<LocalPlayer> winners=null;
 
+    public synchronized ArrayList<LocalPlayer> getWinners() {
+        return winners;
+    }
     public synchronized void setWinners(ArrayList<LocalPlayer> winners) { this.winners = winners; }
 
     public synchronized void setLocalPlayers(ArrayList<LocalPlayer> localPlayers) {
