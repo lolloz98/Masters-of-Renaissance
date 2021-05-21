@@ -4,13 +4,17 @@ import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class GameStatusAnswerHandlerTest  {
     private LocalMulti multiplayer;
     private LocalSingle singleplayer;
-    LocalSingle answerGameSingle;
+    private LocalSingle answerGameSingle;
+    private LocalMulti answerGameMulti;
 
     @Before
     public void setUp() throws Exception {
