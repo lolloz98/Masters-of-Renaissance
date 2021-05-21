@@ -1,9 +1,14 @@
 package it.polimi.ingsw.client.answerhandler;
 
+import it.polimi.ingsw.client.answerhandler.preparation.RemoveLeaderPrepAnswerHandler;
+import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.exceptions.LocalModelException;
+import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
+import it.polimi.ingsw.messages.answers.preparationanswer.RemoveLeaderPrepAnswer;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
@@ -75,6 +80,35 @@ public class AnswerHandlerTestHelper {
 
 
         return localMulti;
+    }
+
+    /**
+     * @param whichPlayerId the id of the player requiring the localgame
+     * @return the localGame of the first player with all the leaders discarded
+     */
+    public static LocalMulti doRemoveLeadersPrepActionOnMulti(int whichPlayerId) throws ModelException, UnexpectedControllerException {
+        LocalMulti localMulti=getLocalMulti(whichPlayerId);
+
+
+        for(int i=0;i<localMulti.getLocalPlayers().size();i++){
+            localMulti.getLocalPlayers().get(i).getLocalBoard().getLeaderCards().remove(0);
+            localMulti.getLocalPlayers().get(i).getLocalBoard().getLeaderCards().remove(0);
+        }
+
+        localMulti.setState(LocalGameState.PREP_RESOURCES);
+
+        return localMulti;
+    }
+
+    public static LocalSingle doRemoveLeadersActionOnSingle() throws ModelException, UnexpectedControllerException {
+        LocalSingle localSingle=getLocalSingle();
+
+        localSingle.getMainPlayer().getLocalBoard().getLeaderCards().remove(0);
+        localSingle.getMainPlayer().getLocalBoard().getLeaderCards().remove(0);
+
+        localSingle.setState(LocalGameState.PREP_RESOURCES);
+
+        return localSingle;
     }
 
 }
