@@ -12,11 +12,14 @@ import java.util.Scanner;
 public class NewMultiView extends View<CLI> {
     private final LocalMulti localMulti;
 
-    public NewMultiView(CLI cli, LocalMulti localMulti, int numberOfPlayers){
+    public NewMultiView(CLI cli, LocalMulti localMulti){
         this.ui = cli;
         this.localMulti = localMulti;
         localMulti.addObserver(this);
         localMulti.getError().addObserver(this);
+    }
+
+    public synchronized void launch(CLI cli, int numberOfPlayers) {
         Scanner input = new Scanner(System.in);
         System.out.println("Type your nickname:\n");
         String nickname = input.nextLine(); // todo: check characters limit
@@ -61,4 +64,6 @@ public class NewMultiView extends View<CLI> {
     @Override
     public synchronized void handleCommand(String ans){
     }
+
+
 }

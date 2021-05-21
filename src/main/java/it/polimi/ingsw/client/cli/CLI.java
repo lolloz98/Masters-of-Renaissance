@@ -155,6 +155,7 @@ public class CLI extends UI {
     @Override
     protected void newMultiPlayer(int numberOfPlayers) {
         super.newMultiPlayer(numberOfPlayers);
-        state = new NewMultiView(this, (LocalMulti) localGame, numberOfPlayers);
+        state = new NewMultiView(this, (LocalMulti) localGame);
+        ((NewMultiView) state).launch(this, numberOfPlayers);
     }
 }

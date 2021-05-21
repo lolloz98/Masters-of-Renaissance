@@ -20,7 +20,7 @@ public class NewSingleView extends View<CLI> {
         localSingle.getError().addObserver(this);
     }
 
-    public void launch(CLI cli){
+    public synchronized void launch(CLI cli){
         try {
             Scanner input = new Scanner(System.in);
             System.out.println("Type your nickname:\n");

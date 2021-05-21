@@ -19,9 +19,9 @@ public class HelpView extends GameView {
     @Override
     public void draw() {
         System.out.println("Anywhere, you can type:");
-        System.out.println("'sm' to look at the market");
-        System.out.println("'sd' to look at the development decks");
-        System.out.println("'sb', followed by a number, to see the corresponding board");
+        System.out.println("'sm' to show the market");
+        System.out.println("'sd' to show the development decks");
+        System.out.println("'sb', followed by a number, to show the corresponding board");
         System.out.println("'next' to end your turn");
         System.out.println("");
         System.out.println("In your board, you can type:");
