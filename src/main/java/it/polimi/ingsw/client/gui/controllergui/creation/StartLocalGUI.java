@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.gui.controllergui.creation;
 
+import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.LocalSingleGameHandler;
 import it.polimi.ingsw.client.cli.Observer;
+import it.polimi.ingsw.client.exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
 import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
@@ -30,14 +32,18 @@ public class StartLocalGUI implements ControllerGUI, Observer {
         ui.newSinglePlayer();
         ui.getLocalGame().overrideObserver(this);
         createGameBtn.setOnMouseClicked(mouseEvent -> {
-            String nick = nickname.getText();
-            new Thread(() ->{
-                try {
-                    ui.getGameHandler().dealWithMessage(new CreateGameMessage(1, nick));
-                } catch (IOException e) {
-                    logger.debug("something wrong happened while dealing with a message: " + e);
-                }
-            }).start();
+            try {
+                CreateGameMessage createGameMessage = new InputHelper().getCreateGameMessage("1", nickname.getText());
+                new Thread(() -> {
+                    try {
+                        ui.getGameHandler().dealWithMessage(createGameMessage);
+                    } catch (IOException e) {
+                        logger.error("something wrong happened while dealing with a message: " + e);
+                    }
+                }).start();
+            }catch (IllegalArgumentException | InvalidNumberOfPlayersException e){
+                logger.warn("Something wrong happened while creating the message: " + e);
+            }
         });
     }
 

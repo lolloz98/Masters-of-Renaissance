@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.gui.controllergui.creation;
 
+import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.Observer;
+import it.polimi.ingsw.client.exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
 import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
@@ -29,24 +31,23 @@ public class CreateGameGUI implements ControllerGUI, Observer {
         this.ui = ui;
         this.stage = stage;
         createGameBtn.setOnMouseClicked(mouseEvent -> {
-            Platform.runLater(() -> {createGameBtn.setDisable(true);});
+            Platform.runLater(() -> createGameBtn.setDisable(true));
             String nick = nickname.getText();
             try {
-                int playerNumber = Integer.parseInt(playerNumbers.getText());
-                if(playerNumber > 4 || playerNumber <= 0) throw new IllegalArgumentException();
+                CreateGameMessage createGameMessage = new InputHelper().getCreateGameMessage(playerNumbers.getText(), nick);
                 new Thread(() -> {
                     try {
-                        if(playerNumber == 1) ui.newSinglePlayer();
+                        if(createGameMessage.getPlayersNumber() == 1) ui.newSinglePlayer();
                         else ui.newMultiPlayer();
 
                         ui.getLocalGame().overrideObserver(this);
-                        ui.getGameHandler().dealWithMessage(new CreateGameMessage(playerNumber, nick));
+                        ui.getGameHandler().dealWithMessage(createGameMessage);
                     } catch (IOException e) {
                         logger.debug("something wrong happened while dealing with a message: " + e);
-                        Platform.runLater(() -> {createGameBtn.setDisable(false);});
+                        Platform.runLater(() -> createGameBtn.setDisable(false));
                     }
                 }).start();
-            }catch (IllegalArgumentException e){
+            }catch (IllegalArgumentException | InvalidNumberOfPlayersException e){
                 logger.debug("something went wrong: " + e);
                 Platform.runLater(() -> {createGameBtn.setDisable(false);});
             }

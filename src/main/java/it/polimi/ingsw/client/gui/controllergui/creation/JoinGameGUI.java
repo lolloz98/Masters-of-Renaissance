@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.controllergui.creation;
 
+import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
@@ -47,15 +48,15 @@ public class JoinGameGUI implements ControllerGUI, Observer {
         this.ui = ui;
         this.stage = stage;
         joinGameBtn.setOnMouseClicked(mouseEvent -> {
-            Platform.runLater(() -> {joinGameBtn.setDisable(true);});
+            Platform.runLater(() -> joinGameBtn.setDisable(true));
             String nick = nickname.getText();
             try {
-                int id = Integer.parseInt(gameId.getText());
+                JoinGameMessage joinGameMessage = new InputHelper().getJoinGameMessage(gameId.getText(), nick);
                 new Thread(() -> {
                     try {
                         ui.newMultiPlayer();
                         ui.getLocalGame().overrideObserver(this);
-                        ui.getGameHandler().dealWithMessage(new JoinGameMessage(id, nick));
+                        ui.getGameHandler().dealWithMessage(joinGameMessage);
                     } catch (IOException e) {
                         logger.debug("something wrong happened while dealing with a message: " + e);
                         Platform.runLater(() -> {joinGameBtn.setDisable(false);});
@@ -63,7 +64,7 @@ public class JoinGameGUI implements ControllerGUI, Observer {
                 }).start();
             }catch (IllegalArgumentException e){
                 logger.debug("something went wrong: " + e);
-                Platform.runLater(() -> {joinGameBtn.setDisable(false);});
+                Platform.runLater(() -> joinGameBtn.setDisable(false));
             }
         });
     }

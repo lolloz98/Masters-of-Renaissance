@@ -24,6 +24,10 @@ public class BuildGUI {
         return INSTANCE = new BuildGUI();
     }
 
+    public Scene newScene(Parent root, Stage stage){
+        return new Scene(root, stage.getScene().getWidth(), stage.getScene().getHeight());
+    }
+
     public void toStartScene(Stage stage, GUI ui) {
         Platform.runLater(() -> {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/start.fxml"));
@@ -49,7 +53,7 @@ public class BuildGUI {
                 Parent root = fxmlLoader.load();
                 CreateGameGUI controller = fxmlLoader.getController();
                 controller.setUp(stage, root, ui);
-                stage.setScene(new Scene(root));
+                stage.setScene(newScene(root, stage));
                 stage.show();
             } catch (IOException e) {
                 logger.error("file not found: " + e);
@@ -64,7 +68,7 @@ public class BuildGUI {
                 Parent root = fxmlLoader.load();
                 StartLocalGUI controller = fxmlLoader.getController();
                 controller.setUp(stage, root, ui);
-                stage.setScene(new Scene(root));
+                stage.setScene(newScene(root, stage));
                 stage.show();
             } catch (IOException e) {
                 logger.error("file not found: " + e);
@@ -79,7 +83,7 @@ public class BuildGUI {
                 Parent root = fxmlLoader.load();
                 StartRemoteGUI controller = fxmlLoader.getController();
                 controller.setUp(stage, root, ui);
-                stage.setScene(new Scene(root));
+                stage.setScene(newScene(root, stage));
                 stage.show();
             } catch (IOException e) {
                 logger.error("file not found: " + e);
@@ -95,7 +99,7 @@ public class BuildGUI {
                 Parent root = fxmlLoader.load();
                 BoardControllerGUI controller = fxmlLoader.getController();
                 controller.setUp(stage, root, ui);
-                stage.setScene(new Scene(root));
+                stage.setScene(newScene(root, stage));
                 stage.show();
             } catch (IOException e) {
                 logger.error("file not found: " + e);
@@ -110,7 +114,7 @@ public class BuildGUI {
                 Parent root = fxmlLoader.load();
                 WaitForPlayersGUI controller = fxmlLoader.getController();
                 controller.setUp(stage, root, ui);
-                stage.setScene(new Scene(root));
+                stage.setScene(newScene(root, stage));
                 stage.show();
             } catch (IOException e) {
                 logger.error("file not found: " + e);
@@ -125,7 +129,7 @@ public class BuildGUI {
                 Parent root = fxmlLoader.load();
                 JoinGameGUI controller = fxmlLoader.getController();
                 controller.setUp(stage, root, ui);
-                stage.setScene(new Scene(root));
+                stage.setScene(newScene(root, stage));
                 stage.show();
             } catch (IOException e) {
                 logger.error("file not found: " + e);
@@ -140,7 +144,7 @@ public class BuildGUI {
                 Parent root = fxmlLoader.load();
                 CreateOrJoinGUI controller = fxmlLoader.getController();
                 controller.setUp(stage, root, ui);
-                stage.setScene(new Scene(root));
+                stage.setScene(newScene(root, stage));
                 stage.show();
             } catch (IOException e) {
                 logger.error("file not found: " + e);

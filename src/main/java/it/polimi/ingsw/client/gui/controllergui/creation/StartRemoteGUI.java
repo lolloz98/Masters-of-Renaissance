@@ -23,12 +23,27 @@ public class StartRemoteGUI implements ControllerGUI {
     public Button connectBtn;
     public Label errorMsg;
 
+    private void uiOnError(String message){
+        Platform.runLater(() -> {
+            logger.debug("making errorMsg invisible");
+            errorMsg.setText(message);
+            errorMsg.setVisible(true);
+            connectBtn.setDisable(false);
+        });
+    }
+
+    private void uiOnClick(){
+        Platform.runLater(() -> {
+            logger.debug("making errorMsg invisible");
+            errorMsg.setVisible(false);
+            connectBtn.setDisable(true);
+        });
+    }
+
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         connectBtn.setOnMouseClicked(mouseEvent -> {
-            Platform.runLater(() -> {
-                logger.debug("making errorMsg invisible");
-                errorMsg.setVisible(false);});
+            uiOnClick();
 
             String ip = serverIp.getText();
             try {
@@ -43,9 +58,7 @@ public class StartRemoteGUI implements ControllerGUI {
                         BuildGUI.getInstance().toJoinOrCreate(stage, ui);
                     } catch (IllegalArgumentException | IOException e) {
                         Platform.runLater(() -> {
-                            logger.debug("making errorMsg visible");
-                            errorMsg.setText("Something went wrong, please try again");
-                            errorMsg.setVisible(true);
+                            uiOnError("Something went wrong, please try again");
                         });
                     }
                 });
@@ -53,9 +66,7 @@ public class StartRemoteGUI implements ControllerGUI {
                 worker.start();
             }catch (NumberFormatException e){
                 Platform.runLater(() -> {
-                    logger.debug("making errorMsg visible");
-                    errorMsg.setText("The port must be a number!");
-                    errorMsg.setVisible(true);
+                    uiOnError("The port must be a number!");
                 });
             }
         });
