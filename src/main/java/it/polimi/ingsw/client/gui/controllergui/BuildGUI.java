@@ -30,7 +30,7 @@ public class BuildGUI {
                 logger.debug("To start scene");
                 Parent root = fxmlLoader.load();
                 StartGUI controller = fxmlLoader.getController();
-                controller.setUp(stage, ui);
+                controller.setUp(stage, root, ui);
 
                 stage.setTitle("Master of Renaissance");
                 stage.setScene(new Scene(root));
@@ -46,8 +46,8 @@ public class BuildGUI {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/create_game.fxml"));
             try {
                 Parent root = fxmlLoader.load();
-                CreateGameControllerGUI controller = fxmlLoader.getController();
-                controller.setUp(stage, ui);
+                CreateGameGUI controller = fxmlLoader.getController();
+                controller.setUp(stage, root, ui);
                 stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException e) {
@@ -61,8 +61,8 @@ public class BuildGUI {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/start_local.fxml"));
             try {
                 Parent root = fxmlLoader.load();
-                StartLocal controller = fxmlLoader.getController();
-                controller.setUp(stage, ui);
+                StartLocalGUI controller = fxmlLoader.getController();
+                controller.setUp(stage, root, ui);
                 stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException e) {
@@ -76,8 +76,69 @@ public class BuildGUI {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/start_remote.fxml"));
             try {
                 Parent root = fxmlLoader.load();
-                StartRemote controller = fxmlLoader.getController();
-                controller.setUp(stage, ui);
+                StartRemoteGUI controller = fxmlLoader.getController();
+                controller.setUp(stage, root, ui);
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                logger.error("file not found: " + e);
+            }
+        });
+    }
+
+    public void toBoard(Stage stage, GUI ui){
+        Platform.runLater(() -> {
+            logger.debug("going in board");
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/board.fxml"));
+            try {
+                Parent root = fxmlLoader.load();
+                BoardControllerGUI controller = fxmlLoader.getController();
+                controller.setUp(stage, root, ui);
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                logger.error("file not found: " + e);
+            }
+        });
+    }
+
+    public void toWait(Stage stage, GUI ui) {
+        Platform.runLater(() -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/wait_players.fxml"));
+            try {
+                Parent root = fxmlLoader.load();
+                WaitForPlayersGUI controller = fxmlLoader.getController();
+                controller.setUp(stage, root, ui);
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                logger.error("file not found: " + e);
+            }
+        });
+    }
+
+    public void toJoinGame(Stage stage, GUI ui) {
+        Platform.runLater(() -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/join_game.fxml"));
+            try {
+                Parent root = fxmlLoader.load();
+                JoinGameGUI controller = fxmlLoader.getController();
+                controller.setUp(stage, root, ui);
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                logger.error("file not found: " + e);
+            }
+        });
+    }
+
+    public void toJoinOrCreate(Stage stage, GUI ui) {
+        Platform.runLater(() -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/create_or_join.fxml"));
+            try {
+                Parent root = fxmlLoader.load();
+                CreateOrJoinGUI controller = fxmlLoader.getController();
+                controller.setUp(stage, root, ui);
                 stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException e) {

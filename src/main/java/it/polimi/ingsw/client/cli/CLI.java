@@ -146,15 +146,14 @@ public class CLI extends UI {
     }
 
     @Override
-    protected void newSinglePlayer() {
+    public void newSinglePlayer() {
         super.newSinglePlayer();
         state = new NewSingleView(this, (LocalSingle) localGame);
         ((NewSingleView) state).launch(this);
     }
 
-    @Override
-    protected void newMultiPlayer(int numberOfPlayers) {
-        super.newMultiPlayer(numberOfPlayers);
+    public void newMultiPlayer(int numberOfPlayers) {
+        super.newMultiPlayer();
         state = new NewMultiView(this, (LocalMulti) localGame);
         ((NewMultiView) state).launch(this, numberOfPlayers);
     }

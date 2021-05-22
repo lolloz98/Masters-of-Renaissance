@@ -43,7 +43,7 @@ public abstract class UI {
      * set local game to new single player.
      * Override this method and execute its base functionalities before setting up the view
      */
-    protected void newSinglePlayer(){
+    public void newSinglePlayer(){
         localGame = new LocalSingle();
         gameHandler.setLocalGame(localGame);
     }
@@ -72,7 +72,7 @@ public abstract class UI {
      * set local game to new multi player.
      * Override this method and execute its base functionalities before setting up the view
      */
-    protected void newMultiPlayer(int numberOfPlayers) {
+    public void newMultiPlayer() {
         localGame = new LocalMulti();
         gameHandler.setLocalGame(localGame);
     }

@@ -18,7 +18,7 @@ public class StartGUI implements ControllerGUI {
     public Button localBtn;
     public Button remoteBtn;
 
-    public void setUp(Stage stage, GUI ui){
+    public void setUp(Stage stage, Parent root, GUI ui){
         localBtn.setOnMouseClicked(mouseEvent -> {
             logger.debug(localBtn + " clicked");
             BuildGUI.getInstance().toStartLocal(stage, ui);

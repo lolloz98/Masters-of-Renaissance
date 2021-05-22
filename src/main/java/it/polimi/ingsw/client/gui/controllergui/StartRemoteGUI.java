@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.controllergui;
 import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.gui.GUI;
 import javafx.application.Platform;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,11 +12,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
-import java.rmi.ConnectException;
 
-public class StartRemote implements ControllerGUI {
-    private static final Logger logger = LogManager.getLogger(StartRemote.class);
+public class StartRemoteGUI implements ControllerGUI {
+    private static final Logger logger = LogManager.getLogger(StartRemoteGUI.class);
 
     public TextField serverIp;
     public TextField portNumber;
@@ -23,7 +22,7 @@ public class StartRemote implements ControllerGUI {
     public Label errorMsg;
 
     @Override
-    public void setUp(Stage stage, GUI ui) {
+    public void setUp(Stage stage, Parent root, GUI ui) {
         connectBtn.setOnMouseClicked(mouseEvent -> {
             Platform.runLater(() -> {
                 logger.debug("making errorMsg invisible");
@@ -35,8 +34,11 @@ public class StartRemote implements ControllerGUI {
                 Thread worker = new Thread(() -> {
                     try {
                         logger.debug("Connecting to server");
-                        ui.setGameHandler(new ServerListener(ip, port));
-                        BuildGUI.getInstance().toCreateGame(stage, ui);
+                        ServerListener serverListener = new ServerListener(ip, port);
+
+                        ui.setGameHandler(serverListener);
+
+                        BuildGUI.getInstance().toJoinOrCreate(stage, ui);
                     } catch (IllegalArgumentException | IOException e) {
                         Platform.runLater(() -> {
                             logger.debug("making errorMsg visible");
