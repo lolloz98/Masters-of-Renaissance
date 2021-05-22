@@ -8,7 +8,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.polimi.ingsw.client.gui.controllergui.WaitForPlayersGUI"
+            fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.WaitForPlayersGUI"
             prefHeight="400.0" prefWidth="600.0">
 
 </VBox>

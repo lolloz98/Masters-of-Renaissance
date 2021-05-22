@@ -1,6 +1,8 @@
-package it.polimi.ingsw.client.gui.controllergui;
+package it.polimi.ingsw.client.gui.controllergui.creation;
 
 import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
+import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;

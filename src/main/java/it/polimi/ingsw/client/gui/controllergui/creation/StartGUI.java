@@ -1,16 +1,13 @@
-package it.polimi.ingsw.client.gui.controllergui;
+package it.polimi.ingsw.client.gui.controllergui.creation;
 
 import it.polimi.ingsw.client.gui.GUI;
-import javafx.fxml.FXMLLoader;
+import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
+import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
-import java.util.Objects;
 
 public class StartGUI implements ControllerGUI {
     private static final Logger logger = LogManager.getLogger(StartGUI.class);

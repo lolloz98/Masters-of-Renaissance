@@ -1,11 +1,7 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
-import it.polimi.ingsw.client.gui.controllergui.StartGUI;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class ClientGUI extends Application {

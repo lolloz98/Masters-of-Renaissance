@@ -8,7 +8,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.polimi.ingsw.client.gui.controllergui.JoinGameGUI"
+            fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.JoinGameGUI"
             prefHeight="400.0" prefWidth="600.0">
     <TextField fx:id="gameId" layoutX="137.0" layoutY="87.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here the gameId" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="131.8" AnchorPane.topAnchor="87.0" />
     <TextField fx:id="nickname" layoutX="136.0" layoutY="166.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here your nickname" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="132.8" AnchorPane.topAnchor="166.0" />

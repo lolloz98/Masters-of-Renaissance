@@ -1,7 +1,9 @@
-package it.polimi.ingsw.client.gui.controllergui;
+package it.polimi.ingsw.client.gui.controllergui.creation;
 
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
+import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import javafx.application.Platform;
