@@ -3,6 +3,8 @@ package it.polimi.ingsw.server.controller.messagesctr.playing;
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
+import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
+import it.polimi.ingsw.client.localmodel.localcards.LocalLorenzoCard;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.endgameanswer.EndGameAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
@@ -12,6 +14,7 @@ import it.polimi.ingsw.server.controller.ControllerActionsBase;
 import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
+import it.polimi.ingsw.server.model.cards.lorenzo.LorenzoCard;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
@@ -53,6 +56,13 @@ public class FinishTurnMessageController extends PlayingMessageController {
             if (game instanceof SinglePlayer) {
                 // we have to manage the turn of lorenzo
                 SinglePlayer singlePlayer = (SinglePlayer) game;
+                LorenzoCard lorenzoCard;
+                try {
+                    lorenzoCard=singlePlayer.getLorenzoDeck().getTopCard();
+                } catch (EmptyDeckException e) {
+                    logger.error("the lorenzo deck is empty while doing "+ logger.getName());
+                    throw new UnexpectedControllerException(e.getMessage());
+                }
 
                 try {
                     performLorenzoAction(singlePlayer);
@@ -87,7 +97,10 @@ public class FinishTurnMessageController extends PlayingMessageController {
                     LocalTrack localPlayerTrack = ConverterToLocalModel.convert(singlePlayer.getPlayer().getBoard().getFaithtrack());
                     //build lorenzo track
                     LocalTrack localLorenzoTrack = ConverterToLocalModel.convert(singlePlayer.getLorenzo().getFaithTrack());
-                    return new FinishTurnSingleAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localGrid, localPlayerTrack, localLorenzoTrack);
+                    //bulid lorenzo card
+                    LocalLorenzoCard localLorenzoCard = ConverterToLocalModel.convert(lorenzoCard);
+
+                    return new FinishTurnSingleAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localGrid, localPlayerTrack, localLorenzoTrack, localLorenzoCard);
                 }
 
             }
