@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.cli.states;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.*;
 import it.polimi.ingsw.client.cli.states.playing.WinnerView;
+import it.polimi.ingsw.client.exceptions.LeaderIndexOutOfBoundException;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
@@ -131,28 +132,10 @@ public abstract class GameView extends View<CLI> {
 
     protected void pickLeaders(ArrayList<String> ansList) {
         if (ansList.size() == 3) {
-            ArrayList<Integer> ansNumbers = new ArrayList<>();
             try {
-                ansNumbers.add(Integer.parseInt(ansList.get(1)));
-                ansNumbers.add(Integer.parseInt(ansList.get(2)));
-                if (ansNumbers.get(0) < 5 && ansNumbers.get(0) > 0 && ansNumbers.get(1) < 5 && ansNumbers.get(1) > 0 && ansNumbers.get(1) != ansNumbers.get(0)) {
-                    ArrayList<Integer> leadersPositions = new ArrayList<>() {{ // position of leaders to be removed
-                        add(1);
-                        add(2);
-                        add(3);
-                        add(4);
-                        removeAll(ansNumbers);
-                    }};
-                    ArrayList<Integer> leaderCardIds = new ArrayList<>(); // ids of leaders to be removed
-                    leaderCardIds.add(localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(leadersPositions.get(0) - 1).getId());
-                    leaderCardIds.add(localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(leadersPositions.get(1) - 1).getId());
-                    ui.getGameHandler().dealWithMessage(new RemoveLeaderPrepMessage(
-                            localGame.getGameId(),
-                            localGame.getMainPlayer().getId(),
-                            leaderCardIds
-                    ));
-                } else writeErrText();
-            } catch (NumberFormatException e) {
+                RemoveLeaderPrepMessage removeLeaderPrepMessage = ui.getInputHelper().getRemoveLeaderPrepMessage(localGame, ansList.get(1), ansList.get(2));
+                ui.getGameHandler().dealWithMessage(removeLeaderPrepMessage);
+            } catch (LeaderIndexOutOfBoundException | NumberFormatException e) {
                 writeErrText();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -222,7 +205,7 @@ public abstract class GameView extends View<CLI> {
             System.out.print("\n");
             System.out.println(localMulti.getState() + " " + localMulti.getMainPlayerPosition());
             if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
-                if (localMulti.getMainPlayer().getLocalBoard().getLeaderCards().size()==2) {
+                if (localMulti.getMainPlayer().getLocalBoard().getLeaderCards().size() == 2) {
                     System.out.println("Please wait");
                 } else
                     System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
@@ -230,19 +213,17 @@ public abstract class GameView extends View<CLI> {
                 if (localMulti.getMainPlayerPosition() == 0)
                     System.out.println("Please wait");
                 else if (localMulti.getMainPlayerPosition() == 1 || localMulti.getMainPlayerPosition() == 2)
-                    if(localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1){
+                    if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1) {
                         System.out.println("Please wait");
-                    }
-                    else
+                    } else
                         System.out.println("Pick a free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
                 else if (localMulti.getMainPlayerPosition() == 3)
-                    if(localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1){
+                    if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1) {
                         System.out.println("Pick another free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
-                    } else if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 2){
+                    } else if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 2) {
                         System.out.println("Please wait");
-                    }
-                     else
-                         System.out.println("Pick two free resources: type pr followed by two numbers, 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
+                    } else
+                        System.out.println("Pick two free resources: type pr followed by two numbers, 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
             } else {
                 System.out.println("Currently playing: " + localMulti.getLocalTurn().getCurrentPlayer().getName());
             }
