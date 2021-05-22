@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client.gui.controllergui;
 
-import it.polimi.ingsw.client.LocalSingleGameHandler;
-import javafx.event.EventHandler;
+import it.polimi.ingsw.client.gui.GUI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,35 +12,21 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Objects;
 
-public class StartGUI {
+public class StartGUI implements ControllerGUI {
     private static final Logger logger = LogManager.getLogger(StartGUI.class);
 
     public Button localBtn;
     public Button remoteBtn;
 
-    public void startGUI(Stage stage){
+    public void setUp(Stage stage, GUI ui){
         localBtn.setOnMouseClicked(mouseEvent -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/start_local.fxml")));
-                Parent root = fxmlLoader.load();
-
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                logger.error("File not found: " + e);
-            }
+            logger.debug(localBtn + " clicked");
+            BuildGUI.getInstance().toStartLocal(stage, ui);
         });
 
         remoteBtn.setOnMouseClicked(mouseEvent -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/start_remote.fxml")));
-                Parent root = fxmlLoader.load();
-
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                logger.error("File not found: " + e);
-            }
+            logger.debug(localBtn + " clicked");
+            BuildGUI.getInstance().toStartRemote(stage, ui);
         });
     }
 
