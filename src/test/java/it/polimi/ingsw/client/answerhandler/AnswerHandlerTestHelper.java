@@ -87,6 +87,9 @@ public class AnswerHandlerTestHelper {
     }
 
     /**
+     *after this method the first player owns the following leaders: {LocalProductionLeader->id: 61};{LocalMarbleLeader->id:58}
+     * the second player owns the following leaders:
+     * the third player owns the following leaders:
      * @param whichPlayerId the id of the player requiring the localgame
      * @return the localGame of the first player with all the leaders discarded
      */
@@ -104,6 +107,12 @@ public class AnswerHandlerTestHelper {
         return localMulti;
     }
 
+    /**
+     * after this method the main player owns the following leaders: {LocalProductionLeader->id: 61};{LocalMarbleLeader->id:58}
+     * @return
+     * @throws ModelException
+     * @throws UnexpectedControllerException
+     */
     public static LocalSingle doRemoveLeadersActionOnSingle() throws ModelException, UnexpectedControllerException {
         LocalSingle localSingle=getLocalSingle();
 
