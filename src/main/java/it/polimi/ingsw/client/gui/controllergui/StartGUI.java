@@ -23,7 +23,21 @@ public class StartGUI {
     public void startGUI(Stage stage){
         localBtn.setOnMouseClicked(mouseEvent -> {
             try {
-                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/start_local.fxml")));
+                FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/start_local.fxml")));
+                Parent root = fxmlLoader.load();
+
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                logger.error("File not found: " + e);
+            }
+        });
+
+        remoteBtn.setOnMouseClicked(mouseEvent -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/start_remote.fxml")));
+                Parent root = fxmlLoader.load();
+
                 stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException e) {

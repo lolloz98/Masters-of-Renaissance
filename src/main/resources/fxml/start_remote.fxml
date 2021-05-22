@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.polimi.ingsw.client.gui.controllergui.StartRemote"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.StartRemote">
+    <TextField fx:id="nickname" layoutX="134.0" layoutY="104.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here your nickname" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="104.0" />
+    <TextField fx:id="numberOfPlayers" layoutX="134.0" layoutY="154.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here the number of players" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="154.0" />
+    <Button fx:id="createGameBtn" layoutX="257.0" layoutY="229.0" mnemonicParsing="false" text="Create Game" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="258.2" AnchorPane.topAnchor="229.0" />
 </AnchorPane>
