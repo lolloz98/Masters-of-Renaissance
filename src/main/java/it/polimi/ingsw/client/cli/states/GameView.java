@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.*;
 import it.polimi.ingsw.client.cli.states.playing.WinnerView;
 import it.polimi.ingsw.client.exceptions.LeaderIndexOutOfBoundException;
+import it.polimi.ingsw.client.exceptions.ResourceNumberOutOfBoundException;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
@@ -82,36 +83,30 @@ public abstract class GameView extends View<CLI> {
 
     protected void pickResources(ArrayList<String> ansList) {
         if (ansList.size() == 3) {
-            ArrayList<Integer> ansNumbers = new ArrayList<>();
             try {
-                ansNumbers.add(Integer.parseInt(ansList.get(1)));
-                ansNumbers.add(Integer.parseInt(ansList.get(2)));
-                if (ansNumbers.get(0) < 5 && ansNumbers.get(0) > 0 && ansNumbers.get(1) < 5 && ansNumbers.get(1) > 0) {
-                    for (Integer ansNumber : ansNumbers) {
-                        Resource pickedRes = intToRes(ansNumber);
-                        waiting = true;
-                        ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
-                    }
-                } else writeErrText();
-            } catch (NumberFormatException e) {
+                ChooseOneResPrepMessage chooseOneResPrepMessage1 = ui.getInputHelper().getChooseOneResPrepMessage(localGame, ansList.get(1));
+                waiting = true;
+                ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage1);
+                ChooseOneResPrepMessage chooseOneResPrepMessage2 = ui.getInputHelper().getChooseOneResPrepMessage(localGame, ansList.get(2));
+                waiting = true;
+                ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage2);
+            } catch (ResourceNumberOutOfBoundException | NumberFormatException e) {
                 writeErrText();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (ansList.size() == 2) {
             try {
-                int ansNumber = Integer.parseInt(ansList.get(1));
-                if (ansNumber < 5 && ansNumber > 0) {
-                    Resource pickedRes = intToRes(ansNumber);
-                    waiting = true;
-                    ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes));
-                } else writeErrText();
-            } catch (NumberFormatException e) {
+                ChooseOneResPrepMessage chooseOneResPrepMessage = ui.getInputHelper().getChooseOneResPrepMessage(localGame, ansList.get(1));
+                waiting = true;
+                ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage);
+            } catch (ResourceNumberOutOfBoundException | NumberFormatException e) {
                 writeErrText();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else writeErrText();
+        } else
+            writeErrText();
     }
 
     private Resource intToRes(int ansNumber) {
@@ -134,6 +129,7 @@ public abstract class GameView extends View<CLI> {
         if (ansList.size() == 3) {
             try {
                 RemoveLeaderPrepMessage removeLeaderPrepMessage = ui.getInputHelper().getRemoveLeaderPrepMessage(localGame, ansList.get(1), ansList.get(2));
+                waiting = true;
                 ui.getGameHandler().dealWithMessage(removeLeaderPrepMessage);
             } catch (LeaderIndexOutOfBoundException | NumberFormatException e) {
                 writeErrText();
@@ -203,7 +199,6 @@ public abstract class GameView extends View<CLI> {
                 System.out.print(" " + (i + 1) + "," + localPlayers.get(i).getName());
             }
             System.out.print("\n");
-            System.out.println(localMulti.getState() + " " + localMulti.getMainPlayerPosition());
             if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
                 if (localMulti.getMainPlayer().getLocalBoard().getLeaderCards().size() == 2) {
                     System.out.println("Please wait");

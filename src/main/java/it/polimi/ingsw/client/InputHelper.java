@@ -3,7 +3,10 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.client.exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.client.exceptions.LeaderIndexOutOfBoundException;
 import it.polimi.ingsw.client.exceptions.LeadersAlreadyPickedException;
+import it.polimi.ingsw.client.exceptions.ResourceNumberOutOfBoundException;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.enums.Resource;
+import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
@@ -50,11 +53,11 @@ public class InputHelper {
     /**
      * creates a new RemoveLeaderPrepMessage if the parameters are correct
      *
-     * @param localGame string containing the index of the first leader to be kept
+     * @param localGame
      * @param leader1   string containing the index of the first leader to be kept
      * @param leader2   string containing the index of the first leader to be kept
-     * @throws NumberFormatException if leader1 or leader2 are not numbers
-     * @throws LeadersAlreadyPickedException if there are 2 leaders on the board
+     * @throws NumberFormatException          if leader1 or leader2 are not numbers
+     * @throws LeadersAlreadyPickedException  if there are 2 leaders on the board
      * @throws LeaderIndexOutOfBoundException if leader1 or leader2 are out of bound
      */
     public RemoveLeaderPrepMessage getRemoveLeaderPrepMessage(LocalGame<?> localGame, String leader1, String leader2) throws NumberFormatException, LeaderIndexOutOfBoundException {
@@ -70,7 +73,7 @@ public class InputHelper {
                 add(3);
                 add(4);
             }};
-            leadersPositions.removeAll(new ArrayList<Integer>(){{
+            leadersPositions.removeAll(new ArrayList<Integer>() {{
                 add(leaderNumber1);
                 add(leaderNumber2);
             }});
@@ -86,4 +89,38 @@ public class InputHelper {
             throw new LeaderIndexOutOfBoundException();
         }
     }
+
+    /**
+     * creates a new RemoveLeaderPrepMessage if the parameters are correct
+     *
+     * @param localGame
+     * @param resString index of the res to be picked: 1 SHIELD, 2 GOLD, 3 SERVANT, 4 ROCK
+     * @throws NumberFormatException             if resString is not a number
+     * @throws ResourceNumberOutOfBoundException if the number is not between 1 and 4
+     */
+    public ChooseOneResPrepMessage getChooseOneResPrepMessage(LocalGame<?> localGame, String resString) throws NumberFormatException, ResourceNumberOutOfBoundException {
+        int resNumber = Integer.parseInt(resString);
+        if (resNumber < 5 && resNumber > 0) {
+            Resource pickedRes = intToRes(resNumber);
+            return new ChooseOneResPrepMessage(localGame.getGameId(), localGame.getMainPlayer().getId(), pickedRes);
+        } else {
+            throw new ResourceNumberOutOfBoundException();
+        }
+    }
+
+    private Resource intToRes(int resNumber) {
+        switch (resNumber) {
+            case 1:
+                return Resource.SHIELD;
+            case 2:
+                return Resource.GOLD;
+            case 3:
+                return Resource.SERVANT;
+            case 4:
+                return Resource.ROCK;
+            default:
+                return null; // i already did the check
+        }
+    }
+
 }
