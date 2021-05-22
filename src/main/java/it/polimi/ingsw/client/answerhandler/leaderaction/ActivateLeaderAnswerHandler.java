@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.answerhandler.leaderaction;
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalConcealedCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
@@ -47,9 +48,23 @@ public abstract class ActivateLeaderAnswerHandler extends AnswerHandler {
             }
         }
 
-        handleLeaderAnswer(localGame);
+        // update history
+        if(localGame instanceof LocalMulti){
+            LocalMulti localMulti = (LocalMulti) localGame;
+            String actionDescription;
+            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+                actionDescription = "You activated a leader card";
+            } else {
+                actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " activated a leader card";
+            }
+            localMulti.getLocalTurn().getHistory().add(actionDescription);
+        }
 
+
+        handleLeaderAnswer(localGame);
         localBoard.notifyObservers();
+
+
     }
 
     protected abstract void handleLeaderAnswer(LocalGame<?> localGame);

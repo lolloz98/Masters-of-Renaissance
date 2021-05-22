@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.answerhandler.mainaction;
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushProductionResAnswer;
 
 public class FlushProductionResAnswerHandler extends AnswerHandler {
@@ -18,7 +19,6 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
 
         //update turn
         localGame.getLocalTurn().setProductionsActivated(false);
-        localGame.getLocalTurn().notifyObservers();
 
         //update faith tracks
         localGame.updatePlayerFaithTracks(serverAnswer.getLocalTracks());
@@ -31,7 +31,18 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
         // update productions
         localBoard.flushFromProductions();
 
-        localBoard.notifyObservers();
+        // update history
+        if(localGame instanceof LocalMulti){
+            LocalMulti localMulti = (LocalMulti) localGame;
+            String actionDescription;
+            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+                actionDescription = "You used a development";
+            } else {
+                actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " used a development";
+            }
+            localMulti.getLocalTurn().getHistory().add(actionDescription);
+        }
 
+        localBoard.notifyObservers();
     }
 }

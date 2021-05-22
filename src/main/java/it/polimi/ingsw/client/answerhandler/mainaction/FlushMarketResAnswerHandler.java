@@ -43,7 +43,18 @@ public class FlushMarketResAnswerHandler extends AnswerHandler {
             ((LocalSingle)localGame).setLorenzoTrack(lorenzoTrack);
         }
 
-        localGame.getLocalTurn().notifyObservers();
+        // update history
+        if(localGame instanceof LocalMulti){
+            LocalMulti localMulti = (LocalMulti) localGame;
+            String actionDescription;
+            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+                actionDescription = "You used the market";
+            } else {
+                actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " used the market";
+            }
+            localMulti.getLocalTurn().getHistory().add(actionDescription);
+        }
+
         localBoard.notifyObservers();
     }
 }
