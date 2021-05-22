@@ -14,6 +14,7 @@ public class LocalBoard extends Observable implements Serializable {
     private TreeMap<Resource, Integer> resInStrongBox;
     private TreeMap<Resource, Integer> resInNormalDepot;
     private ArrayList<LocalCard> leaderCards;
+
     /**
      * notify the board for an update of the local track, it doesn't own an observer
      */
@@ -129,6 +130,7 @@ public class LocalBoard extends Observable implements Serializable {
         this.baseProduction = new LocalProduction();
         this.initialRes = 0;
         this.resInNormalDepot = new TreeMap<>();
+        this.resInStrongBox = new TreeMap<>();
     }
 
     public synchronized LocalProduction getBaseProduction() {

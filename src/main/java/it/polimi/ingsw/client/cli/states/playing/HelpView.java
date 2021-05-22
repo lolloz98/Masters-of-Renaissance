@@ -21,13 +21,13 @@ public class HelpView extends GameView {
         System.out.println("'sm' to show the market");
         System.out.println("'sd' to show the development decks");
         System.out.println("'sb', followed by a number, to show the corresponding board");
-        System.out.println("'next' to end your turn");
+        System.out.println("'nt' to go to the next turn");
         System.out.println("");
         System.out.println("In your board, you can type:");
         System.out.println("'al', followed by a number, to activate a leader card");
         System.out.println("'dl', followed by a number, to discard a leader card");
-        System.out.println("'ad', followed by a number, to activate a production");
-        System.out.println("'fd', to move all the resources currently in a production to the strongbox");
+        System.out.println("'ad', followed by a number, to activate a development card");
+        System.out.println("'fd', to move all the resources currently in all development cards to the strongbox");
         System.out.println("");
         System.out.println("In the market, you can type:");
         System.out.println("'pm', followed by a number or a letter indicating where to push the free marble, to use the market");

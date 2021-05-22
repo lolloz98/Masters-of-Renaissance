@@ -26,7 +26,30 @@ public class FinishTurnSingleAnswerHandler extends AnswerHandler {
             LocalBoard localBoard=localSingle.getMainPlayer().getLocalBoard();
 
             localGame.getLocalTurn().setMainActionOccurred(false);
-            localGame.getLocalTurn().notifyObservers();
+            String turnDescription;
+            switch (serverAnswer.getLorenzoCard()){
+                case FAITH:
+                    turnDescription = "Lorenzo gained 2 faith points";
+                    break;
+                case RESHUFFLE:
+                    turnDescription = "Lorenzo gained 1 faith point";
+                    break;
+                case DISCARD_BLUE:
+                    turnDescription = "Lorenzo discarded 2 blue development cards";
+                    break;
+                case DISCARD_GOLD:
+                    turnDescription = "Lorenzo discarded 2 gold development cards";
+                    break;
+                case DISCARD_GREEN:
+                    turnDescription = "Lorenzo discarded 2 green development cards";
+                    break;
+                case DISCARD_PURPLE:
+                    turnDescription = "Lorenzo discarded 2 purple development cards";
+                    break;
+                default:
+                    turnDescription = "";
+            }
+            localGame.getLocalTurn().getHistory().add(turnDescription);
 
             //update the grid
             localSingle.setLocalDevelopmentGrid(serverAnswer.getLocalGrid());
@@ -38,7 +61,10 @@ public class FinishTurnSingleAnswerHandler extends AnswerHandler {
             //update player's track
             localBoard.setLocalTrack(serverAnswer.getLocalPlayerTrack());
 
+
+
             localBoard.notifyObservers();
+            localGame.getLocalTurn().notifyObservers();
 
         } else
             logger.error("the answer is for a single player game and " + logger.getName() + " has been sent to a multiplayer player");

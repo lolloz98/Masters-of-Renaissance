@@ -10,6 +10,7 @@ public abstract class LocalTurn extends Observable implements Serializable {
     protected boolean mainActionOccurred;
     protected boolean productionsActivated;
     protected boolean marketActivated;
+    protected ArrayList<String> history;
 
     public synchronized ArrayList<String> getHistory() {
         return history;
@@ -19,9 +20,8 @@ public abstract class LocalTurn extends Observable implements Serializable {
         this.history = history;
     }
 
-    protected ArrayList<String> history;
-
     protected LocalTurn() {
+        history = new ArrayList<>();
     }
 
     public synchronized boolean isMainActionOccurred() {
@@ -52,5 +52,6 @@ public abstract class LocalTurn extends Observable implements Serializable {
         this.mainActionOccurred = mainActionOccurred;
         this.productionsActivated = productionsActivated;
         this.marketActivated = marketActivated;
+        history = new ArrayList<>();
     }
 }

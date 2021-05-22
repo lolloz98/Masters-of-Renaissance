@@ -1,10 +1,7 @@
 package it.polimi.ingsw.client.cli.states;
 
 import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.cli.states.playing.BoardView;
-import it.polimi.ingsw.client.cli.states.playing.DevelopmentGridView;
-import it.polimi.ingsw.client.cli.states.playing.HelpView;
-import it.polimi.ingsw.client.cli.states.playing.MarketView;
+import it.polimi.ingsw.client.cli.states.playing.*;
 import it.polimi.ingsw.client.cli.states.playing.WinnerView;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.enums.Resource;
@@ -56,6 +53,9 @@ public abstract class GameView extends View<CLI> {
             case "SB": // show board
                 moveToBoard(ansNumber);
                 break;
+            case "SH": // show history
+                historyScreen();
+                break;
             case "SM": // show market
                 moveToMarket(ansNumber);
                 break;
@@ -65,7 +65,7 @@ public abstract class GameView extends View<CLI> {
             case "HELP": // show help screen
                 helpScreen();
                 break;
-            case "NEXT":
+            case "NT": // next turn
                 next();
                 break;
             case "PL":
@@ -265,5 +265,11 @@ public abstract class GameView extends View<CLI> {
     private void goToWinnerScreen() {
         removeObserved();
         ui.setState(new WinnerView(ui, localGame));
+    }
+
+
+    private void historyScreen() {
+        removeObserved();
+        ui.setState(new HistoryView(ui, localGame));
     }
 }
