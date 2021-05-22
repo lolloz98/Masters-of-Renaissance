@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.StartGUI">
+    <HBox layoutX="100.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          AnchorPane.topAnchor="0">
+        <Button fx:id="localBtn" mnemonicParsing="false" text="Local Game"/>
+        <Button fx:id="remoteBtn" mnemonicParsing="false" text="Connect to Remote"/>
+    </HBox>
+</AnchorPane>
