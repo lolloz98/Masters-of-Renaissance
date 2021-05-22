@@ -5,7 +5,7 @@ import it.polimi.ingsw.enums.Resource;
 import java.util.ArrayList;
 
 /**
- * Implementation of MarbleShufflerInferface that that can be used for testing.
+ * Implementation of MarbleShufflerInferface that can be used for testing.
  * It returns a pre-determined disposition of the market tray.
  */
 

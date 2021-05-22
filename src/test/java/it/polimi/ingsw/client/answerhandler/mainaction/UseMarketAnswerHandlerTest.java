@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.answerhandler.mainaction;
 
 import it.polimi.ingsw.client.answerhandler.AnswerHandlerTestHelper;
+import it.polimi.ingsw.client.localmodel.LocalMarket;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.enums.Resource;
@@ -11,12 +12,16 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.fail;
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import static org.junit.Assert.*;
 
 public class UseMarketAnswerHandlerTest {
     private LocalMulti localMulti;
     private LocalSingle localSingle;
-    private Resource[][] marbleMatrix;
+    private LocalMarket localMarket;
+    private ArrayList<TreeMap<Resource,Integer>> resCombinations;
 
     @Before
     public void setUp(){
@@ -36,18 +41,40 @@ public class UseMarketAnswerHandlerTest {
             fail();
         }
 
-        marbleMatrix = new Resource[][]{
-                {Resource.FAITH, Resource.GOLD, Resource.FAITH, Resource.GOLD},
-                {Resource.FAITH, Resource.GOLD, Resource.FAITH, Resource.GOLD},
-                {Resource.FAITH, Resource.GOLD, Resource.FAITH, Resource.GOLD},
-        };
+        localMarket=AnswerHandlerTestHelper.getALocalMarket();
+
+        resCombinations=AnswerHandlerTestHelper.getAResCombinations();
+
     }
 
     @Test
     public void testHandleAnswerSingle(){
+        UseMarketAnswer serverAnswer=new UseMarketAnswer(0,1,resCombinations,localMarket);
 
-        //todo
-        //UseMarketAnswer serverAnswer=new UseMarketAnswer(0,1,marbleMatrix,)
+        UseMarketAnswerHandler handler=new UseMarketAnswerHandler(serverAnswer);
+        handler.handleAnswer(localSingle);
+
+        assertEquals(resCombinations,localSingle.getLocalMarket().getResCombinations());
+        assertTrue(localMarket.getMarbleMatrix().equals(localSingle.getLocalMarket().getMarbleMatrix()));
+        assertEquals(localMarket.getFreeMarble(),localSingle.getLocalMarket().getFreeMarble());
+        assertTrue(localSingle.getLocalTurn().isMainActionOccurred());
+        assertTrue(localSingle.getLocalTurn().isMarketActivated());
+        assertFalse(localSingle.getLocalTurn().isProductionsActivated());
+    }
+
+    @Test
+    public void testHandleAnswerMulti(){
+        UseMarketAnswer serverAnswer=new UseMarketAnswer(0,2,resCombinations,localMarket);
+
+        UseMarketAnswerHandler handler=new UseMarketAnswerHandler(serverAnswer);
+        handler.handleAnswer(localMulti);
+
+        assertEquals(resCombinations,localMulti.getLocalMarket().getResCombinations());
+        assertTrue(localMarket.getMarbleMatrix().equals(localMulti.getLocalMarket().getMarbleMatrix()));
+        assertEquals(localMarket.getFreeMarble(),localMulti.getLocalMarket().getFreeMarble());
+        assertTrue(localMulti.getLocalTurn().isMainActionOccurred());
+        assertTrue(localMulti.getLocalTurn().isMarketActivated());
+        assertFalse(localMulti.getLocalTurn().isProductionsActivated());
     }
 
 }

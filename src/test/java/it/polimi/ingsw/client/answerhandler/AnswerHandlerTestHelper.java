@@ -1,17 +1,16 @@
 package it.polimi.ingsw.client.answerhandler;
 
-import it.polimi.ingsw.client.answerhandler.preparation.RemoveLeaderPrepAnswerHandler;
-import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalGameState;
-import it.polimi.ingsw.client.localmodel.LocalMulti;
-import it.polimi.ingsw.client.localmodel.LocalSingle;
-import it.polimi.ingsw.client.localmodel.exceptions.LocalModelException;
-import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
+import it.polimi.ingsw.client.FigureStateHelperTest;
+import it.polimi.ingsw.client.answerhandler.mainaction.UseMarketAnswerHandler;
+import it.polimi.ingsw.client.localmodel.*;
+import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
-import it.polimi.ingsw.messages.answers.preparationanswer.RemoveLeaderPrepAnswer;
+import it.polimi.ingsw.messages.answers.mainactionsanswer.UseMarketAnswer;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.model.game.MarbleDispenserTester;
+import it.polimi.ingsw.server.model.game.MarketTray;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
@@ -19,6 +18,8 @@ import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.junit.Ignore;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * helper class to test the answer handlers
@@ -140,4 +141,77 @@ public class AnswerHandlerTestHelper {
 
     }
 
+    /**
+     * generates a determinate instance of the local market
+     * @return
+     */
+    public static LocalMarket getALocalMarket(){
+        MarketTray market=new MarketTray(new MarbleDispenserTester());
+        LocalMarket localMarket=ConverterToLocalModel.convert(market);
+        return localMarket;
+    }
+
+    /**
+     *
+     * @return a combination of market resources to flush
+     */
+    public static ArrayList<TreeMap<Resource,Integer>> getAResCombinations(){
+        return new ArrayList<>(){{
+            add(new TreeMap<>(){{
+                put(Resource.GOLD,1);
+                put(Resource.SHIELD,2);
+            }});
+            add(new TreeMap<>(){{
+                put(Resource.SERVANT,3);
+                put(Resource.FAITH,1);
+            }});
+        }};
+    }
+
+    /**
+     * helper method for the FlushMarketResourcesAnswerhandler test
+     * does the market action on the game passed
+     * @param localGame
+     */
+    public static void doUseMarketAction(LocalGame<?> localGame){
+        LocalMarket localMarket=getALocalMarket();
+        ArrayList<TreeMap<Resource,Integer>> resCombinations=getAResCombinations();
+        UseMarketAnswer serverAnswer=new UseMarketAnswer(0,1,resCombinations,localMarket);
+
+        UseMarketAnswerHandler handler=new UseMarketAnswerHandler(serverAnswer);
+        handler.handleAnswer(localGame);
+    }
+
+
+    /**
+     *
+     * @return a random instance of the tracks of the players in the game
+     */
+    public static ArrayList<LocalTrack> getLocalTracks(LocalGame<?> localGame){
+        ArrayList<LocalTrack> tracks=new ArrayList<>();
+        LocalTrack track;
+
+        for(int i=0; i<localGame.getLocalPlayers().size();i++) {
+            track = getARandomTrack();
+            tracks.add(track);
+        }
+
+        return tracks;
+    }
+
+    /**
+     *
+     * @return a random track
+     */
+    public static LocalTrack getARandomTrack(){
+        LocalTrack track;
+
+        track=new LocalTrack();
+        track.setFaithTrackScore(new Random().nextInt(24));
+        for(int i=0;i<3;i++) {
+            track.setFigureState(0, FigureStateHelperTest.randomFigureState());
+        }
+
+        return track;
+    }
 }
