@@ -103,7 +103,7 @@ public class SinglePlayer extends Game<TurnSingle>{
             setLastTurn();
             setHasPlayerWon(true);
         }
-        if(this.isADeckDevelopEmpty() || lorenzo.getFaithTrack().isEndReached()){
+        if(this.isAColorEmpty() || lorenzo.getFaithTrack().isEndReached()){
             setLastTurn();
         }
     }

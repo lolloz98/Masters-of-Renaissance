@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.answerhandler.mainaction;
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
@@ -33,7 +34,6 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler {
         //update normal depots
         localBoard.setResInNormalDepot(serverAnswer.getLocalBoard().getResInNormalDepot());
 
-        localBoard.notifyObservers();
 
         //update leader depots
         LocalCard toUpdate,updated;
@@ -46,9 +46,21 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler {
 
         }
 
+        // update history
+        if(localGame instanceof LocalMulti){
+            LocalMulti localMulti = (LocalMulti) localGame;
+            String actionDescription;
+            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+                actionDescription = "You bought a development card";
+            } else {
+                actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " bought a development card";
+            }
+            localMulti.getLocalTurn().getHistory().add(actionDescription);
+        }
+
         //update development grid
         localGame.setLocalDevelopmentGrid(serverAnswer.getLocalGrid());
         localGame.getLocalDevelopmentGrid().notifyObservers();
-
+        localBoard.notifyObservers();
     }
 }

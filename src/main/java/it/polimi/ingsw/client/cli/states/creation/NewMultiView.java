@@ -19,18 +19,6 @@ public class NewMultiView extends View<CLI> {
         localMulti.getError().addObserver(this);
     }
 
-    public synchronized void launch(CLI cli, int numberOfPlayers) {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Type your nickname:\n");
-        String nickname = input.nextLine(); // todo: check characters limit
-        try {
-            cli.getGameHandler().dealWithMessage(new CreateGameMessage(numberOfPlayers, nickname));
-        } catch (IOException e) {
-            System.out.println("No connection from server");
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public synchronized void draw(){
         if(localMulti.getState() == LocalGameState.NEW){

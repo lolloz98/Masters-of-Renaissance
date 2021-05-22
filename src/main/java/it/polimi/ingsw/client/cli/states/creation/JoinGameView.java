@@ -14,34 +14,15 @@ import java.util.Scanner;
 public class JoinGameView extends View<CLI> {
     private final LocalMulti localMulti;
     private final String nickname;
+    private boolean valid;
 
-    public JoinGameView(CLI cli, LocalMulti localMulti) {
+    public JoinGameView(CLI cli, LocalMulti localMulti, String nickname) {
         this.ui = cli;
         this.localMulti = localMulti;
+        this.nickname = nickname;
         localMulti.overrideObserver(this);
         localMulti.getError().addObserver(this);
-        Scanner input = new Scanner(System.in);
-        System.out.println("Type your nickname:\n");
-        this.nickname = input.nextLine(); // todo: check characters limit
-        boolean valid;
-        do {
-            System.out.println("Enter the game id:\n");
-            String idString = input.nextLine();
-            try {
-                int idNumber = Integer.parseInt(idString);
-                try {
-                    cli.getGameHandler().dealWithMessage(new JoinGameMessage(idNumber, nickname));
-                    valid = true;
-                } catch (IOException e) {
-                    System.out.println("no connection from server");
-                    valid = false;
-                    e.printStackTrace();
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid id, try again:");
-                valid = false;
-            }
-        } while (!valid);
+        valid = true;
     }
 
     @Override
@@ -63,25 +44,28 @@ public class JoinGameView extends View<CLI> {
     @Override
     public synchronized void handleCommand(String ans) {
         try {
-            int port = Integer.parseInt(ans);
-            ui.getGameHandler().dealWithMessage(new JoinGameMessage(port, nickname));
+            JoinGameMessage joinGameMessage = ui.getInputHelper().getJoinGameMessage(ans, nickname);
+            ui.getGameHandler().dealWithMessage(joinGameMessage);
+            valid = true;
         } catch (IOException e) {
-            System.out.println("no connection from server");
             e.printStackTrace();
         } catch (NumberFormatException ex) {
             System.out.println("Invalid id, try again:");
+            valid = false;
         }
     }
 
     @Override
     public synchronized void draw() {
-        if (localMulti.getState() == LocalGameState.NEW) {
-            System.out.println("Please wait");
-        } else if (localMulti.getState() == LocalGameState.WAITINGPLAYERS) {
-            System.out.println("The id of the game is\n" + localMulti.getGameId());
-            System.out.println("Players currently connected:");
-            for (LocalPlayer p : localMulti.getLocalPlayers()) {
-                System.out.println(p.getName());
+        if (valid) {
+            if (localMulti.getState() == LocalGameState.NEW) {
+                System.out.println("Please wait");
+            } else if (localMulti.getState() == LocalGameState.WAITINGPLAYERS) {
+                System.out.println("The id of the game is\n" + localMulti.getGameId());
+                System.out.println("Players currently connected:");
+                for (LocalPlayer p : localMulti.getLocalPlayers()) {
+                    System.out.println(p.getName());
+                }
             }
         }
     }

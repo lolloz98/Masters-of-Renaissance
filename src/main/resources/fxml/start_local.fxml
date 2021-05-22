@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.StartLocal">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.StartLocalGUI">
         <TextField fx:id="nickname" layoutX="134.0" layoutY="122.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here your nickname" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="122.0" />
         <Button fx:id="createGameBtn" layoutX="257.0" layoutY="229.0" mnemonicParsing="false" text="Create Game" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="258.2" AnchorPane.topAnchor="229.0" />
 </AnchorPane>

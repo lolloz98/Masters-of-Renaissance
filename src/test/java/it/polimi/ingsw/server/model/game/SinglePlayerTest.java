@@ -27,8 +27,10 @@ public class SinglePlayerTest {
         singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.getTurn().isLorenzoPlaying());
-        // draw all cards from a develop deck
+        // draw all cards from a develop deck color
+        singlePlayer.getDecksDevelop().get(Color.BLUE).get(1).distributeCards(4);
         singlePlayer.getDecksDevelop().get(Color.BLUE).get(2).distributeCards(4);
+        singlePlayer.getDecksDevelop().get(Color.BLUE).get(3).distributeCards(4);
         singlePlayer.getTurn().setMainActionOccurred();
         singlePlayer.nextTurn();
         assertTrue(singlePlayer.isGameOver());

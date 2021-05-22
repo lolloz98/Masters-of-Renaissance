@@ -23,6 +23,5 @@ public class UseMarketAnswerHandler extends AnswerHandler {
 
         //notify
         localGame.getLocalMarket().notifyObservers();
-        localGame.getLocalTurn().notifyObservers();
     }
 }
