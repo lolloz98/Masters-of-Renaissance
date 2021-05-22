@@ -2,8 +2,6 @@ package it.polimi.ingsw.client.answerhandler.mainaction;
 
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.*;
-import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
-import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalProductionLeader;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.ApplyProductionAnswer;
@@ -72,6 +70,6 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
                 break;
         }
 
-        localBoard.notifyObserver();
+        localBoard.notifyObservers();
     }
 }

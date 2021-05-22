@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -21,8 +21,8 @@ public class FlushProductionResMessageControllerTest {
     private static final Logger logger = LogManager.getLogger(FlushMarketResMessageControllerTest.class);
 
     int gameId;
-    ControllerActionsMulti ca;
-    ControllerActionsSingle cas;
+    ControllerActionsServerMulti ca;
+    ControllerActionsServerSingle cas;
 
     @BeforeClass
     public static void setUp(){
@@ -32,7 +32,7 @@ public class FlushProductionResMessageControllerTest {
     @Test
     public void doAction() throws ControllerException, ResourceNotDiscountableException, InvalidArgumentException, FullDevelopSlotException, InvalidDevelopCardToSlotException, EmptyDeckException, InvalidStepsException, InvalidResourceQuantityToDepotException, NotEnoughResourcesException, EndAlreadyReachedException {
         gameId = MessageControllerTestHelper.toReadyMulti();
-        ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer mp = ca.getGame();
         Player player = mp.getPlayers().get(0);
 

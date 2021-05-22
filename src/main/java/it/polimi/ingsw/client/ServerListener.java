@@ -25,16 +25,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ServerListener implements Runnable{
+public class ServerListener extends GameHandler{
     private static final Logger logger = LogManager.getLogger(ServerListener.class);
     private final Socket server;
     private ObjectInputStream iStream;
-    private LocalGame<?> localGame;
     private ObjectOutputStream output;
-
-    public void setLocalGame(LocalGame<?> localGame) {
-        this.localGame = localGame;
-    }
 
     @Override
     public void run() {
@@ -80,7 +75,7 @@ public class ServerListener implements Runnable{
         }
     }
 
-    private synchronized void handleAnswer(Answer answer) throws IOException {
+    private synchronized void handleAnswer(Answer answer) {
         try {
             Object parsedAnswer = ParserClient.parseAnswer(answer);
             if (parsedAnswer instanceof AnswerHandler){
@@ -91,7 +86,7 @@ public class ServerListener implements Runnable{
         }
     }
 
-    public void sendMessage(ClientMessage message) throws IOException {
+    public void dealWithMessage(ClientMessage message) throws IOException {
         output.writeObject(message);
     }
 

@@ -6,12 +6,11 @@ import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.ParserServer;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.AnswerFactory;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.apache.logging.log4j.LogManager;
@@ -84,7 +83,7 @@ class ClientHandlerUiTestHelper extends ClientHandler{
             if(parsedMessage instanceof CreateGameMessageController && ((CreateGameMessage)clientMessage).getPlayersNumber() == 1){
                 // we have created a new single player game
                 logger.warn("Hard changing status of game");
-                ControllerActionsSingle ca = (ControllerActionsSingle) controllerManager.getControllerFromMap(answerListener.getGameId());
+                ControllerActionsServerSingle ca = (ControllerActionsServerSingle) controllerManager.getControllerFromMap(answerListener.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
                 ManipulateGameUiTestHelper.setStateOfGame1(answerListener.getGameId(), ca.getGame());
@@ -93,7 +92,7 @@ class ClientHandlerUiTestHelper extends ClientHandler{
             }else if((parsedMessage instanceof JoinGameMessageController) && controllerManager.getControllerFromMap(clientMessage.getGameId()).getGame() != null){
                 // we have created a new multiplayer game
                 logger.warn("Hard changing status of game");
-                ControllerActionsMulti ca = (ControllerActionsMulti) controllerManager.getControllerFromMap(clientMessage.getGameId());
+                ControllerActionsServerMulti ca = (ControllerActionsServerMulti) controllerManager.getControllerFromMap(clientMessage.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
                 ManipulateGameUiTestHelper.setStateOfGame1(answerListener.getGameId(), ca.getGame());

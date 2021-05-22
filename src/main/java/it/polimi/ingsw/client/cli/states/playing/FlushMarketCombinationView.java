@@ -14,6 +14,15 @@ import java.util.TreeMap;
 public class FlushMarketCombinationView extends View<CLI> {
     private final LocalGame<?> localGame;
     private final TreeMap<Resource, Integer> resToFlush;
+    /**
+     * temporary resource map to keep the ones to show in the confirmation question,
+     * contains all resToFlush except for FAITH
+     */
+    private TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToShow;
+    /**
+     * temporary int to keep the number of FAITH resources, to show in the confirmation question
+     */
+    private int faithNumber;
     private final TreeMap<Resource, Integer> chosenCombination;
     private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToKeep;
 
@@ -22,7 +31,15 @@ public class FlushMarketCombinationView extends View<CLI> {
         this.resToFlush = resToFlush;
         this.ui = cli;
         resToKeep = new TreeMap<>();
+        resToShow = new TreeMap<>();
         chosenCombination = new TreeMap<>(resToFlush);
+        // i move the faith to normal depot in res to flush, so it doesn't show it as a choice
+        if (resToFlush.containsKey(Resource.FAITH)) {
+            faithNumber = resToFlush.remove(Resource.FAITH);
+            for (int i = 0; i < faithNumber; i++){
+                MapUtils.addToResMapWarehouse(resToKeep, Resource.FAITH, WarehouseType.NORMAL);
+            }
+        }
     }
 
 
@@ -42,10 +59,12 @@ public class FlushMarketCombinationView extends View<CLI> {
             switch (ans) {
                 case "1":
                     MapUtils.addToResMapWarehouse(resToKeep, resToFlush.firstKey(), WarehouseType.NORMAL);
+                    MapUtils.addToResMapWarehouse(resToShow, resToFlush.firstKey(), WarehouseType.NORMAL);
                     MapUtils.removeResFromMap(resToFlush, resToFlush.firstKey());
                     break;
                 case "2":
                     MapUtils.addToResMapWarehouse(resToKeep, resToFlush.firstKey(), WarehouseType.LEADER);
+                    MapUtils.addToResMapWarehouse(resToShow, resToFlush.firstKey(), WarehouseType.LEADER);
                     MapUtils.removeResFromMap(resToFlush, resToFlush.firstKey());
                     break;
                 case "3":
@@ -60,7 +79,7 @@ public class FlushMarketCombinationView extends View<CLI> {
                     // switch view, send message
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     try {
-                        ui.getServerListener().sendMessage(new FlushMarketResMessage(
+                        ui.getGameHandler().dealWithMessage(new FlushMarketResMessage(
                                 localGame.getGameId(),
                                 localGame.getMainPlayer().getId(),
                                 chosenCombination,
@@ -88,7 +107,7 @@ public class FlushMarketCombinationView extends View<CLI> {
             System.out.println("2. Leader depot");
             System.out.println("3. Don't keep it");
         } else {
-            System.out.println("Res to flush: " + resToKeep);
+            System.out.println("Res to flush: " + resToShow + " FAITH = " + faithNumber);
             System.out.println("Insert 1 to confirm, 2 to abort");
         }
     }

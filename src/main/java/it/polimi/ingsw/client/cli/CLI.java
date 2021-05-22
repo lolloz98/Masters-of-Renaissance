@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.client.LocalSingleGameHandler;
 import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.client.cli.states.*;
 import it.polimi.ingsw.client.cli.states.creation.JoinGameView;
@@ -60,7 +61,9 @@ public class CLI extends UI {
                     System.out.println("Invalid answer, try again:");
                     valid = false;
                 } else if (ansNumber == 1) {
-                    valid = setUpLocalServer();
+                    valid = true;
+                    gameHandler = new LocalSingleGameHandler();
+                    newSinglePlayer();
                 } else {
                     try {
                         System.out.println("Enter server ip");
@@ -146,11 +149,13 @@ public class CLI extends UI {
     protected void newSinglePlayer() {
         super.newSinglePlayer();
         state = new NewSingleView(this, (LocalSingle) localGame);
+        ((NewSingleView) state).launch(this);
     }
 
     @Override
     protected void newMultiPlayer(int numberOfPlayers) {
         super.newMultiPlayer(numberOfPlayers);
-        state = new NewMultiView(this, (LocalMulti) localGame, numberOfPlayers);
+        state = new NewMultiView(this, (LocalMulti) localGame);
+        ((NewMultiView) state).launch(this, numberOfPlayers);
     }
 }

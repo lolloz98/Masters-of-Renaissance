@@ -20,8 +20,8 @@ public class PrepResFourthView extends View<CLI> {
         this.ui = cli;
         this.localMulti = localMulti;
         this.localBoard = localBoard;
-        this.localBoard.addObserver(this);
-        this.localMulti.addObserver(this);
+        this.localBoard.overrideObserver(this);
+        this.localMulti.overrideObserver(this);
         this.localMulti.getError().addObserver(this);
         picked = false;
     }
@@ -33,8 +33,8 @@ public class PrepResFourthView extends View<CLI> {
             draw();
         }
         if (localMulti.getState() == LocalGameState.READY) {
-            localMulti.removeObserver();
-            localBoard.removeObserver();
+            localMulti.removeObservers();
+            localBoard.removeObservers();
             localMulti.getError().removeObserver();
             ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
             ui.getState().draw();
@@ -70,7 +70,7 @@ public class PrepResFourthView extends View<CLI> {
             if (pickedRes != null) {
                 try {
                     picked = true;
-                    ui.getServerListener().sendMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
+                    ui.getGameHandler().dealWithMessage(new ChooseOneResPrepMessage(localMulti.getGameId(), localMulti.getMainPlayerId(), pickedRes));
                 } catch (IOException e) {
                     System.out.println("No connection from server");
                     e.printStackTrace();

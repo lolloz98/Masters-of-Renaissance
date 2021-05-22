@@ -3,10 +3,8 @@ package it.polimi.ingsw.server.controller.messagesctr.playing;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
-import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
-import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -30,8 +28,8 @@ public class BuyDevelopCardMessageControllerTest {
 
     BuyDevelopCardMessageController buyDevelopCardMessageController;
     int gameId;
-    ControllerActionsMulti ca;
-    ControllerActionsSingle cas;
+    ControllerActionsServerMulti ca;
+    ControllerActionsServerSingle cas;
 
     @BeforeClass
     public static void setUp(){
@@ -41,7 +39,7 @@ public class BuyDevelopCardMessageControllerTest {
     @Test
     public void doAction() throws ControllerException, EmptyDeckException, FigureAlreadyDiscardedException, ResourceNotDiscountableException, InvalidArgumentException, FigureAlreadyActivatedException, InvalidStepsException, EndAlreadyReachedException {
         gameId = MessageControllerTestHelper.toReadyMulti();
-        ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer mp = ca.getGame();
         Color color = Color.PURPLE;
         int level = 1;

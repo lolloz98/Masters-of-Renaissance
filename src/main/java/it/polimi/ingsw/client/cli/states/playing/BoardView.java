@@ -25,9 +25,9 @@ public class BoardView extends GameView {
         this.ui = cli;
         this.localPlayer = localPlayer;
         localGame.getError().addObserver(this);
-        localPlayer.getLocalBoard().addObserver(this);
-        localGame.getLocalTurn().addObserver(this);
-        localGame.addObserver(this);
+        localPlayer.getLocalBoard().overrideObserver(this);
+        localGame.getLocalTurn().overrideObserver(this);
+        localGame.overrideObserver(this);
         waiting = false;
     }
 
@@ -47,9 +47,9 @@ public class BoardView extends GameView {
     @Override
     public void removeObserved() {
         localGame.getError().removeObserver();
-        localPlayer.getLocalBoard().removeObserver();
-        localGame.getLocalTurn().removeObserver();
-        localGame.removeObserver();
+        localPlayer.getLocalBoard().removeObservers();
+        localGame.getLocalTurn().removeObservers();
+        localGame.removeObservers();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class BoardView extends GameView {
                 }
                 if (leaderNumber > 0 && leaderNumber <= localPlayer.getLocalBoard().getLeaderCards().size()) {
                     try {
-                        ui.getServerListener().sendMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
+                        ui.getGameHandler().dealWithMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
                         waiting = true;
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -110,7 +110,7 @@ public class BoardView extends GameView {
     private void flushProduction() {
         if (localGame.isMainPlayerTurn()) {
             try {
-                ui.getServerListener().sendMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+                ui.getGameHandler().dealWithMessage(new FlushProductionResMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -173,9 +173,9 @@ public class BoardView extends GameView {
                 } catch (NumberFormatException e) {
                     writeErrText();
                 }
-                if (number > 0 && number < localPlayer.getLocalBoard().getLeaderCards().size()) {
+                if (number > 0 && number <= localPlayer.getLocalBoard().getLeaderCards().size()) {
                     try {
-                        ui.getServerListener().sendMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
+                        ui.getGameHandler().dealWithMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
                         waiting = true;
                     } catch (IOException e) {
                         e.printStackTrace();

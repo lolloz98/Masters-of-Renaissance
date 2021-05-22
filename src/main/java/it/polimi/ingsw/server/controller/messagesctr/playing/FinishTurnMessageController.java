@@ -10,7 +10,8 @@ import it.polimi.ingsw.messages.answers.endgameanswer.EndGameAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnSingleAnswer;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.lorenzo.LorenzoCard;
@@ -34,7 +35,7 @@ public class FinishTurnMessageController extends PlayingMessageController {
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws InvalidActionControllerException, UnexpectedControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws InvalidActionControllerException, UnexpectedControllerException {
         Game<?> game = controllerActions.getGame();
 
         // added if statement just for readability
@@ -112,7 +113,7 @@ public class FinishTurnMessageController extends PlayingMessageController {
     /**
      * method that creates the endGameAnswer for the player and changes the state of the game
      */
-    private Answer handleEndGame(ControllerActions<?> controllerActions) throws UnexpectedControllerException {
+    private Answer handleEndGame(ControllerActionsBase<?> controllerActions) throws UnexpectedControllerException {
         controllerActions.toEndGameState();
         ArrayList<LocalPlayer> winners;
         winners = controllerActions.getWinners();

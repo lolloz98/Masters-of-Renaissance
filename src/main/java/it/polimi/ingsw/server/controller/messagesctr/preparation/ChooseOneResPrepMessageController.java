@@ -3,11 +3,11 @@ package it.polimi.ingsw.server.controller.messagesctr.preparation;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.server.controller.AnswerFactory;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidActionControllerException;
 import it.polimi.ingsw.server.controller.exception.InvalidArgumentControllerException;
-import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.model.exception.*;
@@ -29,7 +29,7 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws ControllerException {
         Board board = getPlayerFromId(controllerActions).getBoard();
         int initRes = board.getInitialRes();
 
@@ -58,7 +58,7 @@ public class ChooseOneResPrepMessageController extends ClientMessageController {
     }
 
     @Override
-    protected boolean checkState(ControllerActions<?> controllerActions) {
+    protected boolean checkState(ControllerActionsBase<?> controllerActions) {
         return controllerActions.getGameState() == State.PREPARATION;
     }
 }

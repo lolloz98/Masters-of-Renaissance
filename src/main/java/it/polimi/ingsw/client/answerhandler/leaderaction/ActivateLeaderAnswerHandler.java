@@ -49,7 +49,7 @@ public abstract class ActivateLeaderAnswerHandler extends AnswerHandler {
 
         handleLeaderAnswer(localGame);
 
-        localBoard.notifyObserver();
+        localBoard.notifyObservers();
     }
 
     protected abstract void handleLeaderAnswer(LocalGame<?> localGame);

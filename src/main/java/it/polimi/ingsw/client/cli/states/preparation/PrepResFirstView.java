@@ -12,13 +12,13 @@ public class PrepResFirstView extends View<CLI> {
     public PrepResFirstView(CLI cli, LocalMulti localMulti) {
         this.ui = cli;
         this.localMulti = localMulti;
-        localMulti.addObserver(this);
+        localMulti.overrideObserver(this);
     }
 
     @Override
     public void notifyUpdate() {
         if(localMulti.getState() == LocalGameState.READY){
-            localMulti.removeObserver();
+            localMulti.removeObservers();
             ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
             ui.getState().draw();
         }

@@ -34,7 +34,7 @@ public class ChooseOneResPrepAnswerHandler extends AnswerHandler {
             logger.error("Prep message sent to single player game");
         }
 
-        localGame.notifyObserver();
-        localGame.getMainPlayer().getLocalBoard().notifyObserver(); // fixme to be removed, just for debug
+        localGame.notifyObservers();
+        localGame.getMainPlayer().getLocalBoard().notifyObservers(); // fixme to be removed, just for debug
     }
 }

@@ -26,11 +26,11 @@ public class FinishTurnSingleAnswerHandler extends AnswerHandler {
             LocalBoard localBoard=localSingle.getMainPlayer().getLocalBoard();
 
             localGame.getLocalTurn().setMainActionOccurred(false);
-            localGame.getLocalTurn().notifyObserver();
+            localGame.getLocalTurn().notifyObservers();
 
             //update the grid
             localSingle.setLocalDevelopmentGrid(serverAnswer.getLocalGrid());
-            localSingle.getLocalDevelopmentGrid().notifyObserver();
+            localSingle.getLocalDevelopmentGrid().notifyObservers();
 
             //update lorenzo's track
             localSingle.getLorenzoTrack().setFaithTrackScore(serverAnswer.getLocalLorenzoTrack().getFaithTrackScore());
@@ -38,7 +38,7 @@ public class FinishTurnSingleAnswerHandler extends AnswerHandler {
             //update player's track
             localBoard.setLocalTrack(serverAnswer.getLocalPlayerTrack());
 
-            localBoard.notifyObserver();
+            localBoard.notifyObservers();
 
         } else
             logger.error("the answer is for a single player game and " + logger.getName() + " has been sent to a multiplayer player");

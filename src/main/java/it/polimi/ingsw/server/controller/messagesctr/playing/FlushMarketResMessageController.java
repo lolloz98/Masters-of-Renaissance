@@ -5,7 +5,8 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushMarketResAnswer;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.leader.DepotLeaderCard;
@@ -36,7 +37,7 @@ public class FlushMarketResMessageController extends PlayingMessageController {
      * @return FlushMarketResAnswer
      */
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws InvalidActionControllerException, WrongPlayerIdControllerException, InvalidArgumentControllerException, UnexpectedControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws InvalidActionControllerException, WrongPlayerIdControllerException, InvalidArgumentControllerException, UnexpectedControllerException {
         Player player = getPlayerFromId(controllerActions);
         Board board = player.getBoard();
         FlushMarketResMessage msg = (FlushMarketResMessage) getClientMessage();

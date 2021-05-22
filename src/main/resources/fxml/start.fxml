@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.StartGUI">
+    <HBox alignment="CENTER" layoutX="100.0" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+      <Button fx:id="localBtn" maxWidth="1.7976931348623157E308" prefHeight="29.0" prefWidth="119.0" mnemonicParsing="false" text="Play Locally" HBox.hgrow="ALWAYS">
+         <HBox.margin>
+            <Insets left="30.0" right="30.0" />
+         </HBox.margin></Button>
+        <Button fx:id="remoteBtn" maxWidth="1.7976931348623157E308" prefHeight="29.0" prefWidth="119.0" text="Connect to Remote" HBox.hgrow="ALWAYS">
+         <HBox.margin>
+            <Insets left="30.0" right="30.0" />
+         </HBox.margin></Button>
+    </HBox>
+</AnchorPane>

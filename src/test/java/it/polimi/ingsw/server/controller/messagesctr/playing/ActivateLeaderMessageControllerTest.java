@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.*;
@@ -24,8 +24,8 @@ public class ActivateLeaderMessageControllerTest {
 
     ActivateLeaderMessageController activateLeaderMessageController;
     int gameId;
-    ControllerActionsMulti ca;
-    ControllerActionsSingle cas;
+    ControllerActionsServerMulti ca;
+    ControllerActionsServerSingle cas;
 
     @BeforeClass
     public static void setUp(){
@@ -53,7 +53,7 @@ public class ActivateLeaderMessageControllerTest {
 
     public void doActionMultiBaseTest() throws ControllerException, ModelException {
         gameId = MessageControllerTestHelper.toReadyMulti();
-        ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer mp = ca.getGame();
         Player player = mp.getPlayers().get(0);
         LeaderCard<?> card = player.getBoard().getLeaderCards().get(0);

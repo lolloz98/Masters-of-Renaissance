@@ -4,7 +4,8 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.ApplyProductionAnswer;
 import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.Production;
@@ -32,7 +33,7 @@ public class ApplyProductionMessageController extends PlayingMessageController {
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws WrongPlayerIdControllerException, InvalidActionControllerException, UnexpectedControllerException, InvalidArgumentControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws WrongPlayerIdControllerException, InvalidActionControllerException, UnexpectedControllerException, InvalidArgumentControllerException {
         Player thisPlayer = getPlayerFromId(controllerActions);
         Board board = thisPlayer.getBoard();
         ApplyProductionMessage clientMessage = (ApplyProductionMessage) getClientMessage();

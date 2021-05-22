@@ -2,9 +2,9 @@ package it.polimi.ingsw.server.controller.messagesctr;
 
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.NotCurrentPlayerException;
 import it.polimi.ingsw.server.controller.exception.WrongPlayerIdControllerException;
 import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.model.game.Game;
@@ -29,7 +29,7 @@ public abstract class ClientMessageController implements Serializable {
         return clientMessage;
     }
 
-    protected Player getPlayerFromId(ControllerActions<?> controllerActions) throws WrongPlayerIdControllerException {
+    protected Player getPlayerFromId(ControllerActionsBase<?> controllerActions) throws WrongPlayerIdControllerException {
         Game<?> game = controllerActions.getGame();
         Player player;
         int playerId = getClientMessage().getPlayerId();
@@ -45,7 +45,7 @@ public abstract class ClientMessageController implements Serializable {
         return player;
     }
 
-    public Answer doAction(ControllerActions<?> controllerActions) throws ControllerException {
+    public Answer doAction(ControllerActionsBase<?> controllerActions) throws ControllerException {
         if (checkState(controllerActions)) {
             return doActionNoChecks(controllerActions);
         } else throw new WrongStateControllerException("Wrong request! the game is not in the correct state");
@@ -58,7 +58,7 @@ public abstract class ClientMessageController implements Serializable {
      * @return answer of this message
      * @throws ControllerException if something wrong with the message
      */
-    protected abstract Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException;
+    protected abstract Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws ControllerException;
 
-    protected abstract boolean checkState(ControllerActions<?> controllerActions);
+    protected abstract boolean checkState(ControllerActionsBase<?> controllerActions);
 }

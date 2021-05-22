@@ -3,8 +3,8 @@ package it.polimi.ingsw.server.controller.messagesctr.preparation;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.answers.preparationanswer.ChooseOneResPrepAnswer;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -28,7 +28,7 @@ public class ChooseOneResPrepMessageControllerTest {
     @Test
     public void doActionOnNotYetCreatedGame() throws ControllerException {
         int gameId = MessageControllerTestHelper.doActionCreateGameMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         chooseOneResPrepMessageController = new ChooseOneResPrepMessageController(new ChooseOneResPrepMessage(gameId, 0, Resource.GOLD));
         try {
             chooseOneResPrepMessageController.doAction(ca);
@@ -36,7 +36,7 @@ public class ChooseOneResPrepMessageControllerTest {
         }catch(WrongStateControllerException ignore){}
 
         gameId = MessageControllerTestHelper.doActionCreateGameSingle();
-        ControllerActionsSingle cas = (ControllerActionsSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerSingle cas = (ControllerActionsServerSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
         chooseOneResPrepMessageController = new ChooseOneResPrepMessageController(new ChooseOneResPrepMessage(gameId, 0, Resource.GOLD));
         try {
             chooseOneResPrepMessageController.doAction(cas);
@@ -48,7 +48,7 @@ public class ChooseOneResPrepMessageControllerTest {
     public void doAction() throws ControllerException, InvalidArgumentException {
         Player p;
         int gameId = MessageControllerTestHelper.doToPrepStateMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer game = ca.getGame();
         chooseOneResPrepMessageController = new ChooseOneResPrepMessageController(new ChooseOneResPrepMessage(gameId, game.getPlayers().get(0).getPlayerId(), Resource.GOLD));
         try {
@@ -72,7 +72,7 @@ public class ChooseOneResPrepMessageControllerTest {
     public void doActionInvalidRes() throws ControllerException {
         Player p;
         int gameId = MessageControllerTestHelper.doToPrepStateMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer game = ca.getGame();
 
         p = game.getPlayers().get(1);
@@ -95,7 +95,7 @@ public class ChooseOneResPrepMessageControllerTest {
     @Test
     public void doActionAllDecided() throws ControllerException {
         int gameId = MessageControllerTestHelper.toDecidedInitResMulti();
-        ControllerActionsMulti ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServerMulti ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer game = ca.getGame();
         for(Player p: game.getPlayers()){
             assertEquals(0, p.getBoard().getInitialRes());

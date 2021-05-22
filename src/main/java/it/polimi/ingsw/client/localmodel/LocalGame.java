@@ -72,7 +72,7 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
         for(int i=0;i<localPlayers.size();i++){
             localBoard=localPlayers.get(i).getLocalBoard();
             localBoard.setLocalTrack(tracksUpdated.get(i));
-            localBoard.notifyObserver();
+            localBoard.notifyObservers();
         }
     }
 

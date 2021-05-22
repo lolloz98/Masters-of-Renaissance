@@ -19,7 +19,7 @@ public class LocalProductionLeader extends LocalLeaderCard{
 
     public synchronized void setResToFlush(TreeMap<Resource, Integer> resToFlush) {
         this.production.setResToFlush(resToFlush);
-        notifyObserver();
+        notifyObservers();
     }
 
     public Color getColorRequirement() {

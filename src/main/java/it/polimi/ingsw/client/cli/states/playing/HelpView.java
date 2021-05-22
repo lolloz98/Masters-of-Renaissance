@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalMarket;
 
 public class HelpView extends GameView {
 
@@ -12,16 +11,16 @@ public class HelpView extends GameView {
         this.localGame = localGame;
         waiting = false;
         localGame.getError().addObserver(this);
-        localGame.getLocalTurn().addObserver(this);
-        localGame.addObserver(this);
+        localGame.getLocalTurn().overrideObserver(this);
+        localGame.overrideObserver(this);
     }
 
     @Override
     public void draw() {
         System.out.println("Anywhere, you can type:");
-        System.out.println("'sm' to look at the market");
-        System.out.println("'sd' to look at the development decks");
-        System.out.println("'sb', followed by a number, to see the corresponding board");
+        System.out.println("'sm' to show the market");
+        System.out.println("'sd' to show the development decks");
+        System.out.println("'sb', followed by a number, to show the corresponding board");
         System.out.println("'next' to end your turn");
         System.out.println("");
         System.out.println("In your board, you can type:");
@@ -43,7 +42,7 @@ public class HelpView extends GameView {
     @Override
     public void removeObserved() {
         localGame.getError().removeObserver();
-        localGame.getLocalTurn().removeObserver();
-        localGame.removeObserver();
+        localGame.getLocalTurn().removeObservers();
+        localGame.removeObservers();
     }
 }

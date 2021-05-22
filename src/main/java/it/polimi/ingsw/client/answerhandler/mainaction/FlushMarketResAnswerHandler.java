@@ -43,7 +43,7 @@ public class FlushMarketResAnswerHandler extends AnswerHandler {
             ((LocalSingle)localGame).setLorenzoTrack(lorenzoTrack);
         }
 
-        localGame.getLocalTurn().notifyObserver();
-        localBoard.notifyObserver();
+        localGame.getLocalTurn().notifyObservers();
+        localBoard.notifyObservers();
     }
 }

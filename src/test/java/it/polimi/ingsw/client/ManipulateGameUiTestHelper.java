@@ -3,15 +3,10 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
-import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
-import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
-import it.polimi.ingsw.server.controller.messagesctr.playing.BuyDevelopCardMessageControllerTest;
-import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.preparation.RemoveLeaderPrepMessageController;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.cards.leader.Requirement;
 import it.polimi.ingsw.server.model.cards.leader.RequirementColorsDevelop;
@@ -126,7 +121,7 @@ public class ManipulateGameUiTestHelper {
     }
 
     private static void setChooseInitRes(int gameId, Player player, Resource res) throws ControllerException, InvalidTypeOfResourceToDepotException, InvalidArgumentException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException {
-        ControllerActions<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
+        ControllerActionsServer<?> ca = ControllerManager.getInstance().getControllerFromMap(gameId);
         while (player.getBoard().getInitialRes() != 0) {
             Board board = player.getBoard();
             board.gainResources(new TreeMap<>() {{

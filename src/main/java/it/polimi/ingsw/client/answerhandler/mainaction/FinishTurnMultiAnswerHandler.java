@@ -31,8 +31,8 @@ public class FinishTurnMultiAnswerHandler extends AnswerHandler {
             localTurn.setMainActionOccurred(false);
 
 
-            localMulti.getLocalDevelopmentGrid().notifyObserver();
-            localTurn.notifyObserver();
+            localMulti.getLocalDevelopmentGrid().notifyObservers();
+            localTurn.notifyObservers();
         }
         else
             logger.error("the answer is for a multi player game and " + logger.getName() + " has been sent to a single player");

@@ -3,7 +3,8 @@ package it.polimi.ingsw.server.controller.messagesctr.playing;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.UseMarketAnswer;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
@@ -21,7 +22,7 @@ public class UseMarketMessageController extends PlayingMessageController {
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws ControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws ControllerException {
         Game<?> game = controllerActions.getGame();
 
         if(game.getTurn().cannotSetMarketActivated(true))

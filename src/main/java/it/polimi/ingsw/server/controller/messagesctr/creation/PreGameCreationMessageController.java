@@ -2,8 +2,8 @@ package it.polimi.ingsw.server.controller.messagesctr.creation;
 
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
-import it.polimi.ingsw.server.controller.ControllerManager;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 
 import java.io.Serializable;
@@ -24,5 +24,5 @@ public abstract class PreGameCreationMessageController implements Serializable {
         return clientMessage;
     }
 
-    public abstract Answer doAction(ControllerActions<?> controllerActions) throws ControllerException;
+    public abstract Answer doAction(ControllerActionsBase<?> controllerActions) throws ControllerException;
 }

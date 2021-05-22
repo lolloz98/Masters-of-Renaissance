@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.cli.states.creation.NewSingleView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
@@ -14,14 +12,14 @@ import java.util.Scanner;
 public abstract class UI {
     private static final Logger logger = LogManager.getLogger(UI.class);
 
-    protected ServerListener serverListener;
+    protected GameHandler gameHandler;
     protected LocalGame<?> localGame;
     protected Scanner input;
     protected boolean gameOver;
 
 
-    public ServerListener getServerListener() {
-        return serverListener;
+    public GameHandler getGameHandler() {
+        return gameHandler;
     }
 
     public LocalGame<?> getLocalGame() {
@@ -38,7 +36,7 @@ public abstract class UI {
      */
     protected void joinGame() {
         this.localGame = new LocalMulti();
-        serverListener.setLocalGame(localGame);
+        gameHandler.setLocalGame(localGame);
     }
 
     /**
@@ -47,14 +45,16 @@ public abstract class UI {
      */
     protected void newSinglePlayer(){
         localGame = new LocalSingle();
-        serverListener.setLocalGame(localGame);
+        gameHandler.setLocalGame(localGame);
     }
 
     /**
      * set up the local server and both the server listener and a new game.
+     * Unfortunately it is not considered valid for the exam to use this method.
      *
      * @return true if everything went fine, false otherwise (the server could not start for some reason)
      */
+    @Deprecated
     protected boolean setUpLocalServer(){
         boolean valid = true;
         int port = LocalServer.getInstance().getPort();
@@ -74,11 +74,11 @@ public abstract class UI {
      */
     protected void newMultiPlayer(int numberOfPlayers) {
         localGame = new LocalMulti();
-        serverListener.setLocalGame(localGame);
+        gameHandler.setLocalGame(localGame);
     }
 
     protected void setServerListener(String ip, int port) throws IOException {
-        serverListener = new ServerListener(ip, port);
-        new Thread(serverListener).start();
+        gameHandler = new ServerListener(ip, port);
+        new Thread(gameHandler).start();
     }
 }

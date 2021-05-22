@@ -2,8 +2,8 @@ package it.polimi.ingsw.server.controller.messagesctr.playing;
 
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -26,8 +26,8 @@ public class FlushMarketResMessageControllerTest {
     private static final Logger logger = LogManager.getLogger(FlushMarketResMessageControllerTest.class);
 
     int gameId;
-    ControllerActionsMulti ca;
-    ControllerActionsSingle cas;
+    ControllerActionsServerMulti ca;
+    ControllerActionsServerSingle cas;
     TreeMap<Resource, Integer> chosenRes;
     TreeMap<WarehouseType, TreeMap<Resource, Integer>> toKeep;
 
@@ -38,7 +38,7 @@ public class FlushMarketResMessageControllerTest {
 
     public void doActionTest() throws ControllerException {
         gameId = MessageControllerTestHelper.toReadyMulti();
-        ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer mp = ca.getGame();
         Player player = mp.getPlayers().get(0);
         chosenRes = new TreeMap<>();

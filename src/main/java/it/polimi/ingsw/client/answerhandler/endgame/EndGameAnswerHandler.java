@@ -34,6 +34,6 @@ public class EndGameAnswerHandler extends AnswerHandler {
         }
 
         localGame.setState(LocalGameState.OVER);
-        localGame.notifyObserver();
+        localGame.notifyObservers();
     }
 }

@@ -8,7 +8,6 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalConcealedCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
-import it.polimi.ingsw.server.controller.messagesctr.playing.DiscardLeaderMessageController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,6 +49,6 @@ public class DiscardLeaderAnswerHandler extends AnswerHandler {
         if (localGame instanceof LocalSingle)
             ((LocalSingle) localGame).setLorenzoTrack(serverAnswer.getLorenzoTrack());
 
-        localBoard.notifyObserver();
+        localBoard.notifyObservers();
     }
 }

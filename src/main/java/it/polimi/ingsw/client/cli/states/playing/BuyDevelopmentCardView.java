@@ -66,7 +66,7 @@ public class BuyDevelopmentCardView extends View<CLI> {
                     // switch view, send message
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     try {
-                        ui.getServerListener().sendMessage(new BuyDevelopCardMessage(
+                        ui.getGameHandler().dealWithMessage(new BuyDevelopCardMessage(
                                 localGame.getGameId(),
                                 localGame.getMainPlayer().getId(),
                                 level,

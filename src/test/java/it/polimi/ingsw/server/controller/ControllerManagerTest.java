@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
@@ -32,7 +31,7 @@ public class ControllerManagerTest {
     public void testNewSinglePlayer() throws ControllerException {
         String name = "Aniello";
         int id= controllerManager.reserveIdForNewGame(new CreateGameMessage(1, name), new AnswerListener(null)).getFirst();
-        ControllerActions<?> controller = controllerManager.getControllerFromMap(id);
+        ControllerActionsServer<?> controller = controllerManager.getControllerFromMap(id);
         assertNotNull(controller.getGame());
         assertEquals(name, ((SinglePlayer) controller.getGame()).getPlayer().getName());
     }

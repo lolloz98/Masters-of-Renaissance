@@ -5,7 +5,8 @@ import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.BuyDevelopCardAnswer;
 import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.*;
@@ -29,7 +30,7 @@ public class BuyDevelopCardMessageController extends PlayingMessageController {
      * @return an answer to the client an update of the board and of the development grid
      */
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws InvalidActionControllerException, WrongPlayerIdControllerException, UnexpectedControllerException, InvalidArgumentControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws InvalidActionControllerException, WrongPlayerIdControllerException, UnexpectedControllerException, InvalidArgumentControllerException {
 
         if(controllerActions.getGame().getTurn().cannotSetMainActionOccurred())
             throw new InvalidActionControllerException("You cannot perform another main action at this time");

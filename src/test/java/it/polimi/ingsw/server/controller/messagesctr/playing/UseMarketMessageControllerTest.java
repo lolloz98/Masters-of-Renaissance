@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.controller.messagesctr.playing;
 
-import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -20,13 +19,13 @@ public class UseMarketMessageControllerTest {
 
     UseMarketMessageController useMarketMessageController;
     int gameId;
-    ControllerActionsMulti ca;
-    ControllerActionsSingle cas;
+    ControllerActionsServerMulti ca;
+    ControllerActionsServerSingle cas;
 
     @Test
     public void testDoAction() throws ControllerException {
         gameId = MessageControllerTestHelper.toReadyMulti();
-        ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer mp = ca.getGame();
         Player player = mp.getPlayers().get(0);
         try {

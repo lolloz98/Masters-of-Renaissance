@@ -4,8 +4,8 @@ import it.polimi.ingsw.client.ManipulateGameUiTestHelper;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
-import it.polimi.ingsw.server.controller.ControllerActionsMulti;
-import it.polimi.ingsw.server.controller.ControllerActionsSingle;
+import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
+import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
@@ -29,8 +29,8 @@ public class FinishTurnMessageControllerTest {
     private static final Logger logger = LogManager.getLogger(FinishTurnMessageControllerTest.class);
 
     int gameId;
-    ControllerActionsMulti ca;
-    ControllerActionsSingle cas;
+    ControllerActionsServerMulti ca;
+    ControllerActionsServerSingle cas;
     @BeforeClass
     public static void setUp(){
         CollectionsHelper.setTest();
@@ -39,7 +39,7 @@ public class FinishTurnMessageControllerTest {
     @Test
     public void doActionMulti() throws ControllerException, ResourceNotDiscountableException, InvalidArgumentException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException {
         gameId = MessageControllerTestHelper.toReadyMulti();
-        ca = (ControllerActionsMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
+        ca = (ControllerActionsServerMulti) ControllerManager.getInstance().getControllerFromMap(gameId);
         MultiPlayer mp = ca.getGame();
         Player player = mp.getPlayers().get(0);
         try {
@@ -63,7 +63,7 @@ public class FinishTurnMessageControllerTest {
     @Test
     public void doActionSingle() throws ControllerException, ResourceNotDiscountableException, InvalidArgumentException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FullDevelopSlotException, InvalidDevelopCardToSlotException, InvalidResourceQuantityToDepotException, NotEnoughResourcesException {
         gameId = MessageControllerTestHelper.toReadySingle();
-        cas = (ControllerActionsSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
+        cas = (ControllerActionsServerSingle) ControllerManager.getInstance().getControllerFromMap(gameId);
         SinglePlayer sp = cas.getGame();
         Player player = sp.getPlayer();
         try {

@@ -33,7 +33,7 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler {
         //update normal depots
         localBoard.setResInNormalDepot(serverAnswer.getLocalBoard().getResInNormalDepot());
 
-        localBoard.notifyObserver();
+        localBoard.notifyObservers();
 
         //update leader depots
         LocalCard toUpdate,updated;
@@ -48,7 +48,7 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler {
 
         //update development grid
         localGame.setLocalDevelopmentGrid(serverAnswer.getLocalGrid());
-        localGame.getLocalDevelopmentGrid().notifyObserver();
+        localGame.getLocalDevelopmentGrid().notifyObservers();
 
     }
 }

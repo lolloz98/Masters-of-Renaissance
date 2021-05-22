@@ -4,7 +4,8 @@ import it.polimi.ingsw.client.localmodel.LocalTrack;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushProductionResAnswer;
 import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
-import it.polimi.ingsw.server.controller.ControllerActions;
+import it.polimi.ingsw.server.controller.ControllerActionsBase;
+import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
@@ -28,7 +29,7 @@ public class FlushProductionResMessageController extends PlayingMessageControlle
     }
 
     @Override
-    protected Answer doActionNoChecks(ControllerActions<?> controllerActions) throws WrongPlayerIdControllerException, InvalidActionControllerException, InvalidArgumentControllerException, UnexpectedControllerException {
+    protected Answer doActionNoChecks(ControllerActionsBase<?> controllerActions) throws WrongPlayerIdControllerException, InvalidActionControllerException, InvalidArgumentControllerException, UnexpectedControllerException {
         Player thisPlayer = getPlayerFromId(controllerActions);
         Board board = thisPlayer.getBoard();
         Turn turn = controllerActions.getGame().getTurn();
