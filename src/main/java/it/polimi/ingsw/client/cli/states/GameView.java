@@ -25,8 +25,8 @@ public abstract class GameView extends View<CLI> {
     public synchronized void notifyUpdate() {
         if (localGame.getState() == LocalGameState.OVER) goToWinnerScreen();
         else {
-            draw();
             waiting = false;
+            draw();
         }
     }
 

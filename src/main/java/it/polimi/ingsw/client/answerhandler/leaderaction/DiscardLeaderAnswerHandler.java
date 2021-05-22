@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.answerhandler.leaderaction;
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalConcealedCard;
@@ -40,6 +41,18 @@ public class DiscardLeaderAnswerHandler extends AnswerHandler {
                 }
             }
             if(!isDiscarded) logger.error("No card has been set to be discarded");
+        }
+
+        // update history
+        if(localGame instanceof LocalMulti){
+            LocalMulti localMulti = (LocalMulti) localGame;
+            String actionDescription;
+            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+                actionDescription = "You discarded a leader card";
+            } else {
+                actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " discarded a leader card";
+            }
+            localMulti.getLocalTurn().getHistory().add(actionDescription);
         }
 
         //update the tracks

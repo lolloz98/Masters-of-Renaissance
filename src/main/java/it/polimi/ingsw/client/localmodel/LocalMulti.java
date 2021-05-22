@@ -16,6 +16,7 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
     public synchronized ArrayList<LocalPlayer> getWinners() {
         return winners;
     }
+
     public synchronized void setWinners(ArrayList<LocalPlayer> winners) { this.winners = winners; }
 
     public synchronized void setLocalPlayers(ArrayList<LocalPlayer> localPlayers) {
@@ -38,7 +39,6 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
     public synchronized ArrayList<LocalPlayer> getLocalPlayers() {
         return localPlayers;
     }
-
 
     public synchronized LocalPlayer getMainPlayer(){
         for(LocalPlayer p : localPlayers){
