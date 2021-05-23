@@ -170,4 +170,25 @@ public class ManipulateGameUiTestHelper {
             setRemoveLeaders(p);
         setBuyDevelopCard(gameId, game.getPlayers().get(0), Color.BLUE, 1, 0);
     }
+
+    /**
+     * set state of the game to ready, it removes the first two leaders,
+     * then calls the satisfyReq fir the first leadercard of the first player
+     */
+    public static void setStateOfGame2(int gameId, MultiPlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException {
+
+        try {
+            setChooseInitRes(gameId, game.getPlayers().get(0), Resource.SHIELD);
+            setChooseInitRes(gameId, game.getPlayers().get(1), Resource.GOLD);
+            setChooseInitRes(gameId, game.getPlayers().get(2), Resource.ROCK);
+            setChooseInitRes(gameId, game.getPlayers().get(3), Resource.SERVANT);
+        }catch (IndexOutOfBoundsException ignore){}
+        for(Player p: game.getPlayers())
+            setRemoveLeaders(p);
+        satisfyReq(
+                game.getPlayers().get(0).getBoard().getLeaderCards().get(0).getRequirement(),
+                game,
+                game.getPlayers().get(0)
+        );
+    }
 }

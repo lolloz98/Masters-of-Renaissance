@@ -28,6 +28,6 @@ public class WinnerView extends View<CLI>{
 
     @Override
     public void draw() {
-
+        // todo
     }
 }

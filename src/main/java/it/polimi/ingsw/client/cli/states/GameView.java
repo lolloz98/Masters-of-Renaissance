@@ -6,7 +6,6 @@ import it.polimi.ingsw.client.cli.states.playing.WinnerView;
 import it.polimi.ingsw.client.exceptions.LeaderIndexOutOfBoundException;
 import it.polimi.ingsw.client.exceptions.ResourceNumberOutOfBoundException;
 import it.polimi.ingsw.client.localmodel.*;
-import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
@@ -107,22 +106,6 @@ public abstract class GameView extends View<CLI> {
             }
         } else
             writeErrText();
-    }
-
-    private Resource intToRes(int ansNumber) {
-        switch (ansNumber) {
-            case 1:
-                return Resource.SHIELD;
-            case 2:
-                return Resource.GOLD;
-            case 3:
-                return Resource.SERVANT;
-            case 4:
-                return Resource.ROCK;
-            default:
-                writeErrText();
-                return null; // i already did the check
-        }
     }
 
     protected void pickLeaders(ArrayList<String> ansList) {
