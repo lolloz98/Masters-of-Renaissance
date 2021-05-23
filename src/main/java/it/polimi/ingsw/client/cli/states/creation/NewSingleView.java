@@ -20,18 +20,6 @@ public class NewSingleView extends View<CLI> {
         localSingle.getError().addObserver(this);
     }
 
-    public synchronized void launch(CLI cli){
-        try {
-            Scanner input = new Scanner(System.in);
-            System.out.println("Type your nickname:\n");
-            String nickname = input.nextLine(); // todo: check characters limit
-            cli.getGameHandler().dealWithMessage(new CreateGameMessage(1, nickname));
-        } catch (IOException e) {
-            System.out.println("no connection from server"); // fixme
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public synchronized void draw(){
         System.out.println("Please wait");

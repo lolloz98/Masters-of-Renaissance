@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.cli.states.printers.BoardPrinter;
+import it.polimi.ingsw.client.exceptions.InvalidLeaderPositionException;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.client.localmodel.localcards.*;
 import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
@@ -85,26 +86,19 @@ public class BoardView extends GameView {
         if (ansList.size() == 2) {
             String ans1 = ansList.get(1);
             if (localPlayer == localGame.getMainPlayer()) {
-                int leaderNumber = 0;
                 try {
-                    leaderNumber = Integer.parseInt(ans1);
-                } catch (NumberFormatException e) {
+                    DiscardLeaderMessage discardLeaderMessage = ui.getInputHelper().getDiscardLeaderMessage(localGame, ans1);
+                    waiting = true;
+                    ui.getGameHandler().dealWithMessage(discardLeaderMessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InvalidLeaderPositionException e) {
                     writeErrText();
                 }
-                if (leaderNumber > 0 && leaderNumber <= localPlayer.getLocalBoard().getLeaderCards().size()) {
-                    try {
-                        ui.getGameHandler().dealWithMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
-                        waiting = true;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    writeErrText();
-                }
-            } else {
-                System.out.println("You can only do this on your board!");
             }
-        } else writeErrText();
+        } else {
+            System.out.println("You can only do this on your board!");
+        }
     }
 
     private void flushProduction() {
@@ -167,24 +161,19 @@ public class BoardView extends GameView {
         if (ansList.size() == 2) {
             String ans1 = ansList.get(1);
             if (localPlayer == localGame.getMainPlayer()) {
-                int number = 0;
                 try {
-                    number = Integer.parseInt(ans1);
-                } catch (NumberFormatException e) {
+                    ActivateLeaderMessage activateLeaderMessage = ui.getInputHelper().getActivateLeaderMessage(localGame, ans1);
+                    waiting = true;
+                    ui.getGameHandler().dealWithMessage(activateLeaderMessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InvalidLeaderPositionException e) {
                     writeErrText();
                 }
-                if (number > 0 && number <= localPlayer.getLocalBoard().getLeaderCards().size()) {
-                    try {
-                        ui.getGameHandler().dealWithMessage(new ActivateLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(number - 1).getId()));
-                        waiting = true;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                System.out.println("You can only do this on your board!");
             }
-        } else writeErrText();
+        } else {
+            System.out.println("You can only do this on your board!");
+        }
     }
 
 }

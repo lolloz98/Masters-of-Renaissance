@@ -1,17 +1,16 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.exceptions.InvalidNumberOfPlayersException;
-import it.polimi.ingsw.client.exceptions.LeaderIndexOutOfBoundException;
-import it.polimi.ingsw.client.exceptions.LeadersAlreadyPickedException;
-import it.polimi.ingsw.client.exceptions.ResourceNumberOutOfBoundException;
+import it.polimi.ingsw.client.exceptions.*;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
-import it.polimi.ingsw.messages.requests.leader.LeaderMessage;
+import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
+import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class InputHelper {
@@ -53,9 +52,8 @@ public class InputHelper {
     /**
      * creates a new RemoveLeaderPrepMessage if the parameters are correct
      *
-     * @param localGame
-     * @param leader1   string containing the index of the first leader to be kept
-     * @param leader2   string containing the index of the first leader to be kept
+     * @param leader1 string containing the index of the first leader to be kept
+     * @param leader2 string containing the index of the first leader to be kept
      * @throws NumberFormatException          if leader1 or leader2 are not numbers
      * @throws LeadersAlreadyPickedException  if there are 2 leaders on the board
      * @throws LeaderIndexOutOfBoundException if leader1 or leader2 are out of bound
@@ -93,7 +91,6 @@ public class InputHelper {
     /**
      * creates a new RemoveLeaderPrepMessage if the parameters are correct
      *
-     * @param localGame
      * @param resString index of the res to be picked: 1 SHIELD, 2 GOLD, 3 SERVANT, 4 ROCK
      * @throws NumberFormatException             if resString is not a number
      * @throws ResourceNumberOutOfBoundException if the number is not between 1 and 4
@@ -122,5 +119,42 @@ public class InputHelper {
                 return null; // i already did the check
         }
     }
+
+    /**
+     * creates a new ActivateLeaderMessage if the parameters are correct
+     *
+     * @param leaderPositionString index of the leader card to be activated
+     * @throws NumberFormatException          if resString is not a number
+     * @throws InvalidLeaderPositionException if the leader position is not valid
+     */
+    public ActivateLeaderMessage getActivateLeaderMessage(LocalGame<?> localGame, String leaderPositionString) throws NumberFormatException, InvalidLeaderPositionException {
+        int leaderPositionNumber;
+        leaderPositionNumber = Integer.parseInt(leaderPositionString);
+        if (leaderPositionNumber > 0 && leaderPositionNumber <= localGame.getMainPlayer().getLocalBoard().getLeaderCards().size()) {
+            return new ActivateLeaderMessage(localGame.getGameId(),
+                    localGame.getMainPlayer().getId(),
+                    localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(leaderPositionNumber - 1).getId());
+        } else
+            throw new InvalidLeaderPositionException();
+    }
+
+    /**
+     * creates a new DiscardLeaderMessage if the parameters are correct
+     *
+     * @param leaderPositionString index of the leader card to be discarded
+     * @throws NumberFormatException          if resString is not a number
+     * @throws InvalidLeaderPositionException if the leader position is not valid
+     */
+    public DiscardLeaderMessage getDiscardLeaderMessage(LocalGame<?> localGame, String leaderPositionString) throws NumberFormatException, InvalidLeaderPositionException {
+        int leaderPositionNumber;
+        leaderPositionNumber = Integer.parseInt(leaderPositionString);
+        if (leaderPositionNumber > 0 && leaderPositionNumber <= localGame.getMainPlayer().getLocalBoard().getLeaderCards().size()) {
+            return new DiscardLeaderMessage(localGame.getGameId(),
+                    localGame.getMainPlayer().getId(),
+                    localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(leaderPositionNumber - 1).getId());
+        } else
+            throw new InvalidLeaderPositionException();
+    }
+
 
 }
