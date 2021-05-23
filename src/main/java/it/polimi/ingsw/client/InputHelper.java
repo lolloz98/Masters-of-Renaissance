@@ -1,11 +1,8 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.cli.states.playing.BuyDevelopmentCardView;
 import it.polimi.ingsw.client.exceptions.*;
 import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
-import it.polimi.ingsw.messages.answers.mainactionsanswer.UseMarketAnswer;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
@@ -14,9 +11,7 @@ import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 public class InputHelper {
 
@@ -205,7 +200,5 @@ public class InputHelper {
                 onRow,
                 indexNumber
         );
-
     }
-
 }

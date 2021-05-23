@@ -227,7 +227,6 @@ public abstract class GameView extends View<CLI> {
         ui.setState(new WinnerView(ui, localGame));
     }
 
-
     private void historyScreen() {
         removeObserved();
         ui.setState(new HistoryView(ui, localGame));
