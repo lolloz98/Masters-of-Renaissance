@@ -8,6 +8,7 @@ import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
+import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -136,4 +137,24 @@ public class InputHelper {
         } else
             throw new InvalidLeaderPositionException();
     }
+
+    /**
+     * creates a new DiscardLeaderMessage if the parameters are correct
+     *
+     * @param leaderPositionString index of the leader card to be discarded
+     * @throws NumberFormatException          if resString is not a number
+     * @throws InvalidLeaderPositionException if the leader position is not valid
+     */
+    public DiscardLeaderMessage getDiscardLeaderMessage(LocalGame<?> localGame, String leaderPositionString) throws NumberFormatException, InvalidLeaderPositionException {
+        int leaderPositionNumber;
+        leaderPositionNumber = Integer.parseInt(leaderPositionString);
+        if (leaderPositionNumber > 0 && leaderPositionNumber <= localGame.getMainPlayer().getLocalBoard().getLeaderCards().size()) {
+            return new DiscardLeaderMessage(localGame.getGameId(),
+                    localGame.getMainPlayer().getId(),
+                    localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(leaderPositionNumber - 1).getId());
+        } else
+            throw new InvalidLeaderPositionException();
+    }
+
+
 }

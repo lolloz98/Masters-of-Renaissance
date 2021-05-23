@@ -86,26 +86,19 @@ public class BoardView extends GameView {
         if (ansList.size() == 2) {
             String ans1 = ansList.get(1);
             if (localPlayer == localGame.getMainPlayer()) {
-                int leaderNumber = 0;
                 try {
-                    leaderNumber = Integer.parseInt(ans1);
-                } catch (NumberFormatException e) {
+                    DiscardLeaderMessage discardLeaderMessage = ui.getInputHelper().getDiscardLeaderMessage(localGame, ans1);
+                    waiting = true;
+                    ui.getGameHandler().dealWithMessage(discardLeaderMessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InvalidLeaderPositionException e) {
                     writeErrText();
                 }
-                if (leaderNumber > 0 && leaderNumber <= localPlayer.getLocalBoard().getLeaderCards().size()) {
-                    try {
-                        ui.getGameHandler().dealWithMessage(new DiscardLeaderMessage(localGame.getGameId(), localPlayer.getId(), localPlayer.getLocalBoard().getLeaderCards().get(leaderNumber - 1).getId()));
-                        waiting = true;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    writeErrText();
-                }
-            } else {
-                System.out.println("You can only do this on your board!");
             }
-        } else writeErrText();
+        } else {
+            System.out.println("You can only do this on your board!");
+        }
     }
 
     private void flushProduction() {
