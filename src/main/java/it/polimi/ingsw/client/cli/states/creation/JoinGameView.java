@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.cli.states.creation;
 
+import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
@@ -44,7 +45,7 @@ public class JoinGameView extends View<CLI> {
     @Override
     public synchronized void handleCommand(String ans) {
         try {
-            JoinGameMessage joinGameMessage = ui.getInputHelper().getJoinGameMessage(ans, nickname);
+            JoinGameMessage joinGameMessage = InputHelper.getJoinGameMessage(ans, nickname);
             ui.getGameHandler().dealWithMessage(joinGameMessage);
             valid = true;
         } catch (IOException e) {

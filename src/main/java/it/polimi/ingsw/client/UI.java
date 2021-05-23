@@ -16,11 +16,6 @@ public abstract class UI {
     protected LocalGame<?> localGame;
     protected Scanner input;
     protected boolean gameOver;
-    protected InputHelper inputHelper;
-
-    public InputHelper getInputHelper() {
-        return inputHelper;
-    }
 
     public GameHandler getGameHandler() {
         return gameHandler;

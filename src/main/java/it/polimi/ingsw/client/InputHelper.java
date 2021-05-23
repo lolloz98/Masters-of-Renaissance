@@ -7,16 +7,13 @@ import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
+import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class InputHelper {
-
-    public InputHelper() {
-    }
 
     /**
      * creates a new CreateGameMessage if the parameters are correct
@@ -27,7 +24,7 @@ public class InputHelper {
      * @throws NumberFormatException           if numberOfPlayers is not a number
      * @throws InvalidNumberOfPlayersException if numberOfPlayers is not between 1 and 4
      */
-    public CreateGameMessage getCreateGameMessage(String numberOfPlayers, String nickname) throws NumberFormatException, InvalidNumberOfPlayersException {
+    public static CreateGameMessage getCreateGameMessage(String numberOfPlayers, String nickname) throws NumberFormatException, InvalidNumberOfPlayersException {
         // todo check nickname length
         int number = Integer.parseInt(numberOfPlayers);
         if (number < 1 || number > 4) {
@@ -44,7 +41,7 @@ public class InputHelper {
      * @return JoinGameMessage to be sent to the gameHandler if the input is correct
      * @throws NumberFormatException if gameIdString is not a number
      */
-    public JoinGameMessage getJoinGameMessage(String gameIdString, String nickname) throws NumberFormatException {
+    public static JoinGameMessage getJoinGameMessage(String gameIdString, String nickname) throws NumberFormatException {
         int gameIdNumber = Integer.parseInt(gameIdString);
         return new JoinGameMessage(gameIdNumber, nickname);
     }
@@ -58,7 +55,7 @@ public class InputHelper {
      * @throws LeadersAlreadyPickedException  if there are 2 leaders on the board
      * @throws LeaderIndexOutOfBoundException if leader1 or leader2 are out of bound
      */
-    public RemoveLeaderPrepMessage getRemoveLeaderPrepMessage(LocalGame<?> localGame, String leader1, String leader2) throws NumberFormatException, LeaderIndexOutOfBoundException {
+    public static RemoveLeaderPrepMessage getRemoveLeaderPrepMessage(LocalGame<?> localGame, String leader1, String leader2) throws NumberFormatException, LeaderIndexOutOfBoundException {
         if (localGame.getMainPlayer().getLocalBoard().getLeaderCards().size() == 2) {
             throw new LeadersAlreadyPickedException();
         }
@@ -95,7 +92,7 @@ public class InputHelper {
      * @throws NumberFormatException             if resString is not a number
      * @throws ResourceNumberOutOfBoundException if the number is not between 1 and 4
      */
-    public ChooseOneResPrepMessage getChooseOneResPrepMessage(LocalGame<?> localGame, String resString) throws NumberFormatException, ResourceNumberOutOfBoundException {
+    public static ChooseOneResPrepMessage getChooseOneResPrepMessage(LocalGame<?> localGame, String resString) throws NumberFormatException, ResourceNumberOutOfBoundException {
         int resNumber = Integer.parseInt(resString);
         if (resNumber < 5 && resNumber > 0) {
             Resource pickedRes = intToRes(resNumber);
@@ -105,7 +102,7 @@ public class InputHelper {
         }
     }
 
-    private Resource intToRes(int resNumber) {
+    private static Resource intToRes(int resNumber) {
         switch (resNumber) {
             case 1:
                 return Resource.SHIELD;
@@ -127,7 +124,7 @@ public class InputHelper {
      * @throws NumberFormatException          if resString is not a number
      * @throws InvalidLeaderPositionException if the leader position is not valid
      */
-    public ActivateLeaderMessage getActivateLeaderMessage(LocalGame<?> localGame, String leaderPositionString) throws NumberFormatException, InvalidLeaderPositionException {
+    public static ActivateLeaderMessage getActivateLeaderMessage(LocalGame<?> localGame, String leaderPositionString) throws NumberFormatException, InvalidLeaderPositionException {
         int leaderPositionNumber;
         leaderPositionNumber = Integer.parseInt(leaderPositionString);
         if (leaderPositionNumber > 0 && leaderPositionNumber <= localGame.getMainPlayer().getLocalBoard().getLeaderCards().size()) {
@@ -145,7 +142,7 @@ public class InputHelper {
      * @throws NumberFormatException          if resString is not a number
      * @throws InvalidLeaderPositionException if the leader position is not valid
      */
-    public DiscardLeaderMessage getDiscardLeaderMessage(LocalGame<?> localGame, String leaderPositionString) throws NumberFormatException, InvalidLeaderPositionException {
+    public static DiscardLeaderMessage getDiscardLeaderMessage(LocalGame<?> localGame, String leaderPositionString) throws NumberFormatException, InvalidLeaderPositionException {
         int leaderPositionNumber;
         leaderPositionNumber = Integer.parseInt(leaderPositionString);
         if (leaderPositionNumber > 0 && leaderPositionNumber <= localGame.getMainPlayer().getLocalBoard().getLeaderCards().size()) {
@@ -156,5 +153,52 @@ public class InputHelper {
             throw new InvalidLeaderPositionException();
     }
 
-
+    /**
+     * creates a new DiscardLeaderMessage if the parameters are correct
+     *
+     * @param indexString index of the market to be pushed, the  allowed values are A, B, C, 1, 2, 3, 4
+     * @throws InvalidMarketIndexException if the leader position is not valid
+     */
+    public static UseMarketMessage getUseMarketMessage(LocalGame<?> localGame, String indexString) throws InvalidMarketIndexException {
+        boolean onRow;
+        int indexNumber;
+        switch (indexString) {
+            case "A":
+                indexNumber = 0;
+                onRow = true;
+                break;
+            case "B":
+                indexNumber = 1;
+                onRow = true;
+                break;
+            case "C":
+                indexNumber = 2;
+                onRow = true;
+                break;
+            case "1":
+                indexNumber = 0;
+                onRow = false;
+                break;
+            case "2":
+                indexNumber = 1;
+                onRow = false;
+                break;
+            case "3":
+                indexNumber = 2;
+                onRow = false;
+                break;
+            case "4":
+                indexNumber = 3;
+                onRow = false;
+                break;
+            default:
+                throw new InvalidMarketIndexException();
+        }
+        return new UseMarketMessage(
+                localGame.getGameId(),
+                localGame.getMainPlayer().getId(),
+                onRow,
+                indexNumber
+        );
+    }
 }

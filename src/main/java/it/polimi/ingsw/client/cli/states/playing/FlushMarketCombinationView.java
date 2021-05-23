@@ -42,7 +42,6 @@ public class FlushMarketCombinationView extends View<CLI> {
         }
     }
 
-
     @Override
     public void notifyUpdate() {
 

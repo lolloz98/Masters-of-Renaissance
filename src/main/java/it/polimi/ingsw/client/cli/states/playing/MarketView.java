@@ -1,9 +1,11 @@
 package it.polimi.ingsw.client.cli.states.playing;
 
+import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.cli.states.printers.MarketPrinter;
+import it.polimi.ingsw.client.exceptions.InvalidMarketIndexException;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
@@ -66,55 +68,16 @@ public class MarketView extends GameView {
 
     private void push(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
-            String s = ansList.get(1);
-            boolean onRow = false;
-            int index = -1;
-            switch (s) {
-                case "A":
-                    index = 0;
-                    onRow = true;
-                    break;
-                case "B":
-                    index = 1;
-                    onRow = true;
-                    break;
-                case "C":
-                    index = 2;
-                    onRow = true;
-                    break;
-                case "1":
-                    index = 0;
-                    onRow = false;
-                    break;
-                case "2":
-                    index = 1;
-                    onRow = false;
-                    break;
-                case "3":
-                    index = 2;
-                    onRow = false;
-                    break;
-                case "4":
-                    index = 3;
-                    onRow = false;
-                    break;
-                default:
-                    writeErrText();
+            try {
+                UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(localGame, ansList.get(1));
+                waiting = true;
+                ui.getGameHandler().dealWithMessage(useMarketMessage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InvalidMarketIndexException e) {
+                writeErrText();
             }
-            if (index != -1) {
-                try {
-                    waiting = true;
-                    ui.getGameHandler().dealWithMessage(new UseMarketMessage(
-                            localGame.getGameId(),
-                            localGame.getMainPlayer().getId(),
-                            onRow,
-                            index
-                    ));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else writeErrText();
+        }
     }
 
     private void flush(ArrayList<String> ansList) {

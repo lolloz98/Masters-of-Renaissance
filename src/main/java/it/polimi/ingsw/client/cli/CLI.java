@@ -37,7 +37,6 @@ public class CLI extends UI {
 
     public void run() {
         gameOver = false;
-        this.inputHelper = new InputHelper();
         this.input = new Scanner(System.in);
         setup();
         String ans;
@@ -71,7 +70,7 @@ public class CLI extends UI {
                 } else if (ansNumber == 1) {
                     valid = true;
                     gameHandler = new LocalSingleGameHandler();
-                    CreateGameMessage createGameMessage = inputHelper.getCreateGameMessage("1", nickname);
+                    CreateGameMessage createGameMessage = InputHelper.getCreateGameMessage("1", nickname);
                     newSinglePlayer();
                     gameHandler.dealWithMessage(createGameMessage);
                 } else {
@@ -118,7 +117,7 @@ public class CLI extends UI {
         do {
             try {
                 numberOfPlayers = input.nextLine();
-                CreateGameMessage createGameMessage = inputHelper.getCreateGameMessage(numberOfPlayers, nickname);
+                CreateGameMessage createGameMessage = InputHelper.getCreateGameMessage(numberOfPlayers, nickname);
                 if(createGameMessage.getPlayersNumber() == 1){
                     newSinglePlayer();
                 } else {
