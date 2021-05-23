@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.cli.states;
 
+import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.*;
 import it.polimi.ingsw.client.cli.states.playing.WinnerView;
@@ -83,10 +84,10 @@ public abstract class GameView extends View<CLI> {
     protected void pickResources(ArrayList<String> ansList) {
         if (ansList.size() == 3) {
             try {
-                ChooseOneResPrepMessage chooseOneResPrepMessage1 = ui.getInputHelper().getChooseOneResPrepMessage(localGame, ansList.get(1));
+                ChooseOneResPrepMessage chooseOneResPrepMessage1 = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(1));
                 waiting = true;
                 ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage1);
-                ChooseOneResPrepMessage chooseOneResPrepMessage2 = ui.getInputHelper().getChooseOneResPrepMessage(localGame, ansList.get(2));
+                ChooseOneResPrepMessage chooseOneResPrepMessage2 = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(2));
                 waiting = true;
                 ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage2);
             } catch (ResourceNumberOutOfBoundException | NumberFormatException e) {
@@ -96,7 +97,7 @@ public abstract class GameView extends View<CLI> {
             }
         } else if (ansList.size() == 2) {
             try {
-                ChooseOneResPrepMessage chooseOneResPrepMessage = ui.getInputHelper().getChooseOneResPrepMessage(localGame, ansList.get(1));
+                ChooseOneResPrepMessage chooseOneResPrepMessage = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(1));
                 waiting = true;
                 ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage);
             } catch (ResourceNumberOutOfBoundException | NumberFormatException e) {
@@ -111,7 +112,7 @@ public abstract class GameView extends View<CLI> {
     protected void pickLeaders(ArrayList<String> ansList) {
         if (ansList.size() == 3) {
             try {
-                RemoveLeaderPrepMessage removeLeaderPrepMessage = ui.getInputHelper().getRemoveLeaderPrepMessage(localGame, ansList.get(1), ansList.get(2));
+                RemoveLeaderPrepMessage removeLeaderPrepMessage = InputHelper.getRemoveLeaderPrepMessage(localGame, ansList.get(1), ansList.get(2));
                 waiting = true;
                 ui.getGameHandler().dealWithMessage(removeLeaderPrepMessage);
             } catch (LeaderIndexOutOfBoundException | NumberFormatException e) {

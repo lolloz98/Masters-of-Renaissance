@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.cli.states.playing;
 
+import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
@@ -87,7 +88,7 @@ public class BoardView extends GameView {
             String ans1 = ansList.get(1);
             if (localPlayer == localGame.getMainPlayer()) {
                 try {
-                    DiscardLeaderMessage discardLeaderMessage = ui.getInputHelper().getDiscardLeaderMessage(localGame, ans1);
+                    DiscardLeaderMessage discardLeaderMessage = InputHelper.getDiscardLeaderMessage(localGame, ans1);
                     waiting = true;
                     ui.getGameHandler().dealWithMessage(discardLeaderMessage);
                 } catch (IOException e) {
@@ -162,7 +163,7 @@ public class BoardView extends GameView {
             String ans1 = ansList.get(1);
             if (localPlayer == localGame.getMainPlayer()) {
                 try {
-                    ActivateLeaderMessage activateLeaderMessage = ui.getInputHelper().getActivateLeaderMessage(localGame, ans1);
+                    ActivateLeaderMessage activateLeaderMessage = InputHelper.getActivateLeaderMessage(localGame, ans1);
                     waiting = true;
                     ui.getGameHandler().dealWithMessage(activateLeaderMessage);
                 } catch (IOException e) {
