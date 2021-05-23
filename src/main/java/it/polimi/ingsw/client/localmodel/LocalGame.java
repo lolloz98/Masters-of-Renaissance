@@ -29,7 +29,7 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
 
     public abstract ArrayList<LocalPlayer> getLocalPlayers();
 
-    public Error getError() {
+    public synchronized Error getError() {
         return error;
     }
 

@@ -79,7 +79,7 @@ public class ServerListener extends GameHandler{
         try {
             Object parsedAnswer = ParserClient.parseAnswer(answer);
             if (parsedAnswer instanceof AnswerHandler){
-                ((AnswerHandler)parsedAnswer).handleAnswer(this.localGame);
+                ((AnswerHandler)parsedAnswer).handleAnswerSync(this.localGame);
             } else throw new HandlerException("Error occurred during the handling of the answer");
     } catch (HandlerException | ParserException e) {
             logger.error("something went wrong, name of exception: " + e.getClass().getSimpleName() + "\n associated message: " + e.getMessage());

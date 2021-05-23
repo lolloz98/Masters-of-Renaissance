@@ -42,6 +42,6 @@
    <Button fx:id="flushBtn" layoutX="646.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Flush Productions" />
    <Label fx:id="messageLbl" layoutX="40.0" layoutY="638.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#e80e0e" />
    
-   <ChoiceBox layoutX="882.0" layoutY="6.0" prefWidth="150.0" />
+   <ChoiceBox fx:id="chooseBoard" layoutX="882.0" layoutY="6.0" prefWidth="150.0" />
 
 </AnchorPane>

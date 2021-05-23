@@ -37,6 +37,10 @@ public class SlotDevelopComponent extends Pane {
         // Todo update activeCard imageView
     }
 
+    public Button getActivateBtn() {
+        return activateBtn;
+    }
+
     public SlotDevelopComponent() {
         FXMLLoader fxmlLoader = new FXMLLoader(
                 getClass().getResource("/fxml/board/slot_develop.fxml"));

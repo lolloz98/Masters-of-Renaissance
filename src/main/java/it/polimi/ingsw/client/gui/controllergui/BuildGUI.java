@@ -94,16 +94,18 @@ public class BuildGUI {
 
     public void toBoard(Stage stage, GUI ui){
         Platform.runLater(() -> {
-            logger.debug("going in board");
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/board2.fxml"));
-            try {
-                Parent root = fxmlLoader.load();
-                BoardControllerGUI controller = fxmlLoader.getController();
-                controller.setUp(stage, root, ui);
-                stage.setScene(newScene(root, stage));
-                stage.show();
-            } catch (IOException e) {
-                logger.error("file not found: " + e);
+            synchronized(ui.getLocalGame()) {
+                logger.debug("going in board");
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/board2.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    BoardControllerGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
             }
         });
     }

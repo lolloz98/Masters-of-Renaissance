@@ -5,20 +5,32 @@ import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.FaithTrackComponent;
 import it.polimi.ingsw.client.gui.componentsgui.LeaderSlotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.SlotDevelopComponent;
+import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
+import it.polimi.ingsw.client.localmodel.LocalPlayer;
+import it.polimi.ingsw.client.localmodel.LocalSingle;
+import it.polimi.ingsw.server.model.utility.PairId;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoardControllerGUI implements ControllerGUI, Observer {
     private static final Logger logger = LogManager.getLogger(BoardControllerGUI.class);
+    public ChoiceBox chooseBoard;
 
     private Stage stage;
     private Parent root;
     private GUI ui;
+
 
     public FaithTrackComponent faithTrackComponent;
     public SlotDevelopComponent slotDevelopComponent1;
@@ -40,17 +52,27 @@ public class BoardControllerGUI implements ControllerGUI, Observer {
         optional1Btn.setOnMouseClicked(mouseEvent -> {
             logger.debug("event handler added by cleanup");
         });
-        optional1Btn.setDisable(false);
-        optional1Btn.setVisible(true);
+        optional1Btn.setDisable(true);
+        optional1Btn.setVisible(false);
 
         optional2Btn.setOnMouseClicked(mouseEvent -> {
             logger.debug("event handler added by cleanup");
         });
-        optional2Btn.setDisable(false);
-        optional2Btn.setVisible(true);
+        optional2Btn.setDisable(true);
+        optional2Btn.setVisible(false);
+
         flushBtn.setDisable(true);
+
+        messageLbl.setText("");
+
+        setVisibleButtonsActions(true);
+
+        setDisableProductions(false);
     }
 
+    /**
+     * called from buildGUI, to setup this view
+     */
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         this.ui = ui;
@@ -62,52 +84,133 @@ public class BoardControllerGUI implements ControllerGUI, Observer {
         developBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toDevelopGrid(stage, ui);
         });
+        LocalGame<?> game = ui.getLocalGame();
+        if(game instanceof LocalSingle)
+            chooseBoard.setVisible(true);
+        else{
+            // todo
+        }
+
 
         setUpOnState();
     }
 
     @Override
     public void notifyUpdate() {
-
+        synchronized (ui.getLocalGame()) {
+            Platform.runLater(this::setUpOnState);
+        }
     }
 
     @Override
     public void notifyError() {
-
+        messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
     }
 
+    /**
+     * set up the view depending on the localGame status
+     */
     private void setUpOnState(){
-        switch(ui.getLocalGame().getState()){
-            case PREP_RESOURCES:
-                Platform.runLater(() -> {
-                    resetDefault();
-                    optional1Btn.setDisable(false);
-                    optional1Btn.setVisible(true);
-                    optional1Btn.setText("Choose Init Resources");
-                    optional1Btn.setOnMouseClicked(mouseEvent -> {
-                        BuildGUI.getInstance().toChooseInitRes(stage, ui);
-                        logger.debug("optional1Btn clicked");
-                    });
+        resetDefault();
+        if(ui.getWhoIAmSeeingId() == ui.getLocalGame().getMainPlayer().getId()) {
+            switch (ui.getLocalGame().getState()) {
+                case PREP_RESOURCES:
+                    setDisableProductions(true);
+                    if(ui.getLocalGame().getMainPlayer().getLocalBoard().getInitialRes() != 0) {
+                        emphasisOnButton(optional1Btn);
+                        optional1Btn.setDisable(false);
+                        optional1Btn.setVisible(true);
+                        optional1Btn.setText("Choose Init Resources");
+                        optional1Btn.setOnMouseClicked(mouseEvent -> {
+                            logger.debug("optional1Btn clicked");
+                            BuildGUI.getInstance().toChooseInitRes(stage, ui);
+                        });
+                    }else{
+                        messageLbl.setText("Wait for other players to choose their resources");
+                    }
+                    break;
+                case PREP_LEADERS:
+                    setVisibleButtonsActions(false);
+                    if(ui.getLocalGame().getMainPlayer().getLocalBoard().getLeaderCards().size() > 2) {
+                        emphasisOnButton(optional1Btn);
+                        optional1Btn.setDisable(false);
+                        optional1Btn.setVisible(true);
+                        optional1Btn.setText("Remove Leaders");
+                        optional1Btn.setOnMouseClicked(mouseEvent -> {
+                            logger.debug("optional1Btn clicked");
+                            BuildGUI.getInstance().toRemoveLeaders(stage, ui);
+                        });
+                    }else{
+                        messageLbl.setText("Wait for other players to remove their leaders");
+                    }
+                    break;
+                case READY:
+                        setUpReady();
+                    break;
+                case OVER:
+                    break;
+                default:
+                    logger.error("Invalid state: " + ui.getLocalGame().getState());
+                    break;
+            }
+        }else
+            setUpViewsForOtherPlayersBoard();
+    }
+
+    public void setUpReady(){
+        // main actions
+        LocalGame<?> game = ui.getLocalGame();
+        if(game.isMainPlayerTurn()) {
+            // need to flush the market
+            if (game.getLocalTurn().isMarketActivated()) {
+                setDisableProductions(true);
+                emphasisOnButton(marketBtn);
+            }
+            else if(game.getLocalTurn().isProductionsActivated()){
+                flushBtn.setDisable(false);
+                emphasisOnButton(flushBtn);
+            }
+            else if(game.getLocalTurn().isMainActionOccurred()){
+                setDisableProductions(true);
+                optional2Btn.setDisable(false);
+                optional2Btn.setText("Pass Turn");
+                optional2Btn.setVisible(true);
+                emphasisOnButton(optional2Btn);
+                optional2Btn.setOnMouseClicked(mouseEvent -> {
+                    // todo send next turn
                 });
-                break;
-            case PREP_LEADERS:
-                Platform.runLater(() -> {
-                    optional1Btn.setDisable(false);
-                    optional1Btn.setVisible(true);
-                    optional1Btn.setText("Remove Leaders");
-                    optional1Btn.setOnMouseClicked(mouseEvent -> {
-                        BuildGUI.getInstance().toRemoveLeaders(stage, ui);
-                        logger.debug("optional1Btn clicked");
-                    });
-                });
-                break;
-            case READY:
-                break;
-            case OVER:
-                break;
-            default:
-                logger.error("Invalid state: " + ui.getLocalGame().getState());
-                break;
+            }
+        } else{
+            setVisibleButtonsActions(false);
         }
+    }
+
+    private void emphasisOnButton(Button btn){
+        btn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
+    }
+
+    private void setVisibleButtonsActions(boolean bool) {
+        slotDevelopComponent1.getActivateBtn().setVisible(bool);
+        slotDevelopComponent2.getActivateBtn().setVisible(bool);
+        slotDevelopComponent3.getActivateBtn().setVisible(bool);
+        activateNormalBtn.setVisible(bool);
+        leader1.setVisibleButtons(bool);
+        leader2.setVisibleButtons(bool);
+    }
+
+    public void setDisableProductions(Boolean bool){
+        activateNormalBtn.setDisable(bool);
+        setDisableProduction(slotDevelopComponent1, bool);
+        setDisableProduction(slotDevelopComponent2, bool);
+        setDisableProduction(slotDevelopComponent3, bool);
+        // todo disable leaderProduction if any
+    }
+
+
+    private void setDisableProduction(SlotDevelopComponent s, Boolean bool){
+        s.getActivateBtn().setDisable(bool);
+    }
+
+    private void setUpViewsForOtherPlayersBoard(){
     }
 }

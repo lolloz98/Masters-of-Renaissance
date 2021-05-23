@@ -15,4 +15,10 @@ public abstract class AnswerHandler {
     }
 
     public abstract void handleAnswer(LocalGame<?> localGame);
+
+    public void handleAnswerSync(LocalGame<?> localGame){
+        synchronized (localGame){
+            handleAnswer(localGame);
+        }
+    }
 }

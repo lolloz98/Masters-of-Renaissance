@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.gui.componentsgui;
 
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
-import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -44,5 +43,10 @@ public class LeaderSlotComponent extends AnchorPane {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    public void setVisibleButtons(boolean bool) {
+        activateBtn.setVisible(bool);
+        discardBtn.setVisible(bool);
     }
 }

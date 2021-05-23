@@ -76,7 +76,7 @@ public class LocalSingleGameHandler extends GameHandler {
             logger.error("Error while parsing the client request: " + e);
         }
         if(parsedAnswer instanceof AnswerHandler){
-            ((AnswerHandler) parsedAnswer).handleAnswer(localGame);
+            ((AnswerHandler) parsedAnswer).handleAnswerSync(localGame);
         }else{
             logger.error("No handler found to do with action: " + answer);
         }

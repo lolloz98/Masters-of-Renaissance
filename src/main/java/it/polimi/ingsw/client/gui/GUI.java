@@ -5,6 +5,13 @@ import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 
 public class GUI extends UI {
+    private int whoIAmSeeingId = -1;
+
+    public int getWhoIAmSeeingId() {
+        if(whoIAmSeeingId == -1) return whoIAmSeeingId = getLocalGame().getGameId();
+        return whoIAmSeeingId;
+    }
+
     public void setGameHandler(GameHandler gameHandler){
         this.gameHandler = gameHandler;
         Thread thread = new Thread(gameHandler);
