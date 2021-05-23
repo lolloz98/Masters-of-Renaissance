@@ -152,4 +152,16 @@ public class BuildGUI {
             }
         });
     }
+
+    public void toChooseInitRes(Stage stage, GUI ui) {
+    }
+
+    public void toRemoveLeaders(Stage stage, GUI ui) {
+    }
+
+    public void toMarket(Stage stage, GUI ui) {
+    }
+
+    public void toDevelopGrid(Stage stage, GUI ui) {
+    }
 }
