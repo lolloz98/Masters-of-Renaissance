@@ -38,6 +38,7 @@ public class BuildGUI {
                 controller.setUp(stage, root, ui);
 
                 stage.setTitle("Master of Renaissance");
+                stage.setResizable(false);
                 stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException e) {
@@ -94,7 +95,7 @@ public class BuildGUI {
     public void toBoard(Stage stage, GUI ui){
         Platform.runLater(() -> {
             logger.debug("going in board");
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/board.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/board2.fxml"));
             try {
                 Parent root = fxmlLoader.load();
                 BoardControllerGUI controller = fxmlLoader.getController();
