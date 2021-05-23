@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root prefHeight="278.0" prefWidth="127.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/11.0.1"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <!--        <ImageView fitHeight="299.0" fitWidth="127.0" pickOnBounds="true" preserveRatio="true">-->
+    <!--            <Image url="@../../png/slot_develop.png" />-->
+    <!--        </ImageView>-->
+    <ImageView fx:id="cardImg" fitHeight="194.0" fitWidth="119.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true"
+               preserveRatio="true" AnchorPane.bottomAnchor="92.21212768554688" AnchorPane.leftAnchor="4.0"
+               AnchorPane.rightAnchor="4.0">
+        <Image url="@../../png/base_develop.png"/>
+    </ImageView>
+    <Button fx:id="activateBtn" layoutY="206.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0"
+            text="Activate" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+    <Button fx:id="discardBtn" layoutY="238.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0"
+            text="Discard"/>
+
+</fx:root>
