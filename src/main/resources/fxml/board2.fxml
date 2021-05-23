@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <?import it.polimi.ingsw.client.gui.componentsgui.FaithTrackComponent?>
+<?import it.polimi.ingsw.client.gui.componentsgui.SlotDevelopComponent?>
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.BoardControllerGUI">
    <ImageView fitHeight="719.0" fitWidth="1035.0" preserveRatio="true">
       <Image url="@../png/board_simplified.png" />
    </ImageView>
-   <FaithTrackComponent prefHeight="215.0" prefWidth="807.0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0"/>
-<!--   <AnchorPane prefHeight="215.0" prefWidth="807.0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0"/>-->
+   <!-- FaithTrack -->
+   <!--   <AnchorPane prefHeight="215.0" prefWidth="807.0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />-->
+
+   <!-- DevelopProd -->
+<!--   <AnchorPane layoutX="329.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />-->
+<!--   <AnchorPane layoutX="487.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />-->
+<!--   <AnchorPane layoutX="649.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />-->
+
+   <FaithTrackComponent fx:id="faithTrackComponent" prefHeight="215.0" prefWidth="807.0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0"/>
+
+   <SlotDevelopComponent fx:id="slotDevelopComponent1" layoutX="329.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0"/>
+   <SlotDevelopComponent fx:id="slotDevelopComponent2" layoutX="487.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />
+   <SlotDevelopComponent fx:id="slotDevelopComponent3" layoutX="649.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />
+
+   <Button fx:id="activateNormalBtn" layoutX="202.0" layoutY="556.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Activate" />
+
+
+
+
 </AnchorPane>
