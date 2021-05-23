@@ -17,12 +17,11 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WaitForPlayersGUI implements ControllerGUI, Observer {
+public class WaitForPlayersGUI extends ControllerGUI implements Observer {
     private static final Logger logger = LogManager.getLogger(WaitForPlayersGUI.class);
-    private Stage stage;
-    private GUI ui;
+
     private final List<Integer> displayed = new ArrayList<>();
-    private Parent root;
+
 
     @Override
     public void notifyUpdate() {

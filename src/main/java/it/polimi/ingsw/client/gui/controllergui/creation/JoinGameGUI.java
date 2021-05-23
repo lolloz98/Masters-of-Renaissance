@@ -17,15 +17,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class JoinGameGUI implements ControllerGUI, Observer {
+public class JoinGameGUI extends ControllerGUI implements Observer {
     private static final Logger logger = LogManager.getLogger(JoinGameGUI.class);
 
     public TextField gameId;
     public TextField nickname;
     public Button joinGameBtn;
-
-    private Stage stage;
-    private GUI ui;
 
     @Override
     public void notifyUpdate() {
@@ -51,7 +48,7 @@ public class JoinGameGUI implements ControllerGUI, Observer {
             Platform.runLater(() -> joinGameBtn.setDisable(true));
             String nick = nickname.getText();
             try {
-                JoinGameMessage joinGameMessage = new InputHelper().getJoinGameMessage(gameId.getText(), nick);
+                JoinGameMessage joinGameMessage = InputHelper.getJoinGameMessage(gameId.getText(), nick);
                 new Thread(() -> {
                     try {
                         ui.newMultiPlayer();

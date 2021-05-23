@@ -16,4 +16,10 @@ public class PairId<T, U> {
     public T getFirst() {
         return t;
     }
+
+    @Override
+    public String toString() {
+        return  t +
+                ", " + u;
+    }
 }

@@ -8,7 +8,7 @@ public class GUI extends UI {
     private int whoIAmSeeingId = -1;
 
     public int getWhoIAmSeeingId() {
-        if(whoIAmSeeingId == -1) return whoIAmSeeingId = getLocalGame().getGameId();
+        if(whoIAmSeeingId == -1) return whoIAmSeeingId = getLocalGame().getMainPlayer().getId();
         return whoIAmSeeingId;
     }
 
@@ -24,5 +24,9 @@ public class GUI extends UI {
 
     public GameHandler getGameHandler(){
         return gameHandler;
+    }
+
+    public void setWhoIAmSeeingId(Integer playerId){
+        whoIAmSeeingId = playerId;
     }
 }

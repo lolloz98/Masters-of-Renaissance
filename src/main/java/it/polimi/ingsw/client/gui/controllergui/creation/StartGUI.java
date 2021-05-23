@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class StartGUI implements ControllerGUI {
+public class StartGUI extends ControllerGUI {
     private static final Logger logger = LogManager.getLogger(StartGUI.class);
 
     public Button localBtn;

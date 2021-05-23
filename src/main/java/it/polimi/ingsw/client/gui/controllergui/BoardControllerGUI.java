@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.controllergui;
 
+import com.sun.javafx.collections.ObservableListWrapper;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.FaithTrackComponent;
@@ -21,16 +22,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class BoardControllerGUI implements ControllerGUI, Observer {
+public class BoardControllerGUI extends ControllerGUI implements Observer {
     private static final Logger logger = LogManager.getLogger(BoardControllerGUI.class);
-    public ChoiceBox chooseBoard;
+    public ChoiceBox<PairId<Integer, String>> chooseBoard;
 
-    private Stage stage;
-    private Parent root;
-    private GUI ui;
-
+    private final ObservableList<PairId<Integer, String>> myList = new ObservableListWrapper<>(new ArrayList<>());
 
     public FaithTrackComponent faithTrackComponent;
     public SlotDevelopComponent slotDevelopComponent1;
@@ -85,10 +84,22 @@ public class BoardControllerGUI implements ControllerGUI, Observer {
             BuildGUI.getInstance().toDevelopGrid(stage, ui);
         });
         LocalGame<?> game = ui.getLocalGame();
+
+        game.overrideObserver(this);
+
         if(game instanceof LocalSingle)
-            chooseBoard.setVisible(true);
+            chooseBoard.setVisible(false);
         else{
-            // todo
+            for(LocalPlayer p: game.getLocalPlayers()){
+                myList.add(new PairId<>(p.getId(), p.getName()));
+            }
+            chooseBoard.setItems(myList);
+            chooseBoard.setOnAction((event) -> {
+                int selectedIndex = chooseBoard.getSelectionModel().getSelectedIndex();
+                PairId<Integer, String> selectedItem = chooseBoard.getSelectionModel().getSelectedItem();
+                ui.setWhoIAmSeeingId(selectedItem.getFirst());
+                BuildGUI.getInstance().toBoard(stage, ui);
+            });
         }
 
 
@@ -115,7 +126,7 @@ public class BoardControllerGUI implements ControllerGUI, Observer {
         if(ui.getWhoIAmSeeingId() == ui.getLocalGame().getMainPlayer().getId()) {
             switch (ui.getLocalGame().getState()) {
                 case PREP_RESOURCES:
-                    setDisableProductions(true);
+                    setVisibleButtonsActions(false);
                     if(ui.getLocalGame().getMainPlayer().getLocalBoard().getInitialRes() != 0) {
                         emphasisOnButton(optional1Btn);
                         optional1Btn.setDisable(false);
@@ -212,5 +223,6 @@ public class BoardControllerGUI implements ControllerGUI, Observer {
     }
 
     private void setUpViewsForOtherPlayersBoard(){
+        setVisibleButtonsActions(false);
     }
 }

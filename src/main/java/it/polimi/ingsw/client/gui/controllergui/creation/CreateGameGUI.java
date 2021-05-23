@@ -18,13 +18,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class CreateGameGUI implements ControllerGUI, Observer {
+public class CreateGameGUI extends ControllerGUI implements Observer {
     private static final Logger logger = LogManager.getLogger(StartLocalGUI.class);
     public TextField nickname;
     public TextField playerNumbers;
     public Button createGameBtn;
-    private Stage stage;
-    private GUI ui;
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
@@ -34,7 +32,7 @@ public class CreateGameGUI implements ControllerGUI, Observer {
             Platform.runLater(() -> createGameBtn.setDisable(true));
             String nick = nickname.getText();
             try {
-                CreateGameMessage createGameMessage = new InputHelper().getCreateGameMessage(playerNumbers.getText(), nick);
+                CreateGameMessage createGameMessage = InputHelper.getCreateGameMessage(playerNumbers.getText(), nick);
                 new Thread(() -> {
                     try {
                         if(createGameMessage.getPlayersNumber() == 1) ui.newSinglePlayer();

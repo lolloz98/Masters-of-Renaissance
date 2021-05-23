@@ -17,12 +17,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class StartLocalGUI implements ControllerGUI, Observer {
+public class StartLocalGUI extends ControllerGUI implements Observer {
     private static final Logger logger = LogManager.getLogger(StartLocalGUI.class);
     public TextField nickname;
     public Button createGameBtn;
-    private Stage stage;
-    private GUI ui;
+
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
@@ -33,7 +32,7 @@ public class StartLocalGUI implements ControllerGUI, Observer {
         ui.getLocalGame().overrideObserver(this);
         createGameBtn.setOnMouseClicked(mouseEvent -> {
             try {
-                CreateGameMessage createGameMessage = new InputHelper().getCreateGameMessage("1", nickname.getText());
+                CreateGameMessage createGameMessage = InputHelper.getCreateGameMessage("1", nickname.getText());
                 new Thread(() -> {
                     try {
                         ui.getGameHandler().dealWithMessage(createGameMessage);

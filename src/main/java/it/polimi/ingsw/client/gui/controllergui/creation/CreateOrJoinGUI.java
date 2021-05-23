@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class CreateOrJoinGUI implements ControllerGUI {
+public class CreateOrJoinGUI extends ControllerGUI {
     public Button createBtn;
     public Button JoinBtn;
 

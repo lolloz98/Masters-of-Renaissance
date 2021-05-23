@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class StartRemoteGUI implements ControllerGUI {
+public class StartRemoteGUI extends ControllerGUI {
     private static final Logger logger = LogManager.getLogger(StartRemoteGUI.class);
 
     public TextField serverIp;
