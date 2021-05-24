@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root alignment="CENTER" type="HBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <ImageView fx:id="img" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+        <Image url="@../../png/res/no_res.png"/>
+    </ImageView>
+    <Label fx:id="label" alignment="CENTER" text="No resources" HBox.hgrow="NEVER">
+      <HBox.margin>
+         <Insets left="20.0" right="10.0" />
+      </HBox.margin></Label>
+</fx:root>

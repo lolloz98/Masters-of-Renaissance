@@ -22,7 +22,7 @@ public class StartGUI extends ControllerGUI {
         });
 
         remoteBtn.setOnMouseClicked(mouseEvent -> {
-            logger.debug(localBtn + " clicked");
+            logger.debug(remoteBtn + " clicked");
             BuildGUI.getInstance().toStartRemote(stage, ui);
         });
     }

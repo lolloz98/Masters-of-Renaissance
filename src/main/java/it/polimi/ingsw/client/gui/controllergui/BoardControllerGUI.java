@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.controllergui;
 import com.sun.javafx.collections.ObservableListWrapper;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.FaithTrackComponent;
 import it.polimi.ingsw.client.gui.componentsgui.LeaderSlotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.SlotDevelopComponent;
@@ -47,7 +48,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public LeaderSlotComponent leader1;
     public LeaderSlotComponent leader2;
 
-    public void resetDefault(){
+    public DepotComponent depotCmp;
+
+    public void resetDefault() {
         optional1Btn.setOnMouseClicked(mouseEvent -> {
             logger.debug("event handler added by cleanup");
         });
@@ -87,10 +90,10 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         game.overrideObserver(this);
 
-        if(game instanceof LocalSingle)
+        if (game instanceof LocalSingle)
             chooseBoard.setVisible(false);
-        else{
-            for(LocalPlayer p: game.getLocalPlayers()){
+        else {
+            for (LocalPlayer p : game.getLocalPlayers()) {
                 myList.add(new PairId<>(p.getId(), p.getName()));
             }
             chooseBoard.setItems(myList);
@@ -108,9 +111,11 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     @Override
     public void notifyUpdate() {
-        synchronized (ui.getLocalGame()) {
-            Platform.runLater(this::setUpOnState);
-        }
+        Platform.runLater(() -> {
+            synchronized (ui.getLocalGame()) {
+                setUpOnState();
+            }
+        });
     }
 
     @Override
@@ -121,13 +126,13 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     /**
      * set up the view depending on the localGame status
      */
-    private void setUpOnState(){
+    private void setUpOnState() {
         resetDefault();
-        if(ui.getWhoIAmSeeingId() == ui.getLocalGame().getMainPlayer().getId()) {
+        if (ui.getWhoIAmSeeingId() == ui.getLocalGame().getMainPlayer().getId()) {
             switch (ui.getLocalGame().getState()) {
                 case PREP_RESOURCES:
                     setVisibleButtonsActions(false);
-                    if(ui.getLocalGame().getMainPlayer().getLocalBoard().getInitialRes() != 0) {
+                    if (ui.getLocalGame().getMainPlayer().getLocalBoard().getInitialRes() != 0) {
                         emphasisOnButton(optional1Btn);
                         optional1Btn.setDisable(false);
                         optional1Btn.setVisible(true);
@@ -136,13 +141,13 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                             logger.debug("optional1Btn clicked");
                             BuildGUI.getInstance().toChooseInitRes(stage, ui);
                         });
-                    }else{
+                    } else {
                         messageLbl.setText("Wait for other players to choose their resources");
                     }
                     break;
                 case PREP_LEADERS:
                     setVisibleButtonsActions(false);
-                    if(ui.getLocalGame().getMainPlayer().getLocalBoard().getLeaderCards().size() > 2) {
+                    if (ui.getLocalGame().getMainPlayer().getLocalBoard().getLeaderCards().size() > 2) {
                         emphasisOnButton(optional1Btn);
                         optional1Btn.setDisable(false);
                         optional1Btn.setVisible(true);
@@ -151,12 +156,12 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                             logger.debug("optional1Btn clicked");
                             BuildGUI.getInstance().toRemoveLeaders(stage, ui);
                         });
-                    }else{
+                    } else {
                         messageLbl.setText("Wait for other players to remove their leaders");
                     }
                     break;
                 case READY:
-                        setUpReady();
+                    setUpReady();
                     break;
                 case OVER:
                     break;
@@ -164,24 +169,22 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                     logger.error("Invalid state: " + ui.getLocalGame().getState());
                     break;
             }
-        }else
+        } else
             setUpViewsForOtherPlayersBoard();
     }
 
-    public void setUpReady(){
+    public void setUpReady() {
         // main actions
         LocalGame<?> game = ui.getLocalGame();
-        if(game.isMainPlayerTurn()) {
+        if (game.isMainPlayerTurn()) {
             // need to flush the market
             if (game.getLocalTurn().isMarketActivated()) {
                 setDisableProductions(true);
                 emphasisOnButton(marketBtn);
-            }
-            else if(game.getLocalTurn().isProductionsActivated()){
+            } else if (game.getLocalTurn().isProductionsActivated()) {
                 flushBtn.setDisable(false);
                 emphasisOnButton(flushBtn);
-            }
-            else if(game.getLocalTurn().isMainActionOccurred()){
+            } else if (game.getLocalTurn().isMainActionOccurred()) {
                 setDisableProductions(true);
                 optional2Btn.setDisable(false);
                 optional2Btn.setText("Pass Turn");
@@ -191,12 +194,12 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                     // todo send next turn
                 });
             }
-        } else{
+        } else {
             setVisibleButtonsActions(false);
         }
     }
 
-    private void emphasisOnButton(Button btn){
+    private void emphasisOnButton(Button btn) {
         btn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
     }
 
@@ -209,7 +212,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         leader2.setVisibleButtons(bool);
     }
 
-    public void setDisableProductions(Boolean bool){
+    public void setDisableProductions(Boolean bool) {
         activateNormalBtn.setDisable(bool);
         setDisableProduction(slotDevelopComponent1, bool);
         setDisableProduction(slotDevelopComponent2, bool);
@@ -218,11 +221,11 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     }
 
 
-    private void setDisableProduction(SlotDevelopComponent s, Boolean bool){
+    private void setDisableProduction(SlotDevelopComponent s, Boolean bool) {
         s.getActivateBtn().setDisable(bool);
     }
 
-    private void setUpViewsForOtherPlayersBoard(){
+    private void setUpViewsForOtherPlayersBoard() {
         setVisibleButtonsActions(false);
     }
 }
