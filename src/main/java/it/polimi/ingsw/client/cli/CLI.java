@@ -54,8 +54,7 @@ public class CLI extends UI {
         input = new Scanner(System.in);
         System.out.println("");
         System.out.println("");
-        System.out.println("Insert your nickname"); // todo check length
-        nickname = input.nextLine();
+        pickNickname();
         do {
             System.out.println("Do you want to play a local single game, or to connect to a server?");
             System.out.println("1. Play locally");
@@ -118,7 +117,7 @@ public class CLI extends UI {
             try {
                 numberOfPlayers = input.nextLine();
                 CreateGameMessage createGameMessage = InputHelper.getCreateGameMessage(numberOfPlayers, nickname);
-                if(createGameMessage.getPlayersNumber() == 1){
+                if (createGameMessage.getPlayersNumber() == 1) {
                     newSinglePlayer();
                 } else {
                     newMultiPlayer();
@@ -153,7 +152,7 @@ public class CLI extends UI {
     /**
      * asks the player if he wants to create a new game or join an already existing one
      */
-    private void joinOrCreate(){
+    private void joinOrCreate() {
         System.out.println("Do you want to join a game or create a new one?");
         System.out.println("1. Join game");
         System.out.println("2. Create a new game\n");
@@ -181,6 +180,21 @@ public class CLI extends UI {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid answer, try again:");
                 valid = false;
+            }
+        } while (!valid);
+    }
+
+    private void pickNickname() {
+        System.out.println("Insert your nickname");
+        boolean valid;
+        do {
+            String nameTemp = input.nextLine();
+            if (nameTemp.length() < 1) {// todo set max length
+                System.out.println("Invalid nickname, retry:");
+                valid = false;
+            } else {
+                nickname = nameTemp;
+                valid = true;
             }
         } while (!valid);
     }
