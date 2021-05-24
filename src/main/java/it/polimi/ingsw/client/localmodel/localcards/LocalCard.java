@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.localmodel.localcards;
 import it.polimi.ingsw.client.localmodel.Observable;
 import javafx.scene.image.Image;
 import java.io.File;
+import java.util.Objects;
 
 public class LocalCard extends Observable {
     protected final int id;
@@ -19,7 +20,8 @@ public class LocalCard extends Observable {
 
     public Image getImage(){
         if (image == null) {
-            String path = String.format("src/main/resources/png/cards_front/%03d.png", id);
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            String path = Objects.requireNonNull(classLoader.getResource(String.format("png/cards_front/%03d.png", id))).getPath();
             File file = new File(path);
             this.image = new Image(file.toURI().toString());
         }
