@@ -10,10 +10,11 @@
 <!--            <Image url="@../../png/slot_develop.png" />-->
 <!--        </ImageView>-->
    <Button fx:id="activateBtn" layoutY="269.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Activate" AnchorPane.bottomAnchor="3.6000000000000014" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-   <ImageView fx:id="activeCard" fitHeight="194.0" fitWidth="119.0" layoutX="4.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="59.212127685546875" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0">
-      <image>
-         <Image url="@../../png/base_develop.png" />
-      </image></ImageView>
+    <ImageView fx:id="activeCard" fitHeight="194.0" fitWidth="119.0" layoutX="4.0" layoutY="60.0" pickOnBounds="true"
+               preserveRatio="true" AnchorPane.bottomAnchor="59.212127685546875" AnchorPane.leftAnchor="4.0"
+               AnchorPane.rightAnchor="4.0">
+        <Image url="@../../png/empty_card.png"/>
+    </ImageView>
 <!--   <Pane layoutX="8.0" layoutY="30.0" prefHeight="26.0" prefWidth="115.0" />-->
 <!--   <Pane layoutX="8.0" layoutY="3.0" prefHeight="26.0" prefWidth="115.0" />-->
     <CoveredCardComponent fx:id="coveredCard1" layoutX="8.0" layoutY="30.0" prefHeight="26.0" prefWidth="115.0" />

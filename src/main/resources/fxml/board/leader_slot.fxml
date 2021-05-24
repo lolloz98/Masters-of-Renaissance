@@ -12,7 +12,7 @@
     <ImageView fx:id="cardImg" fitHeight="194.0" fitWidth="119.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true"
                preserveRatio="true" AnchorPane.bottomAnchor="92.21212768554688" AnchorPane.leftAnchor="4.0"
                AnchorPane.rightAnchor="4.0">
-        <Image url="@../../png/base_develop.png"/>
+        <Image url="@../../png/empty_card.png"/>
     </ImageView>
     <Button fx:id="activateBtn" layoutY="206.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0"
             text="Activate" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
