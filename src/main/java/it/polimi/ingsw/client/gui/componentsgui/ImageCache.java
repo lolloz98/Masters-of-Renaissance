@@ -14,15 +14,16 @@ public final class ImageCache {
     public static final Image SERVANTIMG = new Image("/png/res/servant.png");
     public static final Image GOLDIMG = new Image("/png/res/gold.png");
     public static final Image SHIELDIMG = new Image("/png/res/shield.png");
+    public static final Image FAITHIMG = new Image("/png/res/faith.png");
+    public static final Image ANYTHINGHIMG = new Image("/png/res/anything.png");
     public static final Image PLAYER = new Image("/png/punchboard/player.png");
     public static final Image LORENZO = new Image("/png/punchboard/cross.png");
     private static final Image LORENZO_AND_PLAYER = new Image("/png/punchboard/player_and_lorenzo.png");
+    private static boolean isSinglePlayer;
 
     public static boolean isSinglePlayer() {
         return isSinglePlayer;
     }
-
-    private static boolean isSinglePlayer;
 
     public static void setIsSinglePlayer(boolean isSinglePlayer){
         ImageCache.isSinglePlayer = isSinglePlayer;
