@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import it.polimi.ingsw.client.gui.componentsgui.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="398.0" prefWidth="308.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.MarketControllerGUI">
-    <ImageView fitHeight="600.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+<AnchorPane prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.MarketControllerGUI">
+    <ImageView fitHeight="600.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../png/punchboard/market2.png" />
     </ImageView>
-    <GridPane fx:id="market_grid" layoutX="127.0" layoutY="128.0" prefHeight="169.0" prefWidth="228.0" AnchorPane.leftAnchor="127.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="128.0">
-
-
-
-
-
-
-
-
-
-
-
+    <GridPane fx:id="market_grid" layoutX="127.0" layoutY="128.0" prefHeight="170.0" prefWidth="236.0" AnchorPane.leftAnchor="127.0" AnchorPane.rightAnchor="637.0" AnchorPane.topAnchor="128.0">
     </GridPane>
     <ImageView fx:id="free_marble" fitHeight="56.0" fitWidth="56.0" layoutX="335.0" layoutY="70.0" pickOnBounds="true" />
+    <Button fx:id="boardBtn" layoutX="553.0" layoutY="39.0" mnemonicParsing="false" text="Go back to the board" />
+    <Button fx:id="developmentBtn" layoutX="531.0" layoutY="86.0" mnemonicParsing="false" text="Go to the development decks" />
+    <Button fx:id="push1" layoutX="146.0" layoutY="413.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="15.0" text="1" />
+    <Button fx:id="push2" layoutX="201.0" layoutY="413.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="15.0" text="2" />
+    <Button fx:id="push3" layoutX="256.0" layoutY="413.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="15.0" text="3" />
+    <Button fx:id="push4" layoutX="311.0" layoutY="413.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="15.0" text="4" />
+    <Button fx:id="pushA" layoutX="461.0" layoutY="144.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="15.0" text="A" />
+    <Button fx:id="pushB" layoutX="461.0" layoutY="254.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="15.0" text="B" />
+    <Button fx:id="pushC" layoutX="461.0" layoutY="200.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="15.0" text="C" />
+
+    <DepotComponent fx:id="depotCmp" layoutX="769.0" layoutY="84.0" prefHeight="172.0" prefWidth="194.0" />
+
+    <VBox layoutX="520.0" layoutY="158.0" prefHeight="110.0" prefWidth="229.0">
+      <children>
+         <Label text="To use the market, click on the button" />
+         <Label text="next to one of the arrows to push" />
+         <Label text="the marbles, then pick one of the" />
+         <Label text="resources combinations to go to the form " />
+         <Label text="to decide where to put those resources." />
+      </children>
+   </VBox>
+   <VBox layoutX="824.0" layoutY="39.0" prefHeight="26.0" prefWidth="71.0" />
+   <Label layoutX="841.0" layoutY="61.0" text="Your depot:" />
 </AnchorPane>
