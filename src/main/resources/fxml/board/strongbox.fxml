@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import it.polimi.ingsw.client.gui.componentsgui.ResAmountComponent?>
-<fx:root prefHeight="121.0" prefWidth="179.0" type="Pane" xmlns="http://javafx.com/javafx/11.0.1"
-         xmlns:fx="http://javafx.com/fxml/1">
-    <VBox fx:id="vBox" layoutY="-1.0" prefHeight="128.0" prefWidth="179.0">
+<fx:root prefHeight="121.0" prefWidth="179.0" type="Pane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox style="-fx-border-radius: 3; -fx-border-color: #c9632c" fx:id="vBox" layoutX="64.0" layoutY="-1.0" prefHeight="128.0" prefWidth="115.0">
     </VBox>
 </fx:root>
