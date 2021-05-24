@@ -2,7 +2,10 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.GameHandler;
 import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.client.gui.componentsgui.ImageCache;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+
+import java.awt.*;
 
 public class GUI extends UI {
     private int whoIAmSeeingId = -1;
@@ -28,5 +31,17 @@ public class GUI extends UI {
 
     public void setWhoIAmSeeingId(Integer playerId){
         whoIAmSeeingId = playerId;
+    }
+
+    @Override
+    public void newSinglePlayer() {
+        super.newSinglePlayer();
+        ImageCache.setIsSinglePlayer(true);
+    }
+
+    @Override
+    public void newMultiPlayer() {
+        super.newMultiPlayer();
+        ImageCache.setIsSinglePlayer(false);
     }
 }

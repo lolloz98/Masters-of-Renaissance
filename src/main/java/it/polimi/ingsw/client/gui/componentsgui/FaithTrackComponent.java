@@ -72,13 +72,11 @@ public class FaithTrackComponent extends AnchorPane {
     @FXML
     private ImageView faith24;
 
-    private final Image lorenzo;
-    private final Image player;
-    private final Image overlapped;
     private final List<ImageView> vaticans = new ArrayList<>();
     private final List<ImageView> faith = new ArrayList<>();
     private int currentFaith = 0;
     private int currentLorenzo = 0;
+    private boolean isSinglePlayer;
 
     public int getCurrentLorenzo() {
         return currentLorenzo;
@@ -94,12 +92,18 @@ public class FaithTrackComponent extends AnchorPane {
         return currentFaith;
     }
 
+    private void showLorenzo(){
+        if(ImageCache.isSinglePlayer()){
+            faith.get(currentFaith).setImage(ImageCache.LORENZO);
+        }
+    }
+
     private void changeImagePre(boolean lorenzoMoving){
         if(currentFaith == currentLorenzo){
             if (lorenzoMoving) {
-                faith.get(currentFaith).setImage(player);
+                faith.get(currentFaith).setImage(ImageCache.PLAYER);
             } else {
-                faith.get(currentFaith).setImage(lorenzo);
+                showLorenzo();
             }
         } else{
             faith.get(currentFaith).setImage(null);
@@ -108,12 +112,12 @@ public class FaithTrackComponent extends AnchorPane {
 
     private void changeImagePost(boolean lorenzoMoved){
         if(currentFaith == currentLorenzo){
-            faith.get(currentFaith).setImage(overlapped);
+            faith.get(currentFaith).setImage(ImageCache.getLorenzoAndPlayer());
         } else{
             if (lorenzoMoved) {
-                faith.get(currentLorenzo).setImage(lorenzo);
+                showLorenzo();
             } else {
-                faith.get(currentFaith).setImage(player);
+                faith.get(currentFaith).setImage(ImageCache.PLAYER);
             }
         }
     }
@@ -140,11 +144,6 @@ public class FaithTrackComponent extends AnchorPane {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-
-        // todo change these images
-        player = new Image("/png/punchboard/calamaio.png");
-        lorenzo = new Image("/png/punchboard/croce.png");
-        overlapped = new Image("/png/punchboard/cerchio1.png");
 
         vaticans.add(vatican1);
         vaticans.add(vatican2);

@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.gui.componentsgui;
 
 import it.polimi.ingsw.enums.Resource;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
@@ -45,12 +44,12 @@ public class DepotComponent extends Pane {
             while(tmp != 0){
                 tmp--;
                 if(i == 0) {
-                    ImageCache.setImage(res[i], d1);
+                    ImageCache.setImageInStore(res[i], d1);
                 }
                 else if(i == 1) {
-                    setImage(res[i], depot2.get(tmp));
+                    setImageInStore(res[i], depot2.get(tmp));
                 }
-                else setImage(res[i], depot3.get(tmp));
+                else setImageInStore(res[i], depot3.get(tmp));
             }
         }
     }
