@@ -87,6 +87,17 @@ public class AnswerHandlerTestHelper {
     }
 
     /**
+     *
+     * @return a configuration of the local normal depots
+     */
+    public static TreeMap<Resource,Integer> getResInDepot(){
+        return new TreeMap<Resource, Integer>(){{
+            put(Resource.SERVANT,1);
+            put(Resource.SHIELD,1);
+        }};
+    }
+
+    /**
      *after this method the first player owns the following leaders: {LocalProductionLeader->id: 61};{LocalMarbleLeader->id:58}
      * the second player owns the following leaders:
      * the third player owns the following leaders:

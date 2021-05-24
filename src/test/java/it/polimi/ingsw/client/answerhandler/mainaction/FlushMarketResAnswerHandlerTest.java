@@ -42,15 +42,13 @@ public class FlushMarketResAnswerHandlerTest {
     @Test
     public void testHandleAnswerSingle(){
         //add a depot leader in the main player board
-        localSingle.getMainPlayer().getLocalBoard().getLeaderCards().add(new LocalDepotLeader(0,1,true,false,Resource.GOLD,Resource.GOLD,5));
         int leaderId=0;
+        localSingle.getMainPlayer().getLocalBoard().getLeaderCards().add(new LocalDepotLeader(leaderId,1,true,false,Resource.GOLD,Resource.GOLD,5));
+
         AnswerHandlerTestHelper.doUseMarketAction(localSingle);
         ArrayList<LocalTrack> localTracks=AnswerHandlerTestHelper.getLocalTracks(localSingle);
 
-        TreeMap<Resource,Integer> resInNormalDeposit=new TreeMap<Resource, Integer>(){{
-            put(Resource.SERVANT,1);
-            put(Resource.SHIELD,1);
-        }};
+        TreeMap<Resource,Integer> resInNormalDeposit=AnswerHandlerTestHelper.getResInDepot();
 
         ArrayList<LocalDepotLeader> localDepotLeaders=new ArrayList<>(){{
             add(new LocalDepotLeader(leaderId,3,true,false,Resource.GOLD,Resource.SHIELD,3));
