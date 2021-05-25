@@ -62,12 +62,12 @@ public class MarketPrinter {
         CLIutils.append(out, 5, " : Gold ");
         CLIutils.append(out, 6, "            ");
 
-        CLIutils.append(out, 7, MarblePrinter.toStringBlock(Resource.ROCK));
+        CLIutils.append(out, 7, MarblePrinter.toStringBlock(Resource.NOTHING));
         CLIutils.append(out, 7, "            ");
         CLIutils.append(out, 8, " : Nothing  ");
         CLIutils.append(out, 9, "            ");
 
-        CLIutils.append(out, 7, MarblePrinter.toStringBlock(Resource.NOTHING));
+        CLIutils.append(out, 7, MarblePrinter.toStringBlock(Resource.ROCK));
         CLIutils.append(out, 7, "            ");
         CLIutils.append(out, 8, " : Rock     ");
         CLIutils.append(out, 9, "            ");
@@ -180,35 +180,5 @@ public class MarketPrinter {
             }
         }
         return out;
-        /*
-        ArrayList<String> letters = new ArrayList<>(){{
-            add("A");
-            add("B");
-            add("C");
-        }};
-        out.add("Market:");
-        out.add("");
-        out.add("Free marble: " + localMarket.getFreeMarble());
-        out.add("");
-        for (int i = 0; i < 3; i++) {
-            String line = "";
-            for (int j = 0; j < 4; j++) {
-                line = line + localMarket.getMarbleMatrix()[i][j] + " ";
-            }
-            line = line +"  " +letters.get(i);
-            out.add(line);
-        }
-        out.add("    1      2      3      4");
-        if (localMarket.getResCombinations().size() > 0) {
-            out.add("Resources combinations:");
-            int i = 0;
-            for (TreeMap<Resource, Integer> t : localMarket.getResCombinations()) {
-                i++;
-                out.add(i + ") " + t);
-            }
-        }
-        out.add(" ");
-
-         */
     }
 }
