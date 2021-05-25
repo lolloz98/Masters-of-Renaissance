@@ -191,4 +191,32 @@ public class ManipulateGameUiTestHelper {
                 game.getPlayers().get(0)
         );
     }
+
+    public static void setStateOfGame2(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FullDevelopSlotException, InvalidDevelopCardToSlotException, NotEnoughResourcesException {
+
+        try {
+            setChooseInitRes(gameId, game.getPlayer(), Resource.SHIELD);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.GOLD);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.ROCK);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.SERVANT);
+        }catch (IndexOutOfBoundsException ignore){}
+            setRemoveLeaders(game.getPlayer());
+        satisfyReq(
+                game.getPlayer().getBoard().getLeaderCards().get(0).getRequirement(),
+                game,
+                game.getPlayer()
+        );
+        satisfyReq(
+                game.getPlayer().getBoard().getLeaderCards().get(1).getRequirement(),
+                game,
+                game.getPlayer()
+        );
+        setResourcesInStrongBoxForDevelop(game, game.getPlayer(), Color.BLUE, 1);
+        /*
+        setBuyDevelopCard(gameId, game.getPlayer(), Color.GOLD, 1, 3);
+        setBuyDevelopCard(gameId, game.getPlayer(), Color.GOLD, 2, 3);
+        setBuyDevelopCard(gameId, game.getPlayer(), Color.GOLD, 3, 3);
+
+         */
+    }
 }

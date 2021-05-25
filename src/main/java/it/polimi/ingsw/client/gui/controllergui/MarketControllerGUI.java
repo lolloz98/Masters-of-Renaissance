@@ -8,6 +8,7 @@ import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,6 +29,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public ImageView free_marble;
     public Button developmentBtn;
     public DepotComponent depotCmp;
+    public Label messageLbl;
     public Button boardBtn;
     public Button pushA;
     public Button pushB;
@@ -46,6 +48,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
         market_grid.setVgap(1);
         ui.getLocalGame().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
+        messageLbl.setText("");
         developmentBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toDevelopGrid(stage, ui);
         });
@@ -121,12 +124,16 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
 
     @Override
     public void notifyUpdate() {
-
+        Platform.runLater(() -> {
+            synchronized (ui.getLocalGame()) {
+                setUpState();
+            }
+        });
     }
 
     @Override
     public void notifyError() {
-
+        messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
     }
 
     private void setUpState() {

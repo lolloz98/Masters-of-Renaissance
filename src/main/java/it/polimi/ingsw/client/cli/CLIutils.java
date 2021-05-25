@@ -26,6 +26,16 @@ public class CLIutils {
     public static final String CYAN_BACKGROUND = "\033[46m";
     public static final String WHITE_BACKGROUND = "\033[47m";
 
+    public static final String GREY = "\033[90m";
+    public static final String BLACK = "\033[30m";
+    public static final String RED = "\033[31m";
+    public static final String GREEN = "\033[32m";
+    public static final String YELLOW = "\033[33m";
+    public static final String BLUE = "\033[34m";
+    public static final String MAGENTA = "\033[35m";
+    public static final String CYAN = "\033[36m";
+    public static final String WHITE = "\033[37m";
+
     public static void append(ArrayList<String> strings, int index, String stringToAppend){
         strings.set(index, strings.get(index) + stringToAppend);
     }
@@ -49,16 +59,30 @@ public class CLIutils {
         return " ";
     }
 
+    public static String resourceToAnsiMarble(Resource res){
+        switch (res) {
+            case NOTHING:
+            case ANYTHING:
+                return WHITE;
+            case GOLD: return YELLOW;
+            case SERVANT: return MAGENTA;
+            case SHIELD: return CYAN;
+            case ROCK: return GREY;
+            case FAITH: return RED;
+        }
+        return " ";
+    }
+
     public static String resourceToAnsi(Resource res){
         switch (res) {
             case NOTHING:
             case ANYTHING:
-                return WHITE_BACKGROUND;
-            case GOLD: return YELLOW_BACKGROUND;
-            case SERVANT: return MAGENTA_BACKGROUND;
-            case SHIELD: return CYAN_BACKGROUND;
-            case ROCK: return GREY_BACKGROUND;
-            case FAITH: return RED_BACKGROUND;
+                return WHITE_BACKGROUND+ANSI_BLACK;
+            case GOLD: return YELLOW_BACKGROUND+ANSI_BLACK;
+            case SERVANT: return MAGENTA_BACKGROUND+ANSI_BLACK;
+            case SHIELD: return CYAN_BACKGROUND+ANSI_BLACK;
+            case ROCK: return GREY_BACKGROUND+ANSI_BLACK;
+            case FAITH: return RED_BACKGROUND+ANSI_BLACK;
         }
         return " ";
     }
