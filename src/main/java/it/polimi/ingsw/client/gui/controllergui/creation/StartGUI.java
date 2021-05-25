@@ -27,4 +27,13 @@ public class StartGUI extends ControllerGUI {
         });
     }
 
+    @Override
+    public void notifyUpdate() {
+
+    }
+
+    @Override
+    public void notifyError() {
+
+    }
 }

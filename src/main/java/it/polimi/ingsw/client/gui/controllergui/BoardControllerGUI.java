@@ -11,6 +11,7 @@ import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
+import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.server.model.utility.PairId;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -77,9 +78,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
      */
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
-        this.ui = ui;
-        this.stage = stage;
-        this.root = root;
+        setLocalVariables(stage, root, ui);
         marketBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toMarket(stage, ui);
         });
@@ -88,7 +87,12 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         });
         LocalGame<?> game = ui.getLocalGame();
 
-        game.overrideObserver(this);
+        LocalPlayer currentPlayerOnScene = game.getPlayerById(ui.getWhoIAmSeeingId());
+        List<LocalCard> leadersOnScene = currentPlayerOnScene.getLocalBoard().getLeaderCards();
+        if(leadersOnScene.size() == 2){
+            leader1.setCard(leadersOnScene.get(0));
+            leader2.setCard(leadersOnScene.get(1));
+        }
 
         if (game instanceof LocalSingle)
             chooseBoard.setVisible(false);

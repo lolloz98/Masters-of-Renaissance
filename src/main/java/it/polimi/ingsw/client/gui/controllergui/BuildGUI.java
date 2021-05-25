@@ -159,6 +159,20 @@ public class BuildGUI {
     }
 
     public void toRemoveLeaders(Stage stage, GUI ui) {
+        Platform.runLater(() -> {
+            synchronized(ui.getLocalGame()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/remove_leaders.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    RemoveLeadersGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
+            }
+        });
     }
 
     public void toMarket(Stage stage, GUI ui) {

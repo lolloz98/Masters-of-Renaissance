@@ -9,7 +9,7 @@
 <?import it.polimi.ingsw.client.gui.componentsgui.LeaderSlotComponent?>
 <?import it.polimi.ingsw.client.gui.componentsgui.DepotComponent?>
 <?import it.polimi.ingsw.client.gui.componentsgui.StrongBoxComponent?>
-<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<Pane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.polimi.ingsw.client.gui.controllergui.BoardControllerGUI">
     <ImageView fitHeight="719.0" fitWidth="1035.0" preserveRatio="true">
         <Image url="@../png/board_simplified.png"/>
@@ -66,4 +66,4 @@
     <ChoiceBox fx:id="chooseBoard" layoutX="882.0" layoutY="6.0" prefWidth="150.0"/>
 
 
-</AnchorPane>
+</Pane>

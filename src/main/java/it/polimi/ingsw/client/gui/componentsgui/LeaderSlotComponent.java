@@ -29,7 +29,7 @@ public class LeaderSlotComponent extends AnchorPane {
 
     public void setCard(LocalCard card){
         this.leaderCard = card;
-        // Todo update activeCard imageView
+        cardImg.setImage(card.getImage());
     }
 
     public LeaderSlotComponent() {

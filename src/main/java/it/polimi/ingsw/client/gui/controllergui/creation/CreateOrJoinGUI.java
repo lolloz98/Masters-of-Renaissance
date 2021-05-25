@@ -16,4 +16,14 @@ public class CreateOrJoinGUI extends ControllerGUI {
         createBtn.setOnMouseClicked(mouseEvent -> BuildGUI.getInstance().toCreateGame(stage, ui));
         JoinBtn.setOnMouseClicked(mouseEvent -> BuildGUI.getInstance().toJoinGame(stage, ui));
     }
+
+    @Override
+    public void notifyUpdate() {
+
+    }
+
+    @Override
+    public void notifyError() {
+
+    }
 }
