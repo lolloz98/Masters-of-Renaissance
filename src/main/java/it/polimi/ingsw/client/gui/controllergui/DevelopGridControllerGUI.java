@@ -5,13 +5,14 @@ import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.awt.*;
+
 import java.io.File;
 import java.util.Objects;
 
@@ -39,9 +40,6 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         ui.getLocalGame().overrideObserver(this);
         ui.getLocalGame().getLocalDevelopmentGrid().addObserver(this);
 
-//        backBtn.setOnMouseClicked(mouseEvent -> {
-//            BuildGUI.getInstance().toBoard(stage, ui);
-//        });
 
         updateGrid();
 
@@ -64,10 +62,14 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
                 imgView.setFitHeight(218);
                 imgView.setFitWidth(167);
                 button = new Button();
-                //button.setOnMouseClicked();
-                button.setSize(167,218);
-                //button.setGraphic(imgView);
-                //develop_grid.add(button,i,j);
+                button.setOnMouseClicked(mouseEvent -> {
+                    //todo
+                });
+                button.setPrefWidth(167);
+                button.setPrefHeight(218);
+                button.setDisable(true);
+                button.setGraphic(imgView);
+                develop_grid.add(button,i,j);
             }
         }
     }
