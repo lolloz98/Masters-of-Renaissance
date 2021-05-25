@@ -114,13 +114,14 @@ public class LocalBoard extends Observable implements Serializable {
         this.leaderCards = leaderCards;
     }
 
-    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction, int initialRes, TreeMap<Resource, Integer> resInNormalDepot){
+    public LocalBoard(ArrayList<ArrayList<LocalDevelopCard>> developCards, ArrayList<LocalCard> leaderCards, LocalTrack localTrack, LocalProduction baseProduction, int initialRes, TreeMap<Resource, Integer> resInNormalDepot, TreeMap<Resource, Integer> resInStrongBox){
         this.developCards = developCards;
         this.leaderCards = leaderCards;
         this.localTrack = localTrack;
         this.baseProduction = baseProduction;
         this.initialRes = initialRes;
         this.resInNormalDepot = resInNormalDepot;
+        this.resInStrongBox = resInStrongBox;
     }
 
     public LocalBoard(){
