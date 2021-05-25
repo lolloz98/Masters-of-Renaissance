@@ -11,9 +11,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.List;
 
 public class SlotDevelopComponent extends Pane {
     private static final Logger logger = LogManager.getLogger(SlotDevelopComponent.class);
+
+    public void setDisableActivateBtn(boolean hasBeenActivated) {
+        activateBtn.setDisable(hasBeenActivated);
+    }
+
 
     @FXML
     private CoveredCardComponent coveredCard1;
@@ -26,15 +32,15 @@ public class SlotDevelopComponent extends Pane {
 
     private LocalDevelopCard localDevelopCard;
 
-    public void addCard(LocalDevelopCard localDevelopCard){
-        if(coveredCard2.getDevelopCard() != null) {
-            logger.error("stopped from trying to add fourth card to slot develop");
-            return;
+    public void setCards(List<LocalDevelopCard> localDevelopCards){
+        int lastPos = localDevelopCards.size() - 1;
+        for(int i = lastPos; i >= 0; i--){
+            if(i == lastPos) localDevelopCard = localDevelopCards.get(i);
+            else if(i == lastPos - 1) coveredCard1.setDevelopCard(localDevelopCards.get(i));
+            else if(i == lastPos - 2) coveredCard2.setDevelopCard(localDevelopCards.get(i));
         }
-        coveredCard2.setDevelopCard(coveredCard1.getDevelopCard());
-        coveredCard1.setDevelopCard(localDevelopCard);
-        this.localDevelopCard = localDevelopCard;
-        // Todo update activeCard imageView
+        if(localDevelopCard != null) activeCard.setImage(localDevelopCard.getImage());
+        else activeCard.setImage(ImageCache.EMPTY_CARD);
     }
 
     public Button getActivateBtn() {

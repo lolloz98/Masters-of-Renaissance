@@ -3,15 +3,13 @@ package it.polimi.ingsw.client.gui.controllergui;
 import com.sun.javafx.collections.ObservableListWrapper;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
-import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
-import it.polimi.ingsw.client.gui.componentsgui.FaithTrackComponent;
-import it.polimi.ingsw.client.gui.componentsgui.LeaderSlotComponent;
-import it.polimi.ingsw.client.gui.componentsgui.SlotDevelopComponent;
+import it.polimi.ingsw.client.gui.componentsgui.*;
 import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
+import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 import it.polimi.ingsw.server.model.utility.PairId;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -23,8 +21,8 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BoardControllerGUI extends ControllerGUI implements Observer {
@@ -37,6 +35,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public SlotDevelopComponent slotDevelopComponent1;
     public SlotDevelopComponent slotDevelopComponent2;
     public SlotDevelopComponent slotDevelopComponent3;
+
+    private final List<SlotDevelopComponent> developSlots = new ArrayList<>();
+
     public Button activateNormalBtn;
 
     public Button optional1Btn;
@@ -51,7 +52,60 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     public DepotComponent depotCmp;
 
-    public void resetDefault() {
+    /**
+     * set the various elements of the gui
+     */
+    public void setBoard() {
+        synchronized (ui.getLocalGame()) {
+            if (ui.getWhoIAmSeeingId() == ui.getLocalGame().getMainPlayer().getId()) {
+                setMainPlayerBoard();
+            } else {
+                setNotMainPlayerBoard();
+            }
+        }
+    }
+
+    public void setMainPlayerBoard() {
+        setBaseBoard();
+        setUpOnState();
+    }
+
+    public void setNotMainPlayerBoard() {
+        setBaseBoard();
+        setVisibleButtonsActions(false);
+    }
+
+    /**
+     * set things in common to both not main player and main player
+     */
+    public void setBaseBoard() {
+        LocalPlayer seen = ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId());
+
+        List<LocalCard> leaders = seen.getLocalBoard().getLeaderCards();
+        if (leaders.size() == 2) {
+            leader1.setCard(leaders.get(0));
+            leader2.setCard(leaders.get(1));
+        }
+
+        List<ArrayList<LocalDevelopCard>> develops = seen.getLocalBoard().getDevelopCards();
+        int i = 0;
+        for (ArrayList<LocalDevelopCard> ald : develops) {
+            developSlots.get(i).setCards(ald);
+            if(ald.isEmpty()) developSlots.get(i).setDisableActivateBtn(true);
+            else developSlots.get(i).setDisableActivateBtn(!ald.get(ald.size() - 1).getProduction().getResToFlush().isEmpty());
+            i++;
+        }
+
+        faithTrackComponent.setCurrentFaith(seen.getLocalBoard().getLocalTrack().getFaithTrackScore());
+        faithTrackComponent.setFigureStates(seen.getLocalBoard().getLocalTrack().getFiguresState());
+        if(ImageCache.isSinglePlayer()){
+            LocalSingle game = (LocalSingle) ui.getLocalGame();
+            faithTrackComponent.setCurrentLorenzo(game.getLorenzoTrack().getFaithTrackScore());
+        }
+    }
+
+
+    public void defaultForReady() {
         optional1Btn.setOnMouseClicked(mouseEvent -> {
             logger.debug("event handler added by cleanup");
         });
@@ -74,107 +128,52 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     }
 
     /**
-     * called from buildGUI, to setup this view
-     */
-    @Override
-    public void setUp(Stage stage, Parent root, GUI ui) {
-        setLocalVariables(stage, root, ui);
-        marketBtn.setOnMouseClicked(mouseEvent -> {
-            BuildGUI.getInstance().toMarket(stage, ui);
-        });
-        developBtn.setOnMouseClicked(mouseEvent -> {
-            BuildGUI.getInstance().toDevelopGrid(stage, ui);
-        });
-        LocalGame<?> game = ui.getLocalGame();
-
-        LocalPlayer currentPlayerOnScene = game.getPlayerById(ui.getWhoIAmSeeingId());
-        List<LocalCard> leadersOnScene = currentPlayerOnScene.getLocalBoard().getLeaderCards();
-        if(leadersOnScene.size() == 2){
-            leader1.setCard(leadersOnScene.get(0));
-            leader2.setCard(leadersOnScene.get(1));
-        }
-
-        if (game instanceof LocalSingle)
-            chooseBoard.setVisible(false);
-        else {
-            for (LocalPlayer p : game.getLocalPlayers()) {
-                myList.add(new PairId<>(p.getId(), p.getName()));
-            }
-            chooseBoard.setItems(myList);
-            chooseBoard.setOnAction((event) -> {
-                int selectedIndex = chooseBoard.getSelectionModel().getSelectedIndex();
-                PairId<Integer, String> selectedItem = chooseBoard.getSelectionModel().getSelectedItem();
-                ui.setWhoIAmSeeingId(selectedItem.getFirst());
-                BuildGUI.getInstance().toBoard(stage, ui);
-            });
-        }
-
-
-        setUpOnState();
-    }
-
-    @Override
-    public void notifyUpdate() {
-        Platform.runLater(() -> {
-            synchronized (ui.getLocalGame()) {
-                setUpOnState();
-            }
-        });
-    }
-
-    @Override
-    public void notifyError() {
-        messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
-    }
-
-    /**
-     * set up the view depending on the localGame status
+     * set up the view (only if board is of main player) depending on the localGame status
      */
     private void setUpOnState() {
-        resetDefault();
-        if (ui.getWhoIAmSeeingId() == ui.getLocalGame().getMainPlayer().getId()) {
-            switch (ui.getLocalGame().getState()) {
-                case PREP_RESOURCES:
-                    setVisibleButtonsActions(false);
-                    if (ui.getLocalGame().getMainPlayer().getLocalBoard().getInitialRes() != 0) {
-                        emphasisOnButton(optional1Btn);
-                        optional1Btn.setDisable(false);
-                        optional1Btn.setVisible(true);
-                        optional1Btn.setText("Choose Init Resources");
-                        optional1Btn.setOnMouseClicked(mouseEvent -> {
-                            logger.debug("optional1Btn clicked");
-                            BuildGUI.getInstance().toChooseInitRes(stage, ui);
-                        });
-                    } else {
-                        messageLbl.setText("Wait for other players to choose their resources");
-                    }
-                    break;
-                case PREP_LEADERS:
-                    setVisibleButtonsActions(false);
-                    if (ui.getLocalGame().getMainPlayer().getLocalBoard().getLeaderCards().size() > 2) {
-                        emphasisOnButton(optional1Btn);
-                        optional1Btn.setDisable(false);
-                        optional1Btn.setVisible(true);
-                        optional1Btn.setText("Remove Leaders");
-                        optional1Btn.setOnMouseClicked(mouseEvent -> {
-                            logger.debug("optional1Btn clicked");
-                            BuildGUI.getInstance().toRemoveLeaders(stage, ui);
-                        });
-                    } else {
-                        messageLbl.setText("Wait for other players to remove their leaders");
-                    }
-                    break;
-                case READY:
-                    setUpReady();
-                    break;
-                case OVER:
-                    break;
-                default:
-                    logger.error("Invalid state: " + ui.getLocalGame().getState());
-                    break;
-            }
-        } else
-            setUpViewsForOtherPlayersBoard();
+        LocalGame<?> game = ui.getLocalGame();
+        switch (game.getState()) {
+            case PREP_RESOURCES:
+                setVisibleButtonsActions(false);
+                if (game.getMainPlayer().getLocalBoard().getInitialRes() != 0) {
+                    emphasisOnButton(optional1Btn);
+                    optional1Btn.setDisable(false);
+                    optional1Btn.setVisible(true);
+                    optional1Btn.setText("Choose Init Resources");
+                    optional1Btn.setOnMouseClicked(mouseEvent -> {
+                        logger.debug("optional1Btn clicked");
+                        BuildGUI.getInstance().toChooseInitRes(stage, ui);
+                    });
+                } else {
+                    messageLbl.setText("Wait for other players to choose their resources");
+                }
+                break;
+            case PREP_LEADERS:
+                setVisibleButtonsActions(false);
+                if (ui.getLocalGame().getMainPlayer().getLocalBoard().getLeaderCards().size() > 2) {
+                    emphasisOnButton(optional1Btn);
+                    optional1Btn.setDisable(false);
+                    optional1Btn.setVisible(true);
+                    optional1Btn.setText("Remove Leaders");
+                    optional1Btn.setOnMouseClicked(mouseEvent -> {
+                        logger.debug("optional1Btn clicked");
+                        BuildGUI.getInstance().toRemoveLeaders(stage, ui);
+                    });
+                } else {
+                    messageLbl.setText("Wait for other players to remove their leaders");
+                }
+                break;
+            case READY:
+                defaultForReady();
+                setUpReady();
+                break;
+            case OVER:
+                // todo
+                break;
+            default:
+                logger.error("Invalid state: " + ui.getLocalGame().getState());
+                break;
+        }
     }
 
     public void setUpReady() {
@@ -195,7 +194,12 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                 optional2Btn.setVisible(true);
                 emphasisOnButton(optional2Btn);
                 optional2Btn.setOnMouseClicked(mouseEvent -> {
-                    // todo send next turn
+                    FinishTurnMessage finishTurnMessage = new FinishTurnMessage(game.getGameId(), game.getMainPlayer().getId());
+                    try {
+                        ui.getGameHandler().dealWithMessage(finishTurnMessage);
+                    } catch (IOException e) {
+                        logger.error("Something happened while sending finishTurnMessage: " + e);
+                    }
                 });
             }
         } else {
@@ -203,11 +207,64 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         }
     }
 
+    /**
+     * called from buildGUI, to setup this view
+     */
+    @Override
+    public void setUp(Stage stage, Parent root, GUI ui) {
+        setLocalVariables(stage, root, ui);
+        marketBtn.setOnMouseClicked(mouseEvent -> {
+            BuildGUI.getInstance().toMarket(stage, ui);
+        });
+        developBtn.setOnMouseClicked(mouseEvent -> {
+            BuildGUI.getInstance().toDevelopGrid(stage, ui);
+        });
+
+        developSlots.add(slotDevelopComponent1);
+        developSlots.add(slotDevelopComponent2);
+        developSlots.add(slotDevelopComponent3);
+
+        LocalGame<?> game = ui.getLocalGame();
+        if (game instanceof LocalSingle)
+            chooseBoard.setVisible(false);
+        else {
+            for (LocalPlayer p : game.getLocalPlayers()) {
+                PairId<Integer, String> tmp = new PairId<>(p.getId(), p.getName());
+                myList.add(tmp);
+                if(ui.getWhoIAmSeeingId() == tmp.getFirst()) chooseBoard.setValue(tmp);
+            }
+            chooseBoard.setItems(myList);
+            chooseBoard.setOnAction((event) -> {
+                // int selectedIndex = chooseBoard.getSelectionModel().getSelectedIndex();
+                PairId<Integer, String> selectedItem = chooseBoard.getSelectionModel().getSelectedItem();
+                ui.setWhoIAmSeeingId(selectedItem.getFirst());
+                BuildGUI.getInstance().toBoard(stage, ui);
+            });
+        }
+        setBoard();
+    }
+
+    @Override
+    public void notifyUpdate() {
+        Platform.runLater(() -> {
+            synchronized (ui.getLocalGame()) {
+                setBoard();
+            }
+        });
+    }
+
+    @Override
+    public void notifyError() {
+        messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
+    }
+
     private void emphasisOnButton(Button btn) {
         btn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
     }
 
     private void setVisibleButtonsActions(boolean bool) {
+        optional1Btn.setVisible(false);
+        optional2Btn.setVisible(false);
         slotDevelopComponent1.getActivateBtn().setVisible(bool);
         slotDevelopComponent2.getActivateBtn().setVisible(bool);
         slotDevelopComponent3.getActivateBtn().setVisible(bool);
@@ -227,9 +284,5 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     private void setDisableProduction(SlotDevelopComponent s, Boolean bool) {
         s.getActivateBtn().setDisable(bool);
-    }
-
-    private void setUpViewsForOtherPlayersBoard() {
-        setVisibleButtonsActions(false);
     }
 }
