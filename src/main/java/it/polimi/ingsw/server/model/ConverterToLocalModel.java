@@ -177,8 +177,9 @@ public final class ConverterToLocalModel {
             }
         }
 
-        return new LocalBoard(localDevelopCards, localLeader, localTrack, localBaseProduction, board.getInitialRes(), depots);
+        TreeMap<Resource, Integer> strongBox = board.getResourcesInStrongBox();
 
+        return new LocalBoard(localDevelopCards, localLeader, localTrack, localBaseProduction, board.getInitialRes(), depots, strongBox);
     }
 
     public static LocalPlayer convert(Player player, int playerIdRequiring) throws UnexpectedControllerException {

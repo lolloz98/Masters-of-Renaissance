@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.RemoveLeadersGUI">
+    <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"  prefHeight="719.0" prefWidth="1035.0" spacing="60">
+        <Label text="Choose Leaders to be kept" />
+                <HBox alignment="CENTER" spacing="50">
+                    <ImageView fx:id="leader1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../png/empty_card.png" />
+                    </ImageView>
+                    <ImageView fx:id="leader2" fitHeight="150.0" fitWidth="200.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../png/empty_card.png" />
+                    </ImageView>
+                    <ImageView fx:id="leader3" fitHeight="150.0" fitWidth="200.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../png/empty_card.png" />
+                    </ImageView>
+                    <ImageView fx:id="leader4" fitHeight="150.0" fitWidth="200.0" layoutX="210.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../png/empty_card.png" />
+                    </ImageView>
+                </HBox>
+
+        <Button fx:id="doneBtn" mnemonicParsing="false" text="Done" disable="true" />
+    </VBox>
+
+</AnchorPane>

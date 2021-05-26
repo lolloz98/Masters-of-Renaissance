@@ -71,4 +71,14 @@ public class StartRemoteGUI extends ControllerGUI {
             }
         });
     }
+
+    @Override
+    public void notifyUpdate() {
+
+    }
+
+    @Override
+    public void notifyError() {
+
+    }
 }

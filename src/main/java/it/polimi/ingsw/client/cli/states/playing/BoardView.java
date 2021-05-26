@@ -60,7 +60,7 @@ public class BoardView extends GameView {
             String ans = s.toUpperCase();
             ArrayList<String> ansList = new ArrayList<>(Arrays.asList(ans.split("\\s+")));
             if (localPlayer == localGame.getMainPlayer()) {
-                switch (ansList.get(0)) { // todo check command lenght in every method
+                switch (ansList.get(0)) {
                     case "AL": // activate leader
                         activateLeader(ansList);
                         break;
@@ -70,7 +70,7 @@ public class BoardView extends GameView {
                     case "AD": // activate development
                         activateProduction(ansList);
                         break;
-                    case "FP": // flush development
+                    case "FD": // flush development
                         flushProduction();
                         break;
                     default:
