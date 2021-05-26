@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.componentsgui;
 
+import it.polimi.ingsw.client.localmodel.LocalFigureState;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
@@ -180,5 +181,9 @@ public class FaithTrackComponent extends AnchorPane {
 //        for(ImageView i: faith){
 //            i.setImage(new Image("/png/punchboard/calamaio.png"));
 //        }
+    }
+
+    public void setFigureStates(LocalFigureState[] figuresState) {
+        // todo set visualization of figure states
     }
 }

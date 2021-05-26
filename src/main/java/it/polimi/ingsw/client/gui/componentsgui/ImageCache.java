@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public final class ImageCache {
+    public static final Image EMPTY_CARD = new Image("/png/empty_card.png");
     private static final Logger logger = LogManager.getLogger(FaithTrackComponent.class);
 
     public static final Image NOTHINGIMG = new Image("/png/res/no_res.png");;

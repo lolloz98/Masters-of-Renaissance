@@ -158,6 +158,20 @@ public class BuildGUI {
     }
 
     public void toChooseInitRes(Stage stage, GUI ui) {
+        Platform.runLater(() -> {
+            synchronized(ui.getLocalGame()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/choose_init_res.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    ChooseInitResGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
+            }
+        });
     }
 
     public void toRemoveLeaders(Stage stage, GUI ui) {
@@ -212,5 +226,19 @@ public class BuildGUI {
     }
 
     public void toDevelopGrid(Stage stage, GUI ui) {
+        Platform.runLater(() -> {
+            synchronized(ui.getLocalGame()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/developgrid.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    DevelopGridControllerGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
+            }
+        });
     }
 }

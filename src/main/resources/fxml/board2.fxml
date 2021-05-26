@@ -45,7 +45,7 @@
 
        <DepotComponent fx:id="depotCmp" layoutY="262.0" prefHeight="172.0" prefWidth="194.0"/>
 
-    <StrongBoxComponent layoutY="451.0" prefHeight="121.0" prefWidth="179.0"/>
+    <StrongBoxComponent fx:id="strongBoxCmp" layoutY="451.0" prefHeight="121.0" prefWidth="179.0"/>
 
 
     <Button fx:id="activateNormalBtn" layoutX="202.0" layoutY="556.0" mnemonicParsing="false" prefHeight="26.0"
