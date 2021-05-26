@@ -110,16 +110,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
 
     public void defaultForReady() {
-        optional1Btn.setOnMouseClicked(mouseEvent -> {
-            logger.debug("event handler added by cleanup");
-        });
-        optional1Btn.setDisable(true);
         optional1Btn.setVisible(false);
 
-        optional2Btn.setOnMouseClicked(mouseEvent -> {
-            logger.debug("event handler added by cleanup");
-        });
-        optional2Btn.setDisable(true);
         optional2Btn.setVisible(false);
 
         flushBtn.setDisable(true);
