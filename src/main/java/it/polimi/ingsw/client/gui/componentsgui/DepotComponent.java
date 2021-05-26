@@ -40,16 +40,16 @@ public class DepotComponent extends Pane {
             else if(res[tmp + 2] == Resource.NOTHING) res[tmp + 2] = r;
         }
         for(int i = 0; i < 3; i++){
-            int tmp = resInDepot.get(res[i]);
-            while(tmp != 0){
-                tmp--;
-                if(i == 0) {
-                    ImageCache.setImageInStore(res[i], d1);
+            if(res[i] != Resource.NOTHING) {
+                int tmp = resInDepot.get(res[i]);
+                while (tmp != 0) {
+                    tmp--;
+                    if (i == 0) {
+                        ImageCache.setImageInStore(res[i], d1);
+                    } else if (i == 1) {
+                        setImageInStore(res[i], depot2.get(tmp));
+                    } else setImageInStore(res[i], depot3.get(tmp));
                 }
-                else if(i == 1) {
-                    setImageInStore(res[i], depot2.get(tmp));
-                }
-                else setImageInStore(res[i], depot3.get(tmp));
             }
         }
     }

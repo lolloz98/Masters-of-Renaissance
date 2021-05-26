@@ -57,7 +57,7 @@ public abstract class ActivateLeaderAnswerHandler extends AnswerHandler {
             } else {
                 actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " activated a leader card";
             }
-            localMulti.getLocalTurn().getHistory().add(actionDescription);
+            localMulti.getLocalTurn().getHistoryObservable().getHistory().add(actionDescription);
         }
 
 

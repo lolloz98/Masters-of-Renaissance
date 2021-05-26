@@ -22,7 +22,7 @@ public class HistoryView extends GameView {
     public void draw() {
         CLIutils.clearScreen();
         ArrayList<String> lastHistory;
-        ArrayList<String> fullHistory = localGame.getLocalTurn().getHistory();
+        ArrayList<String> fullHistory = localGame.getLocalTurn().getHistoryObservable().getHistory();
         if (fullHistory.size() < 29){
             lastHistory = new ArrayList<>(fullHistory);
         } else {

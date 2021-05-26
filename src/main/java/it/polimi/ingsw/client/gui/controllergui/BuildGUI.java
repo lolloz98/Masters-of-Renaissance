@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui.controllergui;
 
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.creation.*;
+import it.polimi.ingsw.enums.Resource;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.TreeMap;
 
 public class BuildGUI {
     private static final Logger logger = LogManager.getLogger(BuildGUI.class);
@@ -156,6 +158,20 @@ public class BuildGUI {
     }
 
     public void toChooseInitRes(Stage stage, GUI ui) {
+        Platform.runLater(() -> {
+            synchronized(ui.getLocalGame()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/choose_init_res.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    ChooseInitResGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
+            }
+        });
     }
 
     public void toRemoveLeaders(Stage stage, GUI ui) {
@@ -183,6 +199,23 @@ public class BuildGUI {
                     Parent root = fxmlLoader.load();
                     MarketControllerGUI controller = fxmlLoader.getController();
                     controller.setUp(stage, root, ui);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
+            }
+        });
+    }
+
+    public void toFlushRes(Stage stage, GUI ui, TreeMap< Resource, Integer > resComb) {
+        Platform.runLater(() -> {
+            synchronized(ui.getLocalGame()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/market.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    FlushResControllerGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui, resComb);
                     stage.setScene(newScene(root, stage));
                     stage.show();
                 } catch (IOException e) {

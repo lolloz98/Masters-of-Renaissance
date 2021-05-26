@@ -52,7 +52,7 @@ public class DiscardLeaderAnswerHandler extends AnswerHandler {
             } else {
                 actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " discarded a leader card";
             }
-            localMulti.getLocalTurn().getHistory().add(actionDescription);
+            localMulti.getLocalTurn().getHistoryObservable().getHistory().add(actionDescription);
         }
 
         //update the tracks
