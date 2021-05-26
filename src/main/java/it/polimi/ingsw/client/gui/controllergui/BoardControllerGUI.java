@@ -275,7 +275,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     @Override
     public void notifyError() {
-        messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
+        Platform.runLater(() -> messageLbl.setText(ui.getLocalGame().getError().getErrorMessage()));
     }
 
     private void emphasisOnButton(Button btn) {
