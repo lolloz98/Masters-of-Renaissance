@@ -35,6 +35,7 @@ public class RemoveLeadersGUI extends ControllerGUI implements Observer {
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
+        ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
         leaders.add(leader1);
         leaders.add(leader2);
         leaders.add(leader3);

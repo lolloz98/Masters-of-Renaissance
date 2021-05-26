@@ -14,7 +14,8 @@ public class Error implements Serializable {
 
     public synchronized void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
-        observer.notifyError();
+        if(observer != null)
+            observer.notifyError();
     }
     public void addObserver(Observer observer){
         this.observer = observer;

@@ -3,11 +3,9 @@ package it.polimi.ingsw.client.localmodel;
 import it.polimi.ingsw.client.cli.Observer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Observable implements Serializable  {
-    protected List<Observer> observers = new ArrayList<>();
+    private Observer obs = null;
 
     /**
      * clear local list of observers and add observer
@@ -15,21 +13,15 @@ public class Observable implements Serializable  {
      * @param observer to be added to the list
      */
     public void overrideObserver(Observer observer){
-        observers.clear();
-        observers.add(observer);
-    }
-
-    public void addObserver(Observer observer){
-        observers.add(observer);
+        obs = observer;
     }
 
     public void removeObservers(){
-        observers.clear();
+        obs = null;
     }
 
     public void notifyObservers(){
-        for(Observer o: observers){
-            o.notifyUpdate();
-        }
+        if(obs != null)
+            obs.notifyUpdate();
     }
 }

@@ -84,8 +84,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         List<LocalCard> leaders = seen.getLocalBoard().getLeaderCards();
         if (leaders.size() == 2) {
-            leader1.setCard(leaders.get(0));
-            leader2.setCard(leaders.get(1));
+            leader1.setCard(leaders.get(0), ui);
+            leader2.setCard(leaders.get(1), ui);
         }
 
         List<ArrayList<LocalDevelopCard>> develops = seen.getLocalBoard().getDevelopCards();
@@ -146,6 +146,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                     optional1Btn.setText("Choose Init Resources");
                     optional1Btn.setOnMouseClicked(mouseEvent -> {
                         logger.debug("optional1Btn clicked");
+                        removeThisAsObserver();
                         BuildGUI.getInstance().toChooseInitRes(stage, ui);
                     });
                 } else {
@@ -161,6 +162,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                     optional1Btn.setText("Remove Leaders");
                     optional1Btn.setOnMouseClicked(mouseEvent -> {
                         logger.debug("optional1Btn clicked");
+                        removeThisAsObserver();
                         BuildGUI.getInstance().toRemoveLeaders(stage, ui);
                     });
                 } else {
@@ -218,9 +220,11 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
         marketBtn.setOnMouseClicked(mouseEvent -> {
+            removeThisAsObserver();
             BuildGUI.getInstance().toMarket(stage, ui);
         });
         developBtn.setOnMouseClicked(mouseEvent -> {
+            removeThisAsObserver();
             BuildGUI.getInstance().toDevelopGrid(stage, ui);
         });
 
@@ -242,10 +246,22 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                 // int selectedIndex = chooseBoard.getSelectionModel().getSelectedIndex();
                 PairId<Integer, String> selectedItem = chooseBoard.getSelectionModel().getSelectedItem();
                 ui.setWhoIAmSeeingId(selectedItem.getFirst());
+                removeThisAsObserver();
                 BuildGUI.getInstance().toBoard(stage, ui);
             });
         }
+
+        game.getPlayerById(ui.getWhoIAmSeeingId()).overrideObserver(this);
+        game.getError().addObserver(this);
+
         setBoard();
+    }
+
+    public void removeThisAsObserver(){
+        synchronized (ui.getLocalGame()) {
+            ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).removeObservers();
+            ui.getLocalGame().getError().removeObserver();
+        }
     }
 
     @Override
@@ -273,8 +289,11 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         slotDevelopComponent2.getActivateBtn().setVisible(bool);
         slotDevelopComponent3.getActivateBtn().setVisible(bool);
         activateNormalBtn.setVisible(bool);
-        leader1.setVisibleButtons(bool);
-        leader2.setVisibleButtons(bool);
+        if(!bool) {
+            // if true, better handling in leaderSlot
+            leader1.setVisibleButtons(false);
+            leader2.setVisibleButtons(false);
+        }
     }
 
     public void setDisableProductions(Boolean bool) {

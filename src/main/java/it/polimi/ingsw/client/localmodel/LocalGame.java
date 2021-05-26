@@ -1,10 +1,16 @@
 package it.polimi.ingsw.client.localmodel;
 
 
+import it.polimi.ingsw.client.gui.controllergui.RemoveLeadersGUI;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class LocalGame<T extends LocalTurn> extends Observable implements Serializable {
+    private static final Logger logger = LogManager.getLogger(LocalGame.class);
+
     protected LocalDevelopmentGrid localDevelopmentGrid;
     protected LocalMarket localMarket;
     protected int gameId;
@@ -30,6 +36,7 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
     public abstract ArrayList<LocalPlayer> getLocalPlayers();
 
     public synchronized Error getError() {
+        logger.debug("error in localGame: " + error);
         return error;
     }
 

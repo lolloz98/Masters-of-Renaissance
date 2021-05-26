@@ -95,7 +95,7 @@ public class FaithTrackComponent extends AnchorPane {
 
     private void showLorenzo(){
         if(ImageCache.isSinglePlayer()){
-            faith.get(currentFaith).setImage(ImageCache.LORENZO);
+            faith.get(currentLorenzo).setImage(ImageCache.LORENZO);
         }
     }
 
@@ -115,11 +115,8 @@ public class FaithTrackComponent extends AnchorPane {
         if(currentFaith == currentLorenzo){
             faith.get(currentFaith).setImage(ImageCache.getLorenzoAndPlayer());
         } else{
-            if (lorenzoMoved) {
-                showLorenzo();
-            } else {
-                faith.get(currentFaith).setImage(ImageCache.PLAYER);
-            }
+            showLorenzo();
+            faith.get(currentFaith).setImage(ImageCache.PLAYER);
         }
     }
 
