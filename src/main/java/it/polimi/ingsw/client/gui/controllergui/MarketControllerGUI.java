@@ -44,9 +44,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
-        this.ui = ui;
-        this.stage = stage;
-        this.root = root;
+        setLocalVariables(stage, root, ui);
         // todo set observers
         market_grid.setHgap(1);
         market_grid.setVgap(1);

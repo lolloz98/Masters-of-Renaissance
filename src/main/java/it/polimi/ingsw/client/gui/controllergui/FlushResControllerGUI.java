@@ -11,8 +11,7 @@ import java.util.TreeMap;
 public class FlushResControllerGUI extends ControllerGUI implements Observer {
 
 
-    // todo: is this correct?
-    public void setUp(Stage stage, Parent root, GUI ui, TreeMap<Resource, Integer > resComb) {
+    public void setUp(Stage stage, Parent root, GUI ui, TreeMap<Resource, Integer> resComb) {
         setUp(stage, root, ui);
 
     }
@@ -29,9 +28,6 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
-        this.ui = ui;
-        this.stage = stage;
-        this.root = root;
         setLocalVariables(stage, root, ui);
     }
 }

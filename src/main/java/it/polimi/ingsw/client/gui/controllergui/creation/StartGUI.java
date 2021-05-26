@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.controllergui.creation;
 
+import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
 import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
@@ -9,7 +10,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class StartGUI extends ControllerGUI {
+public class StartGUI extends ControllerGUI implements Observer {
     private static final Logger logger = LogManager.getLogger(StartGUI.class);
 
     public Button localBtn;

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.gui.controllergui;
 
+import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.ImageCache;
+import it.polimi.ingsw.client.localmodel.Observable;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
 import it.polimi.ingsw.server.model.utility.PairId;
@@ -19,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class ChooseInitResGUI extends ControllerGUI {
+public class ChooseInitResGUI extends ControllerGUI implements Observer {
     private static final Logger logger = LogManager.getLogger(ChooseInitResGUI.class);
 
     public Label numberOfResLbl;
