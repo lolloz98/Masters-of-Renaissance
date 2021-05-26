@@ -52,9 +52,10 @@ public class FlushMarketResAnswerHandler extends AnswerHandler {
             } else {
                 actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " used the market";
             }
-            localMulti.getLocalTurn().getHistory().add(actionDescription);
+            localMulti.getLocalTurn().getHistoryObservable().getHistory().add(actionDescription);
         }
 
         localBoard.notifyObservers();
+        localGame.getLocalTurn().getHistoryObservable().notifyObservers();
     }
 }

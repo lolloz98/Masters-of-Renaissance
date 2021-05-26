@@ -55,12 +55,13 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler {
             } else {
                 actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " bought a development card";
             }
-            localMulti.getLocalTurn().getHistory().add(actionDescription);
+            localMulti.getLocalTurn().getHistoryObservable().getHistory().add(actionDescription);
         }
 
         //update development grid
         localGame.setLocalDevelopmentGrid(serverAnswer.getLocalGrid());
         localGame.getLocalDevelopmentGrid().notifyObservers();
         localBoard.notifyObservers();
+        localGame.getLocalTurn().getHistoryObservable().notifyObservers();
     }
 }

@@ -49,7 +49,7 @@ public class FinishTurnSingleAnswerHandler extends AnswerHandler {
                 default:
                     turnDescription = "";
             }
-            localGame.getLocalTurn().getHistory().add(turnDescription);
+            localGame.getLocalTurn().getHistoryObservable().getHistory().add(turnDescription);
 
             //update the grid
             localSingle.setLocalDevelopmentGrid(serverAnswer.getLocalGrid());
@@ -65,6 +65,7 @@ public class FinishTurnSingleAnswerHandler extends AnswerHandler {
 
             localBoard.notifyObservers();
             localGame.getLocalTurn().notifyObservers();
+            localGame.getLocalTurn().getHistoryObservable().notifyObservers();
 
         } else
             logger.error("the answer is for a single player game and " + logger.getName() + " has been sent to a multiplayer player");

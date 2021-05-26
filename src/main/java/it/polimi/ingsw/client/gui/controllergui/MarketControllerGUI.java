@@ -8,7 +8,9 @@ import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
+import it.polimi.ingsw.server.model.game.SinglePlayer;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,6 +31,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public ImageView free_marble;
     public Button developmentBtn;
     public DepotComponent depotCmp;
+    public GridPane resCombGrid;
     public Label messageLbl;
     public Button boardBtn;
     public Button pushA;
@@ -44,83 +47,58 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
         this.ui = ui;
         this.stage = stage;
         this.root = root;
+        // todo set observers
         market_grid.setHgap(1);
         market_grid.setVgap(1);
         ui.getLocalGame().overrideObserver(this);
+        ui.getLocalGame().getLocalMarket().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
         messageLbl.setText("");
+        ArrayList<String> msgList = new ArrayList<>() {{
+            add("A");
+            add("B");
+            add("C");
+            add("1");
+            add("2");
+            add("3");
+            add("4");
+        }};
+        ArrayList<Button> btnList = new ArrayList<>() {{
+            add(pushA);
+            add(pushB);
+            add(pushC);
+            add(push1);
+            add(push2);
+            add(push3);
+            add(push4);
+        }};
         developmentBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toDevelopGrid(stage, ui);
         });
         boardBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toBoard(stage, ui);
         });
-        pushA.setOnMouseClicked(mouseEvent -> {
-            // todo send push
-            try {
-                UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), "A");
-                ui.getGameHandler().dealWithMessage(useMarketMessage);
-            } catch (InvalidMarketIndexException | IOException e) {
-                e.printStackTrace();
-            }
-        });
-        pushB.setOnMouseClicked(mouseEvent -> {
-            // todo send push
-            try {
-                UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), "B");
-                ui.getGameHandler().dealWithMessage(useMarketMessage);
-            } catch (InvalidMarketIndexException | IOException e) {
-                e.printStackTrace();
-            }
-        });
-        pushC.setOnMouseClicked(mouseEvent -> {
-            // todo send push
-            try {
-                UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), "C");
-                ui.getGameHandler().dealWithMessage(useMarketMessage);
-            } catch (InvalidMarketIndexException | IOException e) {
-                e.printStackTrace();
-            }
-        });
-        push1.setOnMouseClicked(mouseEvent -> {
-            // todo send push
-            try {
-                UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), "1");
-                ui.getGameHandler().dealWithMessage(useMarketMessage);
-            } catch (InvalidMarketIndexException | IOException e) {
-                e.printStackTrace();
-            }
-        });
-        push2.setOnMouseClicked(mouseEvent -> {
-            // todo send push
-            try {
-                UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), "2");
-                ui.getGameHandler().dealWithMessage(useMarketMessage);
-            } catch (InvalidMarketIndexException | IOException e) {
-                e.printStackTrace();
-            }
-        });
-        push3.setOnMouseClicked(mouseEvent -> {
-            // todo send push
-            try {
-                UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), "3");
-                ui.getGameHandler().dealWithMessage(useMarketMessage);
-            } catch (InvalidMarketIndexException | IOException e) {
-                e.printStackTrace();
-            }
-        });
-        push4.setOnMouseClicked(mouseEvent -> {
-            // todo send push
-            try {
-                UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), "4");
-                ui.getGameHandler().dealWithMessage(useMarketMessage);
-            } catch (InvalidMarketIndexException | IOException e) {
-                e.printStackTrace();
-            }
-        });
+        int i = 0;
+        for (Button btn : btnList) {
+            int finalI = i;
+            btn.setOnMouseClicked(mouseEvent -> {
+                Platform.runLater(() -> {
+                    messageLbl.setText("Please wait");
+                });
+                    try {
+                        UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), msgList.get(finalI));
+                        Platform.runLater(() -> setEnabled(false));
+                        ui.getGameHandler().dealWithMessage(useMarketMessage);
+                    } catch (InvalidMarketIndexException | IOException e) {
+                        e.printStackTrace();
+                    }
+            });
+            i++;
 
+        }
         setUpState();
     }
+
 
     @Override
     public void notifyUpdate() {
@@ -133,7 +111,12 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
 
     @Override
     public void notifyError() {
-        messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
+        Platform.runLater(() -> {
+            synchronized (ui.getLocalGame()) {
+                messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
+            }
+        });
+
     }
 
     private void setUpState() {
@@ -167,22 +150,23 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
             }
         }
         if (myTurn && ui.getLocalGame().getLocalMarket().getResCombinations().size() != 0) {
-            VBox vboxRes = new VBox();
             Label resCombText = new Label("Click on the button corresponding to the combination of resources you want to get:");
             resCombText.setLayoutX(520);
             resCombText.setLayoutY(290);
-            vboxRes.getChildren().add(resCombText);
-            GridPane resCombGrid = new GridPane();
             ArrayList<TreeMap<Resource, Integer>> resComb = ui.getLocalGame().getLocalMarket().getResCombinations();
             for (int i = 0; i < resComb.size(); i++) {
                 int x = 0; // x of the position in the resCombGrid
                 Button flushButton = new Button();
                 flushButton.setText("flush");
+                int finalI = i;
                 flushButton.setOnMouseClicked(mouseEvent -> {
-                    // todo go to flush screen passing resComb.get(i)
+                    BuildGUI.getInstance().toFlushRes(stage, ui, resComb.get(finalI));
                 });
-                for(Resource res : resComb.get(i).keySet())
-                    for(int j = 0; j<resComb.get(i).get(res); j++){
+                resCombGrid.setHgap(2);
+                resCombGrid.setVgap(2);
+                resCombGrid.add(flushButton, 0, i);
+                for (Resource res : resComb.get(i).keySet())
+                    for (int j = 0; j < resComb.get(i).get(res); j++) {
                         x++;
                         ImageView imgView = new ImageView();
                         path = Objects.requireNonNull(classLoader.getResource("png/punchboard/marbles/" + res + ".png")).getPath();
@@ -191,13 +175,18 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                         imgView.setImage(marbleImage);
                         imgView.setFitHeight(56);
                         imgView.setFitWidth(56);
-                        resCombGrid.add(imgView, i, x);
+                        resCombGrid.add(imgView, x, i);
                     }
             }
         }
     }
 
-    public void resetDefault() {
-        // reset buttons
+    private void resetDefault() {
+        setEnabled(true);
+        messageLbl.setText("");
+    }
+
+    private void setEnabled(boolean bool) {
+
     }
 }
