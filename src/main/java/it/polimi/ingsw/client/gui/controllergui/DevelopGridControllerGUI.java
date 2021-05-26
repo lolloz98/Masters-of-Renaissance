@@ -39,7 +39,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         this.stage = stage;
         this.root = root;
         ui.getLocalGame().overrideObserver(this);
-        ui.getLocalGame().getLocalDevelopmentGrid().addObserver(this);
+        ui.getLocalGame().getLocalDevelopmentGrid().overrideObserver(this);
 
         backBtn.setOnMouseClicked((this::back));
 
