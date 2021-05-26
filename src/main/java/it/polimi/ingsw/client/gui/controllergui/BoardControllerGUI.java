@@ -51,6 +51,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public LeaderSlotComponent leader2;
 
     public DepotComponent depotCmp;
+    public StrongBoxComponent strongBoxCmp;
 
     /**
      * set the various elements of the gui
@@ -102,6 +103,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             LocalSingle game = (LocalSingle) ui.getLocalGame();
             faithTrackComponent.setCurrentLorenzo(game.getLorenzoTrack().getFaithTrackScore());
         }
+
+        depotCmp.setImages(seen.getLocalBoard().getResInNormalDepot());
+        strongBoxCmp.updateRes(seen.getLocalBoard().getResInStrongBox());
     }
 
 
