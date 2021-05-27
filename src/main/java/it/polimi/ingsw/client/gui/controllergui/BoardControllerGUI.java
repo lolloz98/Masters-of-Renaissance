@@ -299,6 +299,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         setBoard();
     }
 
+
     public void removeThisAsObserver(){
         synchronized (ui.getLocalGame()) {
             ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).removeObservers();

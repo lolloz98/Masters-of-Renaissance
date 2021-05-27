@@ -25,6 +25,7 @@ import java.util.TreeMap;
 
 public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer {
     public ImageView cardImg;
+    public Label doneMessageLbl;
     public ComboBox<String> slotToStoreComboBox;
     public Spinner<Integer> leaderShieldSpnr;
     public Spinner<Integer> normalGoldSpnr;
@@ -47,6 +48,21 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
 
     private static final Logger logger = LogManager.getLogger(BuyCardSceneControllerGUI.class);
 
+    @Override
+    public void notifyError() {
+        Platform.runLater(() -> {
+            synchronized (ui.getLocalGame()) {
+                messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
+            }
+        });
+    }
+
+    @Override
+    public void setUp(Stage stage, Parent root, GUI ui) {
+        setLocalVariables(stage, root, ui);
+        ui.getLocalGame().overrideObserver(this);
+        ui.getLocalGame().getError().addObserver(this);
+    }
 
     public void setUp(Stage stage, Parent root, GUI ui, LocalDevelopCard toBuyCard){
         setUp(stage,root,ui);
@@ -124,20 +140,7 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
         });
     }
 
-    @Override
-    public void notifyError() {
-        Platform.runLater(() -> {
-            synchronized (ui.getLocalGame()) {
-                messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
-            }
-        });
-    }
 
-    @Override
-    public void setUp(Stage stage, Parent root, GUI ui) {
-        setLocalVariables(stage, root, ui);
-        ui.getLocalGame().overrideObserver(this);
-    }
 
     public void confirm() {
         logger.debug("in confirm method");
@@ -165,5 +168,7 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
         } catch (IOException e) {
             logger.error("Error while handling request: " + e);
         }
+        confirmBtn.setDisable(true);
+        doneMessageLbl.setText("Done!");
     }
 }
