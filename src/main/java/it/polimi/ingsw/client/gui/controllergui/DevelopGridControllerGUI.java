@@ -3,34 +3,47 @@ package it.polimi.ingsw.client.gui.controllergui;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.io.File;
+import java.util.Objects;
 
 public class DevelopGridControllerGUI extends ControllerGUI implements Observer {
     public Pane develop_pane;
     public GridPane develop_grid;
     public Button buydevelopBtn;
     public Button backBtn;
+    public Label messageLbl;
+
+    private static final Logger logger = LogManager.getLogger(DevelopGridControllerGUI.class);
 
     @Override
     public void notifyUpdate() {
-
+        Platform.runLater(() -> {
+            synchronized (ui.getLocalGame()) {
+                updateGrid();
+            }
+        });
     }
 
     @Override
     public void notifyError() {
-
+        Platform.runLater(() -> {
+            synchronized (ui.getLocalGame()) {
+                messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
+            }
+        });
     }
 
     @Override
@@ -41,9 +54,13 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         ui.getLocalGame().overrideObserver(this);
         ui.getLocalGame().getLocalDevelopmentGrid().overrideObserver(this);
 
-        backBtn.setOnMouseClicked((this::back));
+        backBtn.setOnMouseClicked(mouseEvent -> {
+            BuildGUI.getInstance().toBoard(stage, ui);
+        });
 
-        buydevelopBtn.setOnMouseClicked(this::buyDevelop);
+        buydevelopBtn.setOnMouseClicked(mouseEvent -> {
+            activateChooseCardButtons();
+        });
 
         updateGrid();
 
@@ -59,7 +76,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         for(int i=0;i<4;i++){
             for(int j=2;j>=0;j--){
                 ImageView imgView = new ImageView();
-                path = String.format("png/cards_front/%03d.png", topCards[i][2-j].getId());
+                path = Objects.requireNonNull(classLoader.getResource(String.format("png/cards_front/%03d.png", topCards[i][2-j].getId()))).getPath();
                 File cardImageFile=new File(path);
                 cardImage=new Image(cardImageFile.toURI().toString());
                 imgView.setImage(cardImage);
@@ -69,12 +86,16 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
                 int finalJ = j;
                 int finalI = i;
                 button.setOnMouseClicked((mouseEvent) -> {
-                    buyDevelop(topCards[finalI][3-finalJ]);
+                    buyDevelop(topCards[finalI][2-finalJ]);
                 });
-                button.setPrefWidth(167);
-                button.setPrefHeight(218);
+//                button.setPrefWidth(167);
+//                button.setPrefHeight(218);
+                button.setVisible(true);
                 button.setDisable(true);
                 button.setGraphic(imgView);
+//                BackgroundImage backgroundImage = new BackgroundImage( cardImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+//                Background background = new Background(backgroundImage);
+//                button.setBackground(background);
                 develop_grid.add(button,i,j);
             }
         }
@@ -83,8 +104,13 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
     //activates the buttons on the grid
     private void activateChooseCardButtons(){
         for(Node n:develop_grid.getChildren()){
-            Button b=(Button) n;
-            b.setDisable(false);
+            if(n instanceof Button){
+                //logger.debug("the node is a button");
+                Button b=(Button) n;
+                //logger.debug("disabling the button");
+                b.setDisable(false);
+            }
+
         }
     }
 
@@ -94,12 +120,4 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         //ui.getGameHandler().dealWithMessage(new BuyDevelopCardMessage(ui.getLocalGame().getGameId(),ui.getLocalGame().getMainPlayer().getId(),card.getLevel(),card.getColor(),));
     }
 
-
-    public void back(MouseEvent actionEvent) {
-        BuildGUI.getInstance().toBoard(stage, ui);
-    }
-
-    public void buyDevelop(MouseEvent mouseEvent) {
-        activateChooseCardButtons();
-    }
 }
