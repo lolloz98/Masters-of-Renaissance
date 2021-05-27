@@ -39,6 +39,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public Button push2;
     public Button push3;
     public Button push4;
+    private ArrayList<Button> btnList;
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
@@ -58,7 +59,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
             add("3");
             add("4");
         }};
-        ArrayList<Button> btnList = new ArrayList<>() {{
+        btnList = new ArrayList<>() {{
             add(pushA);
             add(pushB);
             add(pushC);
@@ -136,6 +137,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
             LocalMulti localMulti = (LocalMulti) ui.getLocalGame();
             if (localMulti.getLocalTurn().getCurrentPlayer().getId() != localMulti.getMainPlayer().getId()) {
                 myTurn = false;
+                setEnabled(false);
             }
         }
         if (myTurn && ui.getLocalGame().getLocalMarket().getResCombinations().size() != 0) {
@@ -177,7 +179,8 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     }
 
     private void setEnabled(boolean bool) {
-        // todo
+        for(Button b : btnList)
+            b.setDisable(!bool);
     }
 
     private void removeObserved() {

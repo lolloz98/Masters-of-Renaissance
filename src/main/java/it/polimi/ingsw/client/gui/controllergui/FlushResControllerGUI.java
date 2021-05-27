@@ -29,6 +29,8 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
     private int faithNumber;
     private TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToKeep;
     public Label messageLbl;
+    private Button backBtn;
+    private Button confirmBtn;
 
     public void setUp(Stage stage, Parent root, GUI ui, TreeMap<Resource, Integer> resComb) {
         setUp(stage, root, ui);
@@ -97,9 +99,9 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
             choseResGrid.add(comboBoxList.get(i), 4, i);
             i++;
         } while (!MapUtils.isMapEmpty(resToFlush));
-
-        Button confirmBtn = new Button("Confirm");
+        confirmBtn = new Button("Confirm");
         confirmBtn.setOnMouseClicked(mouseEvent -> {
+            Platform.runLater(()->setEnabled(false));
             int j = 0;
             for (ComboBox<String> c : comboBoxList) {
                 switch (c.getValue()) {
@@ -114,7 +116,6 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
                 }
                 j++;
             }
-            System.out.println(resToKeep);
             FlushMarketResMessage flushMarketResMessage = new FlushMarketResMessage(
                     ui.getLocalGame().getGameId(),
                     ui.getLocalGame().getMainPlayer().getId(),
@@ -127,18 +128,23 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
                 e.printStackTrace();
             }
         });
-        Button backBtn = new Button("Go back to the market");
+        backBtn = new Button("Go back to the market");
         backBtn.setOnMouseClicked(mouseEvent -> {
             removeObserved();
             BuildGUI.getInstance().toMarket(stage, ui);
         });
-        choseResGrid.add(confirmBtn, 0, i);
-        choseResGrid.add(backBtn, 1, i);
+        choseResGrid.add(confirmBtn, 1, i);
+        choseResGrid.add(backBtn, 0, i);
     }
 
     private void removeObserved() {
         ui.getLocalGame().getLocalMarket().removeObservers();
         ui.getLocalGame().getError().removeObserver();
         ui.getLocalGame().getMainPlayer().getLocalBoard().removeObservers();
+    }
+
+    private void setEnabled(boolean bool) {
+        confirmBtn.setDisable(!bool);
+        backBtn.setDisable(!bool);
     }
 }
