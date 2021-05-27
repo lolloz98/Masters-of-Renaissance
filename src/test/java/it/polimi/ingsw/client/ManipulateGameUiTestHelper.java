@@ -151,8 +151,10 @@ public class ManipulateGameUiTestHelper {
     /**
      * set state of the game to ready, it removes the first two leaders
      */
-    public static void setStateOfGame1(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException {
+    public static void setStateOfGame1(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, FullDevelopSlotException, InvalidDevelopCardToSlotException, EmptyDeckException, InvalidStepsException, NotEnoughResourcesException, EndAlreadyReachedException {
         setRemoveLeaders(game.getPlayer());
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+        setBuyDevelopCard(gameId, game.getPlayer(), Color.BLUE, 1, 0);
     }
 
     /**
@@ -168,6 +170,7 @@ public class ManipulateGameUiTestHelper {
         }catch (IndexOutOfBoundsException ignore){}
         for(Player p: game.getPlayers())
             setRemoveLeaders(p);
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
         setBuyDevelopCard(gameId, game.getPlayers().get(0), Color.BLUE, 1, 0);
     }
 
