@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.controllergui;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.creation.*;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.enums.Resource;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -245,5 +246,22 @@ public class BuildGUI {
 
     public void toActivateProduction(Stage stage, GUI ui, LocalCard card){
         logger.debug("to activate production scene");
+    }
+
+    public void toBuyDevelop(Stage stage, GUI ui, LocalDevelopCard toBuy) {
+        Platform.runLater(() -> {
+            synchronized(ui.getLocalGame()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/DevelopGrid/BuyCardScene.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    BuyCardSceneControllerGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui, toBuy);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
+            }
+        });
     }
 }

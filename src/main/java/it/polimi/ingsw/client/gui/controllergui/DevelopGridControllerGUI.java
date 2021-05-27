@@ -63,9 +63,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
-        this.ui = ui;
-        this.stage = stage;
-        this.root = root;
+        setLocalVariables(stage,root,ui);
         ui.getLocalGame().overrideObserver(this);
         ui.getLocalGame().getLocalDevelopmentGrid().overrideObserver(this);
 
@@ -143,7 +141,9 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
             cardSelected=true;
             disableOtherCardButtons(i,j);
             Platform.runLater(() -> matrixBtns[i][j].setStyle("-fx-effect: dropshadow(three-pass-box, rgba(199,17,17,0.8), 20, 0, 0, 0)"));
+
             //todo go to choose resource scene
+            BuildGUI.getInstance().toBuyDevelop(stage, ui, ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards()[i][j]);
             //ui.getGameHandler().dealWithMessage(new BuyDevelopCardMessage(ui.getLocalGame().getGameId(),ui.getLocalGame().getMainPlayer().getId(),card.getLevel(),card.getColor(),));
         }
     }

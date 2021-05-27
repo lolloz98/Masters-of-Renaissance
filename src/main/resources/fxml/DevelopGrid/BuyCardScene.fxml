@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.BuyCardSceneControllerGUI">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.BuyCardSceneControllerGUI">
    <children>
-      <ComboBox fx:id="slotToStoreComboBox" layoutX="368.0" layoutY="437.0" prefHeight="25.0" prefWidth="300.0" promptText="In which slot do you want to store the card? " />
+      <ComboBox fx:id="slotToStoreComboBox" layoutX="51.0" layoutY="438.0" prefHeight="25.0" prefWidth="300.0" promptText="In which slot do you want to store the card? " />
       <GridPane hgap="50.0" layoutX="28.0" layoutY="109.0" prefHeight="287.0" prefWidth="978.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.20001220703125" minWidth="10.0" prefWidth="105.60001220703126" />
@@ -30,25 +23,37 @@
         </rowConstraints>
          <children>
             <Slider fx:id="normalDepotGoldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="3.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="1" />
-            <Slider fx:id="NormalDepotServantSldr" blockIncrement="1.0" majorTickUnit="1.0" max="3.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Slider fx:id="NormaldepotShieldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="3.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Slider fx:id="NormalDepotRockSldr" blockIncrement="1.0" majorTickUnit="1.0" max="3.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Slider fx:id="normalDepotServantSldr" blockIncrement="1.0" majorTickUnit="1.0" max="3.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Slider fx:id="normalDepotShieldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="3.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Slider fx:id="normalDepotRockSldr" blockIncrement="1.0" majorTickUnit="1.0" max="3.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label prefHeight="45.0" prefWidth="109.0" text="Gold:" />
             <Label text="Servant:" GridPane.rowIndex="1" />
             <Label text="Shield:" GridPane.rowIndex="2" />
             <Label text="Rock:" GridPane.rowIndex="3" />
-            <Slider fx:id="StrongBoxGoldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="3" />
-            <Slider fx:id="StrongBoxServantSldr" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Slider fx:id="StrongBoxShieldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Slider fx:id="StrongBocRockSldr" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Slider fx:id="LeaderDepotGoldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="2.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="2" />
-            <Slider fx:id="LeaderDepotServantSldr" blockIncrement="1.0" majorTickUnit="1.0" max="2.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Slider fx:id="LeaderDepotRockSldr" blockIncrement="1.0" majorTickUnit="1.0" max="2.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Slider fx:id="LeaderDepotShieldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="2.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <ImageView fitHeight="62.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" />
-            <ImageView fitHeight="62.0" fitWidth="70.0" layoutX="77.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-            <ImageView fitHeight="62.0" fitWidth="70.0" layoutX="77.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-            <ImageView fitHeight="62.0" fitWidth="70.0" layoutX="77.0" layoutY="160.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <Slider fx:id="strongBoxGoldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="3" />
+            <Slider fx:id="strongBoxServantSldr" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Slider fx:id="strongBoxShieldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Slider fx:id="strongBoxRockSldr" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Slider fx:id="leaderDepotGoldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="2.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="2" />
+            <Slider fx:id="leaderDepotServantSldr" blockIncrement="1.0" majorTickUnit="1.0" max="2.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Slider fx:id="leaderDepotRockSldr" blockIncrement="1.0" majorTickUnit="1.0" max="2.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Slider fx:id="leaderDepotShieldSldr" blockIncrement="1.0" majorTickUnit="1.0" max="2.0" minorTickCount="0" showTickLabels="true" snapToTicks="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <ImageView fitHeight="62.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT">
+               <image>
+                  <Image url="@../../png/res/gold.png" />
+               </image></ImageView>
+            <ImageView fitHeight="62.0" fitWidth="70.0" layoutX="77.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@../../png/res/servant.png" />
+               </image></ImageView>
+            <ImageView fitHeight="62.0" fitWidth="70.0" layoutX="77.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+               <image>
+                  <Image url="@../../png/res/shield.png" />
+               </image></ImageView>
+            <ImageView fitHeight="62.0" fitWidth="70.0" layoutX="77.0" layoutY="160.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+               <image>
+                  <Image url="@../../png/res/rock.png" />
+               </image></ImageView>
          </children>
       </GridPane>
       <Label layoutX="262.0" layoutY="67.0" text="Normal Depot Resources">
@@ -66,9 +71,10 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button fx:id="ConfirmBtn" layoutX="440.0" layoutY="528.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="154.0" text="Confirm" />
-      <Button fx:id="backBtn" layoutX="763.0" layoutY="621.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="154.0" text="Back" />
-      <Label fx:id="messageLbl" layoutX="368.0" layoutY="610.0" prefHeight="86.0" prefWidth="200.0" text="No message found" textFill="#e80e0e" />
-      <ImageView fx:id="cardImg" fitHeight="271.0" fitWidth="200.0" layoutX="14.0" layoutY="407.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="ConfirmBtn" layoutX="719.0" layoutY="463.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="267.0" text="Confirm" />
+      <Button fx:id="backBtn" layoutX="719.0" layoutY="598.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="267.0" text="Back" />
+      <Label fx:id="messageLbl" layoutX="51.0" layoutY="598.0" prefHeight="86.0" prefWidth="200.0" text="No message found" textFill="#e80e0e" />
+      <ImageView fx:id="cardImg" fitHeight="271.0" fitWidth="200.0" layoutX="434.0" layoutY="414.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="discountMessageLbl" layoutX="51.0" layoutY="506.0" prefHeight="62.0" prefWidth="300.0" text="Label" />
    </children>
 </Pane>
