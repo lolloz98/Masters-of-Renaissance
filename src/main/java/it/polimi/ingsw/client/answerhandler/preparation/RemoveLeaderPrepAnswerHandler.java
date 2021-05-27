@@ -41,10 +41,10 @@ public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
 
         if (localGame.getState() != removeLeaderPrepAnswer.getState()) {
             localGame.setState(removeLeaderPrepAnswer.getState());
+            localGame.notifyObservers();
         }
 
         //notify observers
-        localGame.notifyObservers();
         localGame.getPlayerById(removeLeaderPrepAnswer.getPlayerId()).getLocalBoard().notifyObservers();
     }
 }
