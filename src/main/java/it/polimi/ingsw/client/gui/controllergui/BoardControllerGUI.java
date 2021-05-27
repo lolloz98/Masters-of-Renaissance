@@ -231,6 +231,28 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         developSlots.add(slotDevelopComponent2);
         developSlots.add(slotDevelopComponent3);
 
+        for(SlotDevelopComponent s: developSlots){
+            s.getActivateBtn().setOnMouseClicked(mouseEvent -> {
+                synchronized (ui.getLocalGame()) {
+                    if (s.getLocalDevelopCard() != null && s.getLocalDevelopCard().getProduction().getResToFlush().isEmpty()) {
+                        BuildGUI.getInstance().toActivateProduction(stage, ui, s.getLocalDevelopCard());
+                    }else{
+                        logger.warn("Production already activated or developCard is null");
+                    }
+                }
+            });
+        }
+
+        activateNormalBtn.setOnMouseClicked(mouseEvent -> {
+            synchronized (ui.getLocalGame()) {
+                if(ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().getBaseProduction().getResToFlush().isEmpty()) {
+                    BuildGUI.getInstance().toActivateProduction(stage, ui, NormalProductionCard.getINSTANCE());
+                } else{
+                    logger.warn("Normal production already activated");
+                }
+            }
+        });
+
         LocalGame<?> game = ui.getLocalGame();
         if (game instanceof LocalSingle)
             chooseBoard.setVisible(false);
