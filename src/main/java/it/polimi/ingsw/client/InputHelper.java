@@ -201,4 +201,16 @@ public class InputHelper {
                 indexNumber
         );
     }
+
+    public static int getSlotToStore(String input){
+        switch (input){
+            case "First":
+                return 0;
+            case "Second":
+                return 1;
+            case "Third":
+                return 2;
+        }
+        return -1;
+    }
 }
