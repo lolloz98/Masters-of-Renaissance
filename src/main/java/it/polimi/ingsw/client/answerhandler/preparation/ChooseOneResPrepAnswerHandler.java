@@ -28,13 +28,13 @@ public class ChooseOneResPrepAnswerHandler extends AnswerHandler {
 
             if(localMulti.getState()!=chooseOneResPrepAnswer.getState()) {
                 localMulti.setState(chooseOneResPrepAnswer.getState());
+                localGame.notifyObservers();
             }
         }
         else{
             logger.error("Prep message sent to single player game");
         }
 
-        localGame.notifyObservers();
         localGame.getMainPlayer().getLocalBoard().notifyObservers(); // fixme to be removed, just for debug
     }
 }
