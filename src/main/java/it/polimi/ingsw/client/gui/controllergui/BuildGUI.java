@@ -229,7 +229,7 @@ public class BuildGUI {
     public void toDevelopGrid(Stage stage, GUI ui) {
         Platform.runLater(() -> {
             synchronized(ui.getLocalGame()) {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/developgrid.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/DevelopGrid/DevelopGrid.fxml"));
                 try {
                     Parent root = fxmlLoader.load();
                     DevelopGridControllerGUI controller = fxmlLoader.getController();
