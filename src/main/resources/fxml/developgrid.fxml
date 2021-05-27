@@ -19,6 +19,20 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
+         <children>
+            <Button fx:id="buyL2BlueBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="buyL2GreenBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" GridPane.rowIndex="1" />
+            <Button fx:id="buyL3YellowBtn" layoutX="178.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="2" />
+            <Button fx:id="buyL3GreenBtn" layoutX="178.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" />
+            <Button fx:id="buyL3BlueBtn" layoutX="178.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="1" />
+            <Button fx:id="buyL2YellowBtn" layoutX="178.0" layoutY="228.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="buyL3PurpleBtn" layoutX="346.0" layoutY="228.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="3" />
+            <Button fx:id="buyL1PurpleBtn" layoutX="346.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Button fx:id="buyL1YellowBtn" layoutX="346.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Button fx:id="buyL1GreenBtn" layoutX="346.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.rowIndex="2" />
+            <Button fx:id="buyL1BlueBtn" layoutX="346.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="buyL2PurpleBtn" layoutX="346.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="218.0" prefWidth="168.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+         </children>
       </GridPane>
       <Button fx:id="buydevelopBtn" layoutX="43.0" layoutY="31.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="218.0" text="Buy">
          <font>
