@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.Label?>
 <AnchorPane prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.FlushResControllerGUI">
 
+    <GridPane fx:id="choseResGrid"/>
+    <Label fx:id="messageLbl" layoutX="40.0" layoutY="638.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#e80e0e" />
 
 </AnchorPane>
