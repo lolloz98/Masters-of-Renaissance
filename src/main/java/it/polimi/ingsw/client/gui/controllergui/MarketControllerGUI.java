@@ -5,19 +5,17 @@ import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.exceptions.InvalidMarketIndexException;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
+import it.polimi.ingsw.client.gui.componentsgui.ImageCache;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
-import it.polimi.ingsw.server.model.game.SinglePlayer;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -48,7 +46,6 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
         // todo set observers
         market_grid.setHgap(1);
         market_grid.setVgap(1);
-        ui.getLocalGame().overrideObserver(this);
         ui.getLocalGame().getLocalMarket().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
         messageLbl.setText("");
@@ -71,32 +68,32 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
             add(push4);
         }};
         developmentBtn.setOnMouseClicked(mouseEvent -> {
+            removeObserved();
             BuildGUI.getInstance().toDevelopGrid(stage, ui);
         });
         boardBtn.setOnMouseClicked(mouseEvent -> {
+            removeObserved();
             BuildGUI.getInstance().toBoard(stage, ui);
         });
         int i = 0;
         for (Button btn : btnList) {
             int finalI = i;
             btn.setOnMouseClicked(mouseEvent -> {
-                Platform.runLater(() -> {
-                    messageLbl.setText("Please wait");
-                });
-                    try {
-                        UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), msgList.get(finalI));
-                        Platform.runLater(() -> setEnabled(false));
-                        ui.getGameHandler().dealWithMessage(useMarketMessage);
-                    } catch (InvalidMarketIndexException | IOException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    UseMarketMessage useMarketMessage = InputHelper.getUseMarketMessage(ui.getLocalGame(), msgList.get(finalI));
+                    Platform.runLater(() -> {
+                        messageLbl.setText("Please wait");
+                        setEnabled(false);
+                    });
+                    ui.getGameHandler().dealWithMessage(useMarketMessage);
+                } catch (InvalidMarketIndexException | IOException e) {
+                    e.printStackTrace();
+                }
             });
             i++;
-
         }
         setUpState();
     }
-
 
     @Override
     public void notifyUpdate() {
@@ -114,7 +111,6 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                 messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
             }
         });
-
     }
 
     private void setUpState() {
@@ -122,18 +118,13 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
         Resource[][] marbleMatrix = ui.getLocalGame().getLocalMarket().getMarbleMatrix();
         Image marbleImage;
         String path;
+        depotCmp.setImages(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInNormalDepot());
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        path = Objects.requireNonNull(classLoader.getResource("png/punchboard/marbles/" + ui.getLocalGame().getLocalMarket().getFreeMarble() + ".png")).getPath();
-        File freeMarbleFile = new File(path);
-        marbleImage = new Image(freeMarbleFile.toURI().toString());
-        free_marble.setImage(marbleImage);
+        ImageCache.setMarbleInView(ui.getLocalGame().getLocalMarket().getFreeMarble(), free_marble);
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 4; x++) {
                 ImageView imgView = new ImageView();
-                path = Objects.requireNonNull(classLoader.getResource("png/punchboard/marbles/" + marbleMatrix[y][x] + ".png")).getPath();
-                File file = new File(path);
-                marbleImage = new Image(file.toURI().toString());
-                imgView.setImage(marbleImage);
+                ImageCache.setMarbleInView(marbleMatrix[y][x], imgView);
                 imgView.setFitHeight(56);
                 imgView.setFitWidth(56);
                 market_grid.add(imgView, x, y);
@@ -143,7 +134,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
         boolean myTurn = true;
         if (ui.getLocalGame() instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) ui.getLocalGame();
-            if (localMulti.getLocalTurn().getCurrentPlayer() != localMulti.getMainPlayer()) {
+            if (localMulti.getLocalTurn().getCurrentPlayer().getId() != localMulti.getMainPlayer().getId()) {
                 myTurn = false;
             }
         }
@@ -158,6 +149,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                 flushButton.setText("flush");
                 int finalI = i;
                 flushButton.setOnMouseClicked(mouseEvent -> {
+                    removeObserved();
                     BuildGUI.getInstance().toFlushRes(stage, ui, resComb.get(finalI));
                 });
                 resCombGrid.setHgap(2);
@@ -185,6 +177,11 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     }
 
     private void setEnabled(boolean bool) {
+        // todo
+    }
 
+    private void removeObserved() {
+        ui.getLocalGame().getLocalMarket().removeObservers();
+        ui.getLocalGame().getError().removeObserver();
     }
 }

@@ -212,7 +212,7 @@ public class BuildGUI {
     public void toFlushRes(Stage stage, GUI ui, TreeMap< Resource, Integer > resComb) {
         Platform.runLater(() -> {
             synchronized(ui.getLocalGame()) {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/market.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/flushres.fxml"));
                 try {
                     Parent root = fxmlLoader.load();
                     FlushResControllerGUI controller = fxmlLoader.getController();

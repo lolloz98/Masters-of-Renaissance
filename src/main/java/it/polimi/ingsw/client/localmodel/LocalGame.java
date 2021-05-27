@@ -36,7 +36,6 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
     public abstract ArrayList<LocalPlayer> getLocalPlayers();
 
     public synchronized Error getError() {
-        logger.debug("error in localGame: " + error);
         return error;
     }
 
