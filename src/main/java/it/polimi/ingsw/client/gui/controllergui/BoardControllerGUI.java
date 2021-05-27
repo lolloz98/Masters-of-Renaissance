@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.*;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
@@ -52,6 +53,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     public DepotComponent depotCmp;
     public StrongBoxComponent strongBoxCmp;
+    public Label historyLbl;
+
+    private LocalGameState prevGameState;
 
     /**
      * set the various elements of the gui
@@ -63,6 +67,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             } else {
                 setNotMainPlayerBoard();
             }
+            prevGameState = ui.getLocalGame().getState();
         }
     }
 
@@ -106,6 +111,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         depotCmp.setImages(seen.getLocalBoard().getResInNormalDepot());
         strongBoxCmp.updateRes(seen.getLocalBoard().getResInStrongBox());
+
+        historyLbl.setText(ui.getLocalGame().getLocalTurn().getHistoryObservable().getLast());
     }
 
 
@@ -245,6 +252,26 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         game.getPlayerById(ui.getWhoIAmSeeingId()).overrideObserver(this);
         game.getError().addObserver(this);
+        game.getLocalTurn().overrideObserver(this);
+        game.getLocalTurn().getHistoryObservable().overrideObserver(new Observer() {
+            @Override
+            public void notifyUpdate() {
+                Platform.runLater(() -> {
+                    synchronized (ui.getLocalGame()) {
+                        logger.debug("In notifyUpdate from history");
+                        historyLbl.setText(ui.getLocalGame().getLocalTurn().getHistoryObservable().getLast());
+                        if (prevGameState != ui.getLocalGame().getState()) {
+                            setBoard();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void notifyError() {
+                // Nothing to do here
+            }
+        });
 
         setBoard();
     }
@@ -253,6 +280,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         synchronized (ui.getLocalGame()) {
             ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).removeObservers();
             ui.getLocalGame().getError().removeObserver();
+            ui.getLocalGame().getLocalTurn().removeObservers();
+            ui.getLocalGame().getLocalTurn().getHistoryObservable().removeObservers();
         }
     }
 
@@ -293,7 +322,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         setDisableProduction(slotDevelopComponent1, bool);
         setDisableProduction(slotDevelopComponent2, bool);
         setDisableProduction(slotDevelopComponent3, bool);
-        // todo disable leaderProduction if any
+        leader1.setDisableProduction(bool);
+        leader2.setDisableProduction(bool);
     }
 
 

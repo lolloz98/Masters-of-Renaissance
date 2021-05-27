@@ -96,6 +96,8 @@ public class FaithTrackComponent extends AnchorPane {
     private void showLorenzo(){
         if(ImageCache.isSinglePlayer()){
             faith.get(currentLorenzo).setImage(ImageCache.LORENZO);
+        } else{
+            faith.get(currentLorenzo).setImage(null);
         }
     }
 
