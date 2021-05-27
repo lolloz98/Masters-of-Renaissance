@@ -273,6 +273,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         }
 
         game.getPlayerById(ui.getWhoIAmSeeingId()).overrideObserver(this);
+        game.getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().overrideObserver(this);
         game.getError().addObserver(this);
         game.getLocalTurn().overrideObserver(this);
         game.getLocalTurn().getHistoryObservable().overrideObserver(new Observer() {
@@ -304,6 +305,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             ui.getLocalGame().getError().removeObserver();
             ui.getLocalGame().getLocalTurn().removeObservers();
             ui.getLocalGame().getLocalTurn().getHistoryObservable().removeObservers();
+            ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().removeObservers();
         }
     }
 

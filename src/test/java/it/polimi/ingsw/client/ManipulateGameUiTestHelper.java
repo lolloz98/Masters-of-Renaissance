@@ -155,6 +155,9 @@ public class ManipulateGameUiTestHelper {
         setRemoveLeaders(game.getPlayer());
         ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
         setBuyDevelopCard(gameId, game.getPlayer(), Color.BLUE, 1, 0);
+        setBuyDevelopCard(gameId, game.getPlayer(), Color.GOLD, 2, 0);
+        // flush a bit of res in strongBox
+        setResourcesInStrongBoxForDevelop(game, game.getPlayer(), Color.GREEN, 3);
     }
 
     /**
