@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.componentsgui;
 
+import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,6 +47,9 @@ public class SlotDevelopComponent extends Pane {
     public Button getActivateBtn() {
         return activateBtn;
     }
+    public LocalDevelopCard getLocalDevelopCard(){
+        return localDevelopCard;
+    }
 
     public SlotDevelopComponent() {
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -58,12 +62,5 @@ public class SlotDevelopComponent extends Pane {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-
-        activateBtn.setOnMouseClicked(mouseEvent -> {
-            logger.debug("clicked activate");
-            if(localDevelopCard != null){
-                // TODO: activate production
-            }
-        });
     }
 }

@@ -4,15 +4,14 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<?import it.polimi.ingsw.client.gui.componentsgui.FaithTrackComponent?>
-<?import it.polimi.ingsw.client.gui.componentsgui.SlotDevelopComponent?>
-<?import it.polimi.ingsw.client.gui.componentsgui.LeaderSlotComponent?>
 <?import it.polimi.ingsw.client.gui.componentsgui.DepotComponent?>
+<?import it.polimi.ingsw.client.gui.componentsgui.LeaderSlotComponent?>
+<?import it.polimi.ingsw.client.gui.componentsgui.SlotDevelopComponent?>
+<?import it.polimi.ingsw.client.gui.componentsgui.FaithTrackComponent?>
 <?import it.polimi.ingsw.client.gui.componentsgui.StrongBoxComponent?>
-<Pane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.ingsw.client.gui.controllergui.BoardControllerGUI">
+<Pane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.BoardControllerGUI">
     <ImageView fitHeight="719.0" fitWidth="1035.0" preserveRatio="true">
-        <Image url="@../png/board_simplified.png"/>
+        <Image url="@../png/board_simplified.png" />
     </ImageView>
 
     <!-- FaithTrack -->
@@ -48,22 +47,16 @@
     <StrongBoxComponent fx:id="strongBoxCmp" layoutY="451.0" prefHeight="121.0" prefWidth="179.0"/>
 
 
-    <Button fx:id="activateNormalBtn" layoutX="202.0" layoutY="556.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="100.0" text="Activate"/>
-    <Button fx:id="optional1Btn" layoutX="4.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="127.0" text="optional1"/>
-    <Button fx:id="optional2Btn" layoutX="159.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="127.0" text="optional2"/>
-    <Button fx:id="marketBtn" layoutX="329.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="127.0" text="Show Market"/>
-    <Button fx:id="developBtn" layoutX="487.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0"
-            prefWidth="127.0" text="Show Develop"/>
-    <Button fx:id="flushBtn" layoutX="646.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0"
-            text="Flush Productions"/>
-    <Label fx:id="messageLbl" layoutX="40.0" layoutY="638.0" prefHeight="33.0" prefWidth="955.0" text="No message found"
-           textFill="#e80e0e"/>
+    <Button fx:id="activateNormalBtn" layoutX="202.0" layoutY="556.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Activate" />
+    <Button fx:id="optional1Btn" layoutX="4.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="optional1" />
+    <Button fx:id="optional2Btn" layoutX="159.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="optional2" />
+    <Button fx:id="marketBtn" layoutX="329.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Show Market" />
+    <Button fx:id="developBtn" layoutX="487.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Show Develop" />
+    <Button fx:id="flushBtn" layoutX="646.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Flush Productions" />
+    <Label fx:id="historyLbl" layoutX="40.0" layoutY="608.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#4d73e8" />
+    <Label fx:id="messageLbl" layoutX="40.0" layoutY="641.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#e80e0e" />
 
-    <ChoiceBox fx:id="chooseBoard" layoutX="882.0" layoutY="6.0" prefWidth="150.0"/>
+    <ChoiceBox fx:id="chooseBoard" layoutX="882.0" layoutY="6.0" prefWidth="150.0" />
 
 
 </Pane>

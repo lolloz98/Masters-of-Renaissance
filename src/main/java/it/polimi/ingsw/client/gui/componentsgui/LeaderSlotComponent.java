@@ -6,6 +6,7 @@ import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.messages.requests.leader.DiscardLeaderMessage;
 import it.polimi.ingsw.server.model.cards.leader.MarbleLeaderCard;
+import it.polimi.ingsw.server.model.cards.leader.ProductionLeaderCard;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -134,5 +135,11 @@ public class LeaderSlotComponent extends VBox {
     public void setVisibleButtons(boolean bool) {
         activateBtn.setVisible(bool);
         discardBtn.setVisible(bool);
+    }
+
+    public void setDisableProduction(boolean bool) {
+        if(leaderCard instanceof LocalProductionLeader){
+            activateBtn.setDisable(bool);
+        }
     }
 }

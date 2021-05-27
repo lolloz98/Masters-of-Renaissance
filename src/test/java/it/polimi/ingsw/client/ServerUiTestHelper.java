@@ -86,7 +86,7 @@ class ClientHandlerUiTestHelper extends ClientHandler{
                 ControllerActionsServerSingle ca = (ControllerActionsServerSingle) controllerManager.getControllerFromMap(answerListener.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
-                ManipulateGameUiTestHelper.setStateOfGame2(answerListener.getGameId(), ca.getGame());
+                ManipulateGameUiTestHelper.setStateOfGame1(answerListener.getGameId(), ca.getGame());
 
                 answerListener.sendAnswer(AnswerFactory.createGameStatusAnswer(ca.getGameId(), answerListener.getPlayerId(), answerListener.getPlayerId(), ca.getGame()));
             }else if((parsedMessage instanceof JoinGameMessageController) && controllerManager.getControllerFromMap(clientMessage.getGameId()).getGame() != null){
@@ -95,7 +95,7 @@ class ClientHandlerUiTestHelper extends ClientHandler{
                 ControllerActionsServerMulti ca = (ControllerActionsServerMulti) controllerManager.getControllerFromMap(clientMessage.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
-                ManipulateGameUiTestHelper.setStateOfGame2(answerListener.getGameId(), ca.getGame());
+                ManipulateGameUiTestHelper.setStateOfGame1(answerListener.getGameId(), ca.getGame());
 
                 ca.sendGameStatusToAll(clientMessage.getGameId(), clientMessage.getPlayerId());
             }

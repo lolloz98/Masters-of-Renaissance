@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.*;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
@@ -52,6 +53,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     public DepotComponent depotCmp;
     public StrongBoxComponent strongBoxCmp;
+    public Label historyLbl;
+
+    private LocalGameState prevGameState;
 
     /**
      * set the various elements of the gui
@@ -63,6 +67,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             } else {
                 setNotMainPlayerBoard();
             }
+            prevGameState = ui.getLocalGame().getState();
         }
     }
 
@@ -106,6 +111,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         depotCmp.setImages(seen.getLocalBoard().getResInNormalDepot());
         strongBoxCmp.updateRes(seen.getLocalBoard().getResInStrongBox());
+
+        historyLbl.setText(ui.getLocalGame().getLocalTurn().getHistoryObservable().getLast());
     }
 
 
@@ -224,6 +231,28 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         developSlots.add(slotDevelopComponent2);
         developSlots.add(slotDevelopComponent3);
 
+        for(SlotDevelopComponent s: developSlots){
+            s.getActivateBtn().setOnMouseClicked(mouseEvent -> {
+                synchronized (ui.getLocalGame()) {
+                    if (s.getLocalDevelopCard() != null && s.getLocalDevelopCard().getProduction().getResToFlush().isEmpty()) {
+                        BuildGUI.getInstance().toActivateProduction(stage, ui, s.getLocalDevelopCard());
+                    }else{
+                        logger.warn("Production already activated or developCard is null");
+                    }
+                }
+            });
+        }
+
+        activateNormalBtn.setOnMouseClicked(mouseEvent -> {
+            synchronized (ui.getLocalGame()) {
+                if(ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().getBaseProduction().getResToFlush().isEmpty()) {
+                    BuildGUI.getInstance().toActivateProduction(stage, ui, NormalProductionCard.getINSTANCE());
+                } else{
+                    logger.warn("Normal production already activated");
+                }
+            }
+        });
+
         LocalGame<?> game = ui.getLocalGame();
         if (game instanceof LocalSingle)
             chooseBoard.setVisible(false);
@@ -244,7 +273,28 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         }
 
         game.getPlayerById(ui.getWhoIAmSeeingId()).overrideObserver(this);
+        game.getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().overrideObserver(this);
         game.getError().addObserver(this);
+        game.getLocalTurn().overrideObserver(this);
+        game.getLocalTurn().getHistoryObservable().overrideObserver(new Observer() {
+            @Override
+            public void notifyUpdate() {
+                Platform.runLater(() -> {
+                    synchronized (ui.getLocalGame()) {
+                        logger.debug("In notifyUpdate from history");
+                        historyLbl.setText(ui.getLocalGame().getLocalTurn().getHistoryObservable().getLast());
+                        if (prevGameState != ui.getLocalGame().getState()) {
+                            setBoard();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void notifyError() {
+                // Nothing to do here
+            }
+        });
 
         setBoard();
     }
@@ -253,6 +303,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         synchronized (ui.getLocalGame()) {
             ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).removeObservers();
             ui.getLocalGame().getError().removeObserver();
+            ui.getLocalGame().getLocalTurn().removeObservers();
+            ui.getLocalGame().getLocalTurn().getHistoryObservable().removeObservers();
+            ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().removeObservers();
         }
     }
 
@@ -293,7 +346,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         setDisableProduction(slotDevelopComponent1, bool);
         setDisableProduction(slotDevelopComponent2, bool);
         setDisableProduction(slotDevelopComponent3, bool);
-        // todo disable leaderProduction if any
+        leader1.setDisableProduction(bool);
+        leader2.setDisableProduction(bool);
     }
 
 
