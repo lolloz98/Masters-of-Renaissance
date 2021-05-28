@@ -31,7 +31,6 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
     public DepotComponent depotCmp;
     public StrongBoxComponent strongBoxCmp;
     private final ImageView[][] matrixImg=new ImageView[4][3];
-    private boolean cardSelected;
 
 
     private static final Logger logger = LogManager.getLogger(DevelopGridControllerGUI.class);
@@ -61,7 +60,6 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         ui.getLocalGame().getLocalDevelopmentGrid().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
 
-        cardSelected=false;
 
         backBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toBoard(stage, ui);
@@ -88,7 +86,12 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
             for (int j = 0; j < 3; j++) {
                 ImageView imgView = new ImageView();
                 if (topCards[i][j] != null) {
+                    int finalJ = j;
+                    int finalI = i;
                     imgView.setImage(topCards[i][j].getImage());
+                    imgView.setOnMouseClicked(mouseEvent -> {
+                        buyDevelop(finalI,finalJ);
+                    });
                 } else {//update empty card image
                     String path;
                     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -99,12 +102,6 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
                 }
                 imgView.setFitHeight(215);
                 imgView.setFitWidth(165);
-                int finalJ = j;
-                int finalI = i;
-
-                imgView.setOnMouseClicked(mouseEvent -> {
-                    buyDevelop(finalI,finalJ);
-                });
 
                 imgView.setDisable(true);
 
@@ -132,22 +129,9 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         }
     }
 
-    public void disableOtherCardButtons(int selectedI,int selectedJ){
-        for(int i=0;i<4;i++){
-            for(int j=0;j<3;j++){
-                if(i!=selectedI||j!=selectedJ)
-                    matrixImg[i][j].setDisable(true);
-            }
-        }
-    }
 
     private void buyDevelop(int i,int j) {
-        if(!cardSelected) {
-            cardSelected=true;
-            disableOtherCardButtons(i,j);
-
-            BuildGUI.getInstance().toBuyDevelop(stage, ui, ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards()[i][j]);
-        }
+        BuildGUI.getInstance().toBuyDevelop(stage, ui, ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards()[i][j]);
     }
 
 }
