@@ -39,12 +39,13 @@ public abstract class ActivateLeaderAnswerHandler extends AnswerHandler {
                     // only one card
                     isActivated = true;
                 }
-                if(!isActivated) logger.error("No card has been set to be activated");
             }
         } else {
-            for (LocalCard leader : leaderCards) {
-                if (leader.getId() == serverAnswer.getLeader().getId())
-                    ((LocalLeaderCard) leader).setActive(true);
+            for (int i = 0; i < leaderCards.size(); i++) {
+                LocalCard card = leaderCards.get(i);
+                if (card.getId() ==  serverAnswer.getLeader().getId()) {
+                    leaderCards.set(i, serverAnswer.getLeader());
+                }
             }
         }
 
