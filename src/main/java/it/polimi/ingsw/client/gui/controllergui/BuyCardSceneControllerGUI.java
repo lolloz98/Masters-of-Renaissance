@@ -4,6 +4,7 @@ import com.sun.source.tree.Tree;
 import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.localmodel.History;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
@@ -58,10 +59,25 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
     }
 
     @Override
+    public void notifyUpdate() {
+        Platform.runLater(() -> {
+            synchronized (ui.getLocalGame()) {
+                setUpState();
+                History history=ui.getLocalGame().getLocalTurn().getHistoryObservable();
+                if(history.getLast().equals("You bought a development card")) {
+                    confirmBtn.setDisable(true);
+                    doneMessageLbl.setText("Done!");
+                }
+            }
+        });
+    }
+
+    @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
         ui.getLocalGame().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
+        ui.getLocalGame().getLocalTurn().getHistoryObservable().overrideObserver(this);
     }
 
     public void setUp(Stage stage, Parent root, GUI ui, LocalDevelopCard toBuyCard){
@@ -131,19 +147,12 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
         }
     }
 
-    @Override
-    public void notifyUpdate() {
-        Platform.runLater(() -> {
-            synchronized (ui.getLocalGame()) {
-                setUpState();
-            }
-        });
-    }
+
 
 
 
     public void confirm() {
-        logger.debug("in confirm method");
+        //logger.debug("in confirm method");
         //create the to give map
         TreeMap<WarehouseType,TreeMap<Resource,Integer>> toGiveFromWarehouseType=new TreeMap<>();
         TreeMap<Resource,Integer> toGive;
@@ -158,17 +167,16 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
 
             toGiveFromWarehouseType.put(type,toGive);
         }
-        logger.debug("to give built");
+        //logger.debug("to give built");
 
         int slotToStore= InputHelper.getSlotToStore(slotToStoreComboBox.getValue());
-        logger.debug("slot to store code passed");
+        //logger.debug("slot to store code passed");
 
         try {
             ui.getGameHandler().dealWithMessage(new BuyDevelopCardMessage(ui.getLocalGame().getGameId(),ui.getLocalGame().getMainPlayer().getId(), cardToBuy.getLevel(), cardToBuy.getColor(),slotToStore,toGiveFromWarehouseType));
         } catch (IOException e) {
             logger.error("Error while handling request: " + e);
         }
-        confirmBtn.setDisable(true);
-        doneMessageLbl.setText("Done!");
+
     }
 }

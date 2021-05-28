@@ -16,6 +16,7 @@ public class History extends Observable implements Serializable {
     public History(){
         history = new ArrayList<>();
     }
+
     public String getLast(){
         if(history.isEmpty()) return "";
         else return history.get(history.size() - 1);

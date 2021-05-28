@@ -27,21 +27,10 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
     public Button buydevelopBtn;
     public Button backBtn;
     public Label messageLbl;
-    public Button buyL1GreenBtn;
-    public Button buyL2GreenBtn;
-    public Button buyL3GreenBtn;
-    public Button buyL1BlueBtn;
-    public Button buyL2BlueBtn;
-    public Button buyL3BlueBtn;
-    public Button buyL1YellowBtn;
-    public Button buyL2YellowBtn;
-    public Button buyL3YellowBtn;
-    public Button buyL1PurpleBtn;
-    public Button buyL2PurpleBtn;
-    public Button buyL3PurpleBtn;
+    public Label chooseACardLbl;
     public DepotComponent depotCmp;
     public StrongBoxComponent strongBoxCmp;
-    private Button[][] matrixBtns;
+    private final ImageView[][] matrixImg=new ImageView[4][3];
     private boolean cardSelected;
 
 
@@ -74,26 +63,25 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
         cardSelected=false;
 
-        matrixBtns = new Button[][]{
-                {buyL1GreenBtn, buyL2GreenBtn, buyL3GreenBtn},
-                {buyL1BlueBtn, buyL2BlueBtn, buyL3BlueBtn},
-                {buyL1YellowBtn, buyL2YellowBtn, buyL3YellowBtn},
-                {buyL1PurpleBtn, buyL2PurpleBtn, buyL3PurpleBtn}
-        };
-
         backBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toBoard(stage, ui);
         });
 
         buydevelopBtn.setOnMouseClicked(mouseEvent -> {
+            Platform.runLater(()-> chooseACardLbl.setText("Choose a card to buy!"));
             activateChooseCardButtons();
+
         });
+
+
 
         updateGrid();
 
     }
 
     private void updateGrid() {
+        buydevelopBtn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
+
         depotCmp.setImages(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInNormalDepot());
         strongBoxCmp.updateRes(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInStrongBox());
         //add top cards to the grid
@@ -101,18 +89,32 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 ImageView imgView = new ImageView();
-                imgView.setImage(topCards[i][j].getImage());
-                imgView.setFitHeight(218);
-                imgView.setFitWidth(167);
+                if (topCards[i][j] != null) {
+                    imgView.setImage(topCards[i][j].getImage());
+                } else {//update empty card image
+                    String path;
+                    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                    path = Objects.requireNonNull(classLoader.getResource("png/empty_card.png")).getPath();
+                    File file = new File(path);
+                    Image emptyCardImage = new Image(file.toURI().toString());
+                    imgView.setImage(emptyCardImage);
+                }
+                imgView.setFitHeight(215);
+                imgView.setFitWidth(165);
                 int finalJ = j;
                 int finalI = i;
 
-                matrixBtns[i][j].setOnMouseClicked(mouseEvent -> {
+                imgView.setOnMouseClicked(mouseEvent -> {
                     buyDevelop(finalI,finalJ);
                 });
 
-                matrixBtns[i][j].setDisable(true);
-                matrixBtns[i][j].setGraphic(imgView);
+                imgView.setDisable(true);
+
+                matrixImg[i][j]=imgView;
+
+
+                develop_grid.add(imgView,i,j);
+
 
             }
         }
@@ -122,12 +124,13 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
     //activates the buttons on the grid
     private void activateChooseCardButtons() {
+        buydevelopBtn.setDisable(true);
         for (Node n : develop_grid.getChildren()) {
-            if (n instanceof Button) {
+            if (n instanceof ImageView) {
                 //logger.debug("the node is a button");
-                Button b = (Button) n;
+                ImageView card = (ImageView) n;
                 //logger.debug("disabling the button");
-                b.setDisable(false);
+                card.setDisable(false);
             }
 
         }
@@ -137,7 +140,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         for(int i=0;i<4;i++){
             for(int j=0;j<3;j++){
                 if(i!=selectedI||j!=selectedJ)
-                    matrixBtns[i][j].setDisable(true);
+                    matrixImg[i][j].setDisable(true);
             }
         }
     }
@@ -147,11 +150,8 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         if(!cardSelected) {
             cardSelected=true;
             disableOtherCardButtons(i,j);
-            Platform.runLater(() -> matrixBtns[i][j].setStyle("-fx-effect: dropshadow(three-pass-box, rgba(199,17,17,0.8), 20, 0, 0, 0)"));
 
-            //todo go to choose resource scene
             BuildGUI.getInstance().toBuyDevelop(stage, ui, ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards()[i][j]);
-            //ui.getGameHandler().dealWithMessage(new BuyDevelopCardMessage(ui.getLocalGame().getGameId(),ui.getLocalGame().getMainPlayer().getId(),card.getLevel(),card.getColor(),));
         }
     }
 
