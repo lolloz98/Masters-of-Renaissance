@@ -109,7 +109,10 @@ public class FaithTrackComponent extends AnchorPane {
                 showLorenzo();
             }
         } else{
-            faith.get(currentFaith).setImage(null);
+            if(!lorenzoMoving)
+                faith.get(currentFaith).setImage(null);
+            else
+                faith.get(currentLorenzo).setImage(null);
         }
     }
 
