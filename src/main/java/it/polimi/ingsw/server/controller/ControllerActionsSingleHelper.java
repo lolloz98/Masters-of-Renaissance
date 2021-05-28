@@ -13,7 +13,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 
 /**
- * class to be used in both controllerActionsSingleServer and Local
+ * class to be used in both controllerActionsSingleServer and Local.
+ * This class contains the base implementation of some methods useful to both local and remote controllers.
+ * It can be used via composition.
  */
 public class ControllerActionsSingleHelper {
     private static final Logger logger = LogManager.getLogger(ControllerActionsSingleHelper.class);

@@ -69,7 +69,7 @@ public abstract class ControllerActionsBase<T extends Game<? extends Turn>> {
     public abstract void applyLeadersEffect() throws UnexpectedControllerException;
 
     /**
-     * creates the end game answer by putting in it the list of the winners
+     * Creates the list of the winners
      * @throws UnexpectedControllerException if the game is not over
      */
     public abstract ArrayList<LocalPlayer> getWinners() throws UnexpectedControllerException;
