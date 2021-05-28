@@ -79,7 +79,7 @@ public class LeaderSlotComponent extends VBox {
         }
     }
 
-    public void setCard(LocalCard card, GUI ui, int whichProd, Stage stage){
+    public void setCard(LocalCard card, GUI ui, Stage stage){
         this.leaderCard = card;
         setUi(ui);
         cardImg.setImage(card.getImage());
@@ -100,8 +100,8 @@ public class LeaderSlotComponent extends VBox {
             else if(leaderCard instanceof LocalProductionLeader){
                 activateBtn.setText("Activate Production");
                 activateBtn.setOnMouseClicked(mouseEvent -> {
-                    logger.debug("clicked activate of localProduction leader");
-                    BuildGUI.getInstance().toActivateProduction(stage, ui, leaderCard, whichProd);
+                    logger.debug("clicked activate of localProduction leader, for whichProd: " + ((LocalProductionLeader) leaderCard).getWhichProd());
+                    BuildGUI.getInstance().toActivateProduction(stage, ui, leaderCard, ((LocalProductionLeader) leaderCard).getWhichProd());
                 });
             }
         } else if((leaderCard instanceof LocalLeaderCard && ((LocalLeaderCard) leaderCard).isDiscarded()) ||
@@ -140,7 +140,7 @@ public class LeaderSlotComponent extends VBox {
     }
 
     public void setDisableProduction(boolean bool) {
-        if(leaderCard instanceof LocalProductionLeader){
+        if(leaderCard instanceof LocalProductionLeader && ((LocalProductionLeader) leaderCard).isActive()){
             activateBtn.setDisable(bool);
         }
     }

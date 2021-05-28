@@ -89,8 +89,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         List<LocalCard> leaders = seen.getLocalBoard().getLeaderCards();
         if (leaders.size() == 2) {
-            leader1.setCard(leaders.get(0), ui, 4, stage);
-            leader2.setCard(leaders.get(1), ui, 5, stage);
+            leader1.setCard(leaders.get(0), ui, stage);
+            leader2.setCard(leaders.get(1), ui, stage);
         }
 
         List<ArrayList<LocalDevelopCard>> develops = seen.getLocalBoard().getDevelopCards();

@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.cards.Production;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
+import it.polimi.ingsw.server.model.player.Board;
 
 /**
  * LeaderCard with effect of creating a new Production in the board of the player.
@@ -13,6 +14,16 @@ public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevel
     private static final long serialVersionUID = 1004L;
 
     private final Production production;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public int getWhichProd() {
+        return whichProd;
+    }
+
+    private int whichProd = -1;
 
     public ProductionLeaderCard(int victoryPoints, RequirementLevelDevelop requirement, Production production, int id) {
         super(victoryPoints, requirement, id);
@@ -36,11 +47,14 @@ public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevel
      */
     @Override
     protected void applyEffectNoCheckOnActive(Game<?> game) {
+        Board board;
         if ((game instanceof SinglePlayer)) {
-            ((SinglePlayer) game).getPlayer().getBoard().discoverProductionLeader(this);
+            board = ((SinglePlayer) game).getPlayer().getBoard();
         } else {
-            ((MultiPlayer) game).getTurn().getCurrentPlayer().getBoard().discoverProductionLeader(this);
+            board = ((MultiPlayer) game).getTurn().getCurrentPlayer().getBoard();
         }
+        board.discoverProductionLeader(this);
+        whichProd = board.getProductionLeaders().size() + 4;
     }
 
     /**
@@ -56,4 +70,6 @@ public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevel
     public Production getProduction() {
         return production;
     }
+
+
 }

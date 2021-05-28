@@ -95,7 +95,8 @@ public final class ConverterToLocalModel {
                 productionLeaderCard.getProduction().whatResourceToGain(),
                 productionLeaderCard.getProduction().getGainedResources(),
                 productionLeaderCard.getRequirement().getColor(),
-                productionLeaderCard.getRequirement().getLevel());
+                productionLeaderCard.getRequirement().getLevel(),
+                productionLeaderCard.getWhichProd());
     }
 
     public static LocalMarbleLeader convert(MarbleLeaderCard marbleLeaderCard) {
@@ -155,19 +156,10 @@ public final class ConverterToLocalModel {
         }
 
         ArrayList<LocalCard> localLeader = new ArrayList<>();
-        ArrayList<ProductionLeaderCard> productionLeaderCards = board.getProductionLeaders();
-        for (LeaderCard<?> l : productionLeaderCards) {
+        for (LeaderCard<?> l : board.getLeaderCards()) {
             if (l.isActive() || isBoardOfPlayerRequiring) {
                 localLeader.add(convert(l));
             } else localLeader.add(new LocalConcealedCard());
-        }
-
-        for (LeaderCard<?> l : board.getLeaderCards()) {
-            if(!(l instanceof ProductionLeaderCard && productionLeaderCards.contains(l))) {
-                if (l.isActive() || isBoardOfPlayerRequiring) {
-                    localLeader.add(convert(l));
-                } else localLeader.add(new LocalConcealedCard());
-            }
         }
 
         LocalTrack localTrack = convert(board.getFaithtrack());

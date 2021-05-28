@@ -225,4 +225,15 @@ public class ManipulateGameUiTestHelper {
 
          */
     }
+
+    /**
+     * set requirement of 2 leaders
+     */
+    public static void setStateOfGame3(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, FullDevelopSlotException, InvalidDevelopCardToSlotException, EmptyDeckException, InvalidStepsException, NotEnoughResourcesException, EndAlreadyReachedException {
+        setRemoveLeaders(game.getPlayer());
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+        satisfyReq(game.getPlayer().getBoard().getLeaderCards().get(0).getRequirement(), game, game.getPlayer());
+        satisfyReq(game.getPlayer().getBoard().getLeaderCards().get(1).getRequirement(), game, game.getPlayer());
+    }
+
 }
