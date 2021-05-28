@@ -1,8 +1,8 @@
 package it.polimi.ingsw.enums;
 
 public enum Color {
-    PURPLE,
     GREEN,
+    BLUE,
     GOLD,
-    BLUE
+    PURPLE,
 }

@@ -72,10 +72,18 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
         });
     }
 
+    public void removeObservers(){
+        ui.getLocalGame().removeObservers();
+        ui.getLocalGame().getMainPlayer().getLocalBoard().removeObservers();
+        ui.getLocalGame().getError().removeObserver();
+        ui.getLocalGame().getLocalTurn().getHistoryObservable().removeObservers();
+    }
+
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
         ui.getLocalGame().overrideObserver(this);
+        ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
         ui.getLocalGame().getLocalTurn().getHistoryObservable().overrideObserver(this);
     }
@@ -86,13 +94,17 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
         cardToBuy=toBuyCard;
 
         backBtn.setOnMouseClicked(mouseEvent -> {
+            removeObservers();
             BuildGUI.getInstance().toDevelopGrid(stage, ui);
         });
 
         confirmBtn.setOnMouseClicked(e->confirm());
         confirmBtn.setDisable(true);
 
-        slotToStoreComboBox.setOnAction(e-> confirmBtn.setDisable(false));
+        slotToStoreComboBox.setOnAction(e-> {
+            confirmBtn.setDisable(false);
+            confirmBtn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
+        });
 
         //creating useful map to handle the scene
         spinners=new TreeMap<>(){{
@@ -148,9 +160,6 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
     }
 
 
-
-
-
     public void confirm() {
         //logger.debug("in confirm method");
         //create the to give map
@@ -178,5 +187,13 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
             logger.error("Error while handling request: " + e);
         }
 
+        ArrayList<LocalDevelopCard> cards=ui.getLocalGame().getMainPlayer().getLocalBoard().getDevelopCards().get(slotToStore);
+
+        if(!cards.isEmpty()) {
+            if (cards.get(cards.size() - 1).getId()==cardToBuy.getId()){
+                removeObservers();
+                BuildGUI.getInstance().toBoard(stage, ui);
+            }
+        }
     }
 }

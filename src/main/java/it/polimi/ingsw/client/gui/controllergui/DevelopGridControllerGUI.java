@@ -73,8 +73,6 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
         });
 
-
-
         updateGrid();
 
     }
@@ -112,9 +110,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
                 matrixImg[i][j]=imgView;
 
-
-                develop_grid.add(imgView,i,j);
-
+                develop_grid.add(imgView,i,2-j);
 
             }
         }
@@ -145,7 +141,6 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         }
     }
 
-    //todo
     private void buyDevelop(int i,int j) {
         if(!cardSelected) {
             cardSelected=true;
