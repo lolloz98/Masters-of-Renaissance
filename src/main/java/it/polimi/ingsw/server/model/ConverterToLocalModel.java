@@ -155,10 +155,19 @@ public final class ConverterToLocalModel {
         }
 
         ArrayList<LocalCard> localLeader = new ArrayList<>();
-        for (LeaderCard<?> l : board.getLeaderCards()) {
+        ArrayList<ProductionLeaderCard> productionLeaderCards = board.getProductionLeaders();
+        for (LeaderCard<?> l : productionLeaderCards) {
             if (l.isActive() || isBoardOfPlayerRequiring) {
                 localLeader.add(convert(l));
             } else localLeader.add(new LocalConcealedCard());
+        }
+
+        for (LeaderCard<?> l : board.getLeaderCards()) {
+            if(!(l instanceof ProductionLeaderCard && productionLeaderCards.contains(l))) {
+                if (l.isActive() || isBoardOfPlayerRequiring) {
+                    localLeader.add(convert(l));
+                } else localLeader.add(new LocalConcealedCard());
+            }
         }
 
         LocalTrack localTrack = convert(board.getFaithtrack());

@@ -89,8 +89,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         List<LocalCard> leaders = seen.getLocalBoard().getLeaderCards();
         if (leaders.size() == 2) {
-            leader1.setCard(leaders.get(0), ui);
-            leader2.setCard(leaders.get(1), ui);
+            leader1.setCard(leaders.get(0), ui, 4, stage);
+            leader2.setCard(leaders.get(1), ui, 5, stage);
         }
 
         List<ArrayList<LocalDevelopCard>> develops = seen.getLocalBoard().getDevelopCards();
@@ -231,11 +231,14 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         developSlots.add(slotDevelopComponent2);
         developSlots.add(slotDevelopComponent3);
 
-        for(SlotDevelopComponent s: developSlots){
+        for(int i = 0; i < developSlots.size(); i++){
+            SlotDevelopComponent s = developSlots.get(i);
+            int finalI = i;
             s.getActivateBtn().setOnMouseClicked(mouseEvent -> {
                 synchronized (ui.getLocalGame()) {
                     if (s.getLocalDevelopCard() != null && s.getLocalDevelopCard().getProduction().getResToFlush().isEmpty()) {
-                        BuildGUI.getInstance().toActivateProduction(stage, ui, s.getLocalDevelopCard());
+                        int whichProd = finalI + 1;
+                        BuildGUI.getInstance().toActivateProduction(stage, ui, s.getLocalDevelopCard(), whichProd);
                     }else{
                         logger.warn("Production already activated or developCard is null");
                     }
@@ -246,7 +249,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         activateNormalBtn.setOnMouseClicked(mouseEvent -> {
             synchronized (ui.getLocalGame()) {
                 if(ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().getBaseProduction().getResToFlush().isEmpty()) {
-                    BuildGUI.getInstance().toActivateProduction(stage, ui, NormalProductionCard.getINSTANCE());
+                    BuildGUI.getInstance().toActivateProduction(stage, ui, NormalProductionCard.getINSTANCE(), 0);
                 } else{
                     logger.warn("Normal production already activated");
                 }
@@ -276,6 +279,24 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         game.getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().overrideObserver(this);
         game.getError().addObserver(this);
         game.getLocalTurn().overrideObserver(this);
+        game.overrideObserver(new Observer() {
+            @Override
+            public void notifyUpdate() {
+                Platform.runLater(() -> {
+                    synchronized (ui.getLocalGame()) {
+                        logger.debug("check game status");
+                        if (prevGameState != ui.getLocalGame().getState()) {
+                            setBoard();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void notifyError() {
+                // Nothing to do here
+            }
+        });
         game.getLocalTurn().getHistoryObservable().overrideObserver(new Observer() {
             @Override
             public void notifyUpdate() {
@@ -283,9 +304,6 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                     synchronized (ui.getLocalGame()) {
                         logger.debug("In notifyUpdate from history");
                         historyLbl.setText(ui.getLocalGame().getLocalTurn().getHistoryObservable().getLast());
-                        if (prevGameState != ui.getLocalGame().getState()) {
-                            setBoard();
-                        }
                     }
                 });
             }
@@ -302,6 +320,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     public void removeThisAsObserver(){
         synchronized (ui.getLocalGame()) {
+            ui.getLocalGame().removeObservers();
             ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).removeObservers();
             ui.getLocalGame().getError().removeObserver();
             ui.getLocalGame().getLocalTurn().removeObservers();

@@ -244,7 +244,7 @@ public class BuildGUI {
         });
     }
 
-    public void toActivateProduction(Stage stage, GUI ui, LocalCard card){
+    public void toActivateProduction(Stage stage, GUI ui, LocalCard card, int whichProd){
         logger.debug("to activate production scene");
     }
 

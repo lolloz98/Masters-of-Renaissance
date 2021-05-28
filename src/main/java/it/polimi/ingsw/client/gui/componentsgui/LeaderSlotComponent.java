@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.componentsgui;
 
 import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
 import it.polimi.ingsw.client.localmodel.localcards.*;
 import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
@@ -16,6 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -77,7 +79,7 @@ public class LeaderSlotComponent extends VBox {
         }
     }
 
-    public void setCard(LocalCard card, GUI ui){
+    public void setCard(LocalCard card, GUI ui, int whichProd, Stage stage){
         this.leaderCard = card;
         setUi(ui);
         cardImg.setImage(card.getImage());
@@ -99,7 +101,7 @@ public class LeaderSlotComponent extends VBox {
                 activateBtn.setText("Activate Production");
                 activateBtn.setOnMouseClicked(mouseEvent -> {
                     logger.debug("clicked activate of localProduction leader");
-                    // todo: add production behavior
+                    BuildGUI.getInstance().toActivateProduction(stage, ui, leaderCard, whichProd);
                 });
             }
         } else if((leaderCard instanceof LocalLeaderCard && ((LocalLeaderCard) leaderCard).isDiscarded()) ||
