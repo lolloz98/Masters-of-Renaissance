@@ -35,7 +35,7 @@ public class MarketView extends GameView {
             System.out.println("Please wait");
         else {
             CLIutils.clearScreen();
-            CLIutils.printBlock(MarketPrinter.toStringBlock(localMarket));
+            CLIutils.printBlock(MarketPrinter.toStringBlock(localGame, localMarket));
             super.drawTurn();
         }
     }

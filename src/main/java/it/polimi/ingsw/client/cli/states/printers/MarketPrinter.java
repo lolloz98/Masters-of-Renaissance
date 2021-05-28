@@ -2,14 +2,17 @@ package it.polimi.ingsw.client.cli.states.printers;
 
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.MapUtils;
+import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
+import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.enums.Resource;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class MarketPrinter {
-    public static ArrayList<String> toStringBlock(LocalMarket localMarket) {
+    public static ArrayList<String> toStringBlock(LocalGame<?> localGame, LocalMarket localMarket) {
         ArrayList<String> out = new ArrayList<>();
         out.add("                ");
         out.add("  free marble : ");
@@ -93,32 +96,17 @@ public class MarketPrinter {
         out.add("");
 
         ArrayList<TreeMap<Resource, Integer>> resComb = localMarket.getResCombinations();
+        if (localGame instanceof LocalSingle ||
+                ((LocalMulti) localGame).getMainPlayer().getId() == ((LocalMulti) localGame).getLocalTurn().getCurrentPlayer().getId()) {
+            if (resComb.size() == 0) {
+                CLIutils.append(out, 16, "Type 'pm' followed by a number or a letter corresponding to a marble to push");
+            } else {
+                CLIutils.append(out, 16, "Type 'fm' followed by a number to flush the resources to the board");
+                CLIutils.append(out, 18, "  ");
+                CLIutils.append(out, 19, "1)");
+                CLIutils.append(out, 20, "  ");
 
-        if (resComb.size() == 0) {
-            CLIutils.append(out, 16, "Type 'pm' followed by a number or a letter corresponding to a marble to push");
-        } else {
-            CLIutils.append(out, 16, "Type 'fm' followed by a number to flush the resources to the board");
-            CLIutils.append(out, 18, "  ");
-            CLIutils.append(out, 19, "1)");
-            CLIutils.append(out, 20, "  ");
-
-            TreeMap<Resource, Integer> resTree = new TreeMap<>(resComb.get(0));
-            do {
-                CLIutils.append(out, 18, " ");
-                CLIutils.append(out, 19, " ");
-                CLIutils.append(out, 20, " ");
-                CLIutils.append(out, 18, MarblePrinter.toStringBlock(resTree.firstKey()));
-                MapUtils.removeResFromMap(resTree, resTree.firstKey());
-                CLIutils.append(out, 18, " ");
-                CLIutils.append(out, 19, " ");
-                CLIutils.append(out, 20, " ");
-            } while (!resTree.isEmpty());
-
-            if (resComb.size() > 1) {
-                resTree = new TreeMap<>(resComb.get(1));
-                CLIutils.append(out, 18, "         ");
-                CLIutils.append(out, 19, "      2) ");
-                CLIutils.append(out, 20, "         ");
+                TreeMap<Resource, Integer> resTree = new TreeMap<>(resComb.get(0));
                 do {
                     CLIutils.append(out, 18, " ");
                     CLIutils.append(out, 19, " ");
@@ -129,54 +117,71 @@ public class MarketPrinter {
                     CLIutils.append(out, 19, " ");
                     CLIutils.append(out, 20, " ");
                 } while (!resTree.isEmpty());
-            }
-            if (resComb.size() > 2) {
-                resTree = new TreeMap<>(resComb.get(2));
-                CLIutils.append(out, 18, "         ");
-                CLIutils.append(out, 19, "      3) ");
-                CLIutils.append(out, 20, "         ");
-                do {
-                    CLIutils.append(out, 18, " ");
-                    CLIutils.append(out, 19, " ");
-                    CLIutils.append(out, 20, " ");
-                    CLIutils.append(out, 18, MarblePrinter.toStringBlock(resTree.firstKey()));
-                    MapUtils.removeResFromMap(resTree, resTree.firstKey());
-                    CLIutils.append(out, 18, " ");
-                    CLIutils.append(out, 19, " ");
-                    CLIutils.append(out, 20, " ");
-                } while (!resTree.isEmpty());
-            }
-            if (resComb.size() > 3) {
-                resTree = new TreeMap<>(resComb.get(3));
-                CLIutils.append(out, 21, "         ");
-                CLIutils.append(out, 22, "      4) ");
-                CLIutils.append(out, 23, "         ");
-                do {
-                    CLIutils.append(out, 21, " ");
-                    CLIutils.append(out, 22, " ");
-                    CLIutils.append(out, 23, " ");
-                    CLIutils.append(out, 21, MarblePrinter.toStringBlock(resTree.firstKey()));
-                    MapUtils.removeResFromMap(resTree, resTree.firstKey());
-                    CLIutils.append(out, 21, " ");
-                    CLIutils.append(out, 22, " ");
-                    CLIutils.append(out, 23, " ");
-                } while (!resTree.isEmpty());
-            }
-            if (resComb.size() > 4) {
-                resTree = new TreeMap<>(resComb.get(4));
-                CLIutils.append(out, 21, "         ");
-                CLIutils.append(out, 22, "      5) ");
-                CLIutils.append(out, 23, "         ");
-                do {
-                    CLIutils.append(out, 21, " ");
-                    CLIutils.append(out, 22, " ");
-                    CLIutils.append(out, 23, " ");
-                    CLIutils.append(out, 21, MarblePrinter.toStringBlock(resTree.firstKey()));
-                    MapUtils.removeResFromMap(resTree, resTree.firstKey());
-                    CLIutils.append(out, 21, " ");
-                    CLIutils.append(out, 22, " ");
-                    CLIutils.append(out, 23, " ");
-                } while (!resTree.isEmpty());
+
+                if (resComb.size() > 1) {
+                    resTree = new TreeMap<>(resComb.get(1));
+                    CLIutils.append(out, 18, "         ");
+                    CLIutils.append(out, 19, "      2) ");
+                    CLIutils.append(out, 20, "         ");
+                    do {
+                        CLIutils.append(out, 18, " ");
+                        CLIutils.append(out, 19, " ");
+                        CLIutils.append(out, 20, " ");
+                        CLIutils.append(out, 18, MarblePrinter.toStringBlock(resTree.firstKey()));
+                        MapUtils.removeResFromMap(resTree, resTree.firstKey());
+                        CLIutils.append(out, 18, " ");
+                        CLIutils.append(out, 19, " ");
+                        CLIutils.append(out, 20, " ");
+                    } while (!resTree.isEmpty());
+                }
+                if (resComb.size() > 2) {
+                    resTree = new TreeMap<>(resComb.get(2));
+                    CLIutils.append(out, 18, "         ");
+                    CLIutils.append(out, 19, "      3) ");
+                    CLIutils.append(out, 20, "         ");
+                    do {
+                        CLIutils.append(out, 18, " ");
+                        CLIutils.append(out, 19, " ");
+                        CLIutils.append(out, 20, " ");
+                        CLIutils.append(out, 18, MarblePrinter.toStringBlock(resTree.firstKey()));
+                        MapUtils.removeResFromMap(resTree, resTree.firstKey());
+                        CLIutils.append(out, 18, " ");
+                        CLIutils.append(out, 19, " ");
+                        CLIutils.append(out, 20, " ");
+                    } while (!resTree.isEmpty());
+                }
+                if (resComb.size() > 3) {
+                    resTree = new TreeMap<>(resComb.get(3));
+                    CLIutils.append(out, 21, "         ");
+                    CLIutils.append(out, 22, "      4) ");
+                    CLIutils.append(out, 23, "         ");
+                    do {
+                        CLIutils.append(out, 21, " ");
+                        CLIutils.append(out, 22, " ");
+                        CLIutils.append(out, 23, " ");
+                        CLIutils.append(out, 21, MarblePrinter.toStringBlock(resTree.firstKey()));
+                        MapUtils.removeResFromMap(resTree, resTree.firstKey());
+                        CLIutils.append(out, 21, " ");
+                        CLIutils.append(out, 22, " ");
+                        CLIutils.append(out, 23, " ");
+                    } while (!resTree.isEmpty());
+                }
+                if (resComb.size() > 4) {
+                    resTree = new TreeMap<>(resComb.get(4));
+                    CLIutils.append(out, 21, "         ");
+                    CLIutils.append(out, 22, "      5) ");
+                    CLIutils.append(out, 23, "         ");
+                    do {
+                        CLIutils.append(out, 21, " ");
+                        CLIutils.append(out, 22, " ");
+                        CLIutils.append(out, 23, " ");
+                        CLIutils.append(out, 21, MarblePrinter.toStringBlock(resTree.firstKey()));
+                        MapUtils.removeResFromMap(resTree, resTree.firstKey());
+                        CLIutils.append(out, 21, " ");
+                        CLIutils.append(out, 22, " ");
+                        CLIutils.append(out, 23, " ");
+                    } while (!resTree.isEmpty());
+                }
             }
         }
         return out;

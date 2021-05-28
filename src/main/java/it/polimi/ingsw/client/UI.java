@@ -15,8 +15,15 @@ public abstract class UI {
     protected GameHandler gameHandler;
     protected LocalGame<?> localGame;
     protected Scanner input;
-    protected boolean gameOver;
+    protected boolean quit;
 
+    public boolean isQuit() {
+        return quit;
+    }
+
+    public void setQuit(boolean quit) {
+        this.quit = quit;
+    }
     public GameHandler getGameHandler() {
         return gameHandler;
     }
