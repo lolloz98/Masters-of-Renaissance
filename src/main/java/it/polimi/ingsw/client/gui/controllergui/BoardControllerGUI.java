@@ -206,6 +206,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                         logger.error("Something happened while sending finishTurnMessage: " + e);
                     }
                 });
+            }else {
+                setVisibleButtonsActions(true);
             }
         } else {
             setVisibleButtonsActions(false);
@@ -286,6 +288,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                     synchronized (ui.getLocalGame()) {
                         logger.debug("check game status");
                         if (prevGameState != ui.getLocalGame().getState()) {
+                            logger.debug("resetting board");
                             setBoard();
                         }
                     }
@@ -356,6 +359,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         activateNormalBtn.setVisible(bool);
         if(!bool) {
             // if true, better handling in leaderSlot
+            logger.debug("setting invisible buttons action");
             leader1.setVisibleButtons(false);
             leader2.setVisibleButtons(false);
         }
