@@ -63,4 +63,12 @@ public class SlotDevelopComponent extends Pane {
             throw new RuntimeException(exception);
         }
     }
+
+    public void setDisableIfActivated() {
+        if(localDevelopCard != null && localDevelopCard.getProduction().getResToFlush().size() != 0){
+            activateBtn.setDisable(true);
+        }else if(localDevelopCard != null){
+            activateBtn.setDisable(false);
+        }
+    }
 }
