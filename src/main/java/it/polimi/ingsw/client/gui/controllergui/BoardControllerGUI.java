@@ -11,6 +11,7 @@ import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
+import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
 import it.polimi.ingsw.server.model.utility.PairId;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -192,6 +193,15 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             } else if (game.getLocalTurn().isProductionsActivated()) {
                 flushBtn.setDisable(false);
                 emphasisOnButton(flushBtn);
+                flushBtn.setOnMouseClicked(mouseEvent -> {
+                    synchronized (ui.getLocalGame()) {
+                        try {
+                            ui.getGameHandler().dealWithMessage(new FlushProductionResMessage(ui.getLocalGame().getGameId(), ui.getLocalGame().getMainPlayer().getId()));
+                        } catch (IOException e) {
+                            logger.error("error while sending message");
+                        }
+                    }
+                });
             } else if (game.getLocalTurn().isMainActionOccurred()) {
                 setDisableProductions(true);
                 optional2Btn.setDisable(false);

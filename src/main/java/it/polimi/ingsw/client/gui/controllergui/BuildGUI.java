@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.gui.controllergui.creation.*;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.enums.Resource;
+import it.polimi.ingsw.enums.WarehouseType;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -246,6 +247,37 @@ public class BuildGUI {
 
     public void toActivateProduction(Stage stage, GUI ui, LocalCard card, int whichProd){
         logger.debug("to activate production scene");
+        Platform.runLater(() -> {
+            synchronized(ui.getLocalGame()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/activation_production.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    ProductionGiveResGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui, card, whichProd);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
+            }
+        });
+    }
+    public void toActivateProduction(Stage stage, GUI ui, LocalCard card, int whichProd, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive){
+        logger.debug("to activate production scene");
+        Platform.runLater(() -> {
+            synchronized(ui.getLocalGame()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/production_gain.fxml"));
+                try {
+                    Parent root = fxmlLoader.load();
+                    ProductionGainResGUI controller = fxmlLoader.getController();
+                    controller.setUp(stage, root, ui, card, whichProd, resToGive);
+                    stage.setScene(newScene(root, stage));
+                    stage.show();
+                } catch (IOException e) {
+                    logger.error("file not found: " + e);
+                }
+            }
+        });
     }
 
     public void toBuyDevelop(Stage stage, GUI ui, LocalDevelopCard toBuy) {
