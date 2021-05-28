@@ -95,7 +95,8 @@ public final class ConverterToLocalModel {
                 productionLeaderCard.getProduction().whatResourceToGain(),
                 productionLeaderCard.getProduction().getGainedResources(),
                 productionLeaderCard.getRequirement().getColor(),
-                productionLeaderCard.getRequirement().getLevel());
+                productionLeaderCard.getRequirement().getLevel(),
+                productionLeaderCard.getWhichProd());
     }
 
     public static LocalMarbleLeader convert(MarbleLeaderCard marbleLeaderCard) {
