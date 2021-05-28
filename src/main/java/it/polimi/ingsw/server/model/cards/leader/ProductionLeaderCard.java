@@ -54,7 +54,7 @@ public final class ProductionLeaderCard extends LeaderCard<RequirementLevelDevel
             board = ((MultiPlayer) game).getTurn().getCurrentPlayer().getBoard();
         }
         board.discoverProductionLeader(this);
-        whichProd = board.getProductionLeaders().size() + 4;
+        whichProd = board.getProductionLeaders().size() + 3;
     }
 
     /**

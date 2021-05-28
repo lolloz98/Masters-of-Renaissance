@@ -18,6 +18,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
+/**
+ * Class used as controller for a local game.
+ */
 public class ControllerActionsSingleLocal extends ControllerActionsBase<SinglePlayer> {
     private static final Logger logger = LogManager.getLogger(ControllerActionsSingleLocal.class);
 
@@ -54,31 +57,31 @@ public class ControllerActionsSingleLocal extends ControllerActionsBase<SinglePl
 
     @Override
     public void doAction(ClientMessageController clientMessage) throws ControllerException {
-
+        logger.error("You are in local game: call doAction directly on the message");
     }
 
     @Override
     public void doPreGameAction(PreGameCreationMessageController clientMessage, AnswerListener answerListener) throws ControllerException {
-
+        logger.error("You are in local game: call doAction directly on the message");
     }
 
     @Override
     public void doDiscardOrRemoveLeader(ClientMessageController parsedMessage) throws ControllerException {
-
+        logger.error("You are in local game: call doAction directly on the message");
     }
 
     @Override
     public void sendGameStatusToAll(int gameId, int playerIdLastRequest) throws UnexpectedControllerException {
-
+        logger.error("You are in local game: call doAction directly on the message");
     }
 
     @Override
     public void doGetStatusAction(GameStatusMessageController parsedMessage) throws ControllerException {
-
+        logger.error("You are in local game: call doAction directly on the message");
     }
 
     @Override
     public void destroyGame(String message, int playerId, boolean removePlayerIdListener) throws NoSuchControllerException {
-
+        logger.error("You are in local game: call doAction directly on the message");
     }
 }
