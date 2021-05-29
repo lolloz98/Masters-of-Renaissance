@@ -3,6 +3,8 @@ package it.polimi.ingsw.client.answerhandler;
 import it.polimi.ingsw.client.FigureStateHelperTest;
 import it.polimi.ingsw.client.answerhandler.mainaction.UseMarketAnswerHandler;
 import it.polimi.ingsw.client.localmodel.*;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.UseMarketAnswer;
@@ -26,6 +28,15 @@ import java.util.TreeMap;
  */
 @Ignore
 public class AnswerHandlerTestHelper {
+
+    /**
+     * helper method that adds a card on the boad of the main player
+     * @param cardToAdd
+     * @param whichSlot
+     */
+    public static void addADevelopCard(LocalDevelopCard cardToAdd,int whichSlot, LocalGame game){
+        game.getMainPlayer().getLocalBoard().getDevelopCards().get(whichSlot).add(cardToAdd);
+    }
 
     /**
      *creates a single player
@@ -95,6 +106,75 @@ public class AnswerHandlerTestHelper {
             put(Resource.SERVANT,1);
             put(Resource.SHIELD,1);
         }};
+    }
+
+    /**
+     * @return  a configuration of the resources to flush from a determinate card
+     */
+    public static TreeMap<Resource,Integer> getResToFlush(){
+        return new TreeMap<Resource, Integer>(){{
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,1);
+        }};
+
+    }
+
+    public static LocalBoard getALocalBoard() throws ModelException {
+        CollectionsHelper.setTest();
+        MultiPlayer multiPlayer;
+        try{
+            multiPlayer=new MultiPlayer(new ArrayList<>(){{
+                add(new Player("aniello", 1));
+                add(new Player("carpa", 2));
+                add(new Player("inno", 3));
+            }});
+        }catch(IllegalArgumentException | EmptyDeckException | WrongColorDeckException | InvalidArgumentException | PlayersOutOfBoundException | WrongLevelDeckException e){
+            throw new ModelException("something went wrong");
+        }
+
+        multiPlayer.distributeLeader();
+
+        try {
+            return ConverterToLocalModel.convert(multiPlayer.getPlayer(3).getBoard(),true);
+        } catch (UnexpectedControllerException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return  a configuration of the resources in the strongbox
+     */
+    public static TreeMap<Resource,Integer> getResInStrongbox(){
+        return new TreeMap<Resource, Integer>(){{
+            put(Resource.GOLD,8);
+            put(Resource.ROCK,9);
+            put(Resource.SHIELD,5);
+        }};
+
+    }
+
+    /**
+     *
+     * @return the depot leader, added with the method addADepotLeader, modified
+     */
+    public static LocalDepotLeader getADepotLeader(){
+        LocalDepotLeader localDepotLeader=new LocalDepotLeader(0,3,true,false,Resource.GOLD,Resource.SHIELD,3);
+        localDepotLeader.setNumberOfRes(0);
+        return localDepotLeader;
+    }
+
+    /**
+     * adds a depot leader to the main player board
+     * @param game
+     */
+    public static void addADepotLeader(LocalGame<?> game){
+
+        LocalDepotLeader localDepotLeader=new LocalDepotLeader(0,3,true,false,Resource.GOLD,Resource.SHIELD,3);
+        localDepotLeader.setNumberOfRes(2);
+
+        game.getMainPlayer().getLocalBoard().getLeaderCards().add(localDepotLeader);
     }
 
     /**

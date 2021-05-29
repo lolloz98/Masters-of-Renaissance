@@ -11,6 +11,9 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.BuyDevelopCardAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * class that modify the local game with the parameters passed by the server in the answer, this class is used to update the local game after an BuyDevelopCardMessage
+ */
 public class BuyDevelopCardAnswerHandler extends AnswerHandler {
 
     private static final Logger logger = LogManager.getLogger(BuyDevelopCardAnswer.class);

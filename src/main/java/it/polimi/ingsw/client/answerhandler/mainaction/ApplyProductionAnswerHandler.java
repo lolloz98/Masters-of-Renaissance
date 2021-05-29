@@ -10,6 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
+/**
+ * class that modify the local game with the parameters passed by the server in the answer, this class is used to update the local game after an ApplyProductionMessage
+ */
 public class ApplyProductionAnswerHandler extends AnswerHandler {
 
     private static final Logger logger = LogManager.getLogger(ApplyProductionAnswer.class);

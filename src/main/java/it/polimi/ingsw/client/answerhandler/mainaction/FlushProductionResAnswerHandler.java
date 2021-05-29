@@ -5,7 +5,9 @@ import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushProductionResAnswer;
-
+/**
+ * class that modify the local game with the parameters passed by the server in the answer, this class is used to update the local game after an FlushProductionResMessage
+ */
 public class FlushProductionResAnswerHandler extends AnswerHandler {
 
     public FlushProductionResAnswerHandler(FlushProductionResAnswer answer) {
