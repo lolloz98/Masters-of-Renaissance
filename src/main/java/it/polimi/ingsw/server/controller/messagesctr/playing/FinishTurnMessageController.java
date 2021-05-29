@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.controller.messagesctr.playing;
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalTrack;
-import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalLorenzoCard;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.endgameanswer.EndGameAnswer;
@@ -11,7 +10,6 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnMultiAnswer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnSingleAnswer;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 import it.polimi.ingsw.server.controller.ControllerActionsBase;
-import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.lorenzo.LorenzoCard;
@@ -45,7 +43,7 @@ public class FinishTurnMessageController extends PlayingMessageController {
 
         Turn newTurn = controllerActions.getGame().getTurn();
 
-        if (newTurn.getIsPlayable()) {
+        if (!game.isGameOver()) {
             if (game instanceof MultiPlayer) {
                 controllerActions.applyLeadersEffect();
                 LocalDevelopmentGrid localGrid = ConverterToLocalModel.convert(game.getDecksDevelop());
@@ -54,6 +52,7 @@ public class FinishTurnMessageController extends PlayingMessageController {
             }
 
             if (game instanceof SinglePlayer) {
+                logger.debug("in the first if isGameOver");
                 // we have to manage the turn of lorenzo
                 SinglePlayer singlePlayer = (SinglePlayer) game;
                 LorenzoCard lorenzoCard;
@@ -86,10 +85,10 @@ public class FinishTurnMessageController extends PlayingMessageController {
                     logger.error("We cannot have this after a Lorenzo action: " + e + " - Continuing normal execution");
                 }
 
-                newTurn = singlePlayer.getTurn();
-
-                if (!newTurn.getIsPlayable())
+                if (singlePlayer.isGameOver()) {
+                    logger.debug("in the second if isGameOver");
                     return handleEndGame(controllerActions);
+                }
                 else {
                     //build local grid
                     LocalDevelopmentGrid localGrid = ConverterToLocalModel.convert(game.getDecksDevelop());
@@ -97,7 +96,7 @@ public class FinishTurnMessageController extends PlayingMessageController {
                     LocalTrack localPlayerTrack = ConverterToLocalModel.convert(singlePlayer.getPlayer().getBoard().getFaithtrack());
                     //build lorenzo track
                     LocalTrack localLorenzoTrack = ConverterToLocalModel.convert(singlePlayer.getLorenzo().getFaithTrack());
-                    //bulid lorenzo card
+                    //build lorenzo card
                     LocalLorenzoCard localLorenzoCard = ConverterToLocalModel.convert(lorenzoCard);
 
                     return new FinishTurnSingleAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), localGrid, localPlayerTrack, localLorenzoTrack, localLorenzoCard);
