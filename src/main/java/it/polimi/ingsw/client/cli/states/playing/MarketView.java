@@ -35,7 +35,7 @@ public class MarketView extends GameView {
             System.out.println("Please wait");
         else {
             CLIutils.clearScreen();
-            CLIutils.printBlock(MarketPrinter.toStringBlock(localMarket));
+            CLIutils.printBlock(MarketPrinter.toStringBlock(localGame, localMarket));
             super.drawTurn();
         }
     }
@@ -90,7 +90,7 @@ public class MarketView extends GameView {
                 } catch (NumberFormatException e) {
                     writeErrText();
                 }
-                if (number >= 0 && number < localMarket.getResCombinations().size() + 1) {
+                if (number > 0 && number < localMarket.getResCombinations().size() + 1) {
                     removeObserved();
                     ui.setState(new FlushMarketCombinationView(ui, localGame, new TreeMap<>(localMarket.getResCombinations().get(number - 1))));
                 } else {
