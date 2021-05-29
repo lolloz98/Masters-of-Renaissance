@@ -11,6 +11,7 @@ public class WinnerView extends GameView {
 
     public WinnerView(CLI cli, LocalGame<?> localGame) {
         this.ui = cli;
+        this.localGame = localGame;
     }
 
     @Override
