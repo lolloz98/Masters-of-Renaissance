@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class DevelopmentGridPrinter {
-    public static ArrayList<String> toStringBlock(LocalDevelopmentGrid localDevelopmentGrid){
+    public static ArrayList<String> toStringBlock(LocalDevelopmentGrid localDevelopmentGrid) {
         ArrayList<String> out = new ArrayList<>();
         for (int i = 0; i < 29; i++) out.add("");
         LocalDevelopCard[][] topDevelopCards = localDevelopmentGrid.getTopDevelopCards();
@@ -27,8 +27,18 @@ public class DevelopmentGridPrinter {
 
     private static void appendCard(ArrayList<String> out, int x, int y, int developCardNumber, LocalDevelopCard topDevelopCard) {
         ArrayList<String> cardBlock = new ArrayList<>();
-        if (developCardNumber == 0){
+        if (developCardNumber == 0) {
             for (int i = 0; i < 8; i++) cardBlock.add("                 ");
+            for (int i = 0; i < 3; i++) {
+                CLIutils.append(cardBlock, 0, " ");
+                CLIutils.append(cardBlock, 1, " ");
+                CLIutils.append(cardBlock, 2, " ");
+                CLIutils.append(cardBlock, 3, " ");
+                CLIutils.append(cardBlock, 4, " ");
+                CLIutils.append(cardBlock, 5, " ");
+                CLIutils.append(cardBlock, 6, " ");
+                CLIutils.append(cardBlock, 7, " ");
+            }
         } else {
             cardBlock = DevelopmentCardPrinter.toStringBlock(topDevelopCard);
             for (int i = 0; i < 3; i++) {
@@ -41,8 +51,8 @@ public class DevelopmentGridPrinter {
                     CLIutils.append(cardBlock, 5, "┃");
                     CLIutils.append(cardBlock, 6, "┃");
                     CLIutils.append(cardBlock, 7, "┛");
-                }
-                else {
+                } else {
+                    CLIutils.append(cardBlock, 0, " ");
                     CLIutils.append(cardBlock, 1, " ");
                     CLIutils.append(cardBlock, 2, " ");
                     CLIutils.append(cardBlock, 3, " ");

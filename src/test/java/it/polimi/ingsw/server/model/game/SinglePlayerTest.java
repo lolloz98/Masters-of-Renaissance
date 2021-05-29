@@ -116,4 +116,33 @@ public class SinglePlayerTest {
         singlePlayer.distributeLeader();
         assertEquals(singlePlayer.getPlayer().getBoard().getLeaderCards().size(), 4);
     }
+
+    @Test
+    public void testEndGame() throws ModelException {
+        assertFalse(singlePlayer.getTurn().isLorenzoPlaying());
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.getLorenzo().getFaithTrack().move(5, singlePlayer);
+        singlePlayer.nextTurn();
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.nextTurn();
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.getLorenzo().getFaithTrack().move(5, singlePlayer);
+        singlePlayer.nextTurn();
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.nextTurn();
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.getLorenzo().getFaithTrack().move(5, singlePlayer);
+        singlePlayer.nextTurn();
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.nextTurn();
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.getLorenzo().getFaithTrack().move(5, singlePlayer);
+        singlePlayer.nextTurn();
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.nextTurn();
+        singlePlayer.getTurn().setMainActionOccurred();
+        singlePlayer.getLorenzo().getFaithTrack().move(5, singlePlayer); // one step too much
+        singlePlayer.nextTurn();
+        assertTrue(singlePlayer.isGameOver());
+    }
 }
