@@ -11,6 +11,7 @@ import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
+import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
 import it.polimi.ingsw.server.model.utility.PairId;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -97,8 +98,6 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         int i = 0;
         for (ArrayList<LocalDevelopCard> ald : develops) {
             developSlots.get(i).setCards(ald);
-            if(ald.isEmpty()) developSlots.get(i).setDisableActivateBtn(true);
-            else developSlots.get(i).setDisableActivateBtn(!ald.get(ald.size() - 1).getProduction().getResToFlush().isEmpty());
             i++;
         }
 
@@ -190,8 +189,19 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                 setDisableProductions(true);
                 emphasisOnButton(marketBtn);
             } else if (game.getLocalTurn().isProductionsActivated()) {
+                disableIfActivated(game);
                 flushBtn.setDisable(false);
                 emphasisOnButton(flushBtn);
+                flushBtn.setOnMouseClicked(mouseEvent -> {
+                    synchronized (ui.getLocalGame()) {
+                        try {
+                            Platform.runLater(() -> removeEmphasisOnButton(flushBtn));
+                            ui.getGameHandler().dealWithMessage(new FlushProductionResMessage(ui.getLocalGame().getGameId(), ui.getLocalGame().getMainPlayer().getId()));
+                        } catch (IOException e) {
+                            logger.error("error while sending message");
+                        }
+                    }
+                });
             } else if (game.getLocalTurn().isMainActionOccurred()) {
                 setDisableProductions(true);
                 optional2Btn.setDisable(false);
@@ -212,6 +222,15 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         } else {
             setVisibleButtonsActions(false);
         }
+    }
+
+    private void disableIfActivated(LocalGame<?> game) {
+        for(SlotDevelopComponent s: developSlots){
+            s.setDisableIfActivated();
+        }
+        if(!game.getMainPlayer().getLocalBoard().getBaseProduction().getResToFlush().isEmpty()) activateNormalBtn.setDisable(true);
+        leader1.disableIfActivated();
+        leader2.disableIfActivated();
     }
 
     /**
@@ -348,6 +367,10 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     private void emphasisOnButton(Button btn) {
         btn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
+    }
+
+    private void removeEmphasisOnButton(Button btn){
+        btn.setStyle("-fx-border-width: 0px;");
     }
 
     private void setVisibleButtonsActions(boolean bool) {

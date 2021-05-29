@@ -49,7 +49,7 @@ public class DevelopSlotPrinter {
                 CLIutils.append(out, 4, DevelopmentCardPrinter.toStringBlock(slot.get(2)));
             }
             CLIutils.append(out, 12, "  to flush: ");
-            if(slot.get(slot.size()-1).getProduction().getResToFlush().size() == 0){ // fixme maybe null
+            if(slot.get(slot.size()-1).getProduction().getResToFlush().size() == 0){
                 CLIutils.append(out, 12, "     ");
             } else {
                 CLIutils.append(out, 12, DevelopmentPrinter.toStringBlock((slot.get(slot.size()-1).getProduction().getResToFlush())));

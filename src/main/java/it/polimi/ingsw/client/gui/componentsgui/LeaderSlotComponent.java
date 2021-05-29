@@ -150,4 +150,10 @@ public class LeaderSlotComponent extends VBox {
             activateBtn.setDisable(bool);
         }
     }
+
+    public void disableIfActivated() {
+        if (leaderCard instanceof LocalProductionLeader && !((LocalProductionLeader) leaderCard).getProduction().getResToFlush().isEmpty()) {
+            activateBtn.setDisable(true);
+        }
+    }
 }

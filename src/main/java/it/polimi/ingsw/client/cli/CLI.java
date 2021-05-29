@@ -36,21 +36,22 @@ public class CLI extends UI {
     }
 
     public void run() {
-        gameOver = false;
+        CLIutils.clearScreen();
+        System.out.println("Welcome to Masters of Renaissance");
+        quit = false;
         this.input = new Scanner(System.in);
         setup();
         String ans;
-        while (!gameOver) {
+        while (!quit) {
             state.draw();
             ans = input.nextLine();
             state.handleCommand(ans);
         }
+        // todo close socket
     }
 
-    void setup() {
-        CLIutils.clearScreen();
+    private void setup() {
         boolean valid;
-        System.out.println("Welcome to Masters of Renaissance");
         input = new Scanner(System.in);
         System.out.println("");
         System.out.println("");

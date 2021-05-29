@@ -11,10 +11,6 @@ public class WinnerView extends GameView {
 
     public WinnerView(CLI cli, LocalGame<?> localGame) {
         this.ui = cli;
-        waiting = false;
-        localGame.getError().addObserver(this);
-        localGame.getLocalTurn().overrideObserver(this);
-        localGame.overrideObserver(this);
     }
 
     @Override
@@ -44,8 +40,5 @@ public class WinnerView extends GameView {
 
     @Override
     public void removeObserved() {
-        localGame.getError().removeObserver();
-        localGame.getLocalTurn().removeObservers();
-        localGame.removeObservers();
     }
 }

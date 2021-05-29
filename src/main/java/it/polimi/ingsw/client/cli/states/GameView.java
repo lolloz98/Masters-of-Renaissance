@@ -26,6 +26,7 @@ public abstract class GameView extends View<CLI> {
     @Override
     public synchronized void notifyUpdate() {
         if (localGame.getState() == LocalGameState.OVER) goToWinnerScreen();
+        if (localGame.getState() == LocalGameState.DESTROYED) goToDestroyed();
         else {
             waiting = false;
             draw();
@@ -64,9 +65,7 @@ public abstract class GameView extends View<CLI> {
             case "SD": // show development decks
                 moveToDevelop(ansNumber);
                 break;
-            case "HELP": // show help screen
-                helpScreen();
-                break;
+
             case "NT": // next turn
                 next();
                 break;
@@ -75,6 +74,12 @@ public abstract class GameView extends View<CLI> {
                 break;
             case "PR":
                 pickResources(ansList);
+                break;
+            case "HELP": // show help screen
+                helpScreen();
+                break;
+            case "QUIT":
+                ui.setQuit(true);
                 break;
             default:
                 writeErrText();
@@ -220,6 +225,11 @@ public abstract class GameView extends View<CLI> {
     public void helpScreen() {
         removeObserved();
         ui.setState(new HelpView(ui, localGame));
+    }
+
+    public void goToDestroyed() {
+        removeObserved();
+        ui.setState(new DestroyedView(ui, localGame));
     }
 
     private void goToWinnerScreen() {

@@ -6,5 +6,6 @@ public enum LocalGameState {
     PREP_RESOURCES,
     PREP_LEADERS,
     READY,
-    OVER
+    OVER,
+    DESTROYED
 }
