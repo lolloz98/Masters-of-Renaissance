@@ -23,6 +23,10 @@ public final class ImageCache {
     public static final Image LORENZO = new Image("/png/punchboard/cross.png");
     private static final Image LORENZO_AND_PLAYER = new Image("/png/punchboard/player_and_lorenzo.png");
 
+    public static final Image VATICAN_ACTIVE_1 = new Image("/png/punchboard/vat_act_1.png");
+    public static final Image VATICAN_ACTIVE_2 = new Image("/png/punchboard/vat_act_2.png");
+    public static final Image VATICAN_ACTIVE_3 = new Image("/png/punchboard/vat_act_3.png");
+
     public static final Image NOTHINGMARBLE = new Image("png/punchboard/marbles/NOTHING.png");
     public static final Image ROCKMARBLE = new Image("png/punchboard/marbles/ROCK.png");
     public static final Image GOLDMARBLE = new Image("png/punchboard/marbles/GOLD.png");
