@@ -47,6 +47,7 @@ public class ServerListener extends GameHandler{
             logger.warn("server " + server.getInetAddress() + " connection dropped");
         }
         closeConnection();
+        logger.debug("ending run method of serverListener (closing thread)");
     }
 
     public ServerListener(String address, int port) throws IOException {

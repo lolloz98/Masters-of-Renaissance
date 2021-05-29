@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.controllergui;
 
 import com.sun.javafx.collections.ObservableListWrapper;
+import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.*;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
+import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.utility.PairId;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -80,6 +82,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public void setNotMainPlayerBoard() {
         setBaseBoard();
         setVisibleButtonsActions(false);
+        if(ui.getLocalGame().getState() == LocalGameState.OVER){
+            gameOver();
+        }
     }
 
     /**
@@ -112,6 +117,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         strongBoxCmp.updateRes(seen.getLocalBoard().getResInStrongBox());
 
         historyLbl.setText(ui.getLocalGame().getLocalTurn().getHistoryObservable().getLast());
+
     }
 
 
@@ -144,7 +150,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                     optional1Btn.setText("Choose Init Resources");
                     optional1Btn.setOnMouseClicked(mouseEvent -> {
                         logger.debug("optional1Btn clicked");
-                        removeThisAsObserver();
+                        removeObservers();
                         BuildGUI.getInstance().toChooseInitRes(stage, ui);
                     });
                 } else {
@@ -160,7 +166,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                     optional1Btn.setText("Remove Leaders");
                     optional1Btn.setOnMouseClicked(mouseEvent -> {
                         logger.debug("optional1Btn clicked");
-                        removeThisAsObserver();
+                        removeObservers();
                         BuildGUI.getInstance().toRemoveLeaders(stage, ui);
                     });
                 } else {
@@ -172,7 +178,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                 setUpReady();
                 break;
             case OVER:
-                // todo
+                gameOver();
                 break;
             default:
                 logger.error("Invalid state: " + ui.getLocalGame().getState());
@@ -240,11 +246,11 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
         marketBtn.setOnMouseClicked(mouseEvent -> {
-            removeThisAsObserver();
+            removeObservers();
             BuildGUI.getInstance().toMarket(stage, ui);
         });
         developBtn.setOnMouseClicked(mouseEvent -> {
-            removeThisAsObserver();
+            removeObservers();
             BuildGUI.getInstance().toDevelopGrid(stage, ui);
         });
 
@@ -291,7 +297,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                 // int selectedIndex = chooseBoard.getSelectionModel().getSelectedIndex();
                 PairId<Integer, String> selectedItem = chooseBoard.getSelectionModel().getSelectedItem();
                 ui.setWhoIAmSeeingId(selectedItem.getFirst());
-                removeThisAsObserver();
+                removeObservers();
                 BuildGUI.getInstance().toBoard(stage, ui);
             });
         }
@@ -340,7 +346,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     }
 
 
-    public void removeThisAsObserver(){
+    public void removeObservers(){
         synchronized (ui.getLocalGame()) {
             ui.getLocalGame().removeObservers();
             ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).removeObservers();
@@ -380,6 +386,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         slotDevelopComponent2.getActivateBtn().setVisible(bool);
         slotDevelopComponent3.getActivateBtn().setVisible(bool);
         activateNormalBtn.setVisible(bool);
+        flushBtn.setVisible(bool);
         if(!bool) {
             // if true, better handling in leaderSlot
             logger.debug("setting invisible buttons action");
@@ -400,5 +407,38 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     private void setDisableProduction(SlotDevelopComponent s, Boolean bool) {
         s.getActivateBtn().setDisable(bool);
+    }
+
+    private void gameOver(){
+        setVisibleButtonsActions(false);
+        leader1.setVisibleButtons(false);
+        leader1.setVisibleButtons(false);
+
+        marketBtn.setVisible(false);
+        developBtn.setVisible(false);
+
+        optional2Btn.setVisible(true);
+        optional2Btn.setText("End Game");
+        optional2Btn.setOnMouseClicked(mouseEvent -> {
+            logger.debug("Going to start to play again");
+            removeObservers();
+            if(ui.getGameHandler() instanceof ServerListener){
+                // avoid leaks
+                ((ServerListener) ui.getGameHandler()).closeConnection();
+            }
+            ui.resetWhoIAmSeeingId();
+            ui.setLocalGame(null);
+            BuildGUI.getInstance().toStartScene(stage, new GUI());
+        });
+
+        optional1Btn.setVisible(true);
+        optional1Btn.setText("Winners");
+        optional1Btn.setOnMouseClicked(mouseEvent -> {
+            // todo
+            logger.debug("Going to winner view");
+        });
+
+        emphasisOnButton(optional1Btn);
+        emphasisOnButton(optional2Btn);
     }
 }
