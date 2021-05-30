@@ -1049,14 +1049,18 @@ public class Board implements VictoryPointCalculator {
 
         TreeMap<Resource, Integer> resToGive = deck.topCard().getCurrentCost();
 
-        if (!Utility.checkTreeMapEquality(Utility.getTotalResources(toPay), resToGive))
+        if (!Utility.checkTreeMapEquality(Utility.getTotalResources(toPay), resToGive)) {
+            logger.info("Throwing invalidArgEx because: The resources specified to pay are different from the actual due resources");
             throw new InvalidArgumentException("The resources specified to pay are different from the actual due resources");
+        }
 
         if (!enoughResourcesToPay(toPay)) throw new NotEnoughResourcesException();
 
-        developCardSlots.get(slotToStore).addDevelopCard(deck.drawCard());// it can throw InvalidDevelopCardToSlotException
+        developCardSlots.get(slotToStore).addDevelopCard(deck.topCard());
 
         payResourcesNoCheck(toPay);
+
+        deck.drawCard();
     }
 
     /**
