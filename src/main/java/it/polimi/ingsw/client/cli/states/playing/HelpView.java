@@ -27,6 +27,7 @@ public class HelpView extends GameView {
         System.out.println("'al', followed by a number, to activate a leader card");
         System.out.println("'dl', followed by a number, to discard a leader card");
         System.out.println("'ad', followed by a number, to activate a development card");
+        System.out.println("'ald', followed by a number, to activate a leader development card");
         System.out.println("'fd', to move all the resources currently in all development cards to the strongbox");
         System.out.println("");
         System.out.println("In the market, you can type:");
@@ -34,7 +35,7 @@ public class HelpView extends GameView {
         System.out.println("'fm', followed by the number of the combination to pick, to flush the resources to the board");
         System.out.println("");
         System.out.println("When you are looking at the development card decks, you can type:");
-        System.out.println("'bd', followed by a card coordinate, followed by a number that indicates in which slot in the board to put it, to buy a development card (for example: 'buy a1 2')");
+        System.out.println("'bd', followed by a card coordinate, followed by a number that indicates in which slot in the board to put it, to buy a development card (for example: 'bd a1 2')");
         System.out.println("");
         drawTurn();
     }

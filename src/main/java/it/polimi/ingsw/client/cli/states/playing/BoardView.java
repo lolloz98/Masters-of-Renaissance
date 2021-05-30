@@ -70,6 +70,9 @@ public class BoardView extends GameView {
                     case "AD": // activate development
                         activateProduction(ansList);
                         break;
+                    case "ALD": // activate leader development
+                        activateLeaderProduction(ansList);
+                        break;
                     case "FD": // flush development
                         flushProduction();
                         break;
@@ -82,6 +85,7 @@ public class BoardView extends GameView {
             }
         }
     }
+
 
     private void discardLeader(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
@@ -114,6 +118,41 @@ public class BoardView extends GameView {
         }
     }
 
+    private void activateLeaderProduction(ArrayList<String> ansList) {
+        if (ansList.size() == 2) {
+            if (localGame.isMainPlayerTurn()) {
+                if (localPlayer == localGame.getMainPlayer()) {
+                    String ans1 = ansList.get(1);
+                    try {
+                        int number = Integer.parseInt(ans1);
+                        if (number > 0 && number < 3) {
+                            LocalLeaderCard leaderCard = (LocalLeaderCard) localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(number);
+                            if (leaderCard instanceof LocalProductionLeader &&
+                                    leaderCard.isActive() &&
+                                    !leaderCard.isDiscarded()) {
+                                removeObserved();
+                                ui.setState(new ActivateProductionView(
+                                        ui,
+                                        localGame,
+                                        ((LocalProductionLeader) localPlayer.getLocalBoard().getLeaderCards().get(number-1)).getWhichProd(),
+                                        localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().size() - 1).getProduction()
+                                ));
+                            } else {
+                                System.out.println("You can only do this with and active development leader card!");
+                            }
+                        } else writeErrText();
+                    } catch (NumberFormatException e) {
+                        writeErrText();
+                    }
+                } else {
+                    System.out.println("You can only do this on your board!");
+                }
+            } else {
+                System.out.println("It's not your turn!");
+            }
+        } else writeErrText();
+    }
+
     private void activateProduction(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
             String ans1 = ansList.get(1);
@@ -122,27 +161,21 @@ public class BoardView extends GameView {
                     int number = -1;
                     try {
                         number = Integer.parseInt(ans1);
-                        if (number >= 0 && number < 6) {
+                        if (number >= 0 && number < 4) {
                             if (number == 0) {
                                 removeObserved();
-                                ui.setState(new ActivateProductionView(ui, localGame, 0));
-                            } else if (number > 0 && number < 4) {
+                                ui.setState(new ActivateProductionView(ui, localGame, 0, localPlayer.getLocalBoard().getBaseProduction()));
+                            } else {
                                 if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
                                     System.out.println("There are no cards in this slot!");// there are no develop cards in this slot
                                 } else {
                                     removeObserved();
-                                    ui.setState(new ActivateProductionView(ui, localGame, number));
-                                }
-                            } else { // activating a leader production
-                                if (!((LocalLeaderCard) localPlayer.getLocalBoard().getLeaderCards().get(number - 4)).isDiscarded() && ((LocalLeaderCard) localPlayer.getLocalBoard().getLeaderCards().get(number - 4)).isActive()) {
-                                    if ((number - 4) < localPlayer.getLocalBoard().getLeaderCards().size() || !(localPlayer.getLocalBoard().getLeaderCards().get(number - 4) instanceof LocalProductionLeader)) {
-                                        writeErrText();
-                                    } else {
-                                        removeObserved();
-                                        ui.setState(new ActivateProductionView(ui, localGame, number));
-                                    }
-                                } else {
-                                    System.out.println("This leader card is not active");
+                                    ui.setState(new ActivateProductionView(
+                                            ui,
+                                            localGame,
+                                            number,
+                                            localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().size() - 1).getProduction()
+                                    ));
                                 }
                             }
                         }
