@@ -86,7 +86,7 @@ public class FaithTrackComponent extends AnchorPane {
     public void setCurrentLorenzo(int currentLorenzo) {
         changeImagePre(true);
         this.currentLorenzo = currentLorenzo;
-        changeImagePost(true);
+        changeImagePost();
     }
 
     public int getCurrentFaith() {
@@ -116,7 +116,7 @@ public class FaithTrackComponent extends AnchorPane {
         }
     }
 
-    private void changeImagePost(boolean lorenzoMoved){
+    private void changeImagePost(){
         if(currentFaith == currentLorenzo){
             faith.get(currentFaith).setImage(ImageCache.getLorenzoAndPlayer());
         } else{
@@ -128,7 +128,7 @@ public class FaithTrackComponent extends AnchorPane {
     public void setCurrentFaith(int currentFaith) {
         changeImagePre(false);
         this.currentFaith = currentFaith;
-        changeImagePost(false);
+        changeImagePost();
     }
 
     public List<ImageView> getVaticans() {
@@ -186,6 +186,23 @@ public class FaithTrackComponent extends AnchorPane {
     }
 
     public void setFigureStates(LocalFigureState[] figuresState) {
-        // todo set visualization of figure states
+        setVatican(figuresState[0], vatican1, ImageCache.VATICAN_ACTIVE_1);
+        setVatican(figuresState[1], vatican2, ImageCache.VATICAN_ACTIVE_2);
+        setVatican(figuresState[2], vatican1, ImageCache.VATICAN_ACTIVE_3);
+    }
+
+    private void setVatican(LocalFigureState figureState, ImageView vatican, Image img){
+        switch (figureState){
+            case ACTIVE:
+                vatican.setImage(img);
+                break;
+            case INACTIVE:
+                // do nothing -> it is the default
+                break;
+            case DISCARDED:
+                vatican.setImage(null);
+                break;
+        }
     }
 }
+

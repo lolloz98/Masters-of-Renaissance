@@ -15,6 +15,10 @@ public class GUI extends UI {
         return whoIAmSeeingId;
     }
 
+    public void resetWhoIAmSeeingId(){
+        whoIAmSeeingId = -1;
+    }
+
     public void setGameHandler(GameHandler gameHandler){
         this.gameHandler = gameHandler;
         Thread thread = new Thread(gameHandler);
