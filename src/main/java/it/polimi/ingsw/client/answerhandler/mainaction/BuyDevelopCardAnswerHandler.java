@@ -31,12 +31,14 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler {
 
         localGame.getLocalTurn().setMainActionOccurred(true);
 
+        //update the strongbox
+        localBoard.setResInStrongBox(serverAnswer.getLocalBoard().getResInStrongBox());
+
         //update the slot
         localBoard.setDevelopCards(serverAnswer.getLocalBoard().getDevelopCards());
 
         //update normal depots
         localBoard.setResInNormalDepot(serverAnswer.getLocalBoard().getResInNormalDepot());
-
 
         //update leader depots
         LocalCard toUpdate,updated;

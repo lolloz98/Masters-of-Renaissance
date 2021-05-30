@@ -60,6 +60,7 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
 
     @Override
     public void notifyUpdate() {
+        removeObservers();
         BuildGUI.getInstance().toBoard(stage, ui);
     }
 

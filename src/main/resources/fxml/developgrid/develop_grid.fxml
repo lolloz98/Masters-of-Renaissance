@@ -4,10 +4,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import it.polimi.ingsw.client.gui.componentsgui.DepotComponent?>
+<?import it.polimi.ingsw.client.gui.componentsgui.StrongBoxComponent?>
 <Pane fx:id="develop_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.DevelopGridControllerGUI">
-<!--   <DepotComponent fx:id="depotCmp" layoutX="25.0" layoutY="262.0" prefHeight="172.0" prefWidth="194.0" />-->
+   <DepotComponent fx:id="depotCmp" layoutX="25.0" layoutY="262.0" prefHeight="172.0" prefWidth="194.0" />
 
-<!--   <StrongBoxComponent fx:id="strongBoxCmp" layoutX="14.0" layoutY="446.0" prefHeight="121.0" prefWidth="179.0" />-->
+   <StrongBoxComponent fx:id="strongBoxCmp" layoutX="14.0" layoutY="446.0" prefHeight="121.0" prefWidth="179.0" />
    <children>
       <GridPane fx:id="develop_grid" alignment="TOP_RIGHT" gridLinesVisible="true" layoutX="329.0" layoutY="33.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="656.0" prefWidth="670.0">
         <columnConstraints>

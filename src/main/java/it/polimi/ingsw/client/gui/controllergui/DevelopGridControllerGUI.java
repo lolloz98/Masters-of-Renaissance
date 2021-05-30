@@ -32,11 +32,9 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
     public GridPane develop_grid;
     public Button buydevelopBtn;
     public Button backBtn;
-    public Label messageLbl;
     public Label chooseACardLbl;
     public DepotComponent depotCmp;
     public StrongBoxComponent strongBoxCmp;
-    private final ImageView[][] matrixImg=new ImageView[4][3];
 
 
     private static final Logger logger = LogManager.getLogger(DevelopGridControllerGUI.class);
@@ -52,17 +50,14 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
     @Override
     public void notifyError() {
-        Platform.runLater(() -> {
-            synchronized (ui.getLocalGame()) {
-                messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
-            }
-        });
+
     }
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage,root,ui);
         ui.getLocalGame().overrideObserver(this);
+        ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
         ui.getLocalGame().getLocalDevelopmentGrid().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
 
@@ -154,6 +149,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
 
     private void buyDevelop(int i,int j) {
+        ui.getLocalGame().removeAllObservers();
         BuildGUI.getInstance().toBuyDevelop(stage, ui, ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards()[i][j]);
     }
 
