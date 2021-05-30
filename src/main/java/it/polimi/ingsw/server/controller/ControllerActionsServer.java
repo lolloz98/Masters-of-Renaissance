@@ -12,11 +12,13 @@ import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
+import it.polimi.ingsw.server.model.Persist;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Turn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,8 +46,29 @@ public abstract class ControllerActionsServer<T extends Game<? extends Turn>> ex
         addAnswerListener(answerListener);
     }
 
+    /**
+     * persist the status of this game. (it saves the game on a file)
+     */
+    protected void persist(){
+        try {
+            logger.debug("Persisting status of game");
+            Persist.getInstance().persist(game, gameId);
+        } catch (IOException e) {
+            logger.error("Exception while persisting: " + e);
+        }
+    }
+
+    /**
+     * delete the file related to this game
+     */
+    private void destroy(){
+        logger.debug("destroying file related to gameId: " + gameId);
+        Persist.getInstance().remove(gameId);
+    }
+
     public synchronized void doAction(ClientMessageController clientMessage) throws ControllerException {
         Answer answer = clientMessage.doAction(this);
+        persist();
         sendAnswer(answer);
     }
 
@@ -60,6 +83,7 @@ public abstract class ControllerActionsServer<T extends Game<? extends Turn>> ex
         answerListener.setIds(answer.getPlayerId(), answer.getGameId());
         addAnswerListener(answerListener);
         if (game != null) {
+            persist();
             sendGameStatusToAll(answer.getGameId(), answer.getPlayerId());
         } else{
             sendAnswer(answer);
@@ -82,6 +106,8 @@ public abstract class ControllerActionsServer<T extends Game<? extends Turn>> ex
             logger.error("The answer to a " + parsedMessage.getClass().getSimpleName() + " is neither DiscardLeaderAnswer nor RemoveLeaderPrepAnswer");
             throw new UnexpectedControllerException("Something unexpected happened while prepararing the answer to your request");
         }
+
+        persist();
 
         for(AnswerListener answerListener: listeners){
             if(answerListener.getPlayerId() == answer.getPlayerId()) answerListener.sendAnswer(answer);
@@ -143,5 +169,7 @@ public abstract class ControllerActionsServer<T extends Game<? extends Turn>> ex
         sendAnswer(destroyAnswer);
 
         listeners.clear();
+
+        destroy();
     }
 }

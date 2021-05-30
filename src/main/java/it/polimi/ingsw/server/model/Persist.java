@@ -61,7 +61,7 @@ public final class Persist {
         try {
             Files.deleteIfExists(Paths.get(PATH + gameId + EXTENSION));
         } catch (IOException e) {
-            logger.warn("Delete if exist threw an exception");
+            logger.warn("Delete if exist threw an exception: " + e);
         }
     }
 }

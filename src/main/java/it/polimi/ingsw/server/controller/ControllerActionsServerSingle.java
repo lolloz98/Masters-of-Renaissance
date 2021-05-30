@@ -19,6 +19,7 @@ public class ControllerActionsServerSingle extends ControllerActionsServer<Singl
     public ControllerActionsServerSingle(SinglePlayer game, int id, AnswerListener answerListener) throws EmptyDeckException {
         super(game, id, answerListener);
         controllerActionsSingleHelper.constructor(this);
+        persist();
     }
 
     @Override
