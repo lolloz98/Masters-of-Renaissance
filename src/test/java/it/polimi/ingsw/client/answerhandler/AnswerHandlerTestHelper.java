@@ -29,6 +29,23 @@ import java.util.TreeMap;
 @Ignore
 public class AnswerHandlerTestHelper {
 
+    public static LocalDevelopmentGrid getADevelopGrid(){
+        SinglePlayer singlePlayer=null;
+        try {
+            singlePlayer=new SinglePlayer(new Player("gigi",1));
+        } catch (EmptyDeckException e) {
+            e.printStackTrace();
+        } catch (WrongColorDeckException e) {
+            e.printStackTrace();
+        } catch (WrongLevelDeckException e) {
+            e.printStackTrace();
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
+
+        return ConverterToLocalModel.convert(singlePlayer.getDecksDevelop());
+    }
+
     /**
      * helper method that adds a card on the boad of the main player
      * @param cardToAdd

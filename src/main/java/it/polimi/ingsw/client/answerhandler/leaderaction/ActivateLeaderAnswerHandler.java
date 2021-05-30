@@ -29,7 +29,7 @@ public abstract class ActivateLeaderAnswerHandler extends AnswerHandler {
         ArrayList<LocalCard> leaderCards = localBoard.getLeaderCards();
         ArrayList<LocalCard> copyOfLeaderCards = new ArrayList<>(leaderCards);
 
-        if (! (localGame.getMainPlayer().getId() == serverAnswer.getPlayerId())) {
+        if (localGame.getMainPlayer().getId() != serverAnswer.getPlayerId()) {
             //modifying the arraylist of leader cards in local board
             boolean isActivated = false;
             for (LocalCard copyOfLeaderCard : copyOfLeaderCards) {

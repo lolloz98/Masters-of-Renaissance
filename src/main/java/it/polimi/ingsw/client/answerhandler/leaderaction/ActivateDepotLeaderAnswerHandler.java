@@ -13,6 +13,10 @@ public class ActivateDepotLeaderAnswerHandler extends ActivateLeaderAnswerHandle
     }
 
 
+    /**
+     * the leader depot is already updated in the method of ActivateLeaderAnswerHandler(super-class)
+     * @param localGame
+     */
     @Override
     protected void handleLeaderAnswer(LocalGame<?> localGame) {
         //this method does nothing

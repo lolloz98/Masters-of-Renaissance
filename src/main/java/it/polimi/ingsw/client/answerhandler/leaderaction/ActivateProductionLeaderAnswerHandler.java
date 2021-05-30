@@ -13,6 +13,9 @@ public class ActivateProductionLeaderAnswerHandler extends ActivateLeaderAnswerH
 
 
     @Override
+    /**
+     * the production is already passed with the new leader updated in the method of ActivateLeaderAnswerHandler(super-class), so we don't have to update other things
+     */
     protected void handleLeaderAnswer(LocalGame<?> localGame) {
         //this method does nothing
     }

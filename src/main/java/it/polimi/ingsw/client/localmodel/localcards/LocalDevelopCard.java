@@ -7,6 +7,7 @@ import java.util.TreeMap;
 
 public class LocalDevelopCard extends LocalCard{
     private TreeMap<Resource, Integer> cost;
+    private boolean isDiscounted;
     private final int level;
     private final Color color;
     private final LocalProduction production;
@@ -42,8 +43,9 @@ public class LocalDevelopCard extends LocalCard{
         return production;
     }
 
-    public LocalDevelopCard(int id, TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, TreeMap<Resource, Integer> resToFlush) {
+    public LocalDevelopCard(int id,boolean isDiscounted, TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, TreeMap<Resource, Integer> resToFlush) {
         super(id);
+        this.isDiscounted=isDiscounted;
         this.cost = cost;
         this.level = level;
         this.color = color;

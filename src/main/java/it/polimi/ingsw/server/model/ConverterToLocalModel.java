@@ -56,6 +56,7 @@ public final class ConverterToLocalModel {
 
     public static LocalDevelopCard convert(DevelopCard developCard) {
         return new LocalDevelopCard(developCard.getId(),
+                developCard.isDiscounted(),
                 developCard.getCost(),
                 developCard.getLevel(),
                 developCard.getColor(),

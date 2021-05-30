@@ -12,6 +12,9 @@ import it.polimi.ingsw.messages.answers.leaderanswer.DiscardLeaderAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Answer handler that modifies the local game after a DiscardLeaderMessage
+ */
 public class DiscardLeaderAnswerHandler extends AnswerHandler {
     private static final Logger logger = LogManager.getLogger(DiscardLeaderAnswerHandler.class);
 
