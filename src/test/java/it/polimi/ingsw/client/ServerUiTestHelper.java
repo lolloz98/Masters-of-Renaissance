@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.AnswerFactory;
 import it.polimi.ingsw.server.controller.ControllerActionsServerMulti;
 import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
+import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageController;
@@ -37,6 +38,7 @@ public class ServerUiTestHelper extends Server {
 
     public static void main(String[] args)
     {
+        ControllerManager.getInstance();
         ServerSocket socket;
         try {
             // WE SET TO TEST THIS, SO WE CAN REPEAT WHAT HAPPENS WITHOUT RANDOMNESS GIVING PROBLEMS
@@ -86,7 +88,7 @@ class ClientHandlerUiTestHelper extends ClientHandler{
                 ControllerActionsServerSingle ca = (ControllerActionsServerSingle) controllerManager.getControllerFromMap(answerListener.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
-                ManipulateGameUiTestHelper.setStateOfGame4(answerListener.getGameId(), ca.getGame());
+                ManipulateGameUiTestHelper.setStateOfGame5(answerListener.getGameId(), ca.getGame());
 
                 answerListener.sendAnswer(AnswerFactory.createGameStatusAnswer(ca.getGameId(), answerListener.getPlayerId(), answerListener.getPlayerId(), ca.getGame()));
             }else if((parsedMessage instanceof JoinGameMessageController) && controllerManager.getControllerFromMap(clientMessage.getGameId()).getGame() != null){

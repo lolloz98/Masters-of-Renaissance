@@ -246,4 +246,13 @@ public class ManipulateGameUiTestHelper {
         satisfyReq(game.getPlayer().getBoard().getLeaderCards().get(1).getRequirement(), game, game.getPlayer());
         game.getLorenzo().getFaithTrack().move(23, game);
     }
+
+    /**
+     * set requirement of 2 leaders. Lorenzo close to victory  (almost finished his track)
+     */
+    public static void setStateOfGame5(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, FullDevelopSlotException, InvalidDevelopCardToSlotException, EmptyDeckException, InvalidStepsException, NotEnoughResourcesException, EndAlreadyReachedException {
+        setRemoveLeaders(game.getPlayer());
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+        setResourcesInStrongBoxForDevelop(game, game.getPlayer(), Color.BLUE, 1);
+    }
 }
