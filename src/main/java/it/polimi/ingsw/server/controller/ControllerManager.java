@@ -2,7 +2,9 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.*;
+import it.polimi.ingsw.server.model.Persist;
 import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.model.exception.NoSuchGameException;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.PairId;
@@ -11,9 +13,9 @@ import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.TreeMap;
+import java.io.File;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Singleton class that handles the creation of games with their corresponding controllers
@@ -27,16 +29,45 @@ public class ControllerManager {
      * treemap containing the id of the game and the ControllerActions associated
      */
     private final TreeMap<Integer, ControllerActionsServer<?>> controllerMap;
+    private final TreeSet<Integer> toBeRejoinedIds;
 
     private ControllerManager() {
         controllerMap = new TreeMap<>();
+        toBeRejoinedIds = new TreeSet<>();
+        // load from files
+        final File folder = new File("tmp");
+        List<File> files = List.of(Objects.requireNonNull(folder.listFiles()));
+        List<String> fileNames = files.stream().filter(File::isFile).map(File::getName).collect(Collectors.toList());
+        for (String fileName : fileNames) {
+            if (fileName.endsWith(".tmp")) {
+                logger.debug("adding game from file: " + fileName);
+                try {
+                    String idS = fileName.substring(4);
+                    int id = Integer.parseInt(idS.split(".tmp")[0]);
+                    Game<?> game = Persist.getInstance().retrieve(id);
+                    toBeRejoinedIds.add(id);
+                    if (game instanceof MultiPlayer) {
+                        controllerMap.put(id, new ControllerActionsServerMulti((MultiPlayer) game, id));
+                    } else {
+                        ControllerActionsServerSingle controllerActionsServerSingle = new ControllerActionsServerSingle((SinglePlayer) game, id);
+                        controllerMap.put(id, controllerActionsServerSingle);
+                    }
+                } catch (NoSuchGameException | UnexpectedControllerException e) {
+                    logger.error("error while reading file: " + fileName);
+                } catch (IllegalArgumentException e) {
+                    logger.error("error while parsing name of file: " + e);
+                }
+            }
+        }
     }
 
     /**
      * @return the only instance of ControllerHandler
      */
     public static synchronized ControllerManager getInstance() {
-        if (instance == null) instance = new ControllerManager();
+        if (instance == null) {
+            instance = new ControllerManager();
+        }
         return instance;
     }
 
@@ -201,5 +232,9 @@ public class ControllerManager {
             }
         }
         return playerId;
+    }
+
+    public TreeSet<Integer> getToBeRejoinedIds() {
+        return toBeRejoinedIds;
     }
 }

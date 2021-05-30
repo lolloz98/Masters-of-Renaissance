@@ -67,6 +67,16 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
     }
 
     @Override
+    public synchronized void removeAllObservers() {
+        super.removeAllObservers();
+        for(LocalPlayer p: localPlayers){
+            p.removeObservers();
+            p.getLocalBoard().removeObservers();
+            p.getLocalBoard().getLocalTrack().removeObservers();
+        }
+    }
+
+    @Override
     public synchronized LocalPlayer getPlayerById(int id){
         for(LocalPlayer l : localPlayers){
             if(l.getId() == id) return l;

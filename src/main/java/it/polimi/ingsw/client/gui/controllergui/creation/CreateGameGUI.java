@@ -55,7 +55,7 @@ public class CreateGameGUI extends ControllerGUI implements Observer {
     @Override
     public void notifyUpdate() {
         logger.debug("in notify update");
-        if(ui.getLocalGame().getState() == LocalGameState.WAITINGPLAYERS){
+        if(ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS){
             BuildGUI.getInstance().toWait(stage, ui);
         }else{
             BuildGUI.getInstance().toBoard(stage, ui);

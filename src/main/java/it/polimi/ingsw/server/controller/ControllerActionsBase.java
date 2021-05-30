@@ -40,6 +40,8 @@ public abstract class ControllerActionsBase<T extends Game<? extends Turn>> {
         return gameId;
     }
 
+    public abstract int getConnectedPlayers();
+
     public abstract boolean checkToGamePlayState();
 
     public synchronized void toGamePlayState() {

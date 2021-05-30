@@ -3,10 +3,8 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
-import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
-import it.polimi.ingsw.server.model.player.Board;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +18,24 @@ public class ControllerActionsServerSingle extends ControllerActionsServer<Singl
         super(game, id, answerListener);
         controllerActionsSingleHelper.constructor(this);
         persist();
+    }
+
+    /**
+     * @return the correct status of the game (it calculates it lookig at the game)
+     */
+    private State calculateGameState(){
+        if (game.getPlayer().getBoard().getLeaderCards().size() != 2) return State.PREPARATION;
+        if (game.getPlayer().getBoard().getInitialRes() != 0) return State.PREPARATION;
+        if (game.isGameOver()) return State.OVER;
+        return State.PLAY;
+    }
+
+    /**
+     * useful for preparing the rejoin of the game
+     */
+    public ControllerActionsServerSingle(SinglePlayer game, int id) {
+        super(game, id);
+        setGameState(calculateGameState());
     }
 
     @Override

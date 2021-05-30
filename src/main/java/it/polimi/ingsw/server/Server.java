@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.server.controller.ControllerManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +21,8 @@ public class Server
 
     public static void main(String[] args)
     {
+        // init controller manager
+        ControllerManager.getInstance();
         ServerSocket socket;
         try {
             socket = new ServerSocket(PORT);

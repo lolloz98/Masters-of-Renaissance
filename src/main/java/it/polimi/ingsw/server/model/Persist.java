@@ -38,6 +38,10 @@ public final class Persist {
 
     public Game<?> retrieve(int gameId) throws NoSuchGameException, UnexpectedControllerException {
         String path = PATH + gameId + EXTENSION;
+        return retrieve(path);
+    }
+
+    public Game<?> retrieve(String path) throws NoSuchGameException, UnexpectedControllerException {
         try{
             FileInputStream fileInputStream = new FileInputStream(path);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -45,7 +49,7 @@ public final class Persist {
             fileInputStream.close();
             return game;
         } catch (FileNotFoundException e) {
-            logger.info("File not found for gameId: " + gameId);
+            logger.info("File not found for path: " + path);
             throw new NoSuchGameException("No game found with given gameId");
         } catch (IOException | ClassNotFoundException e) {
             logger.warn(e.getClass().getSimpleName() + " while retrieving a game: " + e.getMessage());

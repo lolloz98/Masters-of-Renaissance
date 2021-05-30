@@ -118,6 +118,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         historyLbl.setText(ui.getLocalGame().getLocalTurn().getHistoryObservable().getLast());
 
+        marketBtn.setVisible(true);
+        developBtn.setVisible(true);
     }
 
 
@@ -179,6 +181,13 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                 break;
             case OVER:
                 gameOver();
+                break;
+            case WAIT_FOR_REJOIN:
+                setVisibleButtonsActions(false);
+                leader1.setVisibleButtons(false);
+                leader1.setVisibleButtons(false);
+                marketBtn.setVisible(false);
+                developBtn.setVisible(false);
                 break;
             default:
                 logger.error("Invalid state: " + ui.getLocalGame().getState());

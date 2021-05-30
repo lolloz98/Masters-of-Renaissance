@@ -1,11 +1,8 @@
 package it.polimi.ingsw.client.answerhandler;
 
-import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.messages.answers.CreateGameAnswer;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +25,7 @@ public class CreateGameAnswerHandlerTest {
 
         assertEquals("tullio", multiPlayer.getMainPlayer().getName());
         assertEquals(playerId, multiPlayer.getMainPlayer().getId());
-        assertEquals(LocalGameState.WAITINGPLAYERS,multiPlayer.getState() );
+        assertEquals(LocalGameState.WAITING_PLAYERS,multiPlayer.getState() );
         assertEquals(1, multiPlayer.getLocalPlayers().size());
         assertEquals(gameId, multiPlayer.getGameId());
 

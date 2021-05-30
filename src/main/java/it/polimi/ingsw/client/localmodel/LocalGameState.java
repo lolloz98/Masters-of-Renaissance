@@ -2,10 +2,11 @@ package it.polimi.ingsw.client.localmodel;
 
 public enum LocalGameState {
     NEW,
-    WAITINGPLAYERS,
+    WAITING_PLAYERS,
     PREP_RESOURCES,
     PREP_LEADERS,
     READY,
     OVER,
-    DESTROYED
+    DESTROYED,
+    WAIT_FOR_REJOIN
 }

@@ -25,7 +25,7 @@ public class CreateGameAnswerHandler extends AnswerHandler{
         else{
             logger.error("create game answer received by singlePlayer game");
         }
-        localGame.setState(LocalGameState.WAITINGPLAYERS);
+        localGame.setState(LocalGameState.WAITING_PLAYERS);
         localGame.notifyObservers();
     }
 }

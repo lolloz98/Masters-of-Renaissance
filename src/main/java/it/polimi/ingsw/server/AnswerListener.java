@@ -25,7 +25,7 @@ public class AnswerListener {
     }
 
     public int getPlayerId() {
-        if(playerId == -1) logger.error("the playerId was not set on this answer listener");
+        if(playerId == -1) logger.warn("the playerId was not set on this answer listener");
         return playerId;
     }
 
@@ -43,6 +43,7 @@ public class AnswerListener {
     }
 
     public int getGameId() {
+        if(gameId == -1) logger.warn("the gameId was not set on this answer listener");
         return gameId;
     }
 }

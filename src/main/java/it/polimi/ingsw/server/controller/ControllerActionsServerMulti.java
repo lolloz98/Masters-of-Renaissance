@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.server.AnswerListener;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
@@ -23,10 +24,35 @@ public class ControllerActionsServerMulti extends ControllerActionsServer<MultiP
 
     public ControllerActionsServerMulti(int id, AnswerListener answerListener, int numberOfPlayers, Player player) {
         super(null, id, answerListener);
-        this.numberAndPlayers = new PairId<>(numberOfPlayers, new ArrayList<>(){{
+        this.numberAndPlayers = new PairId<>(numberOfPlayers, new ArrayList<>() {{
             add(player);
         }});
         setGameState(State.WAITING_FOR_PLAYERS);
+    }
+
+    /**
+     * @return the correct status of the game (it calculates it lookig at the game)
+     */
+    private State calculateGameState(){
+        for (Player i : game.getPlayers()) {
+            if (i.getBoard().getLeaderCards().size() != 2) return State.PREPARATION;
+        }
+        for (Player i : game.getPlayers()) {
+            if (i.getBoard().getInitialRes() != 0) return State.PREPARATION;
+        }
+
+        // todo: check that the condition for gameOver is right
+        if (game.isGameOver()) return State.OVER;
+        return State.PLAY;
+    }
+
+    /**
+     * useful for preparing for the rejoining
+     */
+    public ControllerActionsServerMulti(MultiPlayer game, int id) {
+        super(game, id);
+        this.numberAndPlayers = new PairId<>(game.getPlayers().size(), game.getPlayers());
+        setGameState(calculateGameState());
     }
 
     /**

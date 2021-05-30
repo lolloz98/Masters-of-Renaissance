@@ -10,7 +10,6 @@ import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class JoinGameView extends View<CLI> {
     private final LocalMulti localMulti;
@@ -61,7 +60,7 @@ public class JoinGameView extends View<CLI> {
         if (valid) {
             if (localMulti.getState() == LocalGameState.NEW) {
                 System.out.println("Please wait");
-            } else if (localMulti.getState() == LocalGameState.WAITINGPLAYERS) {
+            } else if (localMulti.getState() == LocalGameState.WAITING_PLAYERS) {
                 System.out.println("The id of the game is\n" + localMulti.getGameId());
                 System.out.println("Players currently connected:");
                 for (LocalPlayer p : localMulti.getLocalPlayers()) {

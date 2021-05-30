@@ -70,4 +70,12 @@ public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializa
         this.lorenzoTrack = lorenzoTrack;
         this.mainPlayer = mainPlayer;
     }
+
+    @Override
+    public synchronized void removeAllObservers() {
+        super.removeAllObservers();
+        mainPlayer.removeObservers();
+        mainPlayer.getLocalBoard().removeObservers();
+        mainPlayer.getLocalBoard().getLocalTrack().removeObservers();
+    }
 }

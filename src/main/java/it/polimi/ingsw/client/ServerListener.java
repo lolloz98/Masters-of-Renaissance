@@ -25,11 +25,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * class to handle communication to server.
+ * It notifies its observer if the connection is closed
+ */
 public class ServerListener extends GameHandler{
     private static final Logger logger = LogManager.getLogger(ServerListener.class);
     private final Socket server;
     private ObjectInputStream iStream;
     private ObjectOutputStream output;
+    private final String address;
+    private final int port;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getPort() {
+        return port;
+    }
 
     @Override
     public void run() {
@@ -46,11 +60,14 @@ public class ServerListener extends GameHandler{
         } catch (IOException e) {
             logger.warn("server " + server.getInetAddress() + " connection dropped");
         }
+        notifyObservers();
         closeConnection();
         logger.debug("ending run method of serverListener (closing thread)");
     }
 
     public ServerListener(String address, int port) throws IOException {
+        this.address = address;
+        this.port = port;
         server = new Socket(address, port);
         output = new ObjectOutputStream(server.getOutputStream());
     }

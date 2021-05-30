@@ -96,4 +96,13 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
     }
 
     public abstract boolean isMainPlayerTurn();
+
+    public void removeAllObservers(){
+        removeObservers();
+        localTurn.removeObservers();
+        localTurn.getHistoryObservable().removeObservers();
+        localDevelopmentGrid.removeObservers();
+        localMarket.removeObservers();
+        error.removeObserver();
+    }
 }

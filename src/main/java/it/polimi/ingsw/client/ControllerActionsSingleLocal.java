@@ -36,6 +36,11 @@ public class ControllerActionsSingleLocal extends ControllerActionsBase<SinglePl
     }
 
     @Override
+    public int getConnectedPlayers() {
+        return 1;
+    }
+
+    @Override
     public boolean checkToGamePlayState() {
         return controllerActionsSingleHelper.checkToGamePlayState(game);
     }

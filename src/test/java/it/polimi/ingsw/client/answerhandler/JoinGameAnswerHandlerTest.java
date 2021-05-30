@@ -43,6 +43,6 @@ public class JoinGameAnswerHandlerTest extends TestCase{
         }
 
         assertEquals(2, multiPlayer.getGameId());
-        assertEquals(LocalGameState.WAITINGPLAYERS,multiPlayer.getState());
+        assertEquals(LocalGameState.WAITING_PLAYERS,multiPlayer.getState());
     }
 }

@@ -2,9 +2,11 @@ package it.polimi.ingsw.client.gui.controllergui.creation;
 
 import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.cli.Observer;
+import it.polimi.ingsw.client.gui.ClosingConnectionListenerGUI;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
 import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -53,8 +55,9 @@ public class StartRemoteGUI extends ControllerGUI implements Observer {
                     try {
                         logger.debug("Connecting to server");
                         ServerListener serverListener = new ServerListener(ip, port);
-
                         ui.setGameHandler(serverListener);
+
+                        serverListener.overrideObserver(new ClosingConnectionListenerGUI(stage, ui));
 
                         BuildGUI.getInstance().toJoinOrCreate(stage, ui);
                     } catch (IllegalArgumentException | IOException e) {

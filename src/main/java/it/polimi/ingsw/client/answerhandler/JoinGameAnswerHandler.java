@@ -25,7 +25,7 @@ public class JoinGameAnswerHandler extends AnswerHandler{
             LocalMulti localMulti = (LocalMulti) localGame;
             localMulti.setLocalPlayers(localPlayers);
             localMulti.setGameId(joinGameAnswer.getGameId());
-            localMulti.setState(LocalGameState.WAITINGPLAYERS);
+            localMulti.setState(LocalGameState.WAITING_PLAYERS);
             localMulti.notifyObservers();
         }
         else{

@@ -3,12 +3,14 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.ErrorAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
+import it.polimi.ingsw.messages.requests.RejoinMessage;
 import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
+import it.polimi.ingsw.server.controller.messagesctr.RejoinMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.playing.ConcealedLeaderMessageInterface;
@@ -66,6 +68,10 @@ public class ClientHandler implements Runnable {
             } else if(parsedMessage instanceof ClientMessageController && parsedMessage instanceof ConcealedLeaderMessageInterface){
                 controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
                         .doDiscardOrRemoveLeader((ClientMessageController) parsedMessage);
+            }
+            else if(parsedMessage instanceof RejoinMessageController){
+                controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
+                        .rejoin(answerListener, (RejoinMessage) clientMessage);
             }
             else if (parsedMessage instanceof ClientMessageController) {
                 controllerManager.getControllerFromMap(((ClientMessageController) parsedMessage).getClientMessage().getGameId())
