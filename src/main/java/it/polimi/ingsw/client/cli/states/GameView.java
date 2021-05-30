@@ -65,7 +65,6 @@ public abstract class GameView extends View<CLI> {
             case "SD": // show development decks
                 moveToDevelop(ansNumber);
                 break;
-
             case "NT": // next turn
                 next();
                 break;
@@ -87,31 +86,34 @@ public abstract class GameView extends View<CLI> {
     }
 
     protected void pickResources(ArrayList<String> ansList) {
-        if (ansList.size() == 3) {
-            try {
-                ChooseOneResPrepMessage chooseOneResPrepMessage1 = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(1));
-                waiting = true;
-                ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage1);
-                ChooseOneResPrepMessage chooseOneResPrepMessage2 = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(2));
-                waiting = true;
-                ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage2);
-            } catch (ResourceNumberOutOfBoundException | NumberFormatException e) {
+        if (localGame instanceof LocalMulti) {
+            LocalMulti localMulti = (LocalMulti) localGame;
+            if (ansList.size() == 3 && localMulti.getMainPlayerPosition() == 3) {
+                try {
+                    ChooseOneResPrepMessage chooseOneResPrepMessage1 = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(1));
+                    waiting = true;
+                    ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage1);
+                    ChooseOneResPrepMessage chooseOneResPrepMessage2 = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(2));
+                    waiting = true;
+                    ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage2);
+                } catch (ResourceNumberOutOfBoundException | NumberFormatException e) {
+                    writeErrText();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (ansList.size() == 2 && (localMulti.getMainPlayerPosition() == 1 || localMulti.getMainPlayerPosition() == 2)) {
+                try {
+                    ChooseOneResPrepMessage chooseOneResPrepMessage = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(1));
+                    waiting = true;
+                    ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage);
+                } catch (ResourceNumberOutOfBoundException | NumberFormatException e) {
+                    writeErrText();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else
                 writeErrText();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (ansList.size() == 2) {
-            try {
-                ChooseOneResPrepMessage chooseOneResPrepMessage = InputHelper.getChooseOneResPrepMessage(localGame, ansList.get(1));
-                waiting = true;
-                ui.getGameHandler().dealWithMessage(chooseOneResPrepMessage);
-            } catch (ResourceNumberOutOfBoundException | NumberFormatException e) {
-                writeErrText();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else
-            writeErrText();
+        } else writeErrText();
     }
 
     protected void pickLeaders(ArrayList<String> ansList) {
