@@ -85,6 +85,13 @@ public class MarketTray implements Serializable {
         return marbleMatrixCopy;
     }
 
+    /**
+     * @return the original marble matrix
+     */
+    public Marble[][] getMarbleMatrixMutable() {
+        return marbleMatrix;
+    }
+
     public Marble getFreeMarble() {
         return freeMarble;
     }

@@ -14,6 +14,7 @@ import it.polimi.ingsw.server.model.cards.leader.RequirementLevelDevelop;
 import it.polimi.ingsw.server.model.cards.leader.RequirementResource;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
+import it.polimi.ingsw.server.model.game.Marble;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Board;
@@ -254,5 +255,27 @@ public class ManipulateGameUiTestHelper {
         setRemoveLeaders(game.getPlayer());
         ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
         setResourcesInStrongBoxForDevelop(game, game.getPlayer(), Color.BLUE, 1);
+    }
+
+    /**
+     * try strange situation for depots. CAREFUL: IT MODIFIES THE MARBLES IN MARKET
+     */
+    public static void setStateOfGame6(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, FullDevelopSlotException, InvalidDevelopCardToSlotException, EmptyDeckException, InvalidStepsException, NotEnoughResourcesException, EndAlreadyReachedException {
+        setRemoveLeaders(game.getPlayer());
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+        try {
+            game.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>(){{
+                put(Resource.SHIELD, 1);
+                put(Resource.ROCK, 1);
+            }});
+        } catch (TooManyResourcesToAddException e) {
+            e.printStackTrace();
+        }
+        logger.warn("modifying the marbles in market for testing");
+        Marble[][] m = game.getMarketTray().getMarbleMatrixMutable();
+        m[0][0] = new Marble(Resource.SHIELD);
+        m[0][1] = new Marble(Resource.ROCK);
+        m[0][2] = new Marble(Resource.ROCK);
+        m[0][3] = new Marble(Resource.GOLD);
     }
 }
