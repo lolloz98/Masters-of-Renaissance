@@ -82,5 +82,6 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Label fx:id="discountLbl" layoutX="53.0" layoutY="506.0" prefHeight="52.0" prefWidth="300.0" textFill="#4d73e8" wrapText="true" />
    </children>
 </Pane>

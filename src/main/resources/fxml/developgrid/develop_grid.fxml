@@ -8,9 +8,9 @@
 <?import it.polimi.ingsw.client.gui.componentsgui.DepotComponent?>
 <?import it.polimi.ingsw.client.gui.componentsgui.StrongBoxComponent?>
 <Pane fx:id="develop_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.DevelopGridControllerGUI">
-   <DepotComponent fx:id="depotCmp" layoutY="262.0" prefHeight="172.0" prefWidth="194.0"/>
+   <DepotComponent fx:id="depotCmp" layoutX="25.0" layoutY="262.0" prefHeight="172.0" prefWidth="194.0" />
 
-   <StrongBoxComponent fx:id="strongBoxCmp" layoutY="451.0" prefHeight="121.0" prefWidth="179.0"/>
+   <StrongBoxComponent fx:id="strongBoxCmp" layoutX="14.0" layoutY="446.0" prefHeight="121.0" prefWidth="179.0" />
    <children>
       <GridPane fx:id="develop_grid" alignment="TOP_RIGHT" gridLinesVisible="true" layoutX="329.0" layoutY="33.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="656.0" prefWidth="670.0">
         <columnConstraints>
@@ -25,7 +25,6 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="L3GreenImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="L1PurpleImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <ImageView fx:id="L1YellowImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <ImageView fx:id="L1BlueImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -37,6 +36,11 @@
             <ImageView fx:id="L3PurpleImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
             <ImageView fx:id="L3YellowImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
             <ImageView fx:id="L3BlueImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+            <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="168.0" GridPane.valignment="BOTTOM">
+               <children>
+                  <Label layoutX="70.0" layoutY="5.0" />
+               </children>
+            </AnchorPane>
          </children>
       </GridPane>
       <Button fx:id="buydevelopBtn" layoutX="43.0" layoutY="31.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="218.0" text="Buy">
@@ -86,7 +90,6 @@
 <!--         </image>-->
 <!--      </ImageView>-->
       <Button fx:id="backBtn" layoutX="53.0" layoutY="638.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="185.0" text="Back" />
-      <Label fx:id="messageLbl" layoutX="53.0" layoutY="598.0" prefHeight="17.0" prefWidth="205.0" text="No message found" textFill="#e80e0e" />
       <Label fx:id="chooseACardLbl" layoutX="43.0" layoutY="154.0" prefHeight="25.0" prefWidth="218.0">
          <font>
             <Font size="18.0" />

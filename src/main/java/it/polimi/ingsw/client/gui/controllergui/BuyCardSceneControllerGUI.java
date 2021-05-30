@@ -26,7 +26,7 @@ import java.util.TreeMap;
 
 public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer {
     public ImageView cardImg;
-    public Label doneMessageLbl;
+    public Label discountLbl;
     public ComboBox<String> slotToStoreComboBox;
     public Spinner<Integer> leaderShieldSpnr;
     public Spinner<Integer> normalGoldSpnr;
@@ -60,16 +60,27 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
 
     @Override
     public void notifyUpdate() {
-        Platform.runLater(() -> {
-            synchronized (ui.getLocalGame()) {
-                setUpState();
-                History history=ui.getLocalGame().getLocalTurn().getHistoryObservable();
-                if(history.getLast().equals("You bought a development card")) {
-                    confirmBtn.setDisable(true);
-                    doneMessageLbl.setText("Done!");
-                }
-            }
-        });
+        BuildGUI.getInstance().toBoard(stage, ui);
+//        Platform.runLater(() -> {
+//
+//            synchronized (ui.getLocalGame()) {
+//                setUpState();
+//
+//
+//                LocalDevelopCard lastCard;
+//
+//                for(ArrayList<LocalDevelopCard> slot: ui.getLocalGame().getMainPlayer().getLocalBoard().getDevelopCards()) {
+//
+//                    if (!slot.isEmpty()) {
+//                        lastCard = slot.get(slot.size() - 1);
+//                        if (lastCard.getId() == cardToBuy.getId()) {
+//                            removeObservers();
+//                            BuildGUI.getInstance().toBoard(stage, ui);
+//                        }
+//                    }
+//                }
+//            }
+//        });
     }
 
     public void removeObservers(){
@@ -144,6 +155,9 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
 
     public void setUpState(){
         disableSliders();
+        if(cardToBuy.isDiscounted()){
+            discountLbl.setText("This card is discounted! \nthe actual cost is: " + cardToBuy.getCost());
+        }
     }
 
 
@@ -187,13 +201,5 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
             logger.error("Error while handling request: " + e);
         }
 
-        ArrayList<LocalDevelopCard> cards=ui.getLocalGame().getMainPlayer().getLocalBoard().getDevelopCards().get(slotToStore);
-
-        if(!cards.isEmpty()) {
-            if (cards.get(cards.size() - 1).getId()==cardToBuy.getId()){
-                removeObservers();
-                BuildGUI.getInstance().toBoard(stage, ui);
-            }
-        }
     }
 }

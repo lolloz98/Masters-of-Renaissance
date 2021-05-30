@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.StrongBoxComponent;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import javafx.application.Platform;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -13,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,8 +87,10 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         strongBoxCmp.updateRes(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInStrongBox());
         //add top cards to the grid
         LocalDevelopCard[][] topCards = ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards();
+        int[][] numberOfCards=ui.getLocalGame().getLocalDevelopmentGrid().getDevelopCardsNumber();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
+                //generating images
                 ImageView imgView = new ImageView();
                 if (topCards[i][j] != null) {
                     int finalJ = j;
@@ -100,14 +107,26 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
                     Image emptyCardImage = new Image(file.toURI().toString());
                     imgView.setImage(emptyCardImage);
                 }
-                imgView.setFitHeight(215);
-                imgView.setFitWidth(165);
 
+                imgView.setFitHeight(190);
+                imgView.setFitWidth(168);
                 imgView.setDisable(true);
 
-                matrixImg[i][j]=imgView;
-
                 develop_grid.add(imgView,i,2-j);
+
+                GridPane.setValignment(imgView, VPos.TOP);
+
+                //adding info about how many cards have the deck
+                Pane deckInfoPane=new Pane();
+                Label infoLbl=new Label(numberOfCards[i][j] + " cards on this deck");
+                deckInfoPane.getChildren().add(infoLbl);
+                deckInfoPane.setMaxHeight(28);
+                deckInfoPane.setPrefHeight(28);
+                develop_grid.add(deckInfoPane,i,2-j);
+                GridPane.setValignment(deckInfoPane,VPos.BOTTOM);
+                GridPane.setHalignment(deckInfoPane,HPos.CENTER);
+                GridPane.setFillWidth(deckInfoPane,false);
+
 
             }
         }

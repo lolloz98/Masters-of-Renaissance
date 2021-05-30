@@ -18,6 +18,8 @@ public class LocalDevelopCard extends LocalCard{
         notifyObservers();
     }
 
+    public boolean isDiscounted(){return isDiscounted;}
+
     public int getVictoryPoints() {
         return victoryPoints;
     }
