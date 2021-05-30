@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<?import it.polimi.ingsw.client.gui.componentsgui.DepotComponent?>
-<?import it.polimi.ingsw.client.gui.componentsgui.StrongBoxComponent?>
 <Pane fx:id="develop_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.DevelopGridControllerGUI">
-   <DepotComponent fx:id="depotCmp" layoutX="25.0" layoutY="262.0" prefHeight="172.0" prefWidth="194.0" />
+<!--   <DepotComponent fx:id="depotCmp" layoutX="25.0" layoutY="262.0" prefHeight="172.0" prefWidth="194.0" />-->
 
-   <StrongBoxComponent fx:id="strongBoxCmp" layoutX="14.0" layoutY="446.0" prefHeight="121.0" prefWidth="179.0" />
+<!--   <StrongBoxComponent fx:id="strongBoxCmp" layoutX="14.0" layoutY="446.0" prefHeight="121.0" prefWidth="179.0" />-->
    <children>
       <GridPane fx:id="develop_grid" alignment="TOP_RIGHT" gridLinesVisible="true" layoutX="329.0" layoutY="33.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="656.0" prefWidth="670.0">
         <columnConstraints>
@@ -24,24 +21,6 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
-            <ImageView fx:id="L1PurpleImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <ImageView fx:id="L1YellowImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <ImageView fx:id="L1BlueImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ImageView fx:id="L1GreenImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
-            <ImageView fx:id="L2PurpleImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <ImageView fx:id="L2YellowImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <ImageView fx:id="L2BlueImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ImageView fx:id="L2GreenImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
-            <ImageView fx:id="L3PurpleImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-            <ImageView fx:id="L3YellowImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-            <ImageView fx:id="L3BlueImg" fitHeight="215.0" fitWidth="168.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-            <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="168.0" GridPane.valignment="BOTTOM">
-               <children>
-                  <Label layoutX="70.0" layoutY="5.0" />
-               </children>
-            </AnchorPane>
-         </children>
       </GridPane>
       <Button fx:id="buydevelopBtn" layoutX="43.0" layoutY="31.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="218.0" text="Buy">
          <font>
@@ -83,7 +62,6 @@
             <Font name="System Italic" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="111.0" layoutY="386.0" />
 <!--      <ImageView fitHeight="454.0" fitWidth="331.0" layoutX="50.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">-->
 <!--         <image>-->
 <!--            <Image url="@../../png/depot+strongbox.PNG" />-->

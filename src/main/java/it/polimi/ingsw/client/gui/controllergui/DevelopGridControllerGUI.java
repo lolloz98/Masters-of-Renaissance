@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.StrongBoxComponent;
+import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
@@ -83,8 +84,11 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
     private void updateGrid() {
         buydevelopBtn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
 
-        depotCmp.setImages(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInNormalDepot());
-        strongBoxCmp.updateRes(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInStrongBox());
+        LocalPlayer seen = ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId());
+
+        depotCmp.setImages(seen.getLocalBoard().getResInNormalDepot());
+        strongBoxCmp.updateRes(seen.getLocalBoard().getResInStrongBox());
+
         //add top cards to the grid
         LocalDevelopCard[][] topCards = ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards();
         int[][] numberOfCards=ui.getLocalGame().getLocalDevelopmentGrid().getDevelopCardsNumber();

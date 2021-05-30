@@ -61,26 +61,6 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
     @Override
     public void notifyUpdate() {
         BuildGUI.getInstance().toBoard(stage, ui);
-//        Platform.runLater(() -> {
-//
-//            synchronized (ui.getLocalGame()) {
-//                setUpState();
-//
-//
-//                LocalDevelopCard lastCard;
-//
-//                for(ArrayList<LocalDevelopCard> slot: ui.getLocalGame().getMainPlayer().getLocalBoard().getDevelopCards()) {
-//
-//                    if (!slot.isEmpty()) {
-//                        lastCard = slot.get(slot.size() - 1);
-//                        if (lastCard.getId() == cardToBuy.getId()) {
-//                            removeObservers();
-//                            BuildGUI.getInstance().toBoard(stage, ui);
-//                        }
-//                    }
-//                }
-//            }
-//        });
     }
 
     public void removeObservers(){
