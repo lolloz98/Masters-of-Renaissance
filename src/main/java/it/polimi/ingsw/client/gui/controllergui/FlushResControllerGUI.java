@@ -38,6 +38,7 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
         ui.getLocalGame().getLocalMarket().overrideObserver(this);
         ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
+        messageLbl.setText("");
         initState();
     }
 
@@ -78,7 +79,7 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
         }
         int i = 0; // row in choseResGrid
         Resource res;
-        do {
+        while (!MapUtils.isMapEmpty(resToFlush)) {
             choseResGrid.add(new Label("Chose where to put "), 0, i);
             res = resToFlush.firstKey();
             resList.add(res);
@@ -98,7 +99,9 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
             comboBoxList.get(i).setValue("Store in normal depot");
             choseResGrid.add(comboBoxList.get(i), 4, i);
             i++;
-        } while (!MapUtils.isMapEmpty(resToFlush));
+        }
+        choseResGrid.add(new Label("Faith points: " + faithNumber), 0, i);
+        i++;
         confirmBtn = new Button("Confirm");
         confirmBtn.setOnMouseClicked(mouseEvent -> {
             Platform.runLater(()->setEnabled(false));
