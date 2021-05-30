@@ -248,7 +248,7 @@ public class ManipulateGameUiTestHelper {
     }
 
     /**
-     * set requirement of 2 leaders. Lorenzo close to victory  (almost finished his track)
+     * set requirement of 2 leaders.
      */
     public static void setStateOfGame5(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, FullDevelopSlotException, InvalidDevelopCardToSlotException, EmptyDeckException, InvalidStepsException, NotEnoughResourcesException, EndAlreadyReachedException {
         setRemoveLeaders(game.getPlayer());

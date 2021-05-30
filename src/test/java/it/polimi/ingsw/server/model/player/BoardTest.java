@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.model.player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import com.sun.source.tree.Tree;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
@@ -77,6 +78,45 @@ public class BoardTest {
         board.discoverProductionLeader((ProductionLeaderCard) productionLeaderCards.get(0));
         board.discoverProductionLeader((ProductionLeaderCard) productionLeaderCards.get(1));
         assertEquals(2, board.getProductionLeaders().size());
+    }
+
+    @Test
+    public void gainResourcesTest(){
+        TreeMap<Resource,Integer> toGain=new TreeMap<>(){{
+            put(Resource.SHIELD,1);
+            put(Resource.ROCK,1);
+        }};
+        TreeMap<WarehouseType,TreeMap<Resource,Integer>> toKeep=new TreeMap<>(){{
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.SHIELD,1);
+                put(Resource.ROCK,1);
+            }});
+        }};
+
+        try {
+            board.gainResources(toGain,toKeep,singlePlayer);
+        } catch (InvalidResourcesToKeepByPlayerException | InvalidArgumentException | InvalidTypeOfResourceToDepotException | InvalidResourceQuantityToDepotException | DifferentResourceForDepotException e) {
+            fail();
+        }
+
+        toGain=new TreeMap<>(){{
+            put(Resource.SHIELD,1);
+            put(Resource.GOLD,1);
+            put(Resource.ROCK,2);
+        }};
+        toKeep=new TreeMap<>(){{
+            put(WarehouseType.NORMAL,new TreeMap<>(){{
+                put(Resource.SHIELD,1);
+                put(Resource.GOLD,1);
+                put(Resource.ROCK,2);
+            }});
+        }};
+
+        try {
+            board.gainResources(toGain,toKeep,singlePlayer);
+        } catch (InvalidResourcesToKeepByPlayerException | InvalidArgumentException | InvalidTypeOfResourceToDepotException | InvalidResourceQuantityToDepotException | DifferentResourceForDepotException e) {
+            fail();
+        }
     }
 
     public void buildBoard2() throws ModelException{
