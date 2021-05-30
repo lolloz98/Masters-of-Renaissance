@@ -12,14 +12,14 @@ public class NormalProductionCard extends LocalDevelopCard {
 
     public static NormalProductionCard getINSTANCE() {
         if (INSTANCE != null) return INSTANCE;
-        return INSTANCE = new NormalProductionCard(100, null, 0, Color.GOLD, 0, new TreeMap<>() {{
+        return INSTANCE = new NormalProductionCard(100,false, null, 0, Color.GOLD, 0, new TreeMap<>() {{
             put(Resource.ANYTHING, 2);
         }}, new TreeMap<>() {{
             put(Resource.ANYTHING, 1);
         }}, null);
     }
 
-    private NormalProductionCard(int id, TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, TreeMap<Resource, Integer> resToFlush) {
-        super(id, cost, level, color, victoryPoints, resToGive, resToGain, resToFlush);
+    private NormalProductionCard(int id,boolean isDiscounted, TreeMap<Resource, Integer> cost, int level, Color color, int victoryPoints, TreeMap<Resource, Integer> resToGive, TreeMap<Resource, Integer> resToGain, TreeMap<Resource, Integer> resToFlush) {
+        super(id,isDiscounted, cost, level, color, victoryPoints, resToGive, resToGain, resToFlush);
     }
 }

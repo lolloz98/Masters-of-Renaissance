@@ -11,6 +11,9 @@ public class ActivateMarbleLeaderAnswerHandler extends ActivateLeaderAnswerHandl
     }
 
     @Override
+    /**
+     * the player receives the combinations of the resources which can be flushed when the message UseMarketMessage is sent
+     */
     protected void handleLeaderAnswer(LocalGame<?> localGame) {
         //this method does nothing
     }
