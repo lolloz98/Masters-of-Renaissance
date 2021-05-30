@@ -59,6 +59,23 @@ public class ControllerManager {
                 }
             }
         }
+        Timer timer = new Timer();
+        logger.debug("setting up timer");
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                removeToBeRejoined();
+            }
+        }, 2*60*1000);
+    }
+
+    private synchronized void removeToBeRejoined() {
+        logger.debug("removing to be rejoined");
+        for(int e: toBeRejoinedIds){
+            controllerMap.remove(e);
+            Persist.getInstance().remove(e);
+        }
+        toBeRejoinedIds.clear();
     }
 
     /**
@@ -234,7 +251,7 @@ public class ControllerManager {
         return playerId;
     }
 
-    public TreeSet<Integer> getToBeRejoinedIds() {
-        return toBeRejoinedIds;
+    public synchronized boolean removeFromToBeRejoined(int gameId){
+        return toBeRejoinedIds.remove(gameId);
     }
 }

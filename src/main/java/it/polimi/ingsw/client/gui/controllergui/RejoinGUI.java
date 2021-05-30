@@ -32,7 +32,7 @@ public class RejoinGUI extends ControllerGUI implements Observer {
                 messageLbl.setText("");
             });
             ServerListener old = (ServerListener) ui.getGameHandler();
-            new Thread(()-> {
+            new Thread(() -> {
                 try {
                     ui.setGameHandler(new ServerListener(old.getAddress(), old.getPort()));
                     ui.getGameHandler().setLocalGame(ui.getLocalGame());
@@ -52,11 +52,15 @@ public class RejoinGUI extends ControllerGUI implements Observer {
     @Override
     public void notifyUpdate() {
         logger.debug("Status retrieved successfully: to board");
+        ui.getLocalGame().removeAllObservers();
         BuildGUI.getInstance().toBoard(stage, ui);
     }
 
     @Override
     public void notifyError() {
-        messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
+        Platform.runLater(() -> {
+            rejoinBtn.setDisable(false);
+            messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
+        });
     }
 }

@@ -224,12 +224,10 @@ public abstract class ControllerActionsServer<T extends Game<? extends Turn>> ex
         }
         if(exist){
             if(listeners.size() == 0){
-                TreeSet<Integer> toBeRejoinedIds = ControllerManager.getInstance().getToBeRejoinedIds();
-                if(!toBeRejoinedIds.contains(rejoinMessage.getGameId())){
+                if(!ControllerManager.getInstance().removeFromToBeRejoined(rejoinMessage.getGameId())){
                     logger.error("Unexpected: after checks it seems that we cannot rejoin the game anyway");
                     throw new UnexpectedControllerException("No game in which to be rejoined to");
                 }
-                toBeRejoinedIds.remove(rejoinMessage.getGameId());
             }
             answerListener.setIds(rejoinMessage.getPlayerId(), rejoinMessage.getGameId());
             listeners.add(answerListener);
