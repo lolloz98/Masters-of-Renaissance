@@ -15,4 +15,5 @@
             <Insets left="30.0" right="30.0" />
          </HBox.margin></Button>
     </HBox>
+   <Label fx:id="errorLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="517.5" layoutY="500.5" text="ca" textFill="red" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
 </AnchorPane>

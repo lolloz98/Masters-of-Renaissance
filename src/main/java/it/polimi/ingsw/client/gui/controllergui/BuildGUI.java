@@ -52,6 +52,22 @@ public class BuildGUI {
         });
     }
 
+    public void toStartScene(Stage stage, GUI ui, String errorMessage) {
+        Platform.runLater(() -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/start.fxml"));
+            try {
+                logger.debug("To start scene");
+                Parent root = fxmlLoader.load();
+                StartGUI controller = fxmlLoader.getController();
+                controller.setUp(stage, root, ui, errorMessage);
+                stage.setScene(newScene(root, stage));
+                stage.show();
+            } catch (IOException e) {
+                logger.error("file not found: " + e);
+            }
+        });
+    }
+
     public void toCreateGame(Stage stage, GUI ui){
         Platform.runLater(() -> {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/create_game.fxml"));

@@ -58,9 +58,9 @@ public class RejoinGUI extends ControllerGUI implements Observer {
 
     @Override
     public void notifyError() {
-        Platform.runLater(() -> {
-            rejoinBtn.setDisable(false);
-            messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
-        });
+        ui.getGameHandler().removeObservers();
+        ((ServerListener) ui.getGameHandler()).closeConnection();
+        ui.getLocalGame().removeAllObservers();
+        BuildGUI.getInstance().toStartScene(stage, ui, "The game that you were playing is no longer available");
     }
 }
