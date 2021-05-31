@@ -71,11 +71,11 @@ public class DevelopmentGridView extends GameView {
                         char colorChar = ansList.get(1).charAt(0);
                         switch (colorChar) {
                             case 'A':
-                                color = Color.PURPLE;
+                                color = Color.GREEN;
                                 colorInt = 0;
                                 break;
                             case 'B':
-                                color = Color.GREEN;
+                                color = Color.BLUE;
                                 colorInt = 1;
                                 break;
                             case 'C':
@@ -83,7 +83,7 @@ public class DevelopmentGridView extends GameView {
                                 colorInt = 2;
                                 break;
                             case 'D':
-                                color = Color.BLUE;
+                                color = Color.PURPLE;
                                 colorInt = 3;
                                 break;
                         }
