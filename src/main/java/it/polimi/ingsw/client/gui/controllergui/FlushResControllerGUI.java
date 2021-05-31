@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.controllergui;
 import it.polimi.ingsw.client.cli.MapUtils;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.ImageCache;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
@@ -31,6 +32,7 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
     public Label messageLbl;
     private Button backBtn;
     private Button confirmBtn;
+    public DepotComponent depotCmp;
 
     public void setUp(Stage stage, Parent root, GUI ui, TreeMap<Resource, Integer> resComb) {
         setUp(stage, root, ui);
@@ -38,6 +40,7 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
         ui.getLocalGame().getLocalMarket().overrideObserver(this);
         ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
+        messageLbl.setText("");
         initState();
     }
 
@@ -63,6 +66,7 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
     }
 
     public void initState() {
+        depotCmp.setImages(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInNormalDepot());
         choseResGrid.getChildren().clear();
         comboBoxList = new ArrayList<>();
         resToFlush = new TreeMap<>(resComb);
@@ -78,7 +82,7 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
         }
         int i = 0; // row in choseResGrid
         Resource res;
-        do {
+        while (!MapUtils.isMapEmpty(resToFlush)) {
             choseResGrid.add(new Label("Chose where to put "), 0, i);
             res = resToFlush.firstKey();
             resList.add(res);
@@ -98,7 +102,9 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
             comboBoxList.get(i).setValue("Store in normal depot");
             choseResGrid.add(comboBoxList.get(i), 4, i);
             i++;
-        } while (!MapUtils.isMapEmpty(resToFlush));
+        }
+        choseResGrid.add(new Label("Faith points: " + faithNumber), 0, i);
+        i++;
         confirmBtn = new Button("Confirm");
         confirmBtn.setOnMouseClicked(mouseEvent -> {
             Platform.runLater(()->setEnabled(false));

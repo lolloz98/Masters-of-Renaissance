@@ -24,18 +24,13 @@ public class ActivateProductionView extends View<CLI> {
     private final TreeMap<Resource, Integer> resToGain;
     private final TreeMap<Resource, Integer> resToMove;
 
-    public ActivateProductionView(CLI cli, LocalGame<?> localGame, int whichProd) {
+    public ActivateProductionView(CLI cli, LocalGame<?> localGame, int whichProd, LocalProduction localProduction) {
         this.ui = cli;
         this.localGame = localGame;
         this.whichProd = whichProd;  
         this.resToGive = new TreeMap<>();
-        LocalProduction prod;
+        LocalProduction prod = localProduction;
         if (whichProd == 0) prod = localGame.getMainPlayer().getLocalBoard().getBaseProduction();
-        else if (whichProd > 0 && whichProd < 4)
-            prod = localGame.getMainPlayer().getLocalBoard().getDevelopCards().get(whichProd - 1).get(localGame.getMainPlayer().getLocalBoard().getDevelopCards().get(whichProd - 1).size() - 1).getProduction();
-        else
-            // already checked type
-            prod = ((LocalProductionLeader) localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(whichProd - 4)).getProduction();
         this.resToGain = new TreeMap<>(prod.getResToGain());
         this.resToMove = new TreeMap<>(prod.getResToGive());
     }

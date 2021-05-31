@@ -3,9 +3,12 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.control.Label?>
+<?import it.polimi.ingsw.client.gui.componentsgui.DepotComponent?>
+
 <AnchorPane prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.FlushResControllerGUI">
 
     <GridPane fx:id="choseResGrid"/>
     <Label fx:id="messageLbl" layoutX="40.0" layoutY="638.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#e80e0e" />
+    <DepotComponent fx:id="depotCmp" layoutX="769.0" layoutY="84.0" prefHeight="172.0" prefWidth="194.0" />
 
 </AnchorPane>
