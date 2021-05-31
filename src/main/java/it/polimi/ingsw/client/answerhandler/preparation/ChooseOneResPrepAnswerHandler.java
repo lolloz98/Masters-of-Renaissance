@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.answerhandler.preparation;
 
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
+import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.messages.answers.preparationanswer.ChooseOneResPrepAnswer;
@@ -22,8 +23,11 @@ public class ChooseOneResPrepAnswerHandler extends AnswerHandler {
             LocalMulti localMulti = (LocalMulti) localGame;
             if(chooseOneResPrepAnswer.getPlayerId() == localMulti.getMainPlayerId()) {
                 localMulti.getMainPlayer().getLocalBoard().addResInNormalDepot(chooseOneResPrepAnswer.getRes());
+                localMulti.getMainPlayer().getLocalBoard().setInitialRes(localMulti.getMainPlayer().getLocalBoard().getInitialRes() - 1);
             }else{
-                localMulti.getPlayerById(chooseOneResPrepAnswer.getPlayerId()).getLocalBoard().addResInNormalDepot(chooseOneResPrepAnswer.getRes());
+                LocalBoard localBoard = localMulti.getPlayerById(chooseOneResPrepAnswer.getPlayerId()).getLocalBoard();
+                localBoard.addResInNormalDepot(chooseOneResPrepAnswer.getRes());
+                localBoard.setInitialRes(localBoard.getInitialRes() - 1);
             }
 
             if(localMulti.getState()!=chooseOneResPrepAnswer.getState()) {

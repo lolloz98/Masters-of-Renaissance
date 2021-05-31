@@ -315,25 +315,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         game.getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().overrideObserver(this);
         game.getError().addObserver(this);
         game.getLocalTurn().overrideObserver(this);
-        game.overrideObserver(new Observer() {
-            @Override
-            public void notifyUpdate() {
-                Platform.runLater(() -> {
-                    synchronized (ui.getLocalGame()) {
-                        logger.debug("check game status");
-                        if (prevGameState != ui.getLocalGame().getState()) {
-                            logger.debug("resetting board");
-                            setBoard();
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void notifyError() {
-                // Nothing to do here
-            }
-        });
+        game.overrideObserver(this);
         game.getLocalTurn().getHistoryObservable().overrideObserver(new Observer() {
             @Override
             public void notifyUpdate() {
@@ -357,12 +339,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
     public void removeObservers(){
         synchronized (ui.getLocalGame()) {
-            ui.getLocalGame().removeObservers();
-            ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).removeObservers();
-            ui.getLocalGame().getError().removeObserver();
-            ui.getLocalGame().getLocalTurn().removeObservers();
-            ui.getLocalGame().getLocalTurn().getHistoryObservable().removeObservers();
-            ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().removeObservers();
+            ui.getLocalGame().removeAllObservers();
         }
     }
 
