@@ -34,6 +34,7 @@ public class ChooseInitResGUI extends ControllerGUI implements Observer {
 
     @Override
     public void notifyUpdate() {
+        logger.debug("In notify update of choose init res");
         Platform.runLater(this::setView);
     }
 
@@ -45,8 +46,9 @@ public class ChooseInitResGUI extends ControllerGUI implements Observer {
     private void setView(){
         synchronized (ui.getLocalGame()) {
             int initRes = ui.getLocalGame().getMainPlayer().getLocalBoard().getInitialRes();
+            logger.debug("initial resources: " + initRes);
             if(initRes == 0){
-                ui.getLocalGame().getMainPlayer().removeObservers();
+                ui.getLocalGame().getMainPlayer().getLocalBoard().removeObservers();
 
                 BuildGUI.getInstance().toBoard(stage, ui);
             }
@@ -56,7 +58,7 @@ public class ChooseInitResGUI extends ControllerGUI implements Observer {
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
-        ui.getLocalGame().getMainPlayer().overrideObserver(this);
+        ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
 
         setView();
         comboBox.getItems().addAll(
