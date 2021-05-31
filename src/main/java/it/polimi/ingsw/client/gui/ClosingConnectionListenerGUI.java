@@ -22,9 +22,9 @@ public class ClosingConnectionListenerGUI implements Observer {
     @Override
     public void notifyUpdate() {
         ui.getLocalGame().removeAllObservers();
-        if (ui.getLocalGame() == null || ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS) {
-            logger.warn("Game is null or in WAITING_PLAYERS state, returning at start screen");
-            BuildGUI.getInstance().toStartScene(stage, ui);
+        if (ui.getLocalGame() == null || ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS || ui.getLocalGame().getState() == LocalGameState.OVER) {
+            logger.warn("Game is null or in WAITING_PLAYERS or in OVER state, returning at start screen");
+            BuildGUI.getInstance().toStartScene(stage, ui, "The connection has been closed.");
         } else {
             BuildGUI.getInstance().toRejoin(stage, ui);
         }
