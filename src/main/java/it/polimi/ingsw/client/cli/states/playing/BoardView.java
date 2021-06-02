@@ -126,16 +126,17 @@ public class BoardView extends GameView {
                     try {
                         int number = Integer.parseInt(ans1);
                         if (number > 0 && number < 3) {
-                            LocalLeaderCard leaderCard = (LocalLeaderCard) localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(number);
+                            LocalLeaderCard leaderCard = (LocalLeaderCard) localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(number-1);
                             if (leaderCard instanceof LocalProductionLeader &&
                                     leaderCard.isActive() &&
                                     !leaderCard.isDiscarded()) {
                                 removeObserved();
+                                LocalProductionLeader localProductionLeader = ((LocalProductionLeader) localPlayer.getLocalBoard().getLeaderCards().get(number-1));
                                 ui.setState(new ActivateProductionView(
                                         ui,
                                         localGame,
-                                        ((LocalProductionLeader) localPlayer.getLocalBoard().getLeaderCards().get(number-1)).getWhichProd(),
-                                        localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().size() - 1).getProduction()
+                                        localProductionLeader.getWhichProd(),
+                                        localProductionLeader.getProduction()
                                 ));
                             } else {
                                 System.out.println("You can only do this with and active development leader card!");
@@ -174,7 +175,7 @@ public class BoardView extends GameView {
                                             ui,
                                             localGame,
                                             number,
-                                            localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().size() - 1).getProduction()
+                                            localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() - 1).getProduction()
                                     ));
                                 }
                             }

@@ -48,13 +48,13 @@ public class DevelopSlotPrinter {
                 CLIutils.append(out, 3, card2.get(1));
                 CLIutils.append(out, 4, DevelopmentCardPrinter.toStringBlock(slot.get(2)));
             }
-            CLIutils.append(out, 12, "  to flush: ");
+            CLIutils.append(out, 12, " to flush: ");
             if(slot.get(slot.size()-1).getProduction().getResToFlush().size() == 0){
-                CLIutils.append(out, 12, "     ");
+                CLIutils.append(out, 12, "      ");
             } else {
                 CLIutils.append(out, 12, DevelopmentPrinter.toStringBlock((slot.get(slot.size()-1).getProduction().getResToFlush())));
             }
-            CLIutils.append(out, 13, "  total vps: ");
+            CLIutils.append(out, 13, " total vps:  ");
             int sum = 0;
             for (LocalDevelopCard c : slot)
                 sum = sum + c.getVictoryPoints();
