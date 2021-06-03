@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.componentsgui;
 import it.polimi.ingsw.enums.Resource;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +15,7 @@ import java.util.TreeMap;
 
 import static it.polimi.ingsw.client.gui.componentsgui.ImageCache.*;
 
-public class DepotComponent extends Pane {
+public class DepotComponent extends AnchorPane {
     private static final Logger logger = LogManager.getLogger(FaithTrackComponent.class);
 
     public ImageView d1;

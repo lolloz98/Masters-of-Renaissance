@@ -14,10 +14,10 @@
              <ImageView fx:id="cardImg" fitHeight="194.0" fitWidth="119.0" layoutX="21.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                  <Image url="@../../png/empty_card.png" />
              </ImageView>
-             <ImageView fx:id="depot0" fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="120.0">
+             <ImageView fx:id="depot0" fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="130.0">
                  <Image url="@../../png/res/no_res.png" />
              </ImageView>
-             <ImageView fx:id="depot1" fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="120.0">
+             <ImageView fx:id="depot1" fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="130.0">
                  <Image url="@../../png/res/no_res.png" />
              </ImageView>
          </children>
