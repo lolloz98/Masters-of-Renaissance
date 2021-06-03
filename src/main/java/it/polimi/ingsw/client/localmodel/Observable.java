@@ -24,4 +24,8 @@ public class Observable implements Serializable  {
         if(obs != null)
             obs.notifyUpdate();
     }
+
+    public Observer getObserver(){
+        return obs;
+    }
 }

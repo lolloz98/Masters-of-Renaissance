@@ -13,7 +13,6 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
 import it.polimi.ingsw.messages.requests.actions.FlushProductionResMessage;
-import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.utility.PairId;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -58,19 +57,19 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public StrongBoxComponent strongBoxCmp;
     public Label historyLbl;
 
-    private LocalGameState prevGameState;
+    private Observer historyObserver;
 
     /**
      * set the various elements of the gui
      */
     public void setBoard() {
+        logger.info("setting board");
         synchronized (ui.getLocalGame()) {
             if (ui.getWhoIAmSeeingId() == ui.getLocalGame().getMainPlayer().getId()) {
                 setMainPlayerBoard();
             } else {
                 setNotMainPlayerBoard();
             }
-            prevGameState = ui.getLocalGame().getState();
         }
     }
 
@@ -311,12 +310,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             });
         }
 
-        game.getPlayerById(ui.getWhoIAmSeeingId()).overrideObserver(this);
-        game.getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().overrideObserver(this);
-        game.getError().addObserver(this);
-        game.getLocalTurn().overrideObserver(this);
-        game.overrideObserver(this);
-        game.getLocalTurn().getHistoryObservable().overrideObserver(new Observer() {
+        historyObserver = new Observer() {
             @Override
             public void notifyUpdate() {
                 Platform.runLater(() -> {
@@ -331,9 +325,36 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             public void notifyError() {
                 // Nothing to do here
             }
+        };
+
+        game.overrideObserver(new Observer() {
+            @Override
+            public void notifyUpdate() {
+                Platform.runLater(() -> {
+                    synchronized (ui.getLocalGame()) {
+                        setObserversApartFromGame();
+                        setBoard();
+                    }
+                });
+            }
+
+            @Override
+            public void notifyError() {
+                // Nothing to do here
+            }
         });
+        setObserversApartFromGame();
 
         setBoard();
+    }
+
+    public void setObserversApartFromGame(){
+        LocalGame<?> game = ui.getLocalGame();
+        game.getPlayerById(ui.getWhoIAmSeeingId()).overrideObserver(this);
+        game.getPlayerById(ui.getWhoIAmSeeingId()).getLocalBoard().overrideObserver(this);
+        game.getError().addObserver(this);
+        game.getLocalTurn().overrideObserver(this);
+        game.getLocalTurn().getHistoryObservable().overrideObserver(historyObserver);
     }
 
 
