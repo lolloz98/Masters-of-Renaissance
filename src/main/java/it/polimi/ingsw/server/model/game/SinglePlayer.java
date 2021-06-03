@@ -98,7 +98,7 @@ public class SinglePlayer extends Game<TurnSingle>{
      */
     @Override
     public void checkEndConditions(){
-        if((player.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 6)
+        if((player.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 7)
                 || player.getBoard().getFaithtrack().isEndReached()){
             setLastTurn();
             setHasPlayerWon(true);
