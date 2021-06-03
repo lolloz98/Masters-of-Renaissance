@@ -5,7 +5,6 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.ApplyProductionAnswer;
 import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
 import it.polimi.ingsw.server.controller.ControllerActionsBase;
-import it.polimi.ingsw.server.controller.ControllerActionsServer;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.cards.Production;
@@ -76,7 +75,8 @@ public class ApplyProductionMessageController extends PlayingMessageController {
         }
 
         TreeMap<Resource, Integer> resInNormalDepots = board.getResInNormalDepots();
+        TreeMap<Resource, Integer> resInStrongBox = board.getResourcesInStrongBox();
 
-        return new ApplyProductionAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), resToFlush, resInNormalDepots, leaderDepots, clientMessage.getWhichProd());
+        return new ApplyProductionAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), resToFlush, resInNormalDepots, resInStrongBox, leaderDepots, clientMessage.getWhichProd());
     }
 }

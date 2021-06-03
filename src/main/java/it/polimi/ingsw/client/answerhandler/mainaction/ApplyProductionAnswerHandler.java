@@ -46,6 +46,9 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
         //update the leader depots
         localBoard.updateLeaderDepots(serverAnswer.getLeaderDepots());
 
+        // update strongbox
+        localBoard.setResInStrongBox(serverAnswer.getResInStrongBox());
+
         //update the production
         int whichProd = serverAnswer.getWhichProdSlot();
         switch (whichProd) {

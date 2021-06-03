@@ -2,14 +2,12 @@ package it.polimi.ingsw.client.answerhandler.mainaction;
 
 import it.polimi.ingsw.client.answerhandler.AnswerHandlerTestHelper;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
-import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDepotLeader;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.ApplyProductionAnswer;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.model.exception.ModelException;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +42,8 @@ public class ApplyProductionAnswerHandlerTest {
 
         LocalDepotLeader leaderModified=AnswerHandlerTestHelper.getADepotLeader();
 
-        ApplyProductionAnswer serverAnswer=new ApplyProductionAnswer(0,1,AnswerHandlerTestHelper.getResToFlush(),AnswerHandlerTestHelper.getResInDepot(),new ArrayList<>(){{add(leaderModified);}},0);
+
+        ApplyProductionAnswer serverAnswer=new ApplyProductionAnswer(0,1,AnswerHandlerTestHelper.getResToFlush(),AnswerHandlerTestHelper.getResInDepot(), AnswerHandlerTestHelper.getResInStrongbox(), new ArrayList<>(){{add(leaderModified);}},0);
         ApplyProductionAnswerHandler handler=new ApplyProductionAnswerHandler(serverAnswer);
         handler.handleAnswer(localSingle);
 
