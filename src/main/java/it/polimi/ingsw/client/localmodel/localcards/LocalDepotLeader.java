@@ -8,11 +8,12 @@ public class LocalDepotLeader extends LocalLeaderCard{
     private int numberOfRes;
     private final int reqQuantity;
 
-    public LocalDepotLeader(int id, int victoryPoints, boolean isActive, boolean isDiscarded, Resource resType, Resource resRequirement, int reqQuantity) {
+    public LocalDepotLeader(int id, int victoryPoints, boolean isActive, boolean isDiscarded, Resource resType, int numberOfRes, Resource resRequirement, int reqQuantity) {
         super(id, victoryPoints, isActive, isDiscarded);
         this.resType = resType;
         this.resRequirement = resRequirement;
         this.reqQuantity = reqQuantity;
+        this.numberOfRes = numberOfRes;
     }
 
     public int getReqQuantity() {
@@ -25,7 +26,6 @@ public class LocalDepotLeader extends LocalLeaderCard{
 
     public synchronized void setNumberOfRes(int numberOfRes) {
         this.numberOfRes = numberOfRes;
-        notifyObservers();
     }
 
     public Resource getResType() {

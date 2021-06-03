@@ -72,6 +72,7 @@ public final class ConverterToLocalModel {
                 depotLeaderCard.isActive(),
                 depotLeaderCard.isDiscarded(),
                 depotLeaderCard.getDepot().getTypeOfResource(),
+                depotLeaderCard.getDepot().getStored(),
                 depotLeaderCard.getRequirement().getRes(),
                 depotLeaderCard.getRequirement().getQuantity()
         );

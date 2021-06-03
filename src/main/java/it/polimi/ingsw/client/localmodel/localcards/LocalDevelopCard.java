@@ -30,7 +30,6 @@ public class LocalDevelopCard extends LocalCard{
 
     public synchronized void setCost(TreeMap<Resource, Integer> cost) {
         this.cost = cost;
-        notifyObservers();
     }
 
     public int getLevel() {

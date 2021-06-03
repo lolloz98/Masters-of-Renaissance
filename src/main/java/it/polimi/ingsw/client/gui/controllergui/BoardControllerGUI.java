@@ -87,7 +87,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     }
 
     /**
-     * set things in common to both not main player and main player
+     * set things in common to both not main player and main player boards
      */
     public void setBaseBoard() {
         LocalPlayer seen = ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId());
@@ -121,7 +121,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         developBtn.setVisible(true);
     }
 
-
+    /**
+     * gui preparation to enter the ready state.
+     */
     public void defaultForReady() {
         optional1Btn.setVisible(false);
 
@@ -137,7 +139,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     }
 
     /**
-     * set up the view (only if board is of main player) depending on the localGame status
+     * to be called to set up the view (only if board is of main player) depending on the localGame status
      */
     private void setUpOnState() {
         LocalGame<?> game = ui.getLocalGame();
@@ -194,6 +196,9 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         }
     }
 
+    /**
+     * to be called to set board if we are on the mainPlayer board and if the status of the game is on READY
+     */
     public void setUpReady() {
         // main actions
         LocalGame<?> game = ui.getLocalGame();

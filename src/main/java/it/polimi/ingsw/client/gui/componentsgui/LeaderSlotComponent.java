@@ -96,9 +96,9 @@ public class LeaderSlotComponent extends VBox {
             statusLbl.setTextFill(Color.GREEN);
             if (leaderCard instanceof LocalDepotLeader) {
                 activateBtn.setVisible(false);
-                    LocalDepotLeader l = (LocalDepotLeader) leaderCard;
-                    for (int i = 0; i < l.getNumberOfRes(); i++) {
-                        ImageCache.setImageInStore(l.getResType(), depots.get(i));
+                LocalDepotLeader l = (LocalDepotLeader) leaderCard;
+                for (int i = 0; i < l.getNumberOfRes(); i++) {
+                    ImageCache.setImageInStore(l.getResType(), depots.get(i));
                     depots.get(i).setVisible(true);
                 }
             } else if (leaderCard instanceof LocalMarbleLeader) {

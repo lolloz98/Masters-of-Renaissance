@@ -43,7 +43,7 @@ public class FlushMarketResAnswerHandlerTest {
     public void testHandleAnswerSingle(){
         //add a depot leader in the main player board
         int leaderId=0;
-        localSingle.getMainPlayer().getLocalBoard().getLeaderCards().add(new LocalDepotLeader(leaderId,1,true,false,Resource.GOLD,Resource.GOLD,5));
+        localSingle.getMainPlayer().getLocalBoard().getLeaderCards().add(new LocalDepotLeader(leaderId,1,true,false,Resource.GOLD, 0,Resource.GOLD,5));
 
         AnswerHandlerTestHelper.doUseMarketAction(localSingle);
         ArrayList<LocalTrack> localTracks=AnswerHandlerTestHelper.getLocalTracks(localSingle);
@@ -51,7 +51,7 @@ public class FlushMarketResAnswerHandlerTest {
         TreeMap<Resource,Integer> resInNormalDeposit=AnswerHandlerTestHelper.getResInDepot();
 
         ArrayList<LocalDepotLeader> localDepotLeaders=new ArrayList<>(){{
-            add(new LocalDepotLeader(leaderId,3,true,false,Resource.GOLD,Resource.SHIELD,3));
+            add(new LocalDepotLeader(leaderId,3,true,false,Resource.GOLD, 0,Resource.SHIELD,3));
         }};
         localDepotLeaders.get(0).setNumberOfRes(2);
 
@@ -89,7 +89,7 @@ public class FlushMarketResAnswerHandlerTest {
     @Test
     public void testHandleAnswerMulti(){
         //add a depot leader in the main player board
-        localMulti.getMainPlayer().getLocalBoard().getLeaderCards().add(new LocalDepotLeader(0,1,true,false,Resource.GOLD,Resource.GOLD,5));
+        localMulti.getMainPlayer().getLocalBoard().getLeaderCards().add(new LocalDepotLeader(0,1,true,false,Resource.GOLD, 0, Resource.GOLD,5));
         int leaderId=0;
 
         AnswerHandlerTestHelper.doUseMarketAction(localMulti);
@@ -101,7 +101,7 @@ public class FlushMarketResAnswerHandlerTest {
         }};
 
         ArrayList<LocalDepotLeader> localDepotLeaders=new ArrayList<>(){{
-            add(new LocalDepotLeader(leaderId,3,true,false,Resource.GOLD,Resource.SHIELD,3));
+            add(new LocalDepotLeader(leaderId,3,true,false,Resource.GOLD, 0, Resource.SHIELD,3));
         }};
         localDepotLeaders.get(0).setNumberOfRes(2);
 

@@ -177,7 +177,7 @@ public class AnswerHandlerTestHelper {
      * @return the depot leader, added with the method addADepotLeader, modified
      */
     public static LocalDepotLeader getADepotLeader(){
-        LocalDepotLeader localDepotLeader=new LocalDepotLeader(0,3,true,false,Resource.GOLD,Resource.SHIELD,3);
+        LocalDepotLeader localDepotLeader=new LocalDepotLeader(0,3,true,false,Resource.GOLD, 0, Resource.SHIELD,3);
         localDepotLeader.setNumberOfRes(0);
         return localDepotLeader;
     }
@@ -188,7 +188,7 @@ public class AnswerHandlerTestHelper {
      */
     public static void addADepotLeader(LocalGame<?> game){
 
-        LocalDepotLeader localDepotLeader=new LocalDepotLeader(0,3,true,false,Resource.GOLD,Resource.SHIELD,3);
+        LocalDepotLeader localDepotLeader=new LocalDepotLeader(0,3,true,false,Resource.GOLD,0, Resource.SHIELD,3);
         localDepotLeader.setNumberOfRes(2);
 
         game.getMainPlayer().getLocalBoard().getLeaderCards().add(localDepotLeader);
