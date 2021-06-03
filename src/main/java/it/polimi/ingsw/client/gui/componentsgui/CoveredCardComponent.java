@@ -29,7 +29,7 @@ public class CoveredCardComponent extends StackPane {
     }
 
     private void setLevelLbl(int level){
-        levelLbl.setText("Lv. " + level);
+        levelLbl.setText("Lv. " + level + ", V.p. " + developCard.getVictoryPoints());
     }
 
     private void setColor(Color color){
