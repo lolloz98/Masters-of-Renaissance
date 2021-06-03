@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.messages.requests.ClientMessage;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.server.ClientHandler;
@@ -12,12 +15,15 @@ import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageController;
+import it.polimi.ingsw.server.model.cards.leader.MarbleLeaderCard;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Ignore;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -88,7 +94,7 @@ class ClientHandlerUiTestHelper extends ClientHandler{
                 ControllerActionsServerSingle ca = (ControllerActionsServerSingle) controllerManager.getControllerFromMap(answerListener.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
-                ManipulateGameUiTestHelper.setStateOfGame2(answerListener.getGameId(), ca.getGame());
+                ManipulateGameUiTestHelper.setStateOfGame8(answerListener.getGameId(), ca.getGame());
 
                 answerListener.sendAnswer(AnswerFactory.createGameStatusAnswer(ca.getGameId(), answerListener.getPlayerId(), answerListener.getPlayerId(), ca.getGame()));
             }else if((parsedMessage instanceof JoinGameMessageController) && controllerManager.getControllerFromMap(clientMessage.getGameId()).getGame() != null){

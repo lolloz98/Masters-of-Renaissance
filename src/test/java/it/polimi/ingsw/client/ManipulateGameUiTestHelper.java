@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
@@ -8,10 +11,7 @@ import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
-import it.polimi.ingsw.server.model.cards.leader.Requirement;
-import it.polimi.ingsw.server.model.cards.leader.RequirementColorsDevelop;
-import it.polimi.ingsw.server.model.cards.leader.RequirementLevelDevelop;
-import it.polimi.ingsw.server.model.cards.leader.RequirementResource;
+import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.Game;
 import it.polimi.ingsw.server.model.game.Marble;
@@ -23,6 +23,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Ignore;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -33,10 +35,11 @@ public class ManipulateGameUiTestHelper {
     /**
      * It set up the resources in the strongBox of the player in order to have the possibility to buy the specified card.
      * CARE: this method does not use messageControllers, it manages the game directly.
-     * @param game current game
+     *
+     * @param game   current game
      * @param player player buying the card
-     * @param c color of the card to be bought
-     * @param level level of the card to be bought
+     * @param c      color of the card to be bought
+     * @param level  level of the card to be bought
      * @return the cost of the card to b bought
      */
     public static TreeMap<Resource, Integer> setResourcesInStrongBoxForDevelop(Game<?> game, Player player, Color c, int level) throws EmptyDeckException, ResourceNotDiscountableException, InvalidArgumentException, InvalidStepsException, EndAlreadyReachedException {
@@ -49,10 +52,11 @@ public class ManipulateGameUiTestHelper {
     /**
      * this method buys a develop card (not using messageController)
      * (It puts the required resources to buy the card in the StrongBox).
-     * @param gameId current gameId
-     * @param player player, can be any player
-     * @param c color of the develop to buy
-     * @param level level of the develop
+     *
+     * @param gameId    current gameId
+     * @param player    player, can be any player
+     * @param c         color of the develop to buy
+     * @param level     level of the develop
      * @param whichSlot slot where to put the bought develop
      * @return developCard bought
      */
@@ -68,8 +72,9 @@ public class ManipulateGameUiTestHelper {
 
     /**
      * satisfy either the RequirementColorsDevelop or RequirementLevelDevelop with a bit of a stretch.
-     * @param req developCard needed (Color is the color and the associated integer is the level)
-     * @param game current game
+     *
+     * @param req    developCard needed (Color is the color and the associated integer is the level)
+     * @param game   current game
      * @param player current player
      * @throws ControllerException something unexpected happens
      */
@@ -77,12 +82,25 @@ public class ManipulateGameUiTestHelper {
         for (Color c : req.keySet()) {
             try {
                 int whichSlot = 0;
+                int lev = 1;
                 while (!player.getBoard().getDevelopCardSlots().get(whichSlot).isEmpty()) {
+
+                    // todo check this if condition
+                    if(player.getBoard().getDevelopCardSlots().get(whichSlot).lastCard().getLevel() == 1){
+                        lev = 2;
+                        break;
+                    }
+
                     whichSlot++;
                 }
-                if(req.get(c) > 3) logger.error("number too big. For RequirementColorsDevelop I considered this number as level, actually is the quantity of given color");
-                for (int i = 1; i <= req.get(c); i++) {
-                    TreeMap<Resource, Integer> cost = setResourcesInStrongBoxForDevelop(game, player,c, i);
+                if (req.get(c) > 3)
+                    logger.error("number too big. For RequirementColorsDevelop I considered this number as level, actually is the quantity of given color");
+                int till = req.get(c);
+                if(lev == 2){
+                    till = 3;
+                }
+                for (int i = lev; i <= till; i++) {
+                    TreeMap<Resource, Integer> cost = setResourcesInStrongBoxForDevelop(game, player, c, i);
                     player.getBoard().buyDevelopCard(game, c, i, whichSlot, new TreeMap<>() {{
                         put(WarehouseType.STRONGBOX, new TreeMap<>(cost));
                     }});
@@ -95,24 +113,26 @@ public class ManipulateGameUiTestHelper {
 
     /**
      * satisfies a requirement adjusting the status of a player (if resources are needed are always put and taken from the strongBox)
-     * @param r requirement to be satisfied
+     *
+     * @param r    requirement to be satisfied
      * @param game current game
-     * @param p player for which to satisfy the req
+     * @param p    player for which to satisfy the req
      */
     public static void satisfyReq(Requirement r, Game<?> game, Player p) throws ControllerException {
         try {
-            if(r.checkRequirement(p)) return;
+            if (r.checkRequirement(p)) return;
         } catch (ResourceNotDiscountableException e) {
             throw new ControllerException("something unexpected happened while checking the requirement");
         }
 
-        if(r instanceof RequirementColorsDevelop) satisfyReq(((RequirementColorsDevelop) r).getRequiredDevelop(), game, p);
-        else if(r instanceof RequirementLevelDevelop) satisfyReq(new TreeMap<>(){{
+        if (r instanceof RequirementColorsDevelop)
+            satisfyReq(((RequirementColorsDevelop) r).getRequiredDevelop(), game, p);
+        else if (r instanceof RequirementLevelDevelop) satisfyReq(new TreeMap<>() {{
             put(((RequirementLevelDevelop) r).getColor(), ((RequirementLevelDevelop) r).getLevel());
         }}, game, p);
-        else if(r instanceof RequirementResource) {
+        else if (r instanceof RequirementResource) {
             try {
-                p.getBoard().flushGainedResources(new TreeMap<>(){{
+                p.getBoard().flushGainedResources(new TreeMap<>() {{
                     put(((RequirementResource) r).getRes(), ((RequirementResource) r).getQuantity());
                 }}, game);
             } catch (ModelException e) {
@@ -129,7 +149,7 @@ public class ManipulateGameUiTestHelper {
                 put(res, 1);
             }}, new TreeMap<>() {{
                 put(WarehouseType.NORMAL, new TreeMap<>() {{
-                    put( res, 1);
+                    put(res, 1);
                 }});
             }}, ca.getGame());
 
@@ -140,6 +160,7 @@ public class ManipulateGameUiTestHelper {
 
     /**
      * remove first two leaders of the player
+     *
      * @param player player on which to perform the action
      */
     private static void setRemoveLeaders(Player player) throws InvalidArgumentException {
@@ -171,8 +192,9 @@ public class ManipulateGameUiTestHelper {
             setChooseInitRes(gameId, game.getPlayers().get(1), Resource.GOLD);
             setChooseInitRes(gameId, game.getPlayers().get(2), Resource.ROCK);
             setChooseInitRes(gameId, game.getPlayers().get(3), Resource.SERVANT);
-        }catch (IndexOutOfBoundsException ignore){}
-        for(Player p: game.getPlayers())
+        } catch (IndexOutOfBoundsException ignore) {
+        }
+        for (Player p : game.getPlayers())
             setRemoveLeaders(p);
         ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
         setBuyDevelopCard(gameId, game.getPlayers().get(0), Color.BLUE, 1, 0);
@@ -189,8 +211,9 @@ public class ManipulateGameUiTestHelper {
             setChooseInitRes(gameId, game.getPlayers().get(1), Resource.GOLD);
             setChooseInitRes(gameId, game.getPlayers().get(2), Resource.ROCK);
             setChooseInitRes(gameId, game.getPlayers().get(3), Resource.SERVANT);
-        }catch (IndexOutOfBoundsException ignore){}
-        for(Player p: game.getPlayers())
+        } catch (IndexOutOfBoundsException ignore) {
+        }
+        for (Player p : game.getPlayers())
             setRemoveLeaders(p);
         satisfyReq(
                 game.getPlayers().get(0).getBoard().getLeaderCards().get(0).getRequirement(),
@@ -206,7 +229,8 @@ public class ManipulateGameUiTestHelper {
             setChooseInitRes(gameId, game.getPlayer(), Resource.GOLD);
             setChooseInitRes(gameId, game.getPlayer(), Resource.ROCK);
             setChooseInitRes(gameId, game.getPlayer(), Resource.SERVANT);
-        }catch (IndexOutOfBoundsException ignore){}
+        } catch (IndexOutOfBoundsException ignore) {
+        }
         game.getPlayer().getBoard().removeLeaderCards(new ArrayList<>() {{
             add(game.getPlayer().getBoard().getLeaderCards().get(1).getId());
             add(game.getPlayer().getBoard().getLeaderCards().get(0).getId());
@@ -277,7 +301,7 @@ public class ManipulateGameUiTestHelper {
         setRemoveLeaders(game.getPlayer());
         ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
         try {
-            game.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>(){{
+            game.getPlayer().getBoard().storeInNormalDepot(new TreeMap<>() {{
                 put(Resource.SHIELD, 1);
                 put(Resource.ROCK, 1);
             }});
@@ -291,4 +315,95 @@ public class ManipulateGameUiTestHelper {
         m[0][2] = new Marble(Resource.ROCK);
         m[0][3] = new Marble(Resource.GOLD);
     }
+
+    /**
+     * set two marble leaders
+     */
+    public static void setStateOfGame7(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FullDevelopSlotException, InvalidDevelopCardToSlotException, NotEnoughResourcesException {
+        try {
+            setChooseInitRes(gameId, game.getPlayer(), Resource.SHIELD);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.GOLD);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.ROCK);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.SERVANT);
+        } catch (IndexOutOfBoundsException ignore) {
+        }
+        game.getPlayer().getBoard().removeLeaderCards(new ArrayList<>() {{
+            add(game.getPlayer().getBoard().getLeaderCards().get(1).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(0).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(2).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(3).getId());
+        }});
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+
+        logger.warn("hard setting leaders in player");
+        try {
+            game.getPlayer().getBoard().addLeaderCards(new ArrayList<>() {{
+                add(gson.fromJson(new JsonReader(new FileReader("src/main/resources/json_file/cards/leader/058.json")), MarbleLeaderCard.class));
+                add(gson.fromJson(new JsonReader(new FileReader("src/main/resources/json_file/cards/leader/059.json")), MarbleLeaderCard.class));
+            }});
+        } catch (FileNotFoundException ignore) {
+
+        }
+
+        satisfyReq(
+                game.getPlayer().getBoard().getLeaderCards().get(0).getRequirement(),
+                game,
+                game.getPlayer()
+        );
+        satisfyReq(
+                game.getPlayer().getBoard().getLeaderCards().get(1).getRequirement(),
+                game,
+                game.getPlayer()
+        );
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+    }
+
+    /**
+     * set two depot leaders
+     */
+    public static void setStateOfGame8(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FullDevelopSlotException, InvalidDevelopCardToSlotException, NotEnoughResourcesException {
+        try {
+            setChooseInitRes(gameId, game.getPlayer(), Resource.SHIELD);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.GOLD);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.ROCK);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.SERVANT);
+        } catch (IndexOutOfBoundsException ignore) {
+        }
+        game.getPlayer().getBoard().removeLeaderCards(new ArrayList<>() {{
+            add(game.getPlayer().getBoard().getLeaderCards().get(1).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(0).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(2).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(3).getId());
+        }});
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+
+        logger.warn("hard setting leaders in player");
+        try {
+            game.getPlayer().getBoard().addLeaderCards(new ArrayList<>() {{
+                add(gson.fromJson(new JsonReader(new FileReader("src/main/resources/json_file/cards/leader/054.json")), DepotLeaderCard.class));
+                add(gson.fromJson(new JsonReader(new FileReader("src/main/resources/json_file/cards/leader/055.json")), DepotLeaderCard.class));
+            }});
+        } catch (FileNotFoundException ignore) {
+
+        }
+
+        satisfyReq(
+                game.getPlayer().getBoard().getLeaderCards().get(0).getRequirement(),
+                game,
+                game.getPlayer()
+        );
+        satisfyReq(
+                game.getPlayer().getBoard().getLeaderCards().get(1).getRequirement(),
+                game,
+                game.getPlayer()
+        );
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+    }
+
 }

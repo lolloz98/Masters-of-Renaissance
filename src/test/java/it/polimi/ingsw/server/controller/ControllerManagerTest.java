@@ -59,12 +59,6 @@ public class ControllerManagerTest {
             if(!names.contains(p.getName())) fail();
             names.remove(p.getName());
         }
-
-        try{
-            // try to get controller when gameId not yet reserved
-            controllerManager.getControllerFromMap(gameId + 1);
-            fail();
-        }catch (ControllerException ignore){}
     }
 
     @Test (expected = ControllerException.class)
