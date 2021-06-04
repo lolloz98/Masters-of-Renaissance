@@ -38,12 +38,11 @@ public class ServerUiTestHelper extends Server {
     // fixme: Don't use fixed port number
     private final static int PORT = 16509;
 
-    public static int getPort(){
+    public static int getPort() {
         return PORT;
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         ControllerManager.getInstance();
         ServerSocket socket;
         try {
@@ -60,7 +59,7 @@ public class ServerUiTestHelper extends Server {
         run_server(socket);
     }
 
-    public static void run_server(ServerSocket socket){
+    public static void run_server(ServerSocket socket) {
         while (true) {
             try {
                 Socket client = socket.accept();
@@ -74,7 +73,7 @@ public class ServerUiTestHelper extends Server {
     }
 }
 
-class ClientHandlerUiTestHelper extends ClientHandler{
+class ClientHandlerUiTestHelper extends ClientHandler {
     private static final Logger logger = LogManager.getLogger(ClientHandlerUiTestHelper.class);
 
     public ClientHandlerUiTestHelper(Socket client) {
@@ -88,16 +87,16 @@ class ClientHandlerUiTestHelper extends ClientHandler{
         try {
             // CAREFUL: THIS IS JUST FOR TESTING THE UI, IF MULTIPLE MESSAGES ARRIVE WHILE INSIDE AN IF, THERE COULD BE SYNCHRONISATION PROBLEMS
             parsedMessage = ParserServer.parseRequest(clientMessage);
-            if(parsedMessage instanceof CreateGameMessageController && ((CreateGameMessage)clientMessage).getPlayersNumber() == 1){
+            if (parsedMessage instanceof CreateGameMessageController && ((CreateGameMessage) clientMessage).getPlayersNumber() == 1) {
                 // we have created a new single player game
                 logger.warn("Hard changing status of game");
                 ControllerActionsServerSingle ca = (ControllerActionsServerSingle) controllerManager.getControllerFromMap(answerListener.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
-                ManipulateGameUiTestHelper.setStateOfGame8(answerListener.getGameId(), ca.getGame());
+                ManipulateGameUiTestHelper.setStateOfGame2(answerListener.getGameId(), ca.getGame());
 
                 answerListener.sendAnswer(AnswerFactory.createGameStatusAnswer(ca.getGameId(), answerListener.getPlayerId(), answerListener.getPlayerId(), ca.getGame()));
-            }else if((parsedMessage instanceof JoinGameMessageController) && controllerManager.getControllerFromMap(clientMessage.getGameId()).getGame() != null){
+            } else if ((parsedMessage instanceof JoinGameMessageController) && controllerManager.getControllerFromMap(clientMessage.getGameId()).getGame() != null) {
                 // we have created a new multiplayer game
                 logger.warn("Hard changing status of game");
                 ControllerActionsServerMulti ca = (ControllerActionsServerMulti) controllerManager.getControllerFromMap(clientMessage.getGameId());

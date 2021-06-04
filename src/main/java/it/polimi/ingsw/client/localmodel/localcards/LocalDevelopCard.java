@@ -15,7 +15,6 @@ public class LocalDevelopCard extends LocalCard{
 
     public synchronized void setResToFlush(TreeMap<Resource, Integer> resToFlush) {
         this.production.setResToFlush(resToFlush);
-        notifyObservers();
     }
 
     public boolean isDiscounted(){return isDiscounted;}

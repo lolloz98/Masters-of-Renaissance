@@ -4,7 +4,13 @@ import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
+import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
+import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
+import it.polimi.ingsw.client.localmodel.localcards.LocalProductionLeader;
 import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushProductionResAnswer;
+
+import java.util.TreeMap;
+
 /**
  * class that modify the local game with the parameters passed by the server in the answer, this class is used to update the local game after an FlushProductionResMessage
  */
@@ -32,6 +38,14 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
 
         // update productions
         localBoard.flushFromProductions();
+
+        // flush leader developments
+        for (LocalCard lc : localBoard.getLeaderCards()){
+            if(lc instanceof LocalProductionLeader){
+                LocalProductionLeader lpl = (LocalProductionLeader) lc;
+                lpl.setResToFlush(new TreeMap<>());
+            }
+        }
 
         // update history
         if(localGame instanceof LocalMulti){
