@@ -33,17 +33,25 @@ public class BoardView extends GameView {
         waiting = false;
     }
 
+    public BoardView(CLI cli, LocalGame<?> localGame, LocalPlayer localPlayer, boolean waiting) {
+        this.localGame = localGame;
+        this.ui = cli;
+        this.localPlayer = localPlayer;
+        localGame.getError().addObserver(this);
+        localPlayer.getLocalBoard().overrideObserver(this);
+        localGame.getLocalTurn().overrideObserver(this);
+        localGame.overrideObserver(this);
+        this.waiting = waiting;
+    }
+
     @Override
     public synchronized void draw() {
-        if (waiting) {
-            System.out.println("Please wait");
-        } else {
-            CLIutils.clearScreen();
-            CLIutils.printBlock(BoardPrinter.toStringBlock(localGame, localPlayer));
-            System.out.println("");
-            super.drawTurn();
-        }
+        CLIutils.clearScreen();
+        if (waiting)
+            message = ("Please wait");
+        CLIutils.printBlock(BoardPrinter.toStringBlock(localGame, localPlayer));
         System.out.println("");
+        super.drawTurn();
     }
 
     @Override
@@ -102,7 +110,7 @@ public class BoardView extends GameView {
                 }
             }
         } else {
-            System.out.println("You can only do this on your board!");
+            message = ("You can only do this on your board!");
         }
     }
 
@@ -114,7 +122,7 @@ public class BoardView extends GameView {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("You can only do this on your board!");
+            message = ("You can only do this on your board!");
         }
     }
 
@@ -132,7 +140,7 @@ public class BoardView extends GameView {
                                     !leaderCard.isDiscarded()) {
                                 LocalProductionLeader localProductionLeader = ((LocalProductionLeader) localPlayer.getLocalBoard().getLeaderCards().get(number - 1));
                                 if (localProductionLeader.getProduction().getResToFlush().size() != 0) {
-                                    System.out.println("You already used this development leader card in this turn!");
+                                    message = ("You already used this development leader card in this turn!");
                                 } else {
                                     removeObserved();
                                     ui.setState(new ActivateProductionView(
@@ -143,17 +151,17 @@ public class BoardView extends GameView {
                                     ));
                                 }
                             } else {
-                                System.out.println("You can only do this with and active development leader card!");
+                                message = ("You can only do this with and active development leader card!");
                             }
                         } else writeErrText();
                     } catch (NumberFormatException e) {
                         writeErrText();
                     }
                 } else {
-                    System.out.println("You can only do this on your board!");
+                    message = ("You can only do this on your board!");
                 }
             } else {
-                System.out.println("It's not your turn!");
+                message = ("It's not your turn!");
             }
         } else writeErrText();
     }
@@ -169,17 +177,17 @@ public class BoardView extends GameView {
                         if (number >= 0 && number < 4) {
                             if (number == 0) {
                                 if (localPlayer.getLocalBoard().getBaseProduction().getResToFlush().size() != 0) {
-                                    System.out.println("You already used the base development in this turn!");
+                                    message = ("You already used the base development in this turn!");
                                 } else {
                                     removeObserved();
                                     ui.setState(new ActivateProductionView(ui, localGame, 0, localPlayer.getLocalBoard().getBaseProduction()));
                                 }
                             } else {
                                 if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
-                                    System.out.println("There are no cards in this slot!");// there are no develop cards in this slot
+                                    message = ("There are no cards in this slot!");// there are no develop cards in this slot
                                 } else {
                                     if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() - 1).getProduction().getResToFlush().size() != 0) {
-                                        System.out.println("You already used this development card in this turn!");
+                                        message = ("You already used this development card in this turn!");
                                     } else {
                                         removeObserved();
                                         ui.setState(new ActivateProductionView(
@@ -196,10 +204,10 @@ public class BoardView extends GameView {
                         writeErrText();
                     }
                 } else {
-                    System.out.println("You can only do this on your board!");
+                    message = ("You can only do this on your board!");
                 }
             } else {
-                System.out.println("It's not your turn!");
+                message = ("It's not your turn!");
             }
         } else writeErrText();
     }
@@ -219,7 +227,7 @@ public class BoardView extends GameView {
                 }
             }
         } else {
-            System.out.println("You can only do this on your board!");
+            message = ("You can only do this on your board!");
         }
     }
 

@@ -12,7 +12,7 @@ import java.util.TreeMap;
 public class DevelopmentGridPrinter {
     public static ArrayList<String> toStringBlock(LocalDevelopmentGrid localDevelopmentGrid) {
         ArrayList<String> out = new ArrayList<>();
-        for (int i = 0; i < 29; i++) out.add("");
+        for (int i = 0; i < 27; i++) out.add("");
         LocalDevelopCard[][] topDevelopCards = localDevelopmentGrid.getTopDevelopCards();
         int[][] developCardsNumber = localDevelopmentGrid.getDevelopCardsNumber();
         buildFrame(out);

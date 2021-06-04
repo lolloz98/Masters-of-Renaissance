@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
@@ -16,6 +17,7 @@ public class WinnerView extends GameView {
 
     @Override
     public void draw() {
+        CLIutils.clearScreen();
         System.out.println("The game is over");
         if(localGame instanceof LocalMulti){
             LocalMulti localMulti = (LocalMulti) localGame;

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.cli.states.creation;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.*;
@@ -17,6 +18,7 @@ public class NewMultiView extends View<CLI> {
 
     @Override
     public synchronized void draw(){
+        CLIutils.clearScreen();
         if(localMulti.getState() == LocalGameState.NEW){
             System.out.println("Please wait");
         }

@@ -29,13 +29,11 @@ public class DevelopmentGridView extends GameView {
 
     @Override
     public void draw() {
+        CLIutils.clearScreen();
         if (waiting)
-            System.out.println("Please wait");
-        else {
-            CLIutils.clearScreen();
-            CLIutils.printBlock(DevelopmentGridPrinter.toStringBlock(localDevelopmentGrid));
-            super.drawTurn();
-        }
+            message = ("Please wait");
+        CLIutils.printBlock(DevelopmentGridPrinter.toStringBlock(localDevelopmentGrid));
+        super.drawTurn();
     }
 
     @Override
@@ -93,7 +91,7 @@ public class DevelopmentGridView extends GameView {
                                 TreeMap<Resource, Integer> cost = localDevelopmentGrid.getTopDevelopCards()[colorInt][level - 1].getCost();
                                 ui.setState(new BuyDevelopmentCardView(ui, localGame, color, level, slotNumber, cost));
                             } else {
-                                System.out.println("There are no cards in this deck!");
+                                message = ("There are no cards in this deck!");
                             }
                         } else {
                             writeErrText();
@@ -105,7 +103,7 @@ public class DevelopmentGridView extends GameView {
                     writeErrText();
                 }
             } else {
-                System.out.println("It's not your turn!");
+                message = ("It's not your turn!");
             }
         } else writeErrText();
     }

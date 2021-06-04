@@ -76,7 +76,7 @@ public class FlushMarketCombinationView extends View<CLI> {
             switch (ans) {
                 case "1":
                     // switch view, send message
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer(), true));
                     try {
                         ui.getGameHandler().dealWithMessage(new FlushMarketResMessage(
                                 localGame.getGameId(),

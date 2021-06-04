@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 
@@ -17,6 +18,7 @@ public class HelpView extends GameView {
 
     @Override
     public void draw() {
+        CLIutils.clearScreen();
         System.out.println("Anywhere, you can type:");
         System.out.println("'sm' to show the market");
         System.out.println("'sd' to show the development decks");

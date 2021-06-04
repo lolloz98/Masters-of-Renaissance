@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.states.playing.*;
 import it.polimi.ingsw.client.cli.states.playing.WinnerView;
 import it.polimi.ingsw.client.exceptions.LeaderIndexOutOfBoundException;
+import it.polimi.ingsw.client.exceptions.LeadersAlreadyPickedException;
 import it.polimi.ingsw.client.exceptions.ResourceNumberOutOfBoundException;
 import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 
 public abstract class GameView extends View<CLI> {
     protected LocalGame<?> localGame;
+    protected String message = "";
 
     public abstract void draw();
 
@@ -24,6 +26,7 @@ public abstract class GameView extends View<CLI> {
 
     @Override
     public synchronized void notifyUpdate() {
+        message = "";
         if (localGame.getState() == LocalGameState.OVER) goToWinnerScreen();
         if (localGame.getState() == LocalGameState.DESTROYED) goToDestroyed();
         else {
@@ -34,10 +37,13 @@ public abstract class GameView extends View<CLI> {
 
     @Override
     public void notifyError() {
+        message = localGame.getError().getErrorMessage();
         System.out.println(localGame.getError().getErrorMessage());
         waiting = false;
+        draw();
     }
 
+    @Override
     public void handleCommand(String s) {
         String ans = s.toUpperCase();
         ArrayList<String> ansList = new ArrayList<>(Arrays.asList(ans.split("\\s+")));
@@ -77,7 +83,7 @@ public abstract class GameView extends View<CLI> {
                 helpScreen();
                 break;
             case "QUIT":
-                ui.setQuit(true);
+                ui.setQuit(true); // TODO
                 break;
             default:
                 writeErrText();
@@ -121,7 +127,7 @@ public abstract class GameView extends View<CLI> {
                 RemoveLeaderPrepMessage removeLeaderPrepMessage = InputHelper.getRemoveLeaderPrepMessage(localGame, ansList.get(1), ansList.get(2));
                 waiting = true;
                 ui.getGameHandler().dealWithMessage(removeLeaderPrepMessage);
-            } catch (LeaderIndexOutOfBoundException | NumberFormatException e) {
+            } catch (LeaderIndexOutOfBoundException | LeadersAlreadyPickedException | NumberFormatException e) {
                 writeErrText();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -217,10 +223,11 @@ public abstract class GameView extends View<CLI> {
                 System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
             }
         }
+        System.out.println(message);
     }
 
     protected void writeErrText() {
-        System.out.println("Invalid choice, try again. To see the possible commands, write 'help'");
+        message = ("Invalid choice, try again. To see the possible commands, write 'help'");
     }
 
     public void helpScreen() {

@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.cli.states;
 
 import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.ServerObserver;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
@@ -58,6 +59,7 @@ public class RejoinView extends View<CLI> {
 
     @Override
     public void draw() {
+        CLIutils.clearScreen();
         if (waiting) {
             System.out.println("Please wait");
         } else {

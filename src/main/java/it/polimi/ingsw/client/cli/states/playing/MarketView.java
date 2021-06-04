@@ -31,13 +31,11 @@ public class MarketView extends GameView {
 
     @Override
     public synchronized void draw() {
+        CLIutils.clearScreen();
         if (waiting)
-            System.out.println("Please wait");
-        else {
-            CLIutils.clearScreen();
-            CLIutils.printBlock(MarketPrinter.toStringBlock(localGame, localMarket));
-            super.drawTurn();
-        }
+            message = ("Please wait");
+        CLIutils.printBlock(MarketPrinter.toStringBlock(localGame, localMarket));
+        super.drawTurn();
     }
 
     @Override
@@ -97,7 +95,7 @@ public class MarketView extends GameView {
                     writeErrText();
                 }
             } else {
-                System.out.println("It's not your turn!");
+                message = ("It's not your turn!");
             }
         } else writeErrText();
     }
