@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.player.Player;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -100,8 +101,8 @@ public abstract class Game<T extends Turn> implements Serializable {
         ArrayList<DevelopCard> developCards = new ArrayList<>();
         String path;
         for (int i = 1; i < 49; i++) {
-            path = String.format("src/main/resources/json_file/cards/develop/%03d.json", i);
-            developCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DevelopCard.class));
+            path = String.format("/json_file/cards/develop/%03d.json", i);
+            developCards.add(gson.fromJson(new JsonReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(path)))), DevelopCard.class));
         }
         this.decksDevelop = new TreeMap<>() {{
             for (Color color : Color.values()) {
@@ -132,20 +133,20 @@ public abstract class Game<T extends Turn> implements Serializable {
         String path;
         int i;
         for (i = 49; i < 53; i++) {
-            path = String.format("src/main/resources/json_file/cards/leader/%03d.json", i);
-            leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DiscountLeaderCard.class));
+            path = String.format("/json_file/cards/leader/%03d.json", i);
+            leaderCards.add(gson.fromJson(new JsonReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(path)))), DiscountLeaderCard.class));
         }
         for (i = 53; i < 57; i++) {
-            path = String.format("src/main/resources/json_file/cards/leader/%03d.json", i);
-            leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), DepotLeaderCard.class));
+            path = String.format("/json_file/cards/leader/%03d.json", i);
+            leaderCards.add(gson.fromJson(new JsonReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(path)))), DepotLeaderCard.class));
         }
         for (i = 57; i < 61; i++) {
-            path = String.format("src/main/resources/json_file/cards/leader/%03d.json", i);
-            leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), MarbleLeaderCard.class));
+            path = String.format("/json_file/cards/leader/%03d.json", i);
+            leaderCards.add(gson.fromJson(new JsonReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(path)))), MarbleLeaderCard.class));
         }
         for (i = 61; i < 65; i++) {
-            path = String.format("src/main/resources/json_file/cards/leader/%03d.json", i);
-            leaderCards.add(gson.fromJson(new JsonReader(new FileReader(path)), ProductionLeaderCard.class));
+            path = String.format("/json_file/cards/leader/%03d.json", i);
+            leaderCards.add(gson.fromJson(new JsonReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(path)))), ProductionLeaderCard.class));
         }
         this.deckLeader = new Deck<>(leaderCards);
         this.deckLeader.shuffle();
