@@ -36,6 +36,8 @@ public class ControllerManager {
         toBeRejoinedIds = new TreeSet<>();
         // load from files
         final File folder = new File("tmp");
+        if(!folder.exists()) folder.mkdir();
+
         List<File> files = List.of(Objects.requireNonNull(folder.listFiles()));
         List<String> fileNames = files.stream().filter(File::isFile).map(File::getName).collect(Collectors.toList());
         for (String fileName : fileNames) {
