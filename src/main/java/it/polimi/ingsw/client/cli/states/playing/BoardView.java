@@ -126,18 +126,22 @@ public class BoardView extends GameView {
                     try {
                         int number = Integer.parseInt(ans1);
                         if (number > 0 && number < 3) {
-                            LocalLeaderCard leaderCard = (LocalLeaderCard) localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(number-1);
+                            LocalLeaderCard leaderCard = (LocalLeaderCard) localGame.getMainPlayer().getLocalBoard().getLeaderCards().get(number - 1);
                             if (leaderCard instanceof LocalProductionLeader &&
                                     leaderCard.isActive() &&
                                     !leaderCard.isDiscarded()) {
-                                removeObserved();
-                                LocalProductionLeader localProductionLeader = ((LocalProductionLeader) localPlayer.getLocalBoard().getLeaderCards().get(number-1));
-                                ui.setState(new ActivateProductionView(
-                                        ui,
-                                        localGame,
-                                        localProductionLeader.getWhichProd(),
-                                        localProductionLeader.getProduction()
-                                ));
+                                LocalProductionLeader localProductionLeader = ((LocalProductionLeader) localPlayer.getLocalBoard().getLeaderCards().get(number - 1));
+                                if (localProductionLeader.getProduction().getResToFlush().size() != 0) {
+                                    System.out.println("You already used this development leader card in this turn!");
+                                } else {
+                                    removeObserved();
+                                    ui.setState(new ActivateProductionView(
+                                            ui,
+                                            localGame,
+                                            localProductionLeader.getWhichProd(),
+                                            localProductionLeader.getProduction()
+                                    ));
+                                }
                             } else {
                                 System.out.println("You can only do this with and active development leader card!");
                             }
@@ -164,19 +168,27 @@ public class BoardView extends GameView {
                         number = Integer.parseInt(ans1);
                         if (number >= 0 && number < 4) {
                             if (number == 0) {
-                                removeObserved();
-                                ui.setState(new ActivateProductionView(ui, localGame, 0, localPlayer.getLocalBoard().getBaseProduction()));
+                                if (localPlayer.getLocalBoard().getBaseProduction().getResToFlush().size() != 0) {
+                                    System.out.println("You already used the base development in this turn!");
+                                } else {
+                                    removeObserved();
+                                    ui.setState(new ActivateProductionView(ui, localGame, 0, localPlayer.getLocalBoard().getBaseProduction()));
+                                }
                             } else {
                                 if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
                                     System.out.println("There are no cards in this slot!");// there are no develop cards in this slot
                                 } else {
-                                    removeObserved();
-                                    ui.setState(new ActivateProductionView(
-                                            ui,
-                                            localGame,
-                                            number,
-                                            localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() - 1).getProduction()
-                                    ));
+                                    if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() - 1).getProduction().getResToFlush().size() != 0) {
+                                        System.out.println("You already used this development card in this turn!");
+                                    } else {
+                                        removeObserved();
+                                        ui.setState(new ActivateProductionView(
+                                                ui,
+                                                localGame,
+                                                number,
+                                                localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() - 1).getProduction()
+                                        ));
+                                    }
                                 }
                             }
                         }
