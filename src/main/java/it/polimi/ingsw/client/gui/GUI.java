@@ -1,7 +1,10 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.GameHandler;
+import it.polimi.ingsw.client.LocalSingleGameHandler;
+import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.componentsgui.ImageCache;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 
@@ -19,8 +22,20 @@ public class GUI extends UI {
         whoIAmSeeingId = -1;
     }
 
-    public void setGameHandler(GameHandler gameHandler){
+    public void setGameHandler(LocalSingleGameHandler gameHandler){
         this.gameHandler = gameHandler;
+        Thread thread = new Thread(gameHandler);
+
+        // When the application is closed, we want to close the thread as well
+        thread.setDaemon(true);
+
+        thread.start();
+    }
+
+    public void setGameHandler(ServerListener gameHandler, Observer observer){
+        this.gameHandler = gameHandler;
+        this.gameHandler.overrideObserver(observer);
+
         Thread thread = new Thread(gameHandler);
 
         // When the application is closed, we want to close the thread as well

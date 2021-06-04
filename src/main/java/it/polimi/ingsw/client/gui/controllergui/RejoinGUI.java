@@ -34,9 +34,8 @@ public class RejoinGUI extends ControllerGUI implements Observer {
             ServerListener old = (ServerListener) ui.getGameHandler();
             new Thread(() -> {
                 try {
-                    ui.setGameHandler(new ServerListener(old.getAddress(), old.getPort()));
+                    ui.setGameHandler(new ServerListener(old.getAddress(), old.getPort()), new ClosingConnectionListenerGUI(stage, ui));
                     ui.getGameHandler().setLocalGame(ui.getLocalGame());
-                    ui.getGameHandler().overrideObserver(new ClosingConnectionListenerGUI(stage, ui));
                     ui.getGameHandler().dealWithMessage(new RejoinMessage(ui.getLocalGame().getGameId(), ui.getLocalGame().getMainPlayer().getId()));
                 } catch (IOException e) {
                     logger.error("error while connecting to the server: " + e);

@@ -55,9 +55,7 @@ public class StartRemoteGUI extends ControllerGUI implements Observer {
                     try {
                         logger.debug("Connecting to server");
                         ServerListener serverListener = new ServerListener(ip, port);
-                        ui.setGameHandler(serverListener);
-
-                        serverListener.overrideObserver(new ClosingConnectionListenerGUI(stage, ui));
+                        ui.setGameHandler(serverListener, new ClosingConnectionListenerGUI(stage, ui));
 
                         BuildGUI.getInstance().toJoinOrCreate(stage, ui);
                     } catch (IllegalArgumentException | IOException e) {
