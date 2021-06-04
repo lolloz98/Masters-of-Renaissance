@@ -20,10 +20,7 @@ public class LocalCard extends Observable {
 
     public Image getImage(){
         if (image == null) {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            String path = Objects.requireNonNull(classLoader.getResource(String.format("png/cards_front/%03d.png", id))).getPath();
-            File file = new File(path);
-            this.image = new Image(file.toURI().toString());
+            this.image = new Image(String.format("/png/cards_front/%03d.png", id));
         }
         return image;
     }
