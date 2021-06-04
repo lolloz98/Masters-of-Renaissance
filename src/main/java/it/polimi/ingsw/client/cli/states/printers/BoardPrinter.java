@@ -68,7 +68,7 @@ public class BoardPrinter {
         } else if(localPlayer.getLocalBoard().getLeaderCards().size() == 2){
             CLIutils.append(out, 0, "1) ");
             if(localPlayer.getLocalBoard().getLeaderCards().get(0) instanceof LocalConcealedCard){
-                CLIutils.append(out, 1, "              ");
+                CLIutils.append(out, 0, "              ");
             } else {
                 LocalLeaderCard localLeaderCard = (LocalLeaderCard) localPlayer.getLocalBoard().getLeaderCards().get(0);
                 if(localLeaderCard.isActive()){

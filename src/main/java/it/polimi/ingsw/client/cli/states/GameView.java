@@ -17,7 +17,6 @@ import java.util.Arrays;
 
 public abstract class GameView extends View<CLI> {
     protected LocalGame<?> localGame;
-    protected boolean waiting;
 
     public abstract void draw();
 

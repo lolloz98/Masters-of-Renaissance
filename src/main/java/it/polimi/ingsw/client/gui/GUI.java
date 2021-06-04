@@ -22,32 +22,6 @@ public class GUI extends UI {
         whoIAmSeeingId = -1;
     }
 
-    public void setGameHandler(LocalSingleGameHandler gameHandler){
-        this.gameHandler = gameHandler;
-        Thread thread = new Thread(gameHandler);
-
-        // When the application is closed, we want to close the thread as well
-        thread.setDaemon(true);
-
-        thread.start();
-    }
-
-    public void setGameHandler(ServerListener gameHandler, Observer observer){
-        this.gameHandler = gameHandler;
-        this.gameHandler.overrideObserver(observer);
-
-        Thread thread = new Thread(gameHandler);
-
-        // When the application is closed, we want to close the thread as well
-        thread.setDaemon(true);
-
-        thread.start();
-    }
-
-    public GameHandler getGameHandler(){
-        return gameHandler;
-    }
-
     public void setWhoIAmSeeingId(Integer playerId){
         whoIAmSeeingId = playerId;
     }

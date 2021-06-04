@@ -21,11 +21,11 @@ public class CLI extends UI {
     private View<CLI> state;
     private String nickname;
 
-    public View<CLI> getState() {
+    public synchronized View<CLI> getState() {
         return state;
     }
 
-    public void setState(View<CLI> state) {
+    public synchronized void setState(View<CLI> state) {
         this.state = state;
     }
 
@@ -47,7 +47,6 @@ public class CLI extends UI {
             ans = input.nextLine();
             state.handleCommand(ans);
         }
-        // todo close socket
     }
 
     private void setup() {
@@ -82,6 +81,8 @@ public class CLI extends UI {
                         try {
                             int portNumber = Integer.parseInt(portString);
                             setServerListener(ip, portNumber);
+                            // set observer in case connection closes
+                            gameHandler.overrideObserver(new ServerObserver(this));
                             valid = true;
                             // choice for join or create game
                             joinOrCreate();

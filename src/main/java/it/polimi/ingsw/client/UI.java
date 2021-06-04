@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
@@ -23,9 +24,6 @@ public abstract class UI {
 
     public void setQuit(boolean quit) {
         this.quit = quit;
-    }
-    public GameHandler getGameHandler() {
-        return gameHandler;
     }
 
     public LocalGame<?> getLocalGame() {
@@ -86,5 +84,31 @@ public abstract class UI {
     protected void setServerListener(String ip, int port) throws IOException {
         gameHandler = new ServerListener(ip, port);
         new Thread(gameHandler).start();
+    }
+
+    public void setGameHandler(LocalSingleGameHandler gameHandler){
+        this.gameHandler = gameHandler;
+        Thread thread = new Thread(gameHandler);
+
+        // When the application is closed, we want to close the thread as well
+        thread.setDaemon(true);
+
+        thread.start();
+    }
+
+    public void setGameHandler(ServerListener gameHandler, Observer observer){
+        this.gameHandler = gameHandler;
+        this.gameHandler.overrideObserver(observer);
+
+        Thread thread = new Thread(gameHandler);
+
+        // When the application is closed, we want to close the thread as well
+        thread.setDaemon(true);
+
+        thread.start();
+    }
+
+    public GameHandler getGameHandler(){
+        return gameHandler;
     }
 }
