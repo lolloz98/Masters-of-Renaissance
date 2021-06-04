@@ -93,7 +93,7 @@ class ClientHandlerUiTestHelper extends ClientHandler {
                 ControllerActionsServerSingle ca = (ControllerActionsServerSingle) controllerManager.getControllerFromMap(answerListener.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
-                ManipulateGameUiTestHelper.setStateOfGame2(answerListener.getGameId(), ca.getGame());
+                ManipulateGameUiTestHelper.setStateOfGame9(answerListener.getGameId(), ca.getGame());
 
                 answerListener.sendAnswer(AnswerFactory.createGameStatusAnswer(ca.getGameId(), answerListener.getPlayerId(), answerListener.getPlayerId(), ca.getGame()));
             } else if ((parsedMessage instanceof JoinGameMessageController) && controllerManager.getControllerFromMap(clientMessage.getGameId()).getGame() != null) {

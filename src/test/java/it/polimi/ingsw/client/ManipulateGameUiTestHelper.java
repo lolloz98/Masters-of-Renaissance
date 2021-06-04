@@ -406,4 +406,48 @@ public class ManipulateGameUiTestHelper {
         ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
     }
 
+    /**
+     * set two discount leaders
+     */
+    public static void setStateOfGame9(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FullDevelopSlotException, InvalidDevelopCardToSlotException, NotEnoughResourcesException {
+        try {
+            setChooseInitRes(gameId, game.getPlayer(), Resource.SHIELD);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.GOLD);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.ROCK);
+            setChooseInitRes(gameId, game.getPlayer(), Resource.SERVANT);
+        } catch (IndexOutOfBoundsException ignore) {
+        }
+        game.getPlayer().getBoard().removeLeaderCards(new ArrayList<>() {{
+            add(game.getPlayer().getBoard().getLeaderCards().get(1).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(0).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(2).getId());
+            add(game.getPlayer().getBoard().getLeaderCards().get(3).getId());
+        }});
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+
+        logger.warn("hard setting leaders in player");
+        try {
+            game.getPlayer().getBoard().addLeaderCards(new ArrayList<>() {{
+                add(gson.fromJson(new JsonReader(new FileReader("src/main/resources/json_file/cards/leader/049.json")), DiscountLeaderCard.class));
+                add(gson.fromJson(new JsonReader(new FileReader("src/main/resources/json_file/cards/leader/050.json")), DiscountLeaderCard.class));
+            }});
+        } catch (FileNotFoundException ignore) {
+
+        }
+
+        satisfyReq(
+                game.getPlayer().getBoard().getLeaderCards().get(0).getRequirement(),
+                game,
+                game.getPlayer()
+        );
+        satisfyReq(
+                game.getPlayer().getBoard().getLeaderCards().get(1).getRequirement(),
+                game,
+                game.getPlayer()
+        );
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+    }
 }
