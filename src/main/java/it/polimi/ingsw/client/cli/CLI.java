@@ -20,6 +20,11 @@ public class CLI extends UI {
     private static final Logger logger = LogManager.getLogger(CLI.class);
     private View<CLI> state;
     private String nickname;
+    private String quitMsg;
+
+    public void setQuitMsg(String quitMsg) {
+        this.quitMsg = quitMsg;
+    }
 
     public synchronized View<CLI> getState() {
         return state;
@@ -38,22 +43,24 @@ public class CLI extends UI {
     public void run() {
         CLIutils.clearScreen();
         System.out.println("Welcome to Masters of Renaissance");
-        quit = false;
+        System.out.println("");
+        System.out.println("");
         this.input = new Scanner(System.in);
-        setup();
         String ans;
-        while (!quit) {
-            state.draw();
-            ans = input.nextLine();
-            state.handleCommand(ans);
+        while(true) {
+            quit = false;
+            setup();
+            while (!quit) {
+                state.draw();
+                ans = input.nextLine();
+                state.handleCommand(ans);
+            }
+            CLIutils.clearScreen();
         }
     }
 
     private void setup() {
         boolean valid;
-        input = new Scanner(System.in);
-        System.out.println("");
-        System.out.println("");
         pickNickname();
         do {
             System.out.println("Do you want to play a local single game, or to connect to a server?");
@@ -191,7 +198,7 @@ public class CLI extends UI {
         boolean valid;
         do {
             String nameTemp = input.nextLine();
-            if (nameTemp.length() < 1) {// todo set max length
+            if (nameTemp.length() < 1) {
                 System.out.println("Invalid nickname, retry:");
                 valid = false;
             } else {

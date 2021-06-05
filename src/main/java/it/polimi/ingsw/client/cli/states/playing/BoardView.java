@@ -55,14 +55,6 @@ public class BoardView extends GameView {
     }
 
     @Override
-    public void removeObserved() {
-        localGame.getError().removeObserver();
-        localPlayer.getLocalBoard().removeObservers();
-        localGame.getLocalTurn().removeObservers();
-        localGame.removeObservers();
-    }
-
-    @Override
     public synchronized void handleCommand(String s) {
         if (!waiting) {
             String ans = s.toUpperCase();

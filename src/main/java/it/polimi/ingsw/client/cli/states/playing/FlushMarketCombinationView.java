@@ -28,6 +28,7 @@ public class FlushMarketCombinationView extends View<CLI> {
 
     public FlushMarketCombinationView(CLI cli, LocalGame<?> localGame, TreeMap<Resource, Integer> resToFlush) {
         this.localGame = localGame;
+        localGame.overrideObserver(this);
         this.resToFlush = resToFlush;
         this.ui = cli;
         resToKeep = new TreeMap<>();
@@ -76,6 +77,7 @@ public class FlushMarketCombinationView extends View<CLI> {
             switch (ans) {
                 case "1":
                     // switch view, send message
+                    localGame.removeAllObservers();
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer(), true));
                     try {
                         ui.getGameHandler().dealWithMessage(new FlushMarketResMessage(
@@ -90,6 +92,7 @@ public class FlushMarketCombinationView extends View<CLI> {
                     break;
                 case "2":
                     // only switch view
+                    localGame.removeAllObservers();
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     break;
                 default:

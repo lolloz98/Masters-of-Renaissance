@@ -23,7 +23,7 @@ public class HistoryView extends GameView {
         CLIutils.clearScreen();
         ArrayList<String> lastHistory;
         ArrayList<String> fullHistory = localGame.getLocalTurn().getHistoryObservable().getHistory();
-        if (fullHistory.size() < 29){
+        if (fullHistory.size() < 29) {
             lastHistory = new ArrayList<>(fullHistory);
         } else {
             lastHistory = new ArrayList<>(fullHistory.subList(fullHistory.size() - 29, fullHistory.size() - 1));
@@ -31,12 +31,5 @@ public class HistoryView extends GameView {
         CLIutils.printBlock(lastHistory);
         System.out.println("");
         drawTurn();
-    }
-
-    @Override
-    public void removeObserved() {
-        localGame.getError().removeObserver();
-        localGame.getLocalTurn().removeObservers();
-        localGame.removeObservers();
     }
 }

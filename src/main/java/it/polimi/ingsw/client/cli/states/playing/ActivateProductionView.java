@@ -27,6 +27,7 @@ public class ActivateProductionView extends View<CLI> {
     public ActivateProductionView(CLI cli, LocalGame<?> localGame, int whichProd, LocalProduction localProduction) {
         this.ui = cli;
         this.localGame = localGame;
+        localGame.overrideObserver(this);
         this.whichProd = whichProd;  
         this.resToGive = new TreeMap<>();
         LocalProduction prod = localProduction;
@@ -110,6 +111,7 @@ public class ActivateProductionView extends View<CLI> {
             switch (ans) {
                 case "1":
                     // switch view, send message
+                    localGame.removeAllObservers();
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     try {
                         ui.getGameHandler().dealWithMessage(new ApplyProductionMessage(
@@ -125,6 +127,7 @@ public class ActivateProductionView extends View<CLI> {
                     break;
                 case "2":
                     // only switch view
+                    localGame.removeAllObservers();
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     break;
                 default:

@@ -39,14 +39,6 @@ public class MarketView extends GameView {
     }
 
     @Override
-    public synchronized void removeObserved() {
-        localGame.getError().removeObserver();
-        localMarket.removeObservers();
-        localGame.getLocalTurn().removeObservers();
-        localGame.removeObservers();
-    }
-
-    @Override
     public synchronized void handleCommand(String s) {
         if (!waiting) {
             String ans = s.toUpperCase();

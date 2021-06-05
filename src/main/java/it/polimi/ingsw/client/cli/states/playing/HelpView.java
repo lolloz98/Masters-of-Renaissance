@@ -41,11 +41,4 @@ public class HelpView extends GameView {
         System.out.println("");
         drawTurn();
     }
-
-    @Override
-    public void removeObserved() {
-        localGame.getError().removeObserver();
-        localGame.getLocalTurn().removeObservers();
-        localGame.removeObservers();
-    }
 }
