@@ -190,6 +190,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
                 marketBtn.setVisible(false);
                 developBtn.setVisible(false);
                 break;
+            case DESTROYED:
+                HelperGUI.handleGameDestruction(stage, ui, "A player disconnected. The game has been destroyed");
             default:
                 logger.error("Invalid state: " + ui.getLocalGame().getState());
                 break;

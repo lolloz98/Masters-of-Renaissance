@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.localmodel.History;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
@@ -53,6 +54,7 @@ public class BuyCardSceneControllerGUI extends ControllerGUI implements Observer
     public void notifyError() {
         Platform.runLater(() -> {
             synchronized (ui.getLocalGame()) {
+                if(ui.getLocalGame().getState() ==  LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
                 messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
             }
         });

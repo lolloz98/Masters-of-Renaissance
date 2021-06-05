@@ -12,7 +12,11 @@ public class DestroyedGameAnswerHandler extends AnswerHandler {
 
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
-        localGame.setState(LocalGameState.DESTROYED);
+        // Player cannot call send message to a valid game
+        localGame.setGameId(-1);
+        // if over, I don't want to force the player out of the over page
+        if(localGame.getState() != LocalGameState.OVER)
+            localGame.setState(LocalGameState.DESTROYED);
         localGame.notifyObservers();
     }
 }

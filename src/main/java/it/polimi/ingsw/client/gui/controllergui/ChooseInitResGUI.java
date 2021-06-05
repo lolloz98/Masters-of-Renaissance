@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.controllergui;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.ImageCache;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.Observable;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.ChooseOneResPrepMessage;
@@ -40,7 +41,7 @@ public class ChooseInitResGUI extends ControllerGUI implements Observer {
 
     @Override
     public void notifyError() {
-
+        if(ui.getLocalGame().getState() ==  LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
     }
 
     private void setView(){
@@ -49,6 +50,7 @@ public class ChooseInitResGUI extends ControllerGUI implements Observer {
             logger.debug("initial resources: " + initRes);
             if(initRes == 0){
                 ui.getLocalGame().getMainPlayer().getLocalBoard().removeObservers();
+                ui.getLocalGame().getError().removeObserver();
 
                 BuildGUI.getInstance().toBoard(stage, ui);
             }
@@ -59,6 +61,7 @@ public class ChooseInitResGUI extends ControllerGUI implements Observer {
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
         ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
+        ui.getLocalGame().getError().addObserver(this);
 
         setView();
         comboBox.getItems().addAll(

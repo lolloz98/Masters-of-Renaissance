@@ -102,7 +102,7 @@
                 <version>2.4.1</version>
                 <executions>
                     <execution>
-                        <id>build-first</id>
+                        <id>cli</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -117,7 +117,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>cli</id>
+                        <id>server</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>

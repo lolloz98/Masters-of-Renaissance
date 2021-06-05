@@ -6,6 +6,7 @@ import it.polimi.ingsw.client.exceptions.InvalidMarketIndexException;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.ImageCache;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
@@ -109,6 +110,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public void notifyError() {
         Platform.runLater(() -> {
             synchronized (ui.getLocalGame()) {
+                if(ui.getLocalGame().getState() ==  LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
                 messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
             }
         });
@@ -161,7 +163,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                     for (int j = 0; j < resComb.get(i).get(res); j++) {
                         x++;
                         ImageView imgView = new ImageView();
-                        path = Objects.requireNonNull(classLoader.getResource("png/punchboard/marbles/" + res + ".png")).getPath();
+                        path = Objects.requireNonNull(getClass().getResource("/png/punchboard/marbles/" + res + ".png")).getPath();
                         File file = new File(path);
                         marbleImage = new Image(file.toURI().toString());
                         imgView.setImage(marbleImage);

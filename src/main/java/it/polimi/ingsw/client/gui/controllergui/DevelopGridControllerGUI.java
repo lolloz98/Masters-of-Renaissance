@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.StrongBoxComponent;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import javafx.application.Platform;
@@ -50,7 +51,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
     @Override
     public void notifyError() {
-
+        if(ui.getLocalGame().getState() ==  LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
     }
 
     @Override

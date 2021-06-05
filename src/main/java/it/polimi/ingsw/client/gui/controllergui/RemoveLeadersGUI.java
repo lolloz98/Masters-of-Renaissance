@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.InputHelper;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.exceptions.LeaderIndexOutOfBoundException;
 import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.messages.requests.RemoveLeaderPrepMessage;
 import it.polimi.ingsw.messages.requests.leader.RemoveLeaderMessage;
@@ -36,6 +37,7 @@ public class RemoveLeadersGUI extends ControllerGUI implements Observer {
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
         ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
+        ui.getLocalGame().getError().addObserver(this);
         leaders.add(leader1);
         leaders.add(leader2);
         leaders.add(leader3);
@@ -82,14 +84,16 @@ public class RemoveLeadersGUI extends ControllerGUI implements Observer {
     public void notifyUpdate() {
         synchronized (ui.getLocalGame()) {
             if (ui.getLocalGame().getMainPlayer().getLocalBoard().getLeaderCards().size() == 2) {
+                ui.getLocalGame().removeAllObservers();
                 BuildGUI.getInstance().toBoard(stage, ui);
             }
-            // todo: if else, something by another player happened
         }
     }
 
     @Override
     public void notifyError() {
-        logger.error("Error notification has arrived. Not expected");
+        synchronized (ui.getLocalGame()) {
+            if (ui.getLocalGame().getState() == LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
+        }
     }
 }

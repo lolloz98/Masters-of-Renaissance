@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.DepotComponent;
 import it.polimi.ingsw.client.gui.componentsgui.ImageCache;
+import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
@@ -54,6 +55,7 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
     public void notifyError() {
         Platform.runLater(() -> {
             synchronized (ui.getLocalGame()) {
+                if(ui.getLocalGame().getState() ==  LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
                 messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
             }
             initState();
