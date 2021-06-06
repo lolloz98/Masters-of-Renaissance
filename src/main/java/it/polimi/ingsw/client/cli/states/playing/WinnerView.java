@@ -18,7 +18,8 @@ public class WinnerView extends GameView {
     @Override
     public void draw() {
         CLIutils.clearScreen();
-        System.out.println("The game is over");
+        System.out.println("The game is over.");
+        System.out.println(" ");
         if(localGame instanceof LocalMulti){
             LocalMulti localMulti = (LocalMulti) localGame;
             if(localMulti.getWinners().size() == 1){
@@ -37,9 +38,11 @@ public class WinnerView extends GameView {
                 System.out.print("You lost!");
             }
         }
-        System.out.print(" ");
-        System.out.print("You can still move through the game with 'sb', 'sm', 'sd'");
-        System.out.print("Go back to the main screen by typing 'quit'");
+        System.out.println(" ");
+        System.out.println(" ");
+        System.out.println("You can still move through the game with 'sb', 'sm', 'sd'");
+        System.out.println(" ");
+        System.out.println("Go back to the main screen by typing 'quit'");
     }
 
     @Override

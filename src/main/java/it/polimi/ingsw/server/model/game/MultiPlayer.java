@@ -64,7 +64,7 @@ public class MultiPlayer extends Game<TurnMulti> {
     public void checkEndConditions(){
         for(Player p : players) {
             if (p.getBoard().getFaithtrack().isEndReached() ||
-                    p.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 6)
+                    p.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 7)
                 setLastRound();
         }
     }

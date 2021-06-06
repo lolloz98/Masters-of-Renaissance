@@ -205,7 +205,6 @@ public class ManipulateGameUiTestHelper {
      * then calls the satisfyReq fir the first leadercard of the first player
      */
     public static void setStateOfGame2(int gameId, MultiPlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException {
-
         try {
             setChooseInitRes(gameId, game.getPlayers().get(0), Resource.SHIELD);
             setChooseInitRes(gameId, game.getPlayers().get(1), Resource.GOLD);
@@ -223,6 +222,9 @@ public class ManipulateGameUiTestHelper {
         ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
     }
 
+    /**
+     * lots of resources and requirements for the leaders satisfied
+     */
     public static void setStateOfGame2(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FullDevelopSlotException, InvalidDevelopCardToSlotException, NotEnoughResourcesException {
         try {
             setChooseInitRes(gameId, game.getPlayer(), Resource.SHIELD);
@@ -448,6 +450,95 @@ public class ManipulateGameUiTestHelper {
                 game,
                 game.getPlayer()
         );
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+    }
+
+    /**
+     * all gold deck develops empty, lorenzo wins when the player passes to the next turn
+     */
+    public static void setStateOfGame10(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, FullDevelopSlotException, InvalidDevelopCardToSlotException, EmptyDeckException, InvalidStepsException, NotEnoughResourcesException, EndAlreadyReachedException {
+        setRemoveLeaders(game.getPlayer());
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+        for (int i = 0; i<4; i++) game.getDecksDevelop().get(Color.GOLD).get(1).drawCard();
+        for (int i = 0; i<4; i++) game.getDecksDevelop().get(Color.GOLD).get(2).drawCard();
+        for (int i = 0; i<4; i++) game.getDecksDevelop().get(Color.GOLD).get(3).drawCard();
+    }
+
+
+    /**
+     * set requirement of 2 leaders. Player close to victory  (almost finished his track)
+     */
+    public static void setStateOfGame11(int gameId, SinglePlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, FullDevelopSlotException, InvalidDevelopCardToSlotException, EmptyDeckException, InvalidStepsException, NotEnoughResourcesException, EndAlreadyReachedException {
+        setRemoveLeaders(game.getPlayer());
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+        satisfyReq(game.getPlayer().getBoard().getLeaderCards().get(0).getRequirement(), game, game.getPlayer());
+        satisfyReq(game.getPlayer().getBoard().getLeaderCards().get(1).getRequirement(), game, game.getPlayer());
+        game.getPlayer().getBoard().getFaithtrack().move(23, game);
+    }
+
+    /**
+     * sets track of player 0 to 23rd spot
+     */
+    public static void setStateOfGame11(int gameId, MultiPlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, InvalidStepsException, EndAlreadyReachedException {
+        try {
+            setChooseInitRes(gameId, game.getPlayers().get(0), Resource.SHIELD);
+            setChooseInitRes(gameId, game.getPlayers().get(1), Resource.GOLD);
+            setChooseInitRes(gameId, game.getPlayers().get(2), Resource.ROCK);
+            setChooseInitRes(gameId, game.getPlayers().get(3), Resource.SERVANT);
+        } catch (IndexOutOfBoundsException ignore) {
+        }
+        for (Player p : game.getPlayers())
+            setRemoveLeaders(p);
+        satisfyReq(
+                game.getPlayers().get(0).getBoard().getLeaderCards().get(0).getRequirement(),
+                game,
+                game.getPlayers().get(0)
+        );
+        game.getPlayers().get(0).getBoard().getFaithtrack().move(23, game);
+        ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
+    }
+
+
+    /**
+     * sets track of player 0 to 23rd spot
+     */
+    public static void setStateOfGame12(int gameId, MultiPlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, InvalidStepsException, EndAlreadyReachedException, ResourceNotDiscountableException, EmptyDeckException {
+        try {
+            setChooseInitRes(gameId, game.getPlayers().get(0), Resource.SHIELD);
+            setChooseInitRes(gameId, game.getPlayers().get(1), Resource.GOLD);
+            setChooseInitRes(gameId, game.getPlayers().get(2), Resource.ROCK);
+            setChooseInitRes(gameId, game.getPlayers().get(3), Resource.SERVANT);
+        } catch (IndexOutOfBoundsException ignore) {
+        }
+        for (Player p : game.getPlayers())
+            setRemoveLeaders(p);
+        satisfyReq(
+                game.getPlayers().get(0).getBoard().getLeaderCards().get(0).getRequirement(),
+                game,
+                game.getPlayers().get(0)
+        );
+        satisfyReq(
+                game.getPlayers().get(0).getBoard().getLeaderCards().get(1).getRequirement(),
+                game,
+                game.getPlayers().get(0)
+        );
+
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.BLUE, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.GOLD, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.GREEN, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.PURPLE, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.BLUE, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.GOLD, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.GREEN, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.PURPLE, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.BLUE, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.GOLD, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.GREEN, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.PURPLE, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.BLUE, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.GOLD, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.GREEN, 3);
+        setResourcesInStrongBoxForDevelop(game, game.getPlayers().get(0), Color.PURPLE, 3);
         ControllerManager.getInstance().getControllerFromMap(gameId).toGamePlayState();
     }
 }
