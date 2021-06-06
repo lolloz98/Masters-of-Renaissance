@@ -3,16 +3,13 @@ package it.polimi.ingsw.client.cli.states.printers;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
-import it.polimi.ingsw.enums.Resource;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class DevelopmentGridPrinter {
     public static ArrayList<String> toStringBlock(LocalDevelopmentGrid localDevelopmentGrid) {
         ArrayList<String> out = new ArrayList<>();
-        for (int i = 0; i < 27; i++) out.add("");
+        for (int i = 0; i < 26; i++) out.add("");
         LocalDevelopCard[][] topDevelopCards = localDevelopmentGrid.getTopDevelopCards();
         int[][] developCardsNumber = localDevelopmentGrid.getDevelopCardsNumber();
         buildFrame(out);

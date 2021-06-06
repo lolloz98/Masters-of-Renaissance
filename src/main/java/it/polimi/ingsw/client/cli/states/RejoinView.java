@@ -17,6 +17,7 @@ public class RejoinView extends View<CLI> {
         this.ui = cli;
         ui.getLocalGame().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
+        CLIutils.clearScreen();
         System.out.println("Connection with server dropped!");
     }
 
@@ -24,8 +25,7 @@ public class RejoinView extends View<CLI> {
     public void notifyUpdate() {
         ui.getLocalGame().removeAllObservers();
         if (ui.getLocalGame() == null || ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS || ui.getLocalGame().getState() == LocalGameState.OVER) {
-            // nothing to do, please close
-            // todo end application
+            quit(); // fixme not sure
         } else {
             ui.getLocalGame().removeObservers();
             ui.getLocalGame().getError().removeObserver();
@@ -59,21 +59,15 @@ public class RejoinView extends View<CLI> {
 
     @Override
     public void draw() {
-        CLIutils.clearScreen();
         if (waiting) {
             System.out.println("Please wait");
         } else {
             if (ui.getLocalGame() == null || ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS || ui.getLocalGame().getState() == LocalGameState.OVER) {
-                // nothing to do, please close
-                // todo end application
+                System.out.println("Connection to the server dropped, type 'quit' to go back to the main menu");
             } else {
                 System.out.println("Type 'rejoin' to retry to connect to the server or 'quit' to exit");
             }
         }
-    }
-
-    private void quit() {
-        // todo end application
     }
 
     private void rejoin() {

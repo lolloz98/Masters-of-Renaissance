@@ -22,13 +22,15 @@ public abstract class GameView extends View<CLI> {
 
     public abstract void draw();
 
-    public abstract void removeObserved();
+    public void removeObserved(){
+        localGame.removeAllObservers();
+    }
 
     @Override
     public synchronized void notifyUpdate() {
         message = "";
         if (localGame.getState() == LocalGameState.OVER) goToWinnerScreen();
-        if (localGame.getState() == LocalGameState.DESTROYED) goToDestroyed();
+        else if (localGame.getState() == LocalGameState.DESTROYED) goToDestroyed();
         else {
             waiting = false;
             draw();
@@ -83,7 +85,7 @@ public abstract class GameView extends View<CLI> {
                 helpScreen();
                 break;
             case "QUIT":
-                ui.setQuit(true); // TODO
+                quit();
                 break;
             default:
                 writeErrText();
@@ -187,43 +189,45 @@ public abstract class GameView extends View<CLI> {
     }
 
     public void drawTurn() {
-        if (localGame instanceof LocalMulti) {
-            LocalMulti localMulti = (LocalMulti) localGame;
-            System.out.print("Playing order:");
-            ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
-            for (int i = 0; i < localPlayers.size(); i++) {
-                System.out.print(" " + (i + 1) + "," + localPlayers.get(i).getName());
-            }
-            System.out.print("\n");
-            if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
-                if (localMulti.getMainPlayer().getLocalBoard().getLeaderCards().size() == 2) {
-                    System.out.println("Please wait");
-                } else
-                    System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
-            } else if (localMulti.getState() == LocalGameState.PREP_RESOURCES) {
-                if (localMulti.getMainPlayerPosition() == 0)
-                    System.out.println("Please wait");
-                else if (localMulti.getMainPlayerPosition() == 1 || localMulti.getMainPlayerPosition() == 2)
-                    if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1) {
+        if (localGame.getState() != LocalGameState.DESTROYED && localGame.getState() != LocalGameState.OVER) {
+            if (localGame instanceof LocalMulti) {
+                LocalMulti localMulti = (LocalMulti) localGame;
+                System.out.print("Playing order:");
+                ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
+                for (int i = 0; i < localPlayers.size(); i++) {
+                    System.out.print(" " + (i + 1) + "," + localPlayers.get(i).getName());
+                }
+                System.out.print("\n");
+                if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
+                    if (localMulti.getMainPlayer().getLocalBoard().getLeaderCards().size() == 2) {
                         System.out.println("Please wait");
                     } else
-                        System.out.println("Pick a free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
-                else if (localMulti.getMainPlayerPosition() == 3)
-                    if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1) {
-                        System.out.println("Pick another free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
-                    } else if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 2) {
+                        System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
+                } else if (localMulti.getState() == LocalGameState.PREP_RESOURCES) {
+                    if (localMulti.getMainPlayerPosition() == 0)
                         System.out.println("Please wait");
-                    } else
-                        System.out.println("Pick two free resources: type pr followed by two numbers, 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
+                    else if (localMulti.getMainPlayerPosition() == 1 || localMulti.getMainPlayerPosition() == 2)
+                        if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1) {
+                            System.out.println("Please wait");
+                        } else
+                            System.out.println("Pick a free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
+                    else if (localMulti.getMainPlayerPosition() == 3)
+                        if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 1) {
+                            System.out.println("Pick another free resource: type pr followed by 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
+                        } else if (localMulti.getMainPlayer().getLocalBoard().getResInDepotNumber() == 2) {
+                            System.out.println("Please wait");
+                        } else
+                            System.out.println("Pick two free resources: type pr followed by two numbers, 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
+                } else {
+                    System.out.println("Currently playing: " + localMulti.getLocalTurn().getCurrentPlayer().getName());
+                }
             } else {
-                System.out.println("Currently playing: " + localMulti.getLocalTurn().getCurrentPlayer().getName());
+                if (localGame.getState() == LocalGameState.PREP_LEADERS) {
+                    System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
+                }
             }
-        } else {
-            if (localGame.getState() == LocalGameState.PREP_LEADERS) {
-                System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
-            }
-        }
         System.out.println(message);
+        }
     }
 
     protected void writeErrText() {
@@ -238,11 +242,13 @@ public abstract class GameView extends View<CLI> {
     public void goToDestroyed() {
         removeObserved();
         ui.setState(new DestroyedView(ui, localGame));
+        ui.getState().draw();
     }
 
     private void goToWinnerScreen() {
         removeObserved();
         ui.setState(new WinnerView(ui, localGame));
+        ui.getState().draw();
     }
 
     private void historyScreen() {

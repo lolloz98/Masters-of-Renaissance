@@ -19,7 +19,7 @@ public class LocalBoard extends Observable implements Serializable {
      * notify the board for an update of the local track, it doesn't own an observer
      */
     private LocalTrack localTrack;
-    private int initialRes; // fixme: probably should be removed
+    private int initialRes;
 
     /**
      * method that updates the leader depots of this localBoard

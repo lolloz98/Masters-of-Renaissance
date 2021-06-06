@@ -39,6 +39,7 @@ public class WinnerView extends GameView {
         }
         System.out.print(" ");
         System.out.print("You can still move through the game with 'sb', 'sm', 'sd'");
+        System.out.print("Go back to the main screen by typing 'quit'");
     }
 
     @Override

@@ -37,14 +37,6 @@ public class DevelopmentGridView extends GameView {
     }
 
     @Override
-    public void removeObserved() {
-        localGame.removeObservers();
-        localGame.getError().removeObserver();
-        localDevelopmentGrid.removeObservers();
-        localGame.getLocalTurn().removeObservers();
-    }
-
-    @Override
     public void handleCommand(String s) {
         if (!waiting) {
             String ans = s.toUpperCase();

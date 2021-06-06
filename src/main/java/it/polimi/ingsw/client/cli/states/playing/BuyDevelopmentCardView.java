@@ -23,6 +23,7 @@ public class BuyDevelopmentCardView extends View<CLI> {
 
     public BuyDevelopmentCardView(CLI cli, LocalGame<?> localGame, Color color, int level, int slotNumber, TreeMap<Resource, Integer> cost) {
         this.localGame = localGame;
+        localGame.overrideObserver(this);
         this.cost = new TreeMap<>(cost);
         this.ui = cli;
         this.color = color;
@@ -64,6 +65,7 @@ public class BuyDevelopmentCardView extends View<CLI> {
             switch (ans) {
                 case "1":
                     // switch view, send message
+                    localGame.removeAllObservers();
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer(), true));
                     try {
                         ui.getGameHandler().dealWithMessage(new BuyDevelopCardMessage(
@@ -80,6 +82,7 @@ public class BuyDevelopmentCardView extends View<CLI> {
                     break;
                 case "2":
                     // only switch view
+                    localGame.removeAllObservers();
                     ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
                     break;
                 default:
