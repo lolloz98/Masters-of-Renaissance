@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.controller.ControllerActionsServerSingle;
 import it.polimi.ingsw.server.controller.ControllerManager;
 import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -72,5 +73,10 @@ public class JoinGameMessageControllerTest {
 
         assertNotNull(ca.getGame());
         assertEquals(name, ca.getGame().getPlayer().getName());
+    }
+
+    @AfterClass
+    public static void cleanTmp(){
+        MessageControllerTestHelper.cleanTmp();
     }
 }

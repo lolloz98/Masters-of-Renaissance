@@ -7,6 +7,7 @@ import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.messages.requests.JoinGameMessage;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,4 +70,8 @@ public class ControllerManagerTest {
         controllerManager.joinGame(new JoinGameMessage(id,"fourth"));
     }
 
+    @AfterClass
+    public static void cleanTmp(){
+        MessageControllerTestHelper.cleanTmp();
+    }
 }

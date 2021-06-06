@@ -15,6 +15,7 @@ import it.polimi.ingsw.server.controller.MessageControllerTestHelper;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.WrongStateControllerException;
 import it.polimi.ingsw.server.model.player.Player;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.util.List;
@@ -76,5 +77,10 @@ public class GameStatusMessageControllerTest {
         ls = (LocalSingle) MessageControllerTestHelper.getGameStatus(gameId, cas.getGame().getPlayer().getPlayerId()).getGame();
         assertEquals(gameId, ls.getGameId());
         assertEquals(LocalGameState.PREP_LEADERS, ls.getState());
+    }
+
+    @AfterClass
+    public static void cleanTmp(){
+        MessageControllerTestHelper.cleanTmp();
     }
 }

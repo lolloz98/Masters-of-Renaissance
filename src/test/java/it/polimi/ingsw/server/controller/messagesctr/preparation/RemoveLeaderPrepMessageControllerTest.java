@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.controller.State;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -93,4 +94,8 @@ public class RemoveLeaderPrepMessageControllerTest {
         }catch(InvalidActionControllerException ignore){}
     }
 
+    @AfterClass
+    public static void cleanTmp(){
+        MessageControllerTestHelper.cleanTmp();
+    }
 }

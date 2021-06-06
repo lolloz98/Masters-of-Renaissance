@@ -18,6 +18,7 @@ import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.model.utility.CollectionsHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -96,5 +97,10 @@ public class FinishTurnMessageControllerTest {
 
         MessageControllerTestHelper.doFinishTurn(gameId, player);
         assertFalse(sp.getTurn().isLorenzoPlaying());
+    }
+
+    @AfterClass
+    public static void cleanTmp(){
+        MessageControllerTestHelper.cleanTmp();
     }
 }

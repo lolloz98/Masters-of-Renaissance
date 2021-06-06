@@ -15,6 +15,7 @@ import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.game.MultiPlayer;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.server.model.player.Player;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.util.TreeMap;
@@ -100,5 +101,10 @@ public class ChooseOneResPrepMessageControllerTest {
         for(Player p: game.getPlayers()){
             assertEquals(0, p.getBoard().getInitialRes());
         }
+    }
+
+    @AfterClass
+    public static void cleanTmp(){
+        MessageControllerTestHelper.cleanTmp();
     }
 }

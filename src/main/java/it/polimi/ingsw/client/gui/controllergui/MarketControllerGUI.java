@@ -163,9 +163,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                     for (int j = 0; j < resComb.get(i).get(res); j++) {
                         x++;
                         ImageView imgView = new ImageView();
-                        path = Objects.requireNonNull(getClass().getResource("/png/punchboard/marbles/" + res + ".png")).getPath();
-                        File file = new File(path);
-                        marbleImage = new Image(file.toURI().toString());
+                        marbleImage = new Image("/png/punchboard/marbles/" + res + ".png");
                         imgView.setImage(marbleImage);
                         imgView.setFitHeight(56);
                         imgView.setFitWidth(56);

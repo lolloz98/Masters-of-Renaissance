@@ -17,6 +17,7 @@ import it.polimi.ingsw.server.controller.messagesctr.creation.JoinGameMessageCon
 import it.polimi.ingsw.server.controller.messagesctr.playing.*;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.ChooseOneResPrepMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.preparation.RemoveLeaderPrepMessageController;
+import it.polimi.ingsw.server.model.Persist;
 import it.polimi.ingsw.server.model.cards.DevelopCard;
 import it.polimi.ingsw.server.model.cards.leader.*;
 import it.polimi.ingsw.server.model.exception.*;
@@ -29,8 +30,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Ignore;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * In this class we ignore the ActionControllers, to test just the messageControllers
@@ -155,7 +160,8 @@ public final class MessageControllerTestHelper {
      * to satisfy it. then the card gets activated (if a valid card is passed).
      * Careful: to satisfy the requirement (put resources in the board and buy develop cards) it does it all performing actions
      * directly on the game and NOT passing through messageControllers.
-     * @param card to activate
+     *
+     * @param card   to activate
      * @param player who wants to activate the card (must be the current player otherwise exception)
      * @param gameId current gameId
      * @throws ControllerException something unexpected happens or parameters given are invalid
@@ -199,10 +205,11 @@ public final class MessageControllerTestHelper {
     /**
      * this method buys a develop card (not using messageController), and apply its production (using messageController).
      * (It puts the required resources to buy the card and to activate the production in the StrongBox).
-     * @param gameId current gameId
-     * @param player player (must be the current player)
-     * @param c color of the develop to buy
-     * @param level level of the develop
+     *
+     * @param gameId    current gameId
+     * @param player    player (must be the current player)
+     * @param c         color of the develop to buy
+     * @param level     level of the develop
      * @param whichSlot slot where to put the bought develop
      */
     public static void setPlayerAndDoActivateProduction(int gameId, Player player, Color c, int level, int whichSlot) throws ResourceNotDiscountableException, InvalidArgumentException, EmptyDeckException, InvalidStepsException, EndAlreadyReachedException, FullDevelopSlotException, InvalidDevelopCardToSlotException, InvalidResourceQuantityToDepotException, NotEnoughResourcesException, ControllerException {
@@ -212,5 +219,20 @@ public final class MessageControllerTestHelper {
         doApplyProduction(gameId, player, whichSlot + 1, new TreeMap<>() {{
             put(WarehouseType.STRONGBOX, new TreeMap<>(card.getProduction().whatResourceToGive()));
         }}, card.getProduction().whatResourceToGain());
+    }
+
+    public static void cleanTmp() {
+        final File folder = new File("tmp");
+        if (!folder.exists()) return;
+        List<File> files = List.of(Objects.requireNonNull(folder.listFiles()));
+        List<String> fileNames = files.stream().filter(File::isFile).map(File::getName).collect(Collectors.toList());
+        for (String fileName : fileNames) {
+            if (fileName.endsWith(".tmp")) {
+                logger.debug("adding game from file: " + fileName);
+                String idS = fileName.substring(4);
+                int id = Integer.parseInt(idS.split(".tmp")[0]);
+                Persist.getInstance().remove(id);
+            }
+        }
     }
 }
