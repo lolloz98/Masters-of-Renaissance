@@ -7,6 +7,7 @@ import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +18,7 @@ public class StartGUI extends ControllerGUI implements Observer {
     public Button localBtn;
     public Button remoteBtn;
     public Label errorLbl;
+    public ImageView backgroungImg;
 
     public void setUp(Stage stage, Parent root, GUI ui){
         localBtn.setOnMouseClicked(mouseEvent -> {
