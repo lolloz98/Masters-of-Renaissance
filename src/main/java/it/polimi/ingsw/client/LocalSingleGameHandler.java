@@ -85,7 +85,6 @@ public class LocalSingleGameHandler extends GameHandler {
     }
 
     // We do not need to do anything here
-    // fixme: maybe useful to handle messages and answers in other thread
     @Override
     public void run() {
 
