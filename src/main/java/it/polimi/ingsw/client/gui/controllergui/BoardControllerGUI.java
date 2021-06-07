@@ -5,10 +5,7 @@ import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.componentsgui.*;
-import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalGameState;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
-import it.polimi.ingsw.client.localmodel.LocalSingle;
+import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.client.localmodel.localcards.LocalCard;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import it.polimi.ingsw.messages.requests.FinishTurnMessage;
@@ -56,6 +53,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public DepotComponent depotCmp;
     public StrongBoxComponent strongBoxCmp;
     public Label historyLbl;
+    public Label currentPlayerLbl;
 
     private Observer historyObserver;
 
@@ -117,8 +115,25 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
 
         historyLbl.setText(ui.getLocalGame().getLocalTurn().getHistoryObservable().getLast());
 
+        setCurrentPlayerLabel();
+
         marketBtn.setVisible(true);
         developBtn.setVisible(true);
+    }
+
+    public void setCurrentPlayerLabel(){
+        String currentPlayerStr;
+        if(ui.getLocalGame() instanceof LocalMulti){
+            LocalPlayer p = ((LocalMulti) ui.getLocalGame()).getLocalTurn().getCurrentPlayer();
+            if(p.getId() == ui.getLocalGame().getMainPlayer().getId()){
+                currentPlayerStr = "It's your turn";
+            }else{
+                currentPlayerStr = "It's " + p.getName() + "'s turn";
+            }
+        }else{
+            currentPlayerStr = "It's your turn";
+        }
+        currentPlayerLbl.setText(currentPlayerStr);
     }
 
     /**

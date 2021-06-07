@@ -25,7 +25,7 @@ public class WinnersGUI extends ControllerGUI {
             singlePlayer.setVisible(false);
             int i = 1;
             for(LocalPlayer player: ((LocalMulti) ui.getLocalGame()).getWinners()) {
-                vboxMulti.getChildren().add(new Label(i + " " + player.getId() + " , name: " + player.getName()));
+                vboxMulti.getChildren().add(new Label(i + ": id: " + player.getId() + " ; name: " + player.getName()));
                 i++;
             }
 
