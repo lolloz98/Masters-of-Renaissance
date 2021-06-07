@@ -4,12 +4,10 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.CreateGameGUI">
-   <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-         <Image url="@../png/background_1.jpg" />
-      </image>
-   </ImageView>
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.CreateGameGUI">
+    <ImageView pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Image url="@../png/background_1.jpg" />
+    </ImageView>
     <TextField fx:id="playerNumbers" layoutX="134.0" layoutY="150.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here the number of players" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="150.0" />
     <TextField fx:id="nickname" layoutX="134.0" layoutY="210.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here your nickname" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="210.0" />
     <Button fx:id="createGameBtn" layoutX="260.0" layoutY="256.0" mnemonicParsing="false" text="Create Game" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="255.2" AnchorPane.topAnchor="256.0" />
