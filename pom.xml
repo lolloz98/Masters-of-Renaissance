@@ -112,6 +112,9 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>it.polimi.ingsw.client.cli.CLI</mainClass>
                                 </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                                    <resource>log4j2.xml</resource>
+                                </transformer>
                             </transformers>
                             <finalName>cli</finalName>
                         </configuration>
@@ -141,6 +144,9 @@
                         <transformers>
                             <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                 <mainClass>it.polimi.ingsw.client.gui.Main</mainClass>
+                            </transformer>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                                <resource>log4j2.xml</resource>
                             </transformer>
                         </transformers>
                         <finalName>gui</finalName>
