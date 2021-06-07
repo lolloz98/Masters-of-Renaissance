@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.JoinGameGUI"
-            prefHeight="400.0" prefWidth="600.0">
-    <TextField fx:id="gameId" layoutX="137.0" layoutY="87.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here the gameId" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="131.8" AnchorPane.topAnchor="87.0" />
-    <TextField fx:id="nickname" layoutX="136.0" layoutY="166.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here your nickname" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="132.8" AnchorPane.topAnchor="166.0" />
+<AnchorPane prefHeight="367.0" prefWidth="554.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.JoinGameGUI">
+   <ImageView fitHeight="396.0" fitWidth="554.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../png/background_1.jpg" />
+      </image>
+   </ImageView>
+    <TextField fx:id="gameId" layoutX="134.0" layoutY="147.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here the gameId" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="147.0" />
+    <TextField fx:id="nickname" layoutX="137.0" layoutY="202.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here your nickname" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="131.8" AnchorPane.topAnchor="202.0" />
     <Button fx:id="joinGameBtn" layoutX="260.0" layoutY="256.0" mnemonicParsing="false" text="Join Game" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="255.2" AnchorPane.topAnchor="256.0" />
 
 </AnchorPane>

@@ -7,6 +7,11 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.BuyCardSceneControllerGUI">
    <children>
+      <ImageView fitHeight="731.0" fitWidth="1035.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../png/background_2.jpg" />
+         </image>
+      </ImageView>
       <ComboBox fx:id="slotToStoreComboBox" layoutX="51.0" layoutY="438.0" prefHeight="25.0" prefWidth="300.0" promptText="In which slot do you want to store the card? " />
       <GridPane hgap="50.0" layoutX="26.0" layoutY="26.0" prefHeight="370.0" prefWidth="980.0">
         <columnConstraints>
@@ -74,8 +79,11 @@
       </GridPane>
       <Button fx:id="confirmBtn" layoutX="719.0" layoutY="463.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="267.0" text="Confirm" />
       <Button fx:id="backBtn" layoutX="719.0" layoutY="598.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="267.0" text="Back" />
-      <Label fx:id="messageLbl" contentDisplay="TOP" layoutX="51.0" layoutY="575.0" prefHeight="109.0" prefWidth="317.0" text="No message found" textFill="#e80e0e" wrapText="true" />
-      <ImageView fx:id="cardImg" fitHeight="271.0" fitWidth="200.0" layoutX="434.0" layoutY="414.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="messageLbl" contentDisplay="TOP" layoutX="51.0" layoutY="575.0" prefHeight="109.0" prefWidth="317.0" text="No message found" textFill="#cf0000" wrapText="true">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <ImageView fx:id="cardImg" fitHeight="271.0" fitWidth="200.0" layoutX="418.0" layoutY="423.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="discountMessageLbl" layoutX="51.0" layoutY="506.0" prefHeight="62.0" prefWidth="300.0" />
       <Label fx:id="doneMessageLbl" layoutX="719.0" layoutY="560.0" prefHeight="27.0" prefWidth="267.0">
          <font>

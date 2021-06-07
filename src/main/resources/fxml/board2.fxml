@@ -17,48 +17,48 @@
         <Image url="@../png/real_board_no_background.png" />
     </ImageView>
 
-    <!-- FaithTrack -->
-    <!--      <AnchorPane prefHeight="215.0" prefWidth="807.0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />-->
+<!--    &lt;!&ndash; FaithTrack &ndash;&gt;-->
+<!--    &lt;!&ndash;      <AnchorPane prefHeight="215.0" prefWidth="807.0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />&ndash;&gt;-->
 
-    <!-- DevelopProd -->
-    <!--   <AnchorPane layoutX="329.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />-->
-    <!--   <AnchorPane layoutX="487.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />-->
-    <!--   <AnchorPane layoutX="649.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />-->
+<!--    &lt;!&ndash; DevelopProd &ndash;&gt;-->
+<!--    &lt;!&ndash;   <AnchorPane layoutX="329.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />&ndash;&gt;-->
+<!--    &lt;!&ndash;   <AnchorPane layoutX="487.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />&ndash;&gt;-->
+<!--    &lt;!&ndash;   <AnchorPane layoutX="649.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />&ndash;&gt;-->
 
-    <!-- LeaderSlots -->
-    <!--   <AnchorPane layoutX="835.0" layoutY="342.0" prefHeight="278.0" prefWidth="127.0" />-->
-    <!--   <AnchorPane layoutX="835.0" layoutY="40.0" prefHeight="278.0" prefWidth="127.0" />-->
+<!--    &lt;!&ndash; LeaderSlots &ndash;&gt;-->
+<!--    &lt;!&ndash;   <AnchorPane layoutX="835.0" layoutY="342.0" prefHeight="278.0" prefWidth="127.0" />&ndash;&gt;-->
+<!--    &lt;!&ndash;   <AnchorPane layoutX="835.0" layoutY="40.0" prefHeight="278.0" prefWidth="127.0" />&ndash;&gt;-->
 
-    <!-- depot -->
-    <!--   <AnchorPane layoutY="262.0" prefHeight="172.0" prefWidth="194.0" />-->
+<!--    &lt;!&ndash; depot &ndash;&gt;-->
+<!--    &lt;!&ndash;   <AnchorPane layoutY="262.0" prefHeight="172.0" prefWidth="194.0" />&ndash;&gt;-->
 
-    <!-- strongbox -->
-    <!--   <AnchorPane layoutY="451.0" prefHeight="121.0" prefWidth="179.0" />-->
-
-
-   <FaithTrackComponent fx:id="faithTrackComponent" prefHeight="215.0" prefWidth="807.0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0"/>
-
-   <SlotDevelopComponent fx:id="slotDevelopComponent1" layoutX="329.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0"/>
-   <SlotDevelopComponent fx:id="slotDevelopComponent2" layoutX="487.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />
-   <SlotDevelopComponent fx:id="slotDevelopComponent3" layoutX="649.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />
-
-   <LeaderSlotComponent fx:id="leader1" layoutX="835.0" layoutY="342.0" prefHeight="278.0" prefWidth="127.0" />
-   <LeaderSlotComponent fx:id="leader2" layoutX="835.0" layoutY="40.0" prefHeight="278.0" prefWidth="127.0" />
-
-   <DepotComponent fx:id="depotCmp" layoutY="255.0" layoutX="10" prefHeight="172.0" prefWidth="194.0"/>
-
-    <StrongBoxComponent fx:id="strongBoxCmp" layoutX="36" layoutY="451.0" prefHeight="121.0" prefWidth="179.0"/>
+<!--    &lt;!&ndash; strongbox &ndash;&gt;-->
+<!--    &lt;!&ndash;   <AnchorPane layoutY="451.0" prefHeight="121.0" prefWidth="179.0" />&ndash;&gt;-->
 
 
-    <Button fx:id="activateNormalBtn" layoutX="202.0" layoutY="556.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Activate" />
-    <Button fx:id="optional1Btn" layoutX="4.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="optional1" />
-    <Button fx:id="optional2Btn" layoutX="159.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="optional2" />
-    <Button fx:id="marketBtn" layoutX="329.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Show Market" />
-    <Button fx:id="developBtn" layoutX="487.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Show Develop" />
-    <Button fx:id="flushBtn" layoutX="646.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Flush Productions" />
-    <Label fx:id="historyLbl" layoutX="40.0" layoutY="629.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#1e45bd" />
-    <Label fx:id="messageLbl" layoutX="40.0" layoutY="662.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#ff0808" />
-    <Label fx:id="currentPlayerLbl" layoutX="40.0" layoutY="596.0" prefHeight="33.0" prefWidth="955.0" textFill="#53e54e" />
+<!--   <FaithTrackComponent fx:id="faithTrackComponent" prefHeight="215.0" prefWidth="807.0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0"/>-->
 
-    <ChoiceBox fx:id="chooseBoard" layoutX="882.0" layoutY="6.0" prefWidth="150.0" />
+<!--   <SlotDevelopComponent fx:id="slotDevelopComponent1" layoutX="329.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0"/>-->
+<!--   <SlotDevelopComponent fx:id="slotDevelopComponent2" layoutX="487.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />-->
+<!--   <SlotDevelopComponent fx:id="slotDevelopComponent3" layoutX="649.0" layoutY="284.0" prefHeight="299.0" prefWidth="127.0" />-->
+
+<!--   <LeaderSlotComponent fx:id="leader1" layoutX="835.0" layoutY="342.0" prefHeight="278.0" prefWidth="127.0" />-->
+<!--   <LeaderSlotComponent fx:id="leader2" layoutX="835.0" layoutY="40.0" prefHeight="278.0" prefWidth="127.0" />-->
+
+<!--   <DepotComponent fx:id="depotCmp" layoutY="255.0" layoutX="10" prefHeight="172.0" prefWidth="194.0"/>-->
+
+<!--    <StrongBoxComponent fx:id="strongBoxCmp" layoutX="36" layoutY="451.0" prefHeight="121.0" prefWidth="179.0"/>-->
+
+
+<!--    <Button fx:id="activateNormalBtn" layoutX="202.0" layoutY="556.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Activate" />-->
+<!--    <Button fx:id="optional1Btn" layoutX="4.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="optional1" />-->
+<!--    <Button fx:id="optional2Btn" layoutX="159.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="optional2" />-->
+<!--    <Button fx:id="marketBtn" layoutX="329.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Show Market" />-->
+<!--    <Button fx:id="developBtn" layoutX="487.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Show Develop" />-->
+<!--    <Button fx:id="flushBtn" layoutX="646.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Flush Productions" />-->
+<!--    <Label fx:id="historyLbl" layoutX="40.0" layoutY="629.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#1e45bd" />-->
+<!--    <Label fx:id="messageLbl" layoutX="40.0" layoutY="662.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#ff0808" />-->
+<!--    <Label fx:id="currentPlayerLbl" layoutX="40.0" layoutY="596.0" prefHeight="33.0" prefWidth="955.0" textFill="#53e54e" />-->
+
+<!--    <ChoiceBox fx:id="chooseBoard" layoutX="882.0" layoutY="6.0" prefWidth="150.0" />-->
 </Pane>
