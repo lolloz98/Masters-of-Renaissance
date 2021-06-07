@@ -4,12 +4,13 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.View;
+import it.polimi.ingsw.client.cli.states.playing.DestroyedView;
 import it.polimi.ingsw.client.localmodel.*;
 
 public class NewMultiView extends View<CLI> {
     private final LocalMulti localMulti;
 
-    public NewMultiView(CLI cli, LocalMulti localMulti){
+    public NewMultiView(CLI cli, LocalMulti localMulti) {
         this.ui = cli;
         this.localMulti = localMulti;
         localMulti.overrideObserver(this);
@@ -17,13 +18,13 @@ public class NewMultiView extends View<CLI> {
     }
 
     @Override
-    public synchronized void draw(){
+    public synchronized void draw() {
         CLIutils.clearScreen();
-        if(localMulti.getState() == LocalGameState.NEW){
+        if (localMulti.getState() == LocalGameState.NEW) {
             System.out.println("Please wait");
-        }
-        else if(localMulti.getState() == LocalGameState.WAITING_PLAYERS){
-            System.out.println("The id of the game is\n" + localMulti.getGameId());
+        } else if (localMulti.getState() == LocalGameState.WAITING_PLAYERS) {
+            System.out.println("The id of the game is: " + localMulti.getGameId());
+            System.out.println(" ");
             System.out.println("Players currently connected:");
             for (LocalPlayer p : localMulti.getLocalPlayers()) {
                 System.out.println(p.getName());
@@ -32,14 +33,17 @@ public class NewMultiView extends View<CLI> {
     }
 
     @Override
-    public synchronized void notifyUpdate(){
-        if(localMulti.getState() == LocalGameState.PREP_LEADERS){
+    public synchronized void notifyUpdate() {
+        if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
             localMulti.removeObservers();
             localMulti.getError().removeObserver();
             ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
             ui.getState().draw();
-        }
-        else draw();
+        } else if (localMulti.getState() == LocalGameState.DESTROYED) {
+            localMulti.removeAllObservers();
+            ui.setState(new DestroyedView(ui, localMulti, false));
+            ui.getState().draw();
+        } else draw();
     }
 
     @Override
@@ -48,7 +52,7 @@ public class NewMultiView extends View<CLI> {
     }
 
     @Override
-    public synchronized void handleCommand(String ans){
+    public synchronized void handleCommand(String ans) {
     }
 
 
