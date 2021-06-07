@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.game;
 
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.model.utility.PairId;
+
 import java.util.ArrayList;
 
 /**
@@ -17,7 +19,7 @@ public class MultiPlayer extends Game<TurnMulti> {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof MultiPlayer) {
+        if (obj instanceof MultiPlayer) {
             MultiPlayer t = (MultiPlayer) obj;
             return super.equals(obj) &&
                     players.equals(t.players) &&
@@ -29,7 +31,7 @@ public class MultiPlayer extends Game<TurnMulti> {
 
     public MultiPlayer(ArrayList<Player> players) throws PlayersOutOfBoundException, WrongColorDeckException, WrongLevelDeckException, EmptyDeckException {
         super();
-        if (players.size()<2 || players.size()>4) throw new PlayersOutOfBoundException();
+        if (players.size() < 2 || players.size() > 4) throw new PlayersOutOfBoundException();
         this.turn = new TurnMulti(players.get(0));
         this.players = new ArrayList<>(players);
         this.lastRound = false;
@@ -49,8 +51,8 @@ public class MultiPlayer extends Game<TurnMulti> {
 
     @Override
     public Player getPlayer(int playerId) throws InvalidArgumentException {
-        for(Player p: players){
-            if(p.getPlayerId()==playerId){
+        for (Player p : players) {
+            if (p.getPlayerId() == playerId) {
                 return p;
             }
         }
@@ -61,8 +63,8 @@ public class MultiPlayer extends Game<TurnMulti> {
      * Checks if end condition is met. If it is, the lastRound is set to true and when the last player completes its turn, the game ends.
      */
     @Override
-    public void checkEndConditions(){
-        for(Player p : players) {
+    public void checkEndConditions() {
+        for (Player p : players) {
             if (p.getBoard().getFaithtrack().isEndReached() ||
                     p.getBoard().getDevelopCardSlots().stream().mapToInt(x -> x.getCards().size()).sum() >= 7)
                 setLastRound();
@@ -78,19 +80,18 @@ public class MultiPlayer extends Game<TurnMulti> {
     public void nextTurn() throws GameIsOverException, MarketTrayNotEmptyException, ProductionsResourcesNotFlushedException, MainActionNotOccurredException {
         if (isGameOver()) throw new GameIsOverException();
         TurnMulti turn = getTurn().nextTurn(this);
-        if (!turn.getIsPlayable()){
+        if (!turn.getIsPlayable()) {
             setGameOver(true);
             computeLeaderBoard();
-        }
-        else setTurn(turn);
+        } else setTurn(turn);
     }
 
     /**
      * Computes the points of all the players
      */
-    private void computeLeaderBoard(){
+    private void computeLeaderBoard() {
         playerPoints.clear();
-        for (Player p : players){
+        for (Player p : players) {
             playerPoints.add(p.getBoard().getVictoryPoints());
         }
 
@@ -101,7 +102,7 @@ public class MultiPlayer extends Game<TurnMulti> {
      */
     @Override
     public void distributeLeader() throws EmptyDeckException {
-        for(Player p : players) distributeLeaderToPlayer(p);
+        for (Player p : players) distributeLeaderToPlayer(p);
     }
 
     /**
@@ -109,14 +110,13 @@ public class MultiPlayer extends Game<TurnMulti> {
      * @throws GameNotOverException if i call getWinner on an ongoing game
      */
     public ArrayList<Player> getWinners() throws GameNotOverException {
-        if(!isGameOver()) throw new GameNotOverException();
+        if (!isGameOver()) throw new GameNotOverException();
         int max = 0;
         ArrayList<Player> winners = new ArrayList<>();
-        for(int i=0; i<players.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
             if (playerPoints.get(i) == max) {
                 winners.add(players.get(i));
-            }
-            else if(playerPoints.get(i) > max) {
+            } else if (playerPoints.get(i) > max) {
                 winners.clear();
                 winners.add(players.get(i));
                 max = playerPoints.get(i);
@@ -137,5 +137,40 @@ public class MultiPlayer extends Game<TurnMulti> {
             }
             return winnersRes;
         }
+    }
+
+    /**
+     * @return a list of players and their victory points
+     * @throws GameNotOverException if i call getLeaderBoard on an ongoing game
+     */
+    public ArrayList<PairId<Player, Integer>> getLeaderBoard() throws GameNotOverException {
+        if (!isGameOver()) throw new GameNotOverException();
+        ArrayList<PairId<Player, Integer>> leaderBoard = new ArrayList<>();
+        ArrayList<Integer> playerPointsCopy = new ArrayList<>(playerPoints);
+        ArrayList<Player> playersCopy = new ArrayList<>(players);
+        int maxIndex;
+        while (!playerPointsCopy.isEmpty()) {
+            maxIndex = getMaxIndex(playerPointsCopy);
+            leaderBoard.add(new PairId<>(playersCopy.get(maxIndex), playerPointsCopy.get(maxIndex)));
+            playersCopy.remove(maxIndex);
+            playerPointsCopy.remove(maxIndex);
+        }
+        return leaderBoard;
+    }
+
+
+    /**
+     * @return the index of the max int in the list
+     */
+    public int getMaxIndex(ArrayList<Integer> list) {
+        Integer i = 0, maxIndex = -1, max = null;
+        for (Integer x : list) {
+            if ((x != null) && ((max == null) || (x > max))) {
+                max = x;
+                maxIndex = i;
+            }
+            i++;
+        }
+        return maxIndex;
     }
 }
