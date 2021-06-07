@@ -7,6 +7,7 @@ import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
+import it.polimi.ingsw.server.model.utility.PairId;
 
 public class WinnerView extends GameView {
 
@@ -29,6 +30,11 @@ public class WinnerView extends GameView {
                 for(LocalPlayer l : localMulti.getWinners()){
                     System.out.print(l.getName()+ " ");
                 }
+            }
+            System.out.print(" ");
+            System.out.print("Leader board: ");
+            for(PairId<LocalPlayer, Integer> pair : localMulti.getLocalLeaderBoard()){
+                System.out.print(pair.getSecond() + " " + pair.getFirst());
             }
         } else {
             LocalSingle localSingle = (LocalSingle) localGame;

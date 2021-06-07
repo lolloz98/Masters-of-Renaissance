@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.localmodel.LocalMulti;
 
 public class HelpView extends GameView {
 
@@ -22,13 +23,21 @@ public class HelpView extends GameView {
         System.out.println("Anywhere, you can type:");
         System.out.println("'sm' to show the market");
         System.out.println("'sd' to show the development decks");
-        System.out.println("'sb', followed by a number, to show the corresponding board");
+        if (localGame instanceof LocalMulti)
+            System.out.println("'sb', followed by the number of a player in the turn order, to show his board");
+        else
+            System.out.println("'sb', to show your board");
+        if (localGame instanceof LocalMulti)
+            System.out.println("'sh', to show the history of actions of the players");
+        else
+            System.out.println("'sh', to show the history of actions of Lorenzo");
         System.out.println("'nt' to go to the next turn");
         System.out.println("");
         System.out.println("In your board, you can type:");
         System.out.println("'al', followed by a number, to activate a leader card");
         System.out.println("'dl', followed by a number, to discard a leader card");
         System.out.println("'ad', followed by a number, to activate a development card");
+        System.out.println("(0 for the base development, otherwise the number of the slot on the board)");
         System.out.println("'ald', followed by a number, to activate a leader development card");
         System.out.println("'fd', to move all the resources currently in all development cards to the strongbox");
         System.out.println("");
