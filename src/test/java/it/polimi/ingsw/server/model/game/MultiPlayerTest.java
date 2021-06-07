@@ -172,6 +172,7 @@ public class MultiPlayerTest {
         multiPlayer.getTurn().setMainActionOccurred();
         multiPlayer.nextTurn();
         assertTrue(multiPlayer.isGameOver());
+        assertEquals(multiPlayer.getLeaderBoard().get(0).getFirst(), multiPlayer.getWinners().get(0));
     }
 
     @Test (expected = GameIsOverException.class)
