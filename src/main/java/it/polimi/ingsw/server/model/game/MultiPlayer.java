@@ -162,7 +162,7 @@ public class MultiPlayer extends Game<TurnMulti> {
     /**
      * @return the index of the max int in the list
      */
-    public int getMaxIndex(ArrayList<Integer> list) {
+    private int getMaxIndex(ArrayList<Integer> list) {
         Integer i = 0, maxIndex = -1, max = null;
         for (Integer x : list) {
             if ((x != null) && ((max == null) || (x > max))) {
