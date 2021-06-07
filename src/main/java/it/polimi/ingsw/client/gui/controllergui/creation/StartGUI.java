@@ -18,7 +18,6 @@ public class StartGUI extends ControllerGUI implements Observer {
     public Button localBtn;
     public Button remoteBtn;
     public Label errorLbl;
-    public ImageView backgroungImg;
 
     public void setUp(Stage stage, Parent root, GUI ui){
         localBtn.setOnMouseClicked(mouseEvent -> {
