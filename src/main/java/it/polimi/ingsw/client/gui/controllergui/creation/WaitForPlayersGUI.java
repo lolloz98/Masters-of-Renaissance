@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
 import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
+import it.polimi.ingsw.client.gui.controllergui.HelperGUI;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import javafx.application.Platform;
@@ -28,6 +29,8 @@ public class WaitForPlayersGUI extends ControllerGUI implements Observer {
         logger.debug("in notify update");
         if(ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS)
             Platform.runLater(this::addLabels);
+        else if(ui.getLocalGame().getState() == LocalGameState.DESTROYED)
+            HelperGUI.handleGameDestruction(stage, ui);
         else
             BuildGUI.getInstance().toBoard(stage, ui);
     }
