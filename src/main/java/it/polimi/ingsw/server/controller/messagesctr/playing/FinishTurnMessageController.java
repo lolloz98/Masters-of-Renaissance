@@ -16,6 +16,7 @@ import it.polimi.ingsw.server.model.cards.lorenzo.LorenzoCard;
 import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.model.utility.PairId;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -115,8 +116,20 @@ public class FinishTurnMessageController extends PlayingMessageController {
     private Answer handleEndGame(ControllerActionsBase<?> controllerActions) throws UnexpectedControllerException {
         controllerActions.toEndGameState();
         ArrayList<LocalPlayer> winners;
+        ArrayList<PairId<LocalPlayer, Integer>> localLeaderboard=null;
+        ArrayList<PairId<Player, Integer>> leaderboard;
+        if(controllerActions.getGame() instanceof MultiPlayer) {
+            try {
+                leaderboard=((MultiPlayer) controllerActions.getGame()).getLeaderBoard();
+            } catch (GameNotOverException e) {
+                logger.error("generating the endGameAnswer while the game is not over");
+                throw new UnexpectedControllerException(e.getMessage());
+            }
+            localLeaderboard=ConverterToLocalModel.convert(leaderboard);
+        }
+
         winners = controllerActions.getWinners();
-        return new EndGameAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), winners);
+        return new EndGameAnswer(getClientMessage().getGameId(), getClientMessage().getPlayerId(), winners, localLeaderboard);
     }
 
     private void performLorenzoAction(SinglePlayer singlePlayer) throws UnexpectedControllerException, GameIsOverException {

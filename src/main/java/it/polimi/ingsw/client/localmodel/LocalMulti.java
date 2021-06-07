@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.localmodel;
 
 import it.polimi.ingsw.client.localmodel.exceptions.NoSuchLocalPlayerException;
+import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.model.utility.PairId;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +13,18 @@ public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializabl
      */
     private int mainPlayerId;
     private ArrayList<LocalPlayer> localPlayers;
+    /**
+     * who won the game
+     */
     private ArrayList<LocalPlayer> winners=null;
+    /**
+     * leaderboard of the players who participated at this game
+     */
+    public ArrayList<PairId<LocalPlayer, Integer>> localLeaderBoard;
+
+    public void setLocalLeaderBoard(ArrayList<PairId<LocalPlayer, Integer>> localLeaderBoard) {
+        this.localLeaderBoard = localLeaderBoard;
+    }
 
     public synchronized ArrayList<LocalPlayer> getWinners() {
         return winners;

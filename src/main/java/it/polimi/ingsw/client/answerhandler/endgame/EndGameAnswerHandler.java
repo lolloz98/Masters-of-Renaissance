@@ -31,6 +31,7 @@ public class EndGameAnswerHandler extends AnswerHandler {
 
         if(localGame instanceof LocalMulti){
             ((LocalMulti)localGame).setWinners(serverAnswer.getWinners());
+            ((LocalMulti)localGame).setLocalLeaderBoard(serverAnswer.getLocalLeaderboard());
         }
 
         localGame.setState(LocalGameState.OVER);

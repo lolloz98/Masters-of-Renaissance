@@ -17,6 +17,7 @@ import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
 import it.polimi.ingsw.server.model.game.*;
 import it.polimi.ingsw.server.model.player.*;
+import it.polimi.ingsw.server.model.utility.PairId;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,6 +53,18 @@ public final class ConverterToLocalModel {
                 return LocalLorenzoCard.DISCARD_GOLD;
         }
         return null;
+    }
+
+    /**
+     * @param leaderboard
+     * @return the localLeaderboard converted
+     */
+    public static ArrayList<PairId<LocalPlayer, Integer>> convert(ArrayList<PairId<Player, Integer>> leaderboard) throws UnexpectedControllerException {
+        ArrayList<PairId<LocalPlayer, Integer>> localLeaderboard=new ArrayList<>();
+        for(PairId<Player,Integer> el:leaderboard){
+            localLeaderboard.add(new PairId<>(convert(el.getFirst(),0),el.getSecond()));//note: the playerIdRequiring is hardcoded because is not fundamental in this case
+        }
+        return localLeaderboard;
     }
 
     public static LocalDevelopCard convert(DevelopCard developCard) {
