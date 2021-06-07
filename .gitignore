@@ -219,3 +219,4 @@ $RECYCLE.BIN/
 
 # our addition:
 tmp/*.tmp
+deliverables/tmp/*
