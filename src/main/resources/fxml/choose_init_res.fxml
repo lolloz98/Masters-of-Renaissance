@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<AnchorPane prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.ingsw.client.gui.controllergui.ChooseInitResGUI">
-    <VBox layoutX="90.0" layoutY="27.0" prefHeight="476.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0"
-          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Label text="Choose Resources"/>
-        <Label fx:id="numberOfResLbl" layoutX="10.0" layoutY="10.0" text="Number of resources to choose: "/>
+<AnchorPane prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.ChooseInitResGUI">
+   <ImageView fitHeight="719.0" fitWidth="1035.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../png/background_clearer.png" />
+      </image>
+   </ImageView>
+    <VBox layoutX="90.0" layoutY="27.0" prefHeight="476.0" prefWidth="691.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label text="Choose Resources" />
+        <Label fx:id="numberOfResLbl" layoutX="10.0" layoutY="10.0" text="Number of resources to choose: " />
         <HBox prefHeight="100.0" prefWidth="200.0">
-            <Label text="1 x "/>
-            <ComboBox fx:id="comboBox" prefWidth="150.0"/>
+            <Label text="1 x " />
+            <ComboBox fx:id="comboBox" prefWidth="150.0" />
         </HBox>
-        <Button fx:id="chooseBtn" mnemonicParsing="false" text="Choose"/>
+        <Button fx:id="chooseBtn" mnemonicParsing="false" text="Choose" />
     </VBox>
 </AnchorPane>

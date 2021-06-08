@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.RejoinGUI">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.RejoinGUI">
    <children>
-      <VBox alignment="CENTER" spacing="10" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fitHeight="719.0" fitWidth="1035.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../png/background_1.jpg" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" layoutY="7.0" prefHeight="200.0" prefWidth="100.0" spacing="10" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="7.0">
          <children>
             <Button fx:id="rejoinBtn" mnemonicParsing="false" prefHeight="88.0" prefWidth="441.0" text="Rejoin Game" />
-            <Label fx:id="messageLbl" textFill="red"/>
+            <Label fx:id="messageLbl" prefHeight="18.0" prefWidth="425.0" textFill="red" />
          </children>
       </VBox>
    </children>

@@ -7,6 +7,11 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.ProductionGainResGUI">
     <children>
+      <ImageView fitHeight="730.0" fitWidth="1041.0" layoutX="-1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../png/background_clearer.png" />
+         </image>
+      </ImageView>
         <Label fx:id="promptLbl" layoutX="51.0" layoutY="438.0" text="Choose optional resources to gain" />
         <GridPane fx:id="gridPane" hgap="50.0" layoutX="26.0" layoutY="26.0" prefHeight="370.0" prefWidth="980.0">
             <columnConstraints>

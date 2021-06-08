@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.StartLocalGUI">
-        <TextField fx:id="nickname" layoutX="134.0" layoutY="122.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here your nickname" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="122.0" />
-        <Button fx:id="createGameBtn" layoutX="257.0" layoutY="229.0" mnemonicParsing="false" text="Create Game" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="258.2" AnchorPane.topAnchor="229.0" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.StartLocalGUI">
+   <ImageView fitHeight="719.0" fitWidth="1078.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../png/background_1.jpg" />
+      </image>
+   </ImageView>
+        <TextField fx:id="nickname" layoutX="134.0" layoutY="332.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here your nickname" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.79999999999995" AnchorPane.topAnchor="332.0" />
+        <Button fx:id="createGameBtn" layoutX="264.0" layoutY="435.0" mnemonicParsing="false" text="Create Game" AnchorPane.leftAnchor="264.0" AnchorPane.rightAnchor="251.20000000000005" AnchorPane.topAnchor="435.0" />
 </AnchorPane>

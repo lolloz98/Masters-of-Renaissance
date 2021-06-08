@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.StartRemoteGUI">
-    <TextField fx:id="serverIp" layoutX="134.0" layoutY="104.0" prefHeight="26.0" prefWidth="331.0" promptText="Input the server IP" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="104.0" />
-    <TextField fx:id="portNumber" layoutX="134.0" layoutY="154.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here the port number" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.8" AnchorPane.topAnchor="154.0" />
-    <Button fx:id="connectBtn" layoutX="257.0" layoutY="229.0" mnemonicParsing="false" text="Connect" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="258.2" AnchorPane.topAnchor="229.0" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.creation.StartRemoteGUI">
+   <ImageView fitHeight="747.0" fitWidth="1035.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../png/background_1.jpg" />
+      </image>
+   </ImageView>
+    <TextField fx:id="serverIp" layoutX="133.0" layoutY="292.0" prefHeight="26.0" prefWidth="331.0" promptText="Input the server IP" AnchorPane.leftAnchor="133.0" AnchorPane.rightAnchor="135.79999999999995" AnchorPane.topAnchor="292.0" />
+    <TextField fx:id="portNumber" layoutX="133.0" layoutY="384.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here the port number" AnchorPane.leftAnchor="133.0" AnchorPane.rightAnchor="135.79999999999995" AnchorPane.topAnchor="384.0" />
+    <Button fx:id="connectBtn" layoutX="257.0" layoutY="485.0" mnemonicParsing="false" text="Connect" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="258.20000000000005" AnchorPane.topAnchor="485.0" />
    <Label fx:id="errorMsg" alignment="CENTER" contentDisplay="CENTER" layoutX="168.0" layoutY="283.0" prefHeight="18.0" prefWidth="263.0" text="Error" textFill="#f00808" visible="false" AnchorPane.leftAnchor="168.0" AnchorPane.rightAnchor="168.8" AnchorPane.topAnchor="283.0" />
 </AnchorPane>

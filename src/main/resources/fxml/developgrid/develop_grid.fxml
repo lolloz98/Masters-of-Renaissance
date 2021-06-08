@@ -4,13 +4,13 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.text.Font?>
 <Pane fx:id="develop_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllergui.DevelopGridControllerGUI">
    <ImageView fitHeight="719.0" fitWidth="1035.0" pickOnBounds="true" preserveRatio="true">
       <image>
-         <Image url="@../../png/background_2.jpg" />
+         <Image url="@../../png/background_clearer.png" />
       </image>
    </ImageView>
    <DepotComponent fx:id="depotCmp" layoutX="25.0" layoutY="262.0" prefHeight="172.0" prefWidth="194.0" />

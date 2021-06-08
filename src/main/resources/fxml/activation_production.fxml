@@ -9,7 +9,7 @@
     <children>
       <ImageView fitHeight="725.0" fitWidth="1041.0" layoutX="-1.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../png/background_2.jpg" />
+            <Image url="@../png/background_clearer.png" />
          </image>
       </ImageView>
         <Label fx:id="promptLbl" layoutX="51.0" layoutY="438.0" prefHeight="25.0" prefWidth="300.0" text="Choose resource to give" />
