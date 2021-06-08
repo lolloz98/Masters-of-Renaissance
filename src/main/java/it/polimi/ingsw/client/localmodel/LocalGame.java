@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.localmodel;
 
 
-import it.polimi.ingsw.client.gui.controllergui.RemoveLeadersGUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -99,10 +98,16 @@ public abstract class LocalGame<T extends LocalTurn> extends Observable implemen
 
     public void removeAllObservers(){
         removeObservers();
-        localTurn.removeObservers();
-        localTurn.getHistoryObservable().removeObservers();
-        localDevelopmentGrid.removeObservers();
-        localMarket.removeObservers();
+        removeObserverIfNotNull(localTurn);
+        removeObserverIfNotNull(localTurn.getHistoryObservable());
+        removeObserverIfNotNull(localDevelopmentGrid);
+        removeObserverIfNotNull(localMarket);
         error.removeObserver();
+    }
+
+    private void removeObserverIfNotNull(Observable o){
+        if(o != null)
+            o.removeObservers();
+        else logger.error("One of the observable in board was null");
     }
 }

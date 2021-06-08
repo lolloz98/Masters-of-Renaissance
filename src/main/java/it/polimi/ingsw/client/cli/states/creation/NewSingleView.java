@@ -5,10 +5,6 @@ import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
-import it.polimi.ingsw.messages.requests.CreateGameMessage;
-
-import java.io.IOException;
-import java.util.Scanner;
 
 public class NewSingleView extends View<CLI> {
     private final LocalSingle localSingle;

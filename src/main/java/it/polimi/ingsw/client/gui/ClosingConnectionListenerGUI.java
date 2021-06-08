@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
+import it.polimi.ingsw.client.gui.controllergui.HelperGUI;
 import it.polimi.ingsw.client.gui.controllergui.creation.StartRemoteGUI;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import javafx.stage.Stage;
@@ -22,9 +23,9 @@ public class ClosingConnectionListenerGUI implements Observer {
     @Override
     public void notifyUpdate() {
         ui.getLocalGame().removeAllObservers();
-        if (ui.getLocalGame() == null || ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS || ui.getLocalGame().getState() == LocalGameState.OVER) {
-            logger.warn("Game is null or in WAITING_PLAYERS or in OVER state, returning at start screen");
-            BuildGUI.getInstance().toStartScene(stage, ui, "The connection has been closed.");
+        if (ui.getLocalGame() == null || ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS || ui.getLocalGame().getState() == LocalGameState.OVER || ui.getLocalGame().getState() == LocalGameState.DESTROYED) {
+            logger.warn("Game is null or in WAITING_PLAYERS or in OVER or DESTROYED state, returning at start screen");
+            HelperGUI.handleGameDestruction(stage, ui);
         } else {
             BuildGUI.getInstance().toRejoin(stage, ui);
         }
