@@ -18,7 +18,7 @@ public class GameStatusAnswerHandler extends AnswerHandler {
     }
 
     /**
-     * method that updates the game after a game status request.
+     * method that updates the game after a game status answer.
      *
      * @param localGame
      */
