@@ -6,6 +6,9 @@ import it.polimi.ingsw.messages.answers.endgameanswer.EndGameAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Answer Handler that handles the end of the game modifying the local game
+ */
 public class EndGameAnswerHandler extends AnswerHandler {
 
     private static final Logger logger = LogManager.getLogger(EndGameAnswerHandler.class);

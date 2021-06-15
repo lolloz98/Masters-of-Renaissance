@@ -13,7 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Answer handler that modifies the local game after a DiscardLeaderMessage
+ * Answer handler that handles the discard of a leader card modifying the local game.
  */
 public class DiscardLeaderAnswerHandler extends AnswerHandler {
     private static final Logger logger = LogManager.getLogger(DiscardLeaderAnswerHandler.class);
@@ -22,6 +22,11 @@ public class DiscardLeaderAnswerHandler extends AnswerHandler {
         super(answer);
     }
 
+    /**
+     * method that updates the local game after discarding a leader card.
+     *
+     * @param localGame
+     */
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
         DiscardLeaderAnswer serverAnswer = (DiscardLeaderAnswer) getAnswer();
@@ -43,14 +48,14 @@ public class DiscardLeaderAnswerHandler extends AnswerHandler {
                     isDiscarded = true;
                 }
             }
-            if(!isDiscarded) logger.error("No card has been set to be discarded");
+            if (!isDiscarded) logger.error("No card has been set to be discarded");
         }
 
         // update history
-        if(localGame instanceof LocalMulti){
+        if (localGame instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) localGame;
             String actionDescription;
-            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+            if (serverAnswer.getPlayerId() == localMulti.getMainPlayerId()) {
                 actionDescription = "You discarded a leader card";
             } else {
                 actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " discarded a leader card";

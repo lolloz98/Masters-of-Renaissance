@@ -8,6 +8,9 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.FinishTurnSingleAnswer
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Answer Handler that handles the end of a turn, in a single-player, modifying the local game.
+ */
 public class FinishTurnSingleAnswerHandler extends AnswerHandler {
 
     private static final Logger logger = LogManager.getLogger(FinishTurnSingleAnswerHandler.class);
@@ -17,17 +20,22 @@ public class FinishTurnSingleAnswerHandler extends AnswerHandler {
         super(answer);
     }
 
+    /**
+     * method that updates the local game after a finish turn request.
+     *
+     * @param localGame
+     */
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
-        FinishTurnSingleAnswer serverAnswer=(FinishTurnSingleAnswer) getAnswer();
+        FinishTurnSingleAnswer serverAnswer = (FinishTurnSingleAnswer) getAnswer();
 
-        if(localGame instanceof LocalSingle){
-            LocalSingle localSingle=(LocalSingle) localGame;
-            LocalBoard localBoard=localSingle.getMainPlayer().getLocalBoard();
+        if (localGame instanceof LocalSingle) {
+            LocalSingle localSingle = (LocalSingle) localGame;
+            LocalBoard localBoard = localSingle.getMainPlayer().getLocalBoard();
 
             localGame.getLocalTurn().setMainActionOccurred(false);
             String turnDescription;
-            switch (serverAnswer.getLorenzoCard()){
+            switch (serverAnswer.getLorenzoCard()) {
                 case FAITH:
                     turnDescription = "Lorenzo gained 2 faith points";
                     break;
@@ -60,7 +68,6 @@ public class FinishTurnSingleAnswerHandler extends AnswerHandler {
 
             //update player's track
             localBoard.setLocalTrack(serverAnswer.getLocalPlayerTrack());
-
 
 
             localBoard.notifyObservers();

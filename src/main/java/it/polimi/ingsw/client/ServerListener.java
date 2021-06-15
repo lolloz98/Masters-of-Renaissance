@@ -1,22 +1,10 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
-import it.polimi.ingsw.client.answerhandler.exceptions.HandlerException;
-import it.polimi.ingsw.client.localmodel.LocalGame;
-import it.polimi.ingsw.client.localmodel.LocalMulti;
+import it.polimi.ingsw.client.answerhandler.exception.HandlerException;
 import it.polimi.ingsw.messages.ParserException;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.ErrorAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
-import it.polimi.ingsw.server.AnswerListener;
-import it.polimi.ingsw.server.ClientHandler;
-import it.polimi.ingsw.server.ParserServer;
-import it.polimi.ingsw.server.controller.ControllerManager;
-import it.polimi.ingsw.server.controller.exception.ControllerException;
-import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -5,7 +5,7 @@ import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.leaderanswer.ActivateDepotLeaderAnswer;
 
-//todo
+
 public class ActivateDepotLeaderAnswerHandler extends ActivateLeaderAnswerHandler {
 
     public ActivateDepotLeaderAnswerHandler(ActivateDepotLeaderAnswer answer) {

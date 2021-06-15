@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * class that modify the local game with the parameters passed by the server in the answer, this class is used to update the local game after an BuyDevelopCardMessage
+ * Answer Handler that handles the buy of a development card modifying the local game.
  */
 public class BuyDevelopCardAnswerHandler extends AnswerHandler {
 
@@ -22,12 +22,16 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler {
         super(answer);
     }
 
-
+    /**
+     * method that updates the local game after a buy of a develop card.
+     *
+     * @param localGame
+     */
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
-        BuyDevelopCardAnswer serverAnswer=(BuyDevelopCardAnswer) getAnswer();
-        LocalPlayer player=localGame.getPlayerById(serverAnswer.getPlayerId());
-        LocalBoard localBoard= player.getLocalBoard();
+        BuyDevelopCardAnswer serverAnswer = (BuyDevelopCardAnswer) getAnswer();
+        LocalPlayer player = localGame.getPlayerById(serverAnswer.getPlayerId());
+        LocalBoard localBoard = player.getLocalBoard();
 
         localGame.getLocalTurn().setMainActionOccurred(true);
 
@@ -41,21 +45,21 @@ public class BuyDevelopCardAnswerHandler extends AnswerHandler {
         localBoard.setResInNormalDepot(serverAnswer.getLocalBoard().getResInNormalDepot());
 
         //update leader depots
-        LocalCard toUpdate,updated;
-        for(int i=0;i<localBoard.getLeaderCards().size();i++){
-            toUpdate=localBoard.getLeaderCards().get(i);
-            updated=serverAnswer.getLocalBoard().getLeaderCards().get(i);
+        LocalCard toUpdate, updated;
+        for (int i = 0; i < localBoard.getLeaderCards().size(); i++) {
+            toUpdate = localBoard.getLeaderCards().get(i);
+            updated = serverAnswer.getLocalBoard().getLeaderCards().get(i);
 
-            if(toUpdate instanceof LocalDepotLeader)
+            if (toUpdate instanceof LocalDepotLeader)
                 ((LocalDepotLeader) toUpdate).setNumberOfRes(((LocalDepotLeader) updated).getNumberOfRes());//this method already calls notifyObserver()
 
         }
 
         // update history
-        if(localGame instanceof LocalMulti){
+        if (localGame instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) localGame;
             String actionDescription;
-            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+            if (serverAnswer.getPlayerId() == localMulti.getMainPlayerId()) {
                 actionDescription = "You bought a development card";
             } else {
                 actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " bought a development card";

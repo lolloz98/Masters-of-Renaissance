@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.answers.leaderanswer.ActivateProductionLeaderAnswer;
 
+/**
+ * Answer Handler that handles the activation of a production leader.
+ */
 public class ActivateProductionLeaderAnswerHandler extends ActivateLeaderAnswerHandler {
 
     public ActivateProductionLeaderAnswerHandler(ActivateProductionLeaderAnswer answer) {
@@ -14,7 +17,8 @@ public class ActivateProductionLeaderAnswerHandler extends ActivateLeaderAnswerH
 
     @Override
     /**
-     * the production is already passed with the new leader updated in the method of ActivateLeaderAnswerHandler(super-class), so we don't have to update other things
+     * the production is already passed with the new leader updated in the method of ActivateLeaderAnswerHandler(super-class),
+     * so we don't have to update other things.
      */
     protected void handleLeaderAnswer(LocalGame<?> localGame) {
         //this method does nothing

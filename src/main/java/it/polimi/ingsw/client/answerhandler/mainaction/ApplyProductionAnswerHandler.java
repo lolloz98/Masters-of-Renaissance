@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 
 /**
- * class that modify the local game with the parameters passed by the server in the answer, this class is used to update the local game after an ApplyProductionMessage
+ * Answer Handler that handles the activation of a production modifying the local game.
  */
 public class ApplyProductionAnswerHandler extends AnswerHandler {
 
@@ -21,6 +21,11 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
         super(answer);
     }
 
+    /**
+     * method that updates the local game after an activation of a production
+     *
+     * @param localGame
+     */
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
         ApplyProductionAnswer serverAnswer = (ApplyProductionAnswer) getAnswer();
@@ -37,7 +42,12 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
 
     }
 
-
+    /**
+     * helper method that updates the local board of the main player
+     *
+     * @param localBoard
+     * @param serverAnswer
+     */
     private void updateBoard(LocalBoard localBoard, ApplyProductionAnswer serverAnswer) {
 
         //update the normal depots
@@ -68,8 +78,8 @@ public class ApplyProductionAnswerHandler extends AnswerHandler {
                     LocalProductionLeader toUpdate = (LocalProductionLeader) localBoard.getLeaderCards().get(whichProd - 4);
                     toUpdate.setResToFlush(serverAnswer.getResToFlush());
                 } else
-                    logger.error("something wrong happened: illegal which prod parameter in + " + logger.getName()+ " the leader at that position is not a production leader");
-            break;
+                    logger.error("something wrong happened: illegal which prod parameter in + " + logger.getName() + " the leader at that position is not a production leader");
+                break;
             }
             default:
                 logger.error("something wrong happened: illegal which prod parameter in + " + logger.getName());

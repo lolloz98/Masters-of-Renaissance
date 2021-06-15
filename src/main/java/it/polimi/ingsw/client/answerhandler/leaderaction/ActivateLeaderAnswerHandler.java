@@ -13,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
+/**
+ * Answer Handler that handles the activation of a generic leader
+ */
 public abstract class ActivateLeaderAnswerHandler extends AnswerHandler {
     private static final Logger logger = LogManager.getLogger(ActivateLeaderAnswerHandler.class);
 
@@ -20,6 +23,11 @@ public abstract class ActivateLeaderAnswerHandler extends AnswerHandler {
         super(answer);
     }
 
+    /**
+     * method that updates the local game after the activation of a leader card
+     *
+     * @param localGame
+     */
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
         LeaderAnswer serverAnswer = (LeaderAnswer) getAnswer();
@@ -43,17 +51,17 @@ public abstract class ActivateLeaderAnswerHandler extends AnswerHandler {
         } else {
             for (int i = 0; i < leaderCards.size(); i++) {
                 LocalCard card = leaderCards.get(i);
-                if (card.getId() ==  serverAnswer.getLeader().getId()) {
+                if (card.getId() == serverAnswer.getLeader().getId()) {
                     leaderCards.set(i, serverAnswer.getLeader());
                 }
             }
         }
 
         // update history
-        if(localGame instanceof LocalMulti){
+        if (localGame instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) localGame;
             String actionDescription;
-            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+            if (serverAnswer.getPlayerId() == localMulti.getMainPlayerId()) {
                 actionDescription = "You activated a leader card";
             } else {
                 actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " activated a leader card";
