@@ -12,7 +12,7 @@ import it.polimi.ingsw.messages.answers.mainactionsanswer.FlushProductionResAnsw
 import java.util.TreeMap;
 
 /**
- * class that modify the local game with the parameters passed by the server in the answer, this class is used to update the local game after an FlushProductionResMessage
+ * Answer Handler that handles the flush of the resources from the productions modifying the local game.
  */
 public class FlushProductionResAnswerHandler extends AnswerHandler {
 
@@ -20,9 +20,14 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
         super(answer);
     }
 
+    /**
+     * method that updates the local game after a flush productions resources request.
+     *
+     * @param localGame
+     */
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
-        FlushProductionResAnswer serverAnswer=(FlushProductionResAnswer) getAnswer();
+        FlushProductionResAnswer serverAnswer = (FlushProductionResAnswer) getAnswer();
         LocalBoard localBoard;
 
         //update turn
@@ -31,7 +36,7 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
         //update faith tracks
         localGame.updatePlayerFaithTracks(serverAnswer.getLocalTracks());
 
-        localBoard=localGame.getPlayerById(serverAnswer.getPlayerId()).getLocalBoard();
+        localBoard = localGame.getPlayerById(serverAnswer.getPlayerId()).getLocalBoard();
 
         // update strongbox
         localBoard.setResInStrongBox(serverAnswer.getResInStrongbox());
@@ -40,18 +45,18 @@ public class FlushProductionResAnswerHandler extends AnswerHandler {
         localBoard.flushFromProductions();
 
         // flush leader developments
-        for (LocalCard lc : localBoard.getLeaderCards()){
-            if(lc instanceof LocalProductionLeader){
+        for (LocalCard lc : localBoard.getLeaderCards()) {
+            if (lc instanceof LocalProductionLeader) {
                 LocalProductionLeader lpl = (LocalProductionLeader) lc;
                 lpl.setResToFlush(new TreeMap<>());
             }
         }
 
         // update history
-        if(localGame instanceof LocalMulti){
+        if (localGame instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) localGame;
             String actionDescription;
-            if(serverAnswer.getPlayerId() == localMulti.getMainPlayerId()){
+            if (serverAnswer.getPlayerId() == localMulti.getMainPlayerId()) {
                 actionDescription = "You used a development";
             } else {
                 actionDescription = localMulti.getPlayerById(serverAnswer.getPlayerId()).getName() + " used a development";

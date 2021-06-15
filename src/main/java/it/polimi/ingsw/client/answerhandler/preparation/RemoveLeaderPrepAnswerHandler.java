@@ -10,6 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
+/**
+ * Answer Handler that handles the remove of the leaders in the preparation stage modifying the local game.
+ */
 public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
     private static final Logger logger = LogManager.getLogger(RemoveLeaderPrepAnswerHandler.class);
 
@@ -17,6 +20,11 @@ public class RemoveLeaderPrepAnswerHandler extends AnswerHandler {
         super(answer);
     }
 
+    /**
+     * method that updates the local game after a remove leaders request.
+     *
+     * @param localGame
+     */
     @Override
     public void handleAnswer(LocalGame<?> localGame) {
         RemoveLeaderPrepAnswer removeLeaderPrepAnswer = (RemoveLeaderPrepAnswer) getAnswer();
