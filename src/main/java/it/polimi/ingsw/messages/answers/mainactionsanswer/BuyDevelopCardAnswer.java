@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.localmodel.LocalBoard;
 import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.messages.answers.Answer;
 
+
 public class BuyDevelopCardAnswer extends Answer {
     private final LocalBoard localBoard;
     private final LocalDevelopmentGrid localGrid;

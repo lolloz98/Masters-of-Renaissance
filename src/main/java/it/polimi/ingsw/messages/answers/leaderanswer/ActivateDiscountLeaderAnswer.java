@@ -5,7 +5,7 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 
 public class ActivateDiscountLeaderAnswer extends LeaderAnswer {
     /**
-     * contains the cost of the top card
+     * contains the cost of the top cards to update
      */
     private final LocalDevelopmentGrid localGrid;
 

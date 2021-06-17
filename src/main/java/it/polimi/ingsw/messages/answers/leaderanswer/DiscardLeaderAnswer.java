@@ -7,6 +7,9 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import java.util.ArrayList;
 
 public class DiscardLeaderAnswer extends LeaderAnswer {
+    /**
+     * each track could be modified after a discard of a leader
+     */
     private final ArrayList<LocalTrack> localTracks;
     private final LocalTrack lorenzoTrack;
 

@@ -2,13 +2,16 @@ package it.polimi.ingsw.messages.answers;
 
 import java.io.Serializable;
 
+/**
+ * abstract class containing all the useful info to update the local game.
+ */
 public abstract class Answer implements Serializable {
     private static final long serialVersionUID = 50L;
 
     private final int gameId;
 
     /**
-     * player who asked the request who generated this answer
+     * player who asked the request generated this answer
      */
     private final int playerId;
 

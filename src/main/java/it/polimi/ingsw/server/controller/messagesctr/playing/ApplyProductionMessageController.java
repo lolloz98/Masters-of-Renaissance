@@ -65,7 +65,7 @@ public class ApplyProductionMessageController extends PlayingMessageController {
             throw new UnexpectedControllerException("Something unexpected happened (all the players should ask for the status of the game to correctly see it). The production has been activated.");
         }
 
-        TreeMap<Resource, Integer> resToFlush = new TreeMap<>(production.getGainedResources());
+        TreeMap<Resource, Integer> resToGain = new TreeMap<>(production.getGainedResources());
 
         LocalDepotLeader localDepot;
         ArrayList<LocalDepotLeader> leaderDepots = new ArrayList<>();
@@ -77,6 +77,6 @@ public class ApplyProductionMessageController extends PlayingMessageController {
         TreeMap<Resource, Integer> resInNormalDepots = board.getResInNormalDepots();
         TreeMap<Resource, Integer> resInStrongBox = board.getResourcesInStrongBox();
 
-        return new ApplyProductionAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), resToFlush, resInNormalDepots, resInStrongBox, leaderDepots, clientMessage.getWhichProd());
+        return new ApplyProductionAnswer(clientMessage.getGameId(), clientMessage.getPlayerId(), resToGain, resInNormalDepots, resInStrongBox, leaderDepots, clientMessage.getWhichProd());
     }
 }

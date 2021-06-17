@@ -9,8 +9,6 @@ import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -19,7 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,10 +25,13 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.Objects;
 
+/**
+ * controller that controls the develop grid scene.
+ */
 public class DevelopGridControllerGUI extends ControllerGUI implements Observer {
-    public Pane develop_pane;
-    public GridPane develop_grid;
-    public Button buydevelopBtn;
+    public Pane developPane;
+    public GridPane developGrid;
+    public Button buyDevelopBtn;
     public Button backBtn;
     public Label chooseACardLbl;
     public DepotComponent depotCmp;
@@ -51,24 +51,26 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
     @Override
     public void notifyError() {
-        if(ui.getLocalGame().getState() ==  LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
+        if (ui.getLocalGame().getState() == LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
     }
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
-        setLocalVariables(stage,root,ui);
+        setLocalVariables(stage, root, ui);
         ui.getLocalGame().overrideObserver(this);
         ui.getLocalGame().getMainPlayer().getLocalBoard().overrideObserver(this);
         ui.getLocalGame().getLocalDevelopmentGrid().overrideObserver(this);
         ui.getLocalGame().getError().addObserver(this);
 
-
+/**
+ * go back to board
+ */
         backBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toBoard(stage, ui);
         });
 
-        buydevelopBtn.setOnMouseClicked(mouseEvent -> {
-            Platform.runLater(()-> chooseACardLbl.setText("Choose a card to buy!"));
+        buyDevelopBtn.setOnMouseClicked(mouseEvent -> {
+            Platform.runLater(() -> chooseACardLbl.setText("Choose a card to buy!"));
             activateChooseCardButtons();
 
         });
@@ -77,8 +79,11 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
     }
 
+    /**
+     * updates the grid with the cards.
+     */
     private void updateGrid() {
-        buydevelopBtn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
+        buyDevelopBtn.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
 
         LocalPlayer seen = ui.getLocalGame().getPlayerById(ui.getWhoIAmSeeingId());
 
@@ -87,7 +92,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
         //add top cards to the grid
         LocalDevelopCard[][] topCards = ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards();
-        int[][] numberOfCards=ui.getLocalGame().getLocalDevelopmentGrid().getDevelopCardsNumber();
+        int[][] numberOfCards = ui.getLocalGame().getLocalDevelopmentGrid().getDevelopCardsNumber();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 //generating images
@@ -97,7 +102,7 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
                     int finalI = i;
                     imgView.setImage(topCards[i][j].getImage());
                     imgView.setOnMouseClicked(mouseEvent -> {
-                        buyDevelop(finalI,finalJ);
+                        buyDevelop(finalI, finalJ);
                     });
                 } else {//update empty card image
                     String path;
@@ -112,20 +117,20 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
                 imgView.setFitWidth(168);
                 imgView.setDisable(true);
 
-                develop_grid.add(imgView,i,2-j);
+                developGrid.add(imgView, i, 2 - j);
 
                 GridPane.setValignment(imgView, VPos.TOP);
 
-                //adding info about how many cards have the deck
-                Pane deckInfoPane=new Pane();
-                Label infoLbl=new Label(numberOfCards[i][j] + " cards on this deck");
+                //adding info about how many cards has the deck
+                Pane deckInfoPane = new Pane();
+                Label infoLbl = new Label(numberOfCards[i][j] + " cards on this deck");
                 deckInfoPane.getChildren().add(infoLbl);
                 deckInfoPane.setMaxHeight(28);
                 deckInfoPane.setPrefHeight(28);
-                develop_grid.add(deckInfoPane,i,2-j);
-                GridPane.setValignment(deckInfoPane,VPos.BOTTOM);
-                GridPane.setHalignment(deckInfoPane,HPos.CENTER);
-                GridPane.setFillWidth(deckInfoPane,false);
+                developGrid.add(deckInfoPane, i, 2 - j);
+                GridPane.setValignment(deckInfoPane, VPos.BOTTOM);
+                GridPane.setHalignment(deckInfoPane, HPos.CENTER);
+                GridPane.setFillWidth(deckInfoPane, false);
 
 
             }
@@ -134,10 +139,12 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
 
     }
 
-    //activates the buttons on the grid
+    /**
+     * enabling all the card buttons
+     */
     private void activateChooseCardButtons() {
-        buydevelopBtn.setDisable(true);
-        for (Node n : develop_grid.getChildren()) {
+        buyDevelopBtn.setDisable(true);
+        for (Node n : developGrid.getChildren()) {
             if (n instanceof ImageView) {
                 //logger.debug("the node is a button");
                 ImageView card = (ImageView) n;
@@ -148,8 +155,12 @@ public class DevelopGridControllerGUI extends ControllerGUI implements Observer 
         }
     }
 
-
-    private void buyDevelop(int i,int j) {
+    /**
+     * helper method that passes to the next scene
+     *
+     * @param i,j indexes of the develop card matrix
+     */
+    private void buyDevelop(int i, int j) {
         ui.getLocalGame().removeAllObservers();
         BuildGUI.getInstance().toBuyDevelop(stage, ui, ui.getLocalGame().getLocalDevelopmentGrid().getTopDevelopCards()[i][j]);
     }

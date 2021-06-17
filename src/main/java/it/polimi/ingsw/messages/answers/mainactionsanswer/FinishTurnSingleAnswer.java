@@ -8,6 +8,9 @@ import it.polimi.ingsw.messages.answers.Answer;
 
 public class FinishTurnSingleAnswer extends Answer {
     private final LocalDevelopmentGrid localGrid;
+    /**
+     * all useful information about what Lorenzo did
+     */
     private final LocalTrack localLorenzoTrack;
     private final LocalTrack localPlayerTrack;
     private final LocalLorenzoCard lorenzoCard;

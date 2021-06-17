@@ -23,7 +23,6 @@ public class GameStatusAnswer extends Answer{
      */
     public GameStatusAnswer(int gameId, int playerId, int playerIdReceiver, LocalGame<?> game) {
         super(gameId, playerId);
-        // todo decide how to pass the game status
         this.playerIdReceiver = playerIdReceiver;
         this.game = game;
     }

@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.messages.answers.Answer;
 
 public class FinishTurnMultiAnswer extends Answer {
+    /**
+     * the leaders of the next player could change the state of the development grid
+     */
     private final LocalDevelopmentGrid LocalGrid;
     private final int newCurrentPlayerId;
 

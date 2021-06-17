@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class UseMarketAnswer extends Answer {
+    /**
+     * combination of resources that a player could choose to flush.
+     */
     private final ArrayList<TreeMap<Resource, Integer>> resCombinations;
     private final LocalMarket localMarket;
 
