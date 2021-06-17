@@ -2,6 +2,9 @@ package it.polimi.ingsw.messages.requests;
 
 import java.io.Serializable;
 
+/**
+ * abstract class of all requests sent by the client
+ */
 public abstract class ClientMessage implements Serializable {
     private static final long serialVersionUID = 100L;
 

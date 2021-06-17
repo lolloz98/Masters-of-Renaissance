@@ -3,7 +3,7 @@ package it.polimi.ingsw.messages.requests;
 import it.polimi.ingsw.enums.Resource;
 
 /**
- * ChooseOneResPrepAnswerHandler the type of one resource given at the beginning of the game
+ * Choose the type of resources given at the beginning of the game
  */
 public class ChooseOneResPrepMessage extends ClientMessage {
     private static final long serialVersionUID = 112L;

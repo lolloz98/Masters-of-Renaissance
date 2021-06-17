@@ -19,12 +19,10 @@ public class BuyDevelopCardMessage extends ClientMessage {
      */
     public final int whichSlotToStore;
 
-
-
     /**
-     *resources to pay in order to obtain the desired develop card
+     * resources to pay in order to obtain the desired develop card
      */
-    public final TreeMap<WarehouseType, TreeMap<Resource,Integer>> toPay;
+    public final TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay;
 
     public BuyDevelopCardMessage(int gameId, int playerId, int level, Color color, int whichSlotToStore, TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) {
         super(gameId, playerId);

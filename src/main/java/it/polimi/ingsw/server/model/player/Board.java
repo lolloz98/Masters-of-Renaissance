@@ -138,23 +138,23 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that add a list of leadercard to the board
+     * method that adds a list of leader cards to the board
      *
-     * @param l list of leadercards
+     * @param l list of leader cards
      */
     public void addLeaderCards(ArrayList<LeaderCard<? extends Requirement>> l) {
         leaderCards.addAll(l);
     }
 
     /**
-     * method that handle the application of the production chosen
+     * method that handle the activation of the production chosen
      *
-     * @param resToGive and resToGain are given by the player
-     * @param whichProd if zero it refers to the normalProduction, if 1,2 or 3 it refers to which productionSlot,
-     *                  if 4 or 5 it refers to the leaderCardProductionSlot.
+     * @param resToGive,resToGain TreeMaps of resources that the player wants to give/gain
+     * @param whichProd           if zero it refers to the normalProduction, if 1,2 or 3 it refers to which productionSlot,
+     *                            if 4 or 5 it refers to the leaderCardProductionSlot.
      * @throws ProductionAlreadyActivatedException if the production has already been activated in this turn
-     * @throws InvalidResourcesByPlayerException   if toPay or resourcesToGain contain invalid type of Resources
-     * @throws NotEnoughResourcesException         if there are not enough resources topay on the board
+     * @throws InvalidResourcesByPlayerException   if resToGive or resToGain contain invalid type of Resources
+     * @throws NotEnoughResourcesException         if there are not enough resources to pay on the board
      */
     public void activateProduction(int whichProd, TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Game<?> game) throws InvalidProductionSlotChosenException, ProductionAlreadyActivatedException, ResourceNotDiscountableException, InvalidArgumentException, InvalidResourceQuantityToDepotException, InvalidResourcesByPlayerException, NotEnoughResourcesException {
         if (whichProd < 0)
@@ -177,7 +177,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * flush resources from productions to the board
+     * method that flushes resources from productions to the board
      *
      * @param game current game
      */
@@ -250,7 +250,7 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param resToGive resources we would like to remove from normal depots.
-     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the normal depots
+     * @param diff      first it is cleared then if there are resources in resToGive that we are not able to put in normal depots are puts in this map.
      * @return true, if it is possible to remove resToGive from the normal depots
      * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
@@ -270,6 +270,8 @@ public class Board implements VictoryPointCalculator {
         }
         return true;
     }
+
+//tag for aniello
 
     /**
      * @param resToGive resources we would like to remove from leader depots.
@@ -475,9 +477,9 @@ public class Board implements VictoryPointCalculator {
         if (gainedResources.getOrDefault(Resource.FAITH, 0) > 0)
             try {
                 this.faithtrack.move(gainedResources.get(Resource.FAITH), game);
-            } catch (EndAlreadyReachedException e){
+            } catch (EndAlreadyReachedException e) {
                 logger.warn("End reached for faith path, continuing normal execution: " + e);
-            } catch (InvalidStepsException e){
+            } catch (InvalidStepsException e) {
                 // we should never go inside here
                 logger.error("InvalidStepsException occurred even after checks: " + e);
             }
