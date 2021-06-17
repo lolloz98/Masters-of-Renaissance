@@ -6,12 +6,15 @@ import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 
+/**
+ * CLI state for joining a game
+ */
 public class NewSingleView extends View<CLI> {
     private final LocalSingle localSingle;
 
-    public NewSingleView(CLI cli, LocalSingle localSingle){
+    public NewSingleView(CLI cli){
         this.ui = cli;
-        this.localSingle = localSingle;
+        this.localSingle = (LocalSingle) cli.getLocalGame();
         localSingle.overrideObserver(this);
         localSingle.getError().addObserver(this);
     }
@@ -26,7 +29,7 @@ public class NewSingleView extends View<CLI> {
         if(localSingle.getState() == LocalGameState.PREP_LEADERS){
             localSingle.removeObservers();
             localSingle.getError().removeObserver();
-            ui.setState(new BoardView(ui, localSingle, localSingle.getMainPlayer()));
+            ui.setState(new BoardView(ui, localSingle.getMainPlayer()));
             ui.getState().draw();
         }
         else draw();
@@ -34,7 +37,6 @@ public class NewSingleView extends View<CLI> {
 
     @Override
     public synchronized void notifyError() {
-        // there is no error associated with the new game
     }
 
     @Override

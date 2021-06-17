@@ -66,7 +66,7 @@ public class BuyDevelopmentCardView extends View<CLI> {
                 case "1":
                     // switch view, send message
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer(), true));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer(), true));
                     try {
                         ui.getGameHandler().dealWithMessage(new BuyDevelopCardMessage(
                                 localGame.getGameId(),
@@ -83,7 +83,7 @@ public class BuyDevelopmentCardView extends View<CLI> {
                 case "2":
                     // only switch view
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer()));
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");

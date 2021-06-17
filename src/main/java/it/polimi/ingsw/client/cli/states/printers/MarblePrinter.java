@@ -5,6 +5,9 @@ import it.polimi.ingsw.enums.Resource;
 
 import java.util.ArrayList;
 
+/**
+ * Printer class for a marble
+ */
 public class MarblePrinter {
 
     public static ArrayList<String> toStringBlock(Resource res) {

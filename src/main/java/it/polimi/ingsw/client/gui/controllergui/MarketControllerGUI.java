@@ -18,6 +18,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +43,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public Button push3;
     public Button push4;
     private ArrayList<Button> btnList;
+    private static final Logger logger = LogManager.getLogger(MarketControllerGUI.class);
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
@@ -110,7 +113,8 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public void notifyError() {
         Platform.runLater(() -> {
             synchronized (ui.getLocalGame()) {
-                if(ui.getLocalGame().getState() ==  LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
+                if (ui.getLocalGame().getState() == LocalGameState.DESTROYED)
+                    HelperGUI.handleGameDestruction(stage, ui);
                 messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
             }
         });
@@ -159,16 +163,20 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                 resCombGrid.setHgap(2);
                 resCombGrid.setVgap(2);
                 resCombGrid.add(flushButton, 0, i);
-                for (Resource res : resComb.get(i).keySet())
-                    for (int j = 0; j < resComb.get(i).get(res); j++) {
-                        x++;
-                        ImageView imgView = new ImageView();
-                        marbleImage = new Image("/png/punchboard/marbles/" + res + ".png");
-                        imgView.setImage(marbleImage);
-                        imgView.setFitHeight(56);
-                        imgView.setFitWidth(56);
-                        resCombGrid.add(imgView, x, i);
+                for (Resource res : resComb.get(i).keySet()) {
+                    if (res != Resource.FAITH && !Resource.isDiscountable(res)){
+                        logger.error("There is a problem in the resources combinations, one is: " + res);
                     }
+                        for (int j = 0; j < resComb.get(i).get(res); j++) {
+                            x++;
+                            ImageView imgView = new ImageView();
+                            marbleImage = new Image("/png/punchboard/marbles/" + res + ".png");
+                            imgView.setImage(marbleImage);
+                            imgView.setFitHeight(56);
+                            imgView.setFitWidth(56);
+                            resCombGrid.add(imgView, x, i);
+                        }
+                }
             }
         }
     }
@@ -179,7 +187,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     }
 
     private void setEnabled(boolean bool) {
-        for(Button b : btnList)
+        for (Button b : btnList)
             b.setDisable(!bool);
     }
 

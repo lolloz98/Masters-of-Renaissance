@@ -11,23 +11,42 @@ import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
 import java.io.IOException;
 import java.util.TreeMap;
 
+/**
+ * CLI state to handle the flush of the resources from the market
+ */
 public class FlushMarketCombinationView extends View<CLI> {
     private final LocalGame<?> localGame;
+
+    /**
+     * TreeMap containing the resources gained from the market.
+     * When the player chooses where tu put one of the resources, it get removed from this tree
+     */
     private final TreeMap<Resource, Integer> resToFlush;
+
     /**
      * temporary resource map to keep the ones to show in the confirmation question,
      * contains all resToFlush except for FAITH
      */
-    private TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToShow;
+    private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToShow;
+
     /**
      * temporary int to keep the number of FAITH resources, to show in the confirmation question
      */
     private int faithNumber;
+
+    /**
+     * Copy if the TreeMap containing the resources gained from the market.
+     * Needed to set the message to be sent to the server.
+     */
     private final TreeMap<Resource, Integer> chosenCombination;
+
+    /**
+     * TreeMap containing the resources the player decided to keep, with the corresponding depots to be put in
+     */
     private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToKeep;
 
-    public FlushMarketCombinationView(CLI cli, LocalGame<?> localGame, TreeMap<Resource, Integer> resToFlush) {
-        this.localGame = localGame;
+    public FlushMarketCombinationView(CLI cli, TreeMap<Resource, Integer> resToFlush) {
+        this.localGame = cli.getLocalGame();
         localGame.overrideObserver(this);
         this.resToFlush = resToFlush;
         this.ui = cli;
@@ -45,12 +64,10 @@ public class FlushMarketCombinationView extends View<CLI> {
 
     @Override
     public void notifyUpdate() {
-
     }
 
     @Override
     public void notifyError() {
-
     }
 
     @Override
@@ -78,7 +95,7 @@ public class FlushMarketCombinationView extends View<CLI> {
                 case "1":
                     // switch view, send message
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer(), true));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer(), true));
                     try {
                         ui.getGameHandler().dealWithMessage(new FlushMarketResMessage(
                                 localGame.getGameId(),
@@ -93,7 +110,7 @@ public class FlushMarketCombinationView extends View<CLI> {
                 case "2":
                     // only switch view
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer()));
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");

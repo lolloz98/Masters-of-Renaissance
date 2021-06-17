@@ -11,6 +11,9 @@ import it.polimi.ingsw.messages.requests.RejoinMessage;
 import java.io.IOException;
 import java.net.ConnectException;
 
+/**
+ * CLI state for when the connection with the server drops
+ */
 public class RejoinView extends View<CLI> {
 
     public RejoinView(CLI cli) {
@@ -30,7 +33,7 @@ public class RejoinView extends View<CLI> {
         } else {
             ui.getLocalGame().removeObservers();
             ui.getLocalGame().getError().removeObserver();
-            ui.setState(new BoardView(ui, ui.getLocalGame(), ui.getLocalGame().getMainPlayer()));
+            ui.setState(new BoardView(ui, ui.getLocalGame().getMainPlayer()));
             ui.getState().draw();
         }
     }
@@ -71,6 +74,9 @@ public class RejoinView extends View<CLI> {
         }
     }
 
+    /**
+     * send the rejoin message to the server
+     */
     private void rejoin() {
         ServerListener old = (ServerListener) ui.getGameHandler();
         try {

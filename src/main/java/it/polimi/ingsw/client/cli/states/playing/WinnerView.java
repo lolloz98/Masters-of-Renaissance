@@ -3,17 +3,19 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
-import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMulti;
 import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.server.model.utility.PairId;
 
+/**
+ * CLI state to show the winner of the game
+ */
 public class WinnerView extends GameView {
 
-    public WinnerView(CLI cli, LocalGame<?> localGame) {
+    public WinnerView(CLI cli) {
         this.ui = cli;
-        this.localGame = localGame;
+        this.localGame = cli.getLocalGame();
     }
 
     @Override
@@ -49,9 +51,5 @@ public class WinnerView extends GameView {
         System.out.println("You can still move through the game with 'sb', 'sm', 'sd'");
         System.out.println(" ");
         System.out.println("Go back to the main screen by typing 'quit'");
-    }
-
-    @Override
-    public void removeObserved() {
     }
 }

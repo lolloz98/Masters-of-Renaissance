@@ -6,6 +6,9 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 
 import java.util.ArrayList;
 
+/**
+ * Printer class for the development grid
+ */
 public class DevelopmentGridPrinter {
     public static ArrayList<String> toStringBlock(LocalDevelopmentGrid localDevelopmentGrid) {
         ArrayList<String> out = new ArrayList<>();

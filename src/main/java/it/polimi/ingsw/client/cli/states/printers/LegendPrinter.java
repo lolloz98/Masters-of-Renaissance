@@ -6,6 +6,9 @@ import it.polimi.ingsw.enums.Resource;
 
 import java.util.ArrayList;
 
+/**
+ * Printer class for the legend, to be put on board and development grid
+ */
 public class LegendPrinter {
 
     public static ArrayList<String> toStringBlock() {

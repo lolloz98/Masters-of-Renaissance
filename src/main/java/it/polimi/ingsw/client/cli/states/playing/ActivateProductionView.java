@@ -24,9 +24,9 @@ public class ActivateProductionView extends View<CLI> {
     private final TreeMap<Resource, Integer> resToGain;
     private final TreeMap<Resource, Integer> resToMove;
 
-    public ActivateProductionView(CLI cli, LocalGame<?> localGame, int whichProd, LocalProduction localProduction) {
+    public ActivateProductionView(CLI cli, int whichProd, LocalProduction localProduction) {
         this.ui = cli;
-        this.localGame = localGame;
+        this.localGame = cli.getLocalGame();
         localGame.overrideObserver(this);
         this.whichProd = whichProd;  
         this.resToGive = new TreeMap<>();
@@ -38,12 +38,10 @@ public class ActivateProductionView extends View<CLI> {
 
     @Override
     public void notifyUpdate() {
-
     }
 
     @Override
     public void notifyError() {
-
     }
 
     @Override
@@ -112,7 +110,7 @@ public class ActivateProductionView extends View<CLI> {
                 case "1":
                     // switch view, send message
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer()));
                     try {
                         ui.getGameHandler().dealWithMessage(new ApplyProductionMessage(
                                 localGame.getGameId(),
@@ -128,7 +126,7 @@ public class ActivateProductionView extends View<CLI> {
                 case "2":
                     // only switch view
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer()));
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");
@@ -155,6 +153,4 @@ public class ActivateProductionView extends View<CLI> {
             System.out.println("Insert 1 to confirm, 2 to abort");
         }
     }
-
-
 }

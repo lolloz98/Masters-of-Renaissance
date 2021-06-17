@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Printer class for the development card
+ */
 public class DevelopmentCardPrinter {
 
     public static ArrayList<String> toStringBlock(LocalDevelopCard localDevelopCard) {

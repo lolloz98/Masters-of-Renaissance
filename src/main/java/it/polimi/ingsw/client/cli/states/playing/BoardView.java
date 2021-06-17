@@ -16,14 +16,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * CLI state to show and interact with the board
+ */
 public class BoardView extends GameView {
     /**
      * the player to which belongs the board i'm showing
      */
     private final LocalPlayer localPlayer;
 
-    public BoardView(CLI cli, LocalGame<?> localGame, LocalPlayer localPlayer) {
-        this.localGame = localGame;
+    public BoardView(CLI cli, LocalPlayer localPlayer) {
+        this.localGame = cli.getLocalGame();
         this.ui = cli;
         this.localPlayer = localPlayer;
         localGame.getError().addObserver(this);
@@ -33,8 +36,11 @@ public class BoardView extends GameView {
         waiting = false;
     }
 
-    public BoardView(CLI cli, LocalGame<?> localGame, LocalPlayer localPlayer, boolean waiting) {
-        this.localGame = localGame;
+    /**
+     * alternative constructor to be able to set the waiting boolean
+     */
+    public BoardView(CLI cli, LocalPlayer localPlayer, boolean waiting) {
+        this.localGame = cli.getLocalGame();
         this.ui = cli;
         this.localPlayer = localPlayer;
         localGame.getError().addObserver(this);
@@ -50,7 +56,7 @@ public class BoardView extends GameView {
         if (waiting)
             message = ("Please wait");
         CLIutils.printBlock(BoardPrinter.toStringBlock(localGame, localPlayer));
-        System.out.println("");
+        System.out.println(" ");
         super.drawTurn();
     }
 
@@ -86,7 +92,13 @@ public class BoardView extends GameView {
         }
     }
 
-
+    /**
+     * handling of "discard leader" command
+     *
+     * @param ansList string of commands, parsed to a list.
+     *                The second parameter in this list indicates
+     *                which one of the leaders must be discarded
+     */
     private void discardLeader(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
             String ans1 = ansList.get(1);
@@ -106,6 +118,9 @@ public class BoardView extends GameView {
         }
     }
 
+    /**
+     * handling of "flush all productions" command
+     */
     private void flushProduction() {
         if (localGame.isMainPlayerTurn()) {
             try {
@@ -118,6 +133,12 @@ public class BoardView extends GameView {
         }
     }
 
+    /**
+     * handling of "activate leader production" command
+     *
+     * @param ansList string of commands, parsed to a list.
+     *                The second parameter in this list indicates which one of the leaders productions must be activated
+     */
     private void activateLeaderProduction(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
             if (localGame.isMainPlayerTurn()) {
@@ -137,7 +158,6 @@ public class BoardView extends GameView {
                                     removeObserved();
                                     ui.setState(new ActivateProductionView(
                                             ui,
-                                            localGame,
                                             localProductionLeader.getWhichProd(),
                                             localProductionLeader.getProduction()
                                     ));
@@ -158,12 +178,18 @@ public class BoardView extends GameView {
         } else writeErrText();
     }
 
+    /**
+     * handling of "activate production" command
+     *
+     * @param ansList string of commands, parsed to a list.
+     *                The second parameter in this list indicates which one of the productions must be activated.
+     */
     private void activateProduction(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
             String ans1 = ansList.get(1);
             if (localGame.isMainPlayerTurn()) {
                 if (localPlayer == localGame.getMainPlayer()) {
-                    int number = -1;
+                    int number;
                     try {
                         number = Integer.parseInt(ans1);
                         if (number >= 0 && number < 4) {
@@ -172,7 +198,7 @@ public class BoardView extends GameView {
                                     message = ("You already used the base development in this turn!");
                                 } else {
                                     removeObserved();
-                                    ui.setState(new ActivateProductionView(ui, localGame, 0, localPlayer.getLocalBoard().getBaseProduction()));
+                                    ui.setState(new ActivateProductionView(ui, 0, localPlayer.getLocalBoard().getBaseProduction()));
                                 }
                             } else {
                                 if (localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() == 0) {
@@ -184,7 +210,6 @@ public class BoardView extends GameView {
                                         removeObserved();
                                         ui.setState(new ActivateProductionView(
                                                 ui,
-                                                localGame,
                                                 number,
                                                 localPlayer.getLocalBoard().getDevelopCards().get(number - 1).get(localPlayer.getLocalBoard().getDevelopCards().get(number - 1).size() - 1).getProduction()
                                         ));
@@ -204,6 +229,12 @@ public class BoardView extends GameView {
         } else writeErrText();
     }
 
+    /**
+     * handling of "activate leader production" command
+     *
+     * @param ansList string of commands, parsed to a list.
+     *                The second parameter in this list indicates which one of the leaders must be activated
+     */
     private void activateLeader(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
             String ans1 = ansList.get(1);
@@ -222,5 +253,4 @@ public class BoardView extends GameView {
             message = ("You can only do this on your board!");
         }
     }
-
 }

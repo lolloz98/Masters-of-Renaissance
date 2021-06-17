@@ -11,6 +11,9 @@ import it.polimi.ingsw.enums.Resource;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * Printer class for the market
+ */
 public class MarketPrinter {
     public static ArrayList<String> toStringBlock(LocalGame<?> localGame, LocalMarket localMarket) {
         ArrayList<String> out = new ArrayList<>();

@@ -13,15 +13,18 @@ import it.polimi.ingsw.messages.requests.JoinGameMessage;
 
 import java.io.IOException;
 
+/**
+ * CLI state for joining a game
+ */
 public class JoinGameView extends View<CLI> {
     private final LocalMulti localMulti;
     private final String nickname;
     private boolean valid;
     private boolean waiting;
 
-    public JoinGameView(CLI cli, LocalMulti localMulti, String nickname) {
+    public JoinGameView(CLI cli, String nickname) {
         this.ui = cli;
-        this.localMulti = localMulti;
+        this.localMulti = (LocalMulti) cli.getLocalGame();
         this.nickname = nickname;
         localMulti.overrideObserver(this);
         localMulti.getError().addObserver(this);
@@ -34,7 +37,7 @@ public class JoinGameView extends View<CLI> {
         if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
             localMulti.removeObservers();
             localMulti.getError().removeObserver();
-            ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
+            ui.setState(new BoardView(ui, localMulti.getMainPlayer()));
             ui.getState().draw();
         } else if (localMulti.getState() == LocalGameState.DESTROYED) {
             localMulti.removeAllObservers();

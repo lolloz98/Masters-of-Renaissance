@@ -13,13 +13,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 
+/**
+ * CLI state to show and interact with the development grid
+ */
 public class DevelopmentGridView extends GameView {
     private final LocalDevelopmentGrid localDevelopmentGrid;
 
-    public DevelopmentGridView(CLI cli, LocalGame<?> localGame, LocalDevelopmentGrid localDevelopmentGrid) {
+    public DevelopmentGridView(CLI cli, LocalDevelopmentGrid localDevelopmentGrid) {
         this.ui = cli;
         this.localDevelopmentGrid = localDevelopmentGrid;
-        this.localGame = localGame;
+        this.localGame = cli.getLocalGame();
         waiting = false;
         localGame.overrideObserver(this);
         localGame.getError().addObserver(this);
@@ -49,6 +52,13 @@ public class DevelopmentGridView extends GameView {
         }
     }
 
+    /**
+     * handling of "buy development card" command
+     *
+     * @param ansList string of commands, parsed to a list.
+     *                The second parameter in this list indicates the coordinate of the card to buy, for example "A1".
+     *                The third parameter indicates the slot in the board in which the card will be placed.
+     */
     private void buy(ArrayList<String> ansList) {
         if (ansList.size() == 3) {
             if (localGame.isMainPlayerTurn()) {
@@ -99,5 +109,4 @@ public class DevelopmentGridView extends GameView {
             }
         } else writeErrText();
     }
-
 }

@@ -3,15 +3,20 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
-import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 
+/**
+ * CLI state that informs the player that the game has been destroyed
+ */
 public class DestroyedView extends GameView {
-    private boolean fromGameView;
+    /**
+     * true if the player comes to this state from a game view, false if he comes from one of the creation states
+     */
+    private final boolean fromGameView;
 
-    public DestroyedView(CLI cli, LocalGame<?> localGame) {
+    public DestroyedView(CLI cli) {
         this.ui = cli;
-        this.localGame = localGame;
+        this.localGame = cli.getLocalGame();
         this.fromGameView = true;
     }
 

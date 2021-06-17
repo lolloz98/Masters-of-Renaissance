@@ -1,11 +1,13 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.cli.states.RejoinView;
-import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
-import it.polimi.ingsw.client.localmodel.LocalGameState;
 
+/**
+ * observer class for serverListener
+ * gets updated if the server drops the connection
+ */
 public class ServerObserver implements Observer{
-    private CLI cli;
+    private final CLI cli;
 
     public ServerObserver(CLI cli){
         this.cli = cli;
@@ -20,6 +22,5 @@ public class ServerObserver implements Observer{
 
     @Override
     public void notifyError() {
-        // nothing to do here
     }
 }
