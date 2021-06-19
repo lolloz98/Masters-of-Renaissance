@@ -117,11 +117,13 @@ public class ControllerManager {
     /**
      * @return an id not used in reservedId or gameMap
      */
-    private synchronized int getNewId() {
+    private synchronized int getNewId() throws UnexpectedControllerException {
         int i = 0;
         while (controllerMap.containsKey(i)) {
-            // fixme: check i for upper bounds
             i++;
+        }
+        if(i > Integer.MAX_VALUE / 10){
+            throw new UnexpectedControllerException("Too many games. Wait until one of them finishes");
         }
         return i;
     }

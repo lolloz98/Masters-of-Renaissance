@@ -35,7 +35,6 @@ import java.net.Socket;
 public class ServerUiTestHelper extends Server {
     private static final Logger logger = LogManager.getLogger(Server.class);
 
-    // fixme: Don't use fixed port number
     private final static int PORT = 16509;
 
     public static int getPort() {

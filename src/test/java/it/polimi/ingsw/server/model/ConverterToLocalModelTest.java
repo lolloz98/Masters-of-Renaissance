@@ -113,7 +113,6 @@ public class ConverterToLocalModelTest {
     public void testConvertDevelopDecks() throws ModelException {
         SinglePlayer singlePlayer = new SinglePlayer(new Player("lollo", 0));
         ConverterToLocalModel.convert(singlePlayer.getDecksDevelop());
-        // todo checks
     }
 
     @Test
@@ -143,7 +142,6 @@ public class ConverterToLocalModelTest {
         }
     }
 
-    //  todo: test all the convert methods
 
     public Production createProductionApplied() throws ModelException {
         TreeMap<Resource, Integer> toGive = new TreeMap<>() {{

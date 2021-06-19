@@ -464,7 +464,6 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         optional1Btn.setVisible(true);
         optional1Btn.setText("Winners");
         optional1Btn.setOnMouseClicked(mouseEvent -> {
-            // todo
             logger.debug("Going to winner view");
             BuildGUI.getInstance().toWinners(stage, ui);
         });

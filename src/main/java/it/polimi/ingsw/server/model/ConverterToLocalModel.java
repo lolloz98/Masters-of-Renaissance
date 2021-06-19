@@ -298,7 +298,6 @@ public final class ConverterToLocalModel {
             if (i.getBoard().getInitialRes() != 0) return LocalGameState.PREP_RESOURCES;
         }
 
-        // todo: check that the condition for gameOver is right
         if (game.isGameOver()) return LocalGameState.OVER;
         return LocalGameState.READY;
     }

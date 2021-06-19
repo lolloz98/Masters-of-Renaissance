@@ -38,7 +38,6 @@ public class ClientHandler implements Runnable {
 
     public ClientHandler(Socket client) {
         this.client = client;
-        // todo: add reference to controller/view
     }
 
     private void handleClientConnection() throws IOException {
@@ -47,7 +46,6 @@ public class ClientHandler implements Runnable {
                 ClientMessage clientMessage = (ClientMessage) iStream.readObject();
                 logger.debug("class of message: " + clientMessage.getClass());
                 logger.debug("input from client: " + clientMessage);
-                // TODO modify this
                 handleMessage(clientMessage);
             }
         } catch (ClassNotFoundException | ClassCastException e) {
@@ -112,7 +110,7 @@ public class ClientHandler implements Runnable {
 
     public synchronized void closeConnection() {
         try {
-            // fixme: for now, if a client drop the connection the game is cancelled
+            // if a client drop the connection the game is destroyed
             if(answerListener != null && answerListener.getGameId() != -1){
                 try {
                     ControllerActionsServer<?> ca = ControllerManager.getInstance().getControllerFromMap(answerListener.getGameId());
