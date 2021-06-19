@@ -4,7 +4,7 @@ Lorenzo Carpaneto, Aniello De Santis, Lorenzo Innocenti
 
 ## Implemented features
 |Feature|Description|
-|--|--|
+---|---
 |Complete rule set|The game works for both the single-player and multi-player mode (up to 4 players)|
 |Multiple games|It is possible to play multiple games simultaneously. To each game is associated a gameId: to join a game the player needs to specify its gameId.|
 |Persistence|The game status is saved on the disk. If, during a game, the server should, for some reasons, shutdown, the players (if they do not close the application) will be able to rejoin the game when the server will start running again|
