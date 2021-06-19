@@ -7,10 +7,10 @@ Lorenzo Carpaneto, Aniello De Santis, Lorenzo Innocenti
 |--|--|
 |Complete rule set|The game works for both the single-player and multi-player mode (up to 4 players)|
 |Multiple games|It is possible to play multiple games simultaneously. To each game is associated a gameId: to join a game the player needs to specify its gameId.|
-|Persistence|The game status is saved on the disk. If, during a game, the server should, for some reason, shutdown, the players (if they do not disconnect) will be able to rejoin the game when the server will start running again|
+|Persistence|The game status is saved on the disk. If, during a game, the server should, for some reasons, shutdown, the players (if they do not close the application) will be able to rejoin the game when the server will start running again|
 |Local game|It is possible to play a single-player game without connecting to the server|
 
-All the features are implemented for both CLI and GUI.
+All the features are implemented for both **CLI** and **GUI**.
 
 ## How to execute jars
 ### Client - CLI
@@ -41,3 +41,7 @@ If you want to specify the port on which to run the server, pass as argument the
 ```
 java -jar server.jar 44000
 ```
+
+Otherwise the server will run on port: `16509`.
+
+Please check to run the server on an available port, otherwise it will not start.
