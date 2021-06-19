@@ -63,7 +63,7 @@ public abstract class GameView extends View<CLI> {
      * method that gets called from the implementations of this class.
      * from the string of commands calls the correct function.
      *
-     * @param ansList the parsed string of commands, converted in a list of strings
+     * @param ansList the parsed string of commands, parsed to a list of strings
      */
     public void handleCommand(ArrayList<String> ansList) {
         int ansNumber;
