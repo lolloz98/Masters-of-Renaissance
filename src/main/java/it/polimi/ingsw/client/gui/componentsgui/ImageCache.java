@@ -8,6 +8,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
+/**
+ * Some pointers to images useful in multiple views.
+ */
 public final class ImageCache {
     public static final Image EMPTY_CARD = new Image("/png/empty_card.png");
     private static final Logger logger = LogManager.getLogger(FaithTrackComponent.class);

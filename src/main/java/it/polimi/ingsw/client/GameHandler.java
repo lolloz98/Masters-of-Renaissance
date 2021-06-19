@@ -6,6 +6,9 @@ import it.polimi.ingsw.messages.requests.ClientMessage;
 
 import java.io.IOException;
 
+/**
+ * Base class. It deals with the requests and the answers.
+ */
 public abstract class GameHandler extends Observable implements Runnable {
     protected LocalGame<?> localGame;
 

@@ -133,6 +133,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
         }else{
             currentPlayerStr = "It's your turn";
         }
+        currentPlayerStr += "; You are " + ui.getLocalGame().getMainPlayer().getName();
         currentPlayerLbl.setText(currentPlayerStr);
     }
 

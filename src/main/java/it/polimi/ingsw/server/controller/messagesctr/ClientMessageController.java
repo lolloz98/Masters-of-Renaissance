@@ -16,6 +16,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Base class for the messages
+ */
 public abstract class ClientMessageController implements Serializable {
     private static final long serialVersionUID = 200L;
 
@@ -29,6 +32,12 @@ public abstract class ClientMessageController implements Serializable {
         return clientMessage;
     }
 
+    /**
+     *
+     * @param controllerActions of the current game
+     * @return player who sent the message
+     * @throws WrongPlayerIdControllerException the id in the message does not match with the id of a player in this game
+     */
     protected Player getPlayerFromId(ControllerActionsBase<?> controllerActions) throws WrongPlayerIdControllerException {
         Game<?> game = controllerActions.getGame();
         Player player;
@@ -45,6 +54,11 @@ public abstract class ClientMessageController implements Serializable {
         return player;
     }
 
+    /**
+     * After checking the status of the game it
+     * @param controllerActions of the current game
+     * @return answer related to this specific request
+     */
     public Answer doAction(ControllerActionsBase<?> controllerActions) throws ControllerException {
         if (checkState(controllerActions)) {
             return doActionNoChecks(controllerActions);

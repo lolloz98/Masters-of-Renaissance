@@ -6,6 +6,9 @@ import it.polimi.ingsw.client.localmodel.Observable;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 
+/**
+ * Base class for controllers of GUI.
+ */
 public abstract class ControllerGUI {
     public abstract void setUp(Stage stage, Parent root, GUI ui);
     public void setLocalVariables(Stage stage, Parent root, GUI ui){
