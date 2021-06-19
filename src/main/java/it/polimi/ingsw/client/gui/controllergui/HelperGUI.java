@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Helper class with useful methods for GUI
+ */
 public final class HelperGUI {
     private static final Logger logger = LogManager.getLogger(HelperGUI.class);
 

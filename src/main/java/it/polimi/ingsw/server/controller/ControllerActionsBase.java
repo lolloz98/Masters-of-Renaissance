@@ -16,6 +16,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
+/**
+ * base controller: it defines methods and attributes useful for concrete controllers (both local controller
+ * and server controllers).
+ * It handles the actions of the players.
+ */
 public abstract class ControllerActionsBase<T extends Game<? extends Turn>> {
     private static final Logger logger = LogManager.getLogger(ControllerActionsServer.class);
 

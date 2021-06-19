@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
+ * GameHandler for remote games (both single player and multi player)
  * class to handle communication to server.
  * It notifies its observer if the connection is closed
  */

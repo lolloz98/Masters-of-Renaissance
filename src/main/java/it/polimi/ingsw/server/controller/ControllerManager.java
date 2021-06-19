@@ -18,7 +18,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Singleton class that handles the creation of games with their corresponding controllers
+ * Singleton class that handles the creation of games and their corresponding controllers.
+ * It also handles the dispatch of games and their destruction
  */
 public class ControllerManager {
 
@@ -29,6 +30,9 @@ public class ControllerManager {
      * treemap containing the id of the game and the ControllerActions associated
      */
     private final TreeMap<Integer, ControllerActionsServer<?>> controllerMap;
+    /**
+     * treeSet containing the id of the game to which someone could rejoin
+     */
     private final TreeSet<Integer> toBeRejoinedIds;
 
     private ControllerManager() {

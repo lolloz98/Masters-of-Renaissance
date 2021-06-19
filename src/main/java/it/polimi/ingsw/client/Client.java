@@ -13,6 +13,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * old client. Not used anymore.
+ */
 @Deprecated
 public class Client {
     Socket server;

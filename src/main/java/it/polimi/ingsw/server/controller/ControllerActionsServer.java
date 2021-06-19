@@ -31,11 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 
-/**
- * class that handles the actions of the players and calls the methods of the model
- *
- * @param <T> the type of the game, it can be single player or multi player
- */
 public abstract class ControllerActionsServer<T extends Game<? extends Turn>> extends ControllerActionsBase<T> {
     private static final Logger logger = LogManager.getLogger(ControllerActionsServer.class);
 

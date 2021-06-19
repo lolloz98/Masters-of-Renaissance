@@ -9,6 +9,11 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * This should observe the serverListener. When it closes for some reasons, it will call notifyUpdate.
+ * After the closing of the connection, we could go either to the start page or to the rejoin page (it depends
+ * on the current status of the game)
+ */
 public class ClosingConnectionListenerGUI implements Observer {
     private static final Logger logger = LogManager.getLogger(ClosingConnectionListenerGUI.class);
 

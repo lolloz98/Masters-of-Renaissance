@@ -10,6 +10,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Class used for persistence. Handle the game saving, retrieving from file and the deletion
+ * of the file containing the game.
+ */
 public final class Persist {
     private static final Logger logger = LogManager.getLogger(Persist.class);
 

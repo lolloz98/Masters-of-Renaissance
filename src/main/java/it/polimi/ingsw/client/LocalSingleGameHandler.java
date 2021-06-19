@@ -28,6 +28,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * GameHandler for local single player games.
+ */
 public class LocalSingleGameHandler extends GameHandler {
     private static final Logger logger = LogManager.getLogger(LocalSingleGameHandler.class);
     ControllerActionsSingleLocal controllerActionsSingleLocal;
