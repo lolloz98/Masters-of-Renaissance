@@ -21,10 +21,8 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.TreeMap;
 
 public class MarketControllerGUI extends ControllerGUI implements Observer {
@@ -48,7 +46,6 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
-        // todo set observers
         market_grid.setHgap(1);
         market_grid.setVgap(1);
         ui.getLocalGame().getLocalMarket().overrideObserver(this);

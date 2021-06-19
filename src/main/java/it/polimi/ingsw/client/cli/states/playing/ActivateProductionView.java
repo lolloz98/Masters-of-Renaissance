@@ -3,10 +3,8 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.MapUtils;
-import it.polimi.ingsw.client.cli.states.View;
-import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.cli.states.ConversationalView;
 import it.polimi.ingsw.client.localmodel.LocalProduction;
-import it.polimi.ingsw.client.localmodel.localcards.LocalProductionLeader;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
@@ -14,9 +12,8 @@ import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class ActivateProductionView extends View<CLI> {
+public class ActivateProductionView extends ConversationalView {
     private final int whichProd;
-    private final LocalGame<?> localGame;
     /**
      * one by one, resources are taken from resToMove and put in resToGive once the player has decided where to take them from
      */
@@ -34,10 +31,6 @@ public class ActivateProductionView extends View<CLI> {
         if (whichProd == 0) prod = localGame.getMainPlayer().getLocalBoard().getBaseProduction();
         this.resToGain = new TreeMap<>(prod.getResToGain());
         this.resToMove = new TreeMap<>(prod.getResToGive());
-    }
-
-    @Override
-    public void notifyUpdate() {
     }
 
     @Override

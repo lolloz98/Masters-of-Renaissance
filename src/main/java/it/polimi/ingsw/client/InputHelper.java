@@ -25,7 +25,6 @@ public class InputHelper {
      * @throws InvalidNumberOfPlayersException if numberOfPlayers is not between 1 and 4
      */
     public static CreateGameMessage getCreateGameMessage(String numberOfPlayers, String nickname) throws NumberFormatException, InvalidNumberOfPlayersException {
-        // todo check nickname length
         int number = Integer.parseInt(numberOfPlayers);
         if (number < 1 || number > 4) {
             throw new InvalidNumberOfPlayersException();

@@ -91,7 +91,7 @@ public class DevelopmentGridView extends GameView {
                         if (color != null && level > 0 && level < 4) {
                             if (localDevelopmentGrid.getDevelopCardsNumber()[colorInt][level - 1] > 0) {
                                 TreeMap<Resource, Integer> cost = localDevelopmentGrid.getTopDevelopCards()[colorInt][level - 1].getCost();
-                                ui.setState(new BuyDevelopmentCardView(ui, localGame, color, level, slotNumber, cost));
+                                ui.setState(new BuyDevelopmentCardView(ui, color, level, slotNumber, cost));
                             } else {
                                 message = ("There are no cards in this deck!");
                             }

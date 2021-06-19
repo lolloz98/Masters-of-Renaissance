@@ -2,8 +2,7 @@ package it.polimi.ingsw.client.cli.states.playing;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.MapUtils;
-import it.polimi.ingsw.client.cli.states.View;
-import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.cli.states.ConversationalView;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.requests.actions.FlushMarketResMessage;
@@ -14,9 +13,7 @@ import java.util.TreeMap;
 /**
  * CLI state to handle the flush of the resources from the market
  */
-public class FlushMarketCombinationView extends View<CLI> {
-    private final LocalGame<?> localGame;
-
+public class FlushMarketCombinationView extends ConversationalView {
     /**
      * TreeMap containing the resources gained from the market.
      * When the player chooses where tu put one of the resources, it get removed from this tree
@@ -60,10 +57,6 @@ public class FlushMarketCombinationView extends View<CLI> {
                 MapUtils.addToResMapWarehouse(resToKeep, Resource.FAITH, WarehouseType.NORMAL);
             }
         }
-    }
-
-    @Override
-    public void notifyUpdate() {
     }
 
     @Override
