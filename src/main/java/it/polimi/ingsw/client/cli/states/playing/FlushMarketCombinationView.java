@@ -16,7 +16,7 @@ import java.util.TreeMap;
 public class FlushMarketCombinationView extends ConversationalView {
     /**
      * TreeMap containing the resources gained from the market.
-     * When the player chooses where tu put one of the resources, it get removed from this tree
+     * When the player chooses where to put one of the resources, it gets removed from this tree
      */
     private final TreeMap<Resource, Integer> resToFlush;
 
@@ -32,7 +32,7 @@ public class FlushMarketCombinationView extends ConversationalView {
     private int faithNumber;
 
     /**
-     * Copy if the TreeMap containing the resources gained from the market.
+     * Copy of the TreeMap containing the resources gained from the market.
      * Needed to set the message to be sent to the server.
      */
     private final TreeMap<Resource, Integer> chosenCombination;
