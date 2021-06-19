@@ -32,12 +32,14 @@ java -jar gui.jar
 ### Server
 Execute from shell (tested option: cmd) with command: `java -jar <path_to_server.jar>`.
 
-If shell is opened in the folder containing gui.jar:
+If shell is opened in the folder containing server.jar:
 ```
 java -jar server.jar
 ```
 
-If you want to specify the port on which to run the server, pass as argument the port number `java -jar <path_to_server.jar> <port_number>`. E.g.:
+If you want to specify the port on which to run the server, pass as argument the port number `java -jar <path_to_server.jar> <port_number>`. 
+
+E.g. If shell is opened in the folder containing server.jar:
 ```
 java -jar server.jar 44000
 ```
