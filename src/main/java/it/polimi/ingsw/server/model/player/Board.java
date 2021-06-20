@@ -250,7 +250,7 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param resToGive resources we would like to remove from normal depots.
-     * @param diff      first it is cleared then if there are resources in resToGive that we are not able to put in normal depots are puts in this map.
+     * @param diff      first it is cleared then if there are resources in resToGive that we are not able to put in normal depots, these are put in this map.
      * @return true, if it is possible to remove resToGive from the normal depots
      * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
@@ -271,11 +271,9 @@ public class Board implements VictoryPointCalculator {
         return true;
     }
 
-//tag for aniello
-
     /**
      * @param resToGive resources we would like to remove from leader depots.
-     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the leader depots
+     * @param diff      first it is cleared then if there are resources in resToGive that we are not able to put in leader depots, these are put in this map.
      * @return true, if it is possible to remove resToGive from the leader depots
      * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
@@ -298,7 +296,7 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param resToGive resources we would like to remove from the strong box.
-     * @param diff      first it is cleared then there are put all the resources that we were not able to put in the strong box
+     * @param diff      first it is cleared then if there are resources in resToGive that we are not able to put in the strongbox, these are put in this map.
      * @return true, if it is possible to remove resToGive from the strong box
      * @throws ResourceNotDiscountableException if resToGive contains any resource notDiscountable
      */
@@ -319,6 +317,11 @@ public class Board implements VictoryPointCalculator {
         return true;
     }
 
+    /**
+     * @param whichLeader
+     * @return true if the leader production indicated has been activated.
+     * @throws InvalidArgumentException if there isn't any leader selected
+     */
     private boolean theLeaderProductionIsActivated(int whichLeader) throws InvalidArgumentException {
         if (whichLeader >= productionLeaderSlots.size() || whichLeader < 0)
             throw new InvalidArgumentException("Invalid production slot leader selected");
@@ -328,7 +331,7 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * remove resToGive from the board.
-     * It removes the resources in this order: from the normal Depots, from LeaderDepots (if any) and from the strongbox
+     * It removes the resources in this order: First from the normal Depots; Second from LeaderDepots (if any); Last from the strongbox
      *
      * @param resToGive resources to be removed from the board
      * @throws NotEnoughResourcesException      if there are not enough resources on the board
@@ -343,7 +346,7 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param resToGive resources to be removed from the normal depots
-     * @return treeMap with the resources still to be spent
+     * @return TreeMap with the resources still to be spent
      * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
      */
     private TreeMap<Resource, Integer> removeResFromNormalDepotNoCheck(TreeMap<Resource, Integer> resToGive) throws ResourceNotDiscountableException, InvalidResourceQuantityToDepotException {
@@ -367,7 +370,7 @@ public class Board implements VictoryPointCalculator {
 
     /**
      * @param resToGive resources to be removed from the leader depots
-     * @return treeMap with the resources still to be spent
+     * @return TreeMap with the resources still to be spent
      * @throws ResourceNotDiscountableException if there are any resources which are not discountable in resToGive
      */
     private TreeMap<Resource, Integer> removeResFromLeaderDepotNoCheck(TreeMap<Resource, Integer> resToGive) throws ResourceNotDiscountableException, InvalidResourceQuantityToDepotException {
@@ -431,6 +434,11 @@ public class Board implements VictoryPointCalculator {
         removeResFromStrongBoxNoCheck(resToGive);
     }
 
+    /**
+     * calculates the victory points on the board
+     *
+     * @return points
+     */
     @Override
     public int getVictoryPoints() {
         int points = 0;
@@ -450,7 +458,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * put the activated depotLeaderCard in depotLeaders array
+     * puts the activated depotLeaderCard in depotLeaders array
      *
      * @param depotLeaderCard is owned by the player and it's just been activated
      */
@@ -505,7 +513,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * @return resources in depots all grouped in a treeMap
+     * @return resources in depots all grouped in a TreeMap
      */
     public TreeMap<Resource, Integer> getResInNormalDepots() {
         TreeMap<Resource, Integer> inDepots = new TreeMap<>();
@@ -620,7 +628,7 @@ public class Board implements VictoryPointCalculator {
      * @param game      current game
      * @throws InvalidResourcesToKeepByPlayerException if the player made an invalid decision regarding the resources to keep,
      *                                                 the resources given must be enough to not overload the depots
-     * @throws InvalidArgumentException                if the treemaps toKeep and resGained contain an irregular type of resource
+     * @throws InvalidArgumentException                if the TreeMaps toKeep and resGained contain an irregular type of resource
      *                                                 or if the amount of resources in the toKeep are greater that un the resGained
      */
     public void gainResourcesSmart(TreeMap<Resource, Integer> resGained, TreeMap<Resource, Integer> toKeep, Game<?> game) throws InvalidResourcesToKeepByPlayerException, InvalidArgumentException, InvalidTypeOfResourceToDepotException, InvalidResourceQuantityToDepotException, DifferentResourceForDepotException, InvalidStepsException {
@@ -671,14 +679,14 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that put the resources gained by the market in the depots and if there is a discard of resources make the other players move on the faithpath
+     * method that put the resources gained by the market in the depots and if there is a discard of resources make the other players move on the FaithTrack
      *
      * @param resGained resources gained by the market
      * @param toKeep    resources to keep chosen by the player, the argument contains also the information about where to store the resources
      * @param game      current game
      * @throws InvalidResourcesToKeepByPlayerException if the player made an invalid decision regarding the resources to keep,
      *                                                 the resources given must be enough to not overload the depots
-     * @throws InvalidArgumentException                if the treemaps toKeep and resGained contain an irregular type of resource
+     * @throws InvalidArgumentException                if the TreeMaps toKeep and resGained contain an irregular type of resource
      *                                                 or if the amount of resources in the toKeep are greater than in the resGained
      *                                                 or if the treemap toKeep contains the strongbox as Warehouse type
      */
@@ -825,7 +833,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that checks if the treemap toKeep is valid (it can be added to the depots without any gap of resources)
+     * method that checks if the TreeMap toKeep is valid (it can be added to the depots without any gap of resources)
      *
      * @param toKeep a Treemap chosen by the player
      * @return true if the TreeMap passed by the player is not valid
@@ -843,8 +851,8 @@ public class Board implements VictoryPointCalculator {
      * method that search a depot which can be substituted with the depot passed
      *
      * @param depotToSwitchFrom depot that i want to substitute
-     * @param depotArrayList
-     * @param howMany           resources must be added to the depot
+     * @param depotArrayList    list of depots to analyze
+     * @param howMany           how many resources must be added to the depot
      * @return the depot to substitute or null if no valid depot is found
      */
     private Depot lookForADepotToSwitch(Depot depotToSwitchFrom, ArrayList<Depot> depotArrayList, int howMany) {
@@ -858,7 +866,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * method that checks if there is a depot that contains r
+     * method that checks if there is a depot that contains the type of resource passed
      *
      * @param r              resource
      * @param depotArrayList arraylist of depots to analyze
@@ -873,7 +881,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * give one point for each resource in extraResource to each player (apart from the current player)
+     * give one point for each resource in extraResources to each player (apart from the current player)
      *
      * @param game           current game
      * @param extraResources resources that cannot be stored in depots
@@ -1105,7 +1113,6 @@ public class Board implements VictoryPointCalculator {
      */
     private void payResourcesNoCheck(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) throws ResourceNotDiscountableException, NotEnoughResourcesException, InvalidArgumentException, InvalidResourceQuantityToDepotException {
 
-        // then pay
         for (WarehouseType w : toPay.keySet()) {
             switch (w) {
                 case STRONGBOX:
