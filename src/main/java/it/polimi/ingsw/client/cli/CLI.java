@@ -8,7 +8,6 @@ import it.polimi.ingsw.client.cli.states.creation.JoinGameView;
 import it.polimi.ingsw.client.cli.states.creation.NewMultiView;
 import it.polimi.ingsw.client.cli.states.creation.NewSingleView;
 import it.polimi.ingsw.client.exceptions.InvalidNumberOfPlayersException;
-import it.polimi.ingsw.client.localmodel.*;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,23 +15,14 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Entry class for the CLI game
+ */
 public class CLI extends UI {
     private static final Logger logger = LogManager.getLogger(CLI.class);
     private View<CLI> state;
     private String nickname;
     private String quitMsg;
-
-    public void setQuitMsg(String quitMsg) {
-        this.quitMsg = quitMsg;
-    }
-
-    public synchronized View<CLI> getState() {
-        return state;
-    }
-
-    public synchronized void setState(View<CLI> state) {
-        this.state = state;
-    }
 
     public static void main(String[] args) {
         logger.debug("CLI Started");
@@ -43,8 +33,8 @@ public class CLI extends UI {
     public void run() {
         CLIutils.clearScreen();
         System.out.println("Welcome to Masters of Renaissance");
-        System.out.println("");
-        System.out.println("");
+        System.out.println(" ");
+        System.out.println(" ");
         this.input = new Scanner(System.in);
         String ans;
         while(true) {
@@ -59,6 +49,9 @@ public class CLI extends UI {
         }
     }
 
+    /**
+     * Sets up a new game
+     */
     private void setup() {
         boolean valid;
         pickNickname();
@@ -115,9 +108,12 @@ public class CLI extends UI {
     @Override
     protected void joinGame() {
         super.joinGame();
-        state = new JoinGameView(this, (LocalMulti) localGame, nickname);
+        state = new JoinGameView(this, nickname);
     }
 
+    /**
+     * Method to choose the number of players. Loops until the number is valid.
+     */
     protected void choseNumberOfPlayers() {
         System.out.println("Type the number of players:\n");
         String numberOfPlayers;
@@ -150,12 +146,13 @@ public class CLI extends UI {
     @Override
     public void newSinglePlayer() {
         super.newSinglePlayer();
-        state = new NewSingleView(this, (LocalSingle) localGame);
+        state = new NewSingleView(this);
     }
 
+    @Override
     public void newMultiPlayer() {
         super.newMultiPlayer();
-        state = new NewMultiView(this, (LocalMulti) localGame);
+        state = new NewMultiView(this);
     }
 
     /**
@@ -193,6 +190,9 @@ public class CLI extends UI {
         } while (!valid);
     }
 
+    /**
+     * lets the player pick a name
+     */
     private void pickNickname() {
         System.out.println("Insert your nickname");
         boolean valid;
@@ -207,4 +207,17 @@ public class CLI extends UI {
             }
         } while (!valid);
     }
+
+    public void setQuitMsg(String quitMsg) {
+        this.quitMsg = quitMsg;
+    }
+
+    public synchronized View<CLI> getState() {
+        return state;
+    }
+
+    public synchronized void setState(View<CLI> state) {
+        this.state = state;
+    }
+
 }

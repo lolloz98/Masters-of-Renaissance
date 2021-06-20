@@ -3,10 +3,8 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.MapUtils;
-import it.polimi.ingsw.client.cli.states.View;
-import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.cli.states.ConversationalView;
 import it.polimi.ingsw.client.localmodel.LocalProduction;
-import it.polimi.ingsw.client.localmodel.localcards.LocalProductionLeader;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
 import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
@@ -14,9 +12,8 @@ import it.polimi.ingsw.messages.requests.actions.ApplyProductionMessage;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class ActivateProductionView extends View<CLI> {
+public class ActivateProductionView extends ConversationalView {
     private final int whichProd;
-    private final LocalGame<?> localGame;
     /**
      * one by one, resources are taken from resToMove and put in resToGive once the player has decided where to take them from
      */
@@ -24,9 +21,9 @@ public class ActivateProductionView extends View<CLI> {
     private final TreeMap<Resource, Integer> resToGain;
     private final TreeMap<Resource, Integer> resToMove;
 
-    public ActivateProductionView(CLI cli, LocalGame<?> localGame, int whichProd, LocalProduction localProduction) {
+    public ActivateProductionView(CLI cli, int whichProd, LocalProduction localProduction) {
         this.ui = cli;
-        this.localGame = localGame;
+        this.localGame = cli.getLocalGame();
         localGame.overrideObserver(this);
         this.whichProd = whichProd;  
         this.resToGive = new TreeMap<>();
@@ -37,13 +34,7 @@ public class ActivateProductionView extends View<CLI> {
     }
 
     @Override
-    public void notifyUpdate() {
-
-    }
-
-    @Override
     public void notifyError() {
-
     }
 
     @Override
@@ -112,7 +103,7 @@ public class ActivateProductionView extends View<CLI> {
                 case "1":
                     // switch view, send message
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer()));
                     try {
                         ui.getGameHandler().dealWithMessage(new ApplyProductionMessage(
                                 localGame.getGameId(),
@@ -128,7 +119,7 @@ public class ActivateProductionView extends View<CLI> {
                 case "2":
                     // only switch view
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer()));
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");
@@ -155,6 +146,4 @@ public class ActivateProductionView extends View<CLI> {
             System.out.println("Insert 1 to confirm, 2 to abort");
         }
     }
-
-
 }

@@ -7,12 +7,15 @@ import it.polimi.ingsw.client.cli.states.View;
 import it.polimi.ingsw.client.cli.states.playing.DestroyedView;
 import it.polimi.ingsw.client.localmodel.*;
 
+/**
+ * CLI state for joining a game
+ */
 public class NewMultiView extends View<CLI> {
     private final LocalMulti localMulti;
 
-    public NewMultiView(CLI cli, LocalMulti localMulti) {
+    public NewMultiView(CLI cli) {
         this.ui = cli;
-        this.localMulti = localMulti;
+        this.localMulti = (LocalMulti) cli.getLocalGame();
         localMulti.overrideObserver(this);
         localMulti.getError().addObserver(this);
     }
@@ -37,7 +40,7 @@ public class NewMultiView extends View<CLI> {
         if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
             localMulti.removeObservers();
             localMulti.getError().removeObserver();
-            ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
+            ui.setState(new BoardView(ui, localMulti.getMainPlayer()));
             ui.getState().draw();
         } else if (localMulti.getState() == LocalGameState.DESTROYED) {
             localMulti.removeAllObservers();
@@ -48,12 +51,9 @@ public class NewMultiView extends View<CLI> {
 
     @Override
     public synchronized void notifyError() {
-        // there is no error associated with the new game
     }
 
     @Override
     public synchronized void handleCommand(String ans) {
     }
-
-
 }

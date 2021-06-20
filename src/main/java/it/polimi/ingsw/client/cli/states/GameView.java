@@ -16,13 +16,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * CLI state for the playing states
+ */
 public abstract class GameView extends View<CLI> {
     protected LocalGame<?> localGame;
+    /**
+     * message string to be shown at the end of the screen, can be an error message or some other information, like "Please wait"
+     */
     protected String message = "";
 
-    public abstract void draw();
-
-    public void removeObserved(){
+    /**
+     * remove all observers from the game
+     */
+    public void removeObserved() {
         localGame.removeAllObservers();
     }
 
@@ -52,6 +59,12 @@ public abstract class GameView extends View<CLI> {
         handleCommand(ansList);
     }
 
+    /**
+     * method that gets called from the implementations of this class.
+     * from the string of commands calls the correct function.
+     *
+     * @param ansList the parsed string of commands, parsed to a list of strings
+     */
     public void handleCommand(ArrayList<String> ansList) {
         int ansNumber;
         try {
@@ -92,6 +105,11 @@ public abstract class GameView extends View<CLI> {
         }
     }
 
+    /**
+     * Handles the choice of initial resources.
+     *
+     * @param ansList the parsed string of commands, converted in a list of strings
+     */
     protected void pickResources(ArrayList<String> ansList) {
         if (localGame instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) localGame;
@@ -123,6 +141,11 @@ public abstract class GameView extends View<CLI> {
         } else writeErrText();
     }
 
+    /**
+     * Handles the choice of leader cards.
+     *
+     * @param ansList the parsed string of commands, converted in a list of strings
+     */
     protected void pickLeaders(ArrayList<String> ansList) {
         if (ansList.size() == 3) {
             try {
@@ -137,6 +160,9 @@ public abstract class GameView extends View<CLI> {
         } else writeErrText();
     }
 
+    /**
+     * Sends the "next turn" message to the server
+     */
     private void next() {
         try {
             ui.getGameHandler().dealWithMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
@@ -145,49 +171,64 @@ public abstract class GameView extends View<CLI> {
         }
     }
 
-    private void moveToDevelop(int ansWithoutLetters) {
-        if (ansWithoutLetters == 0) {
+    /**
+     * Switches view to development grid
+     */
+    private void moveToDevelop(int ansNumber) {
+        if (ansNumber == 0) {
             removeObserved();
-            ui.setState(new DevelopmentGridView(ui, localGame, localGame.getLocalDevelopmentGrid()));
+            ui.setState(new DevelopmentGridView(ui, localGame.getLocalDevelopmentGrid()));
         } else writeErrText();
     }
 
-    private void moveToMarket(int ansWithoutLetters) {
-        if (ansWithoutLetters == 0) {
+    /**
+     * Switches view to market
+     */
+    private void moveToMarket(int ansNumber) {
+        if (ansNumber == 0) {
             removeObserved();
-            ui.setState(new MarketView(ui, localGame, localGame.getLocalMarket()));
+            ui.setState(new MarketView(ui, localGame.getLocalMarket()));
         } else writeErrText();
     }
 
-    private void moveToBoard(int ansWithoutLetters) {
+    /**
+     * Switches view to one of the boards
+     *
+     * @param ansNumber number of the player corresponding to the board to show, in playing order. If the number is 0 it shows the main player's board
+     */
+    private void moveToBoard(int ansNumber) {
         if (localGame instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) localGame;
-            if (ansWithoutLetters < 0 || ansWithoutLetters > localMulti.getLocalPlayers().size()) {
+            if (ansNumber < 0 || ansNumber > localMulti.getLocalPlayers().size()) {
                 writeErrText();
             } else {
-                if (ansWithoutLetters == 0) {
+                if (ansNumber == 0) {
                     // go to main board
                     removeObserved();
-                    ui.setState(new BoardView(ui, localMulti, localMulti.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localMulti.getMainPlayer()));
                 } else {
                     // go to ans-1 board
                     removeObserved();
-                    ui.setState(new BoardView(ui, localMulti, localMulti.getLocalPlayers().get(ansWithoutLetters - 1)));
+                    ui.setState(new BoardView(ui, localMulti.getLocalPlayers().get(ansNumber - 1)));
                 }
             }
         }
         if (localGame instanceof LocalSingle) {
             LocalSingle localSingle = (LocalSingle) localGame;
-            if (ansWithoutLetters == 0) {
+            if (ansNumber == 0) {
                 // go to main board
                 removeObserved();
-                ui.setState(new BoardView(ui, localSingle, localSingle.getMainPlayer()));
+                ui.setState(new BoardView(ui, localSingle.getMainPlayer()));
             } else {
                 writeErrText();
             }
         }
     }
 
+    /**
+     * Prints at the end of the screen information about the playing order, the current player, the messages about
+     * the initial resources and leader card choice, and prints error messages if present
+     */
     public void drawTurn() {
         if (localGame.getState() != LocalGameState.DESTROYED && localGame.getState() != LocalGameState.OVER) {
             if (localGame instanceof LocalMulti) {
@@ -226,33 +267,50 @@ public abstract class GameView extends View<CLI> {
                     System.out.println("Pick two leader cards: type pl followed by two numbers, corresponding to the leader cards to keep");
                 }
             }
-        System.out.println(message);
+            System.out.println(message);
         }
     }
 
+    /**
+     * Prints the generic "wrong command" text
+     */
     protected void writeErrText() {
         message = ("Invalid choice, try again. To see the possible commands, write 'help'");
     }
 
+    /**
+     * Redirects to the help view
+     */
     public void helpScreen() {
         removeObserved();
-        ui.setState(new HelpView(ui, localGame));
+        ui.setState(new HelpView(ui));
     }
 
+    /**
+     * Redirects to the destroyed game view, gets called if someone left the game
+     */
     public void goToDestroyed() {
         removeObserved();
-        ui.setState(new DestroyedView(ui, localGame));
+        ui.setState(new DestroyedView(ui));
+        // must call the draw function because this state change is not called by a player command, but by an update from the server
         ui.getState().draw();
     }
 
+    /**
+     * Redirects to the winner view, gets called if the game is over
+     */
     private void goToWinnerScreen() {
         removeObserved();
-        ui.setState(new WinnerView(ui, localGame));
+        ui.setState(new WinnerView(ui));
+        // must call the draw function because this state change is not called by a player command, but by an update from the server
         ui.getState().draw();
     }
 
+    /**
+     * Redirects to the history view
+     */
     private void historyScreen() {
         removeObserved();
-        ui.setState(new HistoryView(ui, localGame));
+        ui.setState(new HistoryView(ui));
     }
 }

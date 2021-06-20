@@ -8,6 +8,9 @@ import it.polimi.ingsw.enums.Resource;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * Printer class for the leader cards
+ */
 public class LeaderPrinter {
 
     public static ArrayList<String> toStringBlock(LocalCard localCard) {
@@ -34,7 +37,7 @@ public class LeaderPrinter {
 
     private static ArrayList<String> localDiscountLeaderPrint(LocalDiscountLeader localCard) {
         ArrayList<String> out = new ArrayList<>();
-        TreeMap<Color, Integer> req = new TreeMap<Color, Integer>(localCard.getProdRequirement());
+        TreeMap<Color, Integer> req = new TreeMap<>(localCard.getProdRequirement());
         out.add("┏━━━━━━━━━━━━━━━┓");
         out.add("┃requirement");
         for(Color c : req.keySet()) {
@@ -57,7 +60,7 @@ public class LeaderPrinter {
 
     private static ArrayList<String> localMarbleLeaderPrint(LocalMarbleLeader localCard) {
         ArrayList<String> out = new ArrayList<>();
-        TreeMap<Color, Integer> req = new TreeMap<Color, Integer>(localCard.getProdRequirement());
+        TreeMap<Color, Integer> req = new TreeMap<>(localCard.getProdRequirement());
         out.add("┏━━━━━━━━━━━━━━━┓");
         out.add("┃requirement");
         for(Color c : req.keySet()) {

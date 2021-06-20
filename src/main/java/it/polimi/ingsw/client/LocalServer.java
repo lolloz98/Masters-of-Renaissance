@@ -11,7 +11,8 @@ import java.net.ServerSocket;
 
 /**
  * LocalServer is used only for singlePlayer games which do not require connection to the internet.
- * Unfortunately it is not considered valid for the exam to use this class.
+ * Unfortunately it is not considered valid for the exam to use this class (thus, we do not use it
+ * we have marked it as deprecated).
  */
 @Deprecated
 public final class LocalServer {

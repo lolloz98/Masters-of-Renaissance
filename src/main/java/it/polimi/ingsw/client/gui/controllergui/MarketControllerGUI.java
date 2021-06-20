@@ -18,14 +18,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.TreeMap;
 
+/**
+ * Controller for Market view
+ */
 public class MarketControllerGUI extends ControllerGUI implements Observer {
+    /**
+     * marble grid
+     */
     public GridPane market_grid;
     public ImageView free_marble;
     public Button developmentBtn;
@@ -33,6 +39,9 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public GridPane resCombGrid;
     public Label messageLbl;
     public Button boardBtn;
+    /**
+     * buttons to push marbles
+     */
     public Button pushA;
     public Button pushB;
     public Button pushC;
@@ -40,12 +49,15 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public Button push2;
     public Button push3;
     public Button push4;
+    /**
+     * list that contains all the buttons, to gray them all at once
+     */
     private ArrayList<Button> btnList;
+    private static final Logger logger = LogManager.getLogger(MarketControllerGUI.class);
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
         setLocalVariables(stage, root, ui);
-        // todo set observers
         market_grid.setHgap(1);
         market_grid.setVgap(1);
         ui.getLocalGame().getLocalMarket().overrideObserver(this);
@@ -110,19 +122,21 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
     public void notifyError() {
         Platform.runLater(() -> {
             synchronized (ui.getLocalGame()) {
-                if(ui.getLocalGame().getState() ==  LocalGameState.DESTROYED) HelperGUI.handleGameDestruction(stage, ui);
+                if (ui.getLocalGame().getState() == LocalGameState.DESTROYED)
+                    HelperGUI.handleGameDestruction(stage, ui);
                 messageLbl.setText(ui.getLocalGame().getError().getErrorMessage());
             }
         });
     }
 
+    /**
+     * default setup method, gets called when an update is received an the first time this view gets accessed
+     */
     private void setUpState() {
         resetDefault();
         Resource[][] marbleMatrix = ui.getLocalGame().getLocalMarket().getMarbleMatrix();
         Image marbleImage;
-        String path;
         depotCmp.setImages(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInNormalDepot());
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         ImageCache.setMarbleInView(ui.getLocalGame().getLocalMarket().getFreeMarble(), free_marble);
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 4; x++) {
@@ -133,7 +147,6 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                 market_grid.add(imgView, x, y);
             }
         }
-        // print resComb if it's my turn
         boolean myTurn = true;
         if (ui.getLocalGame() instanceof LocalMulti) {
             LocalMulti localMulti = (LocalMulti) ui.getLocalGame();
@@ -142,6 +155,7 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                 setEnabled(false);
             }
         }
+        // if it's my turn and there are resource combinations, i have to print them
         if (myTurn && ui.getLocalGame().getLocalMarket().getResCombinations().size() != 0) {
             Label resCombText = new Label("Click on the button corresponding to the combination of resources you want to get:");
             resCombText.setLayoutX(520);
@@ -159,7 +173,10 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                 resCombGrid.setHgap(2);
                 resCombGrid.setVgap(2);
                 resCombGrid.add(flushButton, 0, i);
-                for (Resource res : resComb.get(i).keySet())
+                for (Resource res : resComb.get(i).keySet()) {
+                    if (res != Resource.FAITH && !Resource.isDiscountable(res)) {
+                        logger.error("There is a problem in the resources combinations, one is: " + res);
+                    }
                     for (int j = 0; j < resComb.get(i).get(res); j++) {
                         x++;
                         ImageView imgView = new ImageView();
@@ -169,22 +186,32 @@ public class MarketControllerGUI extends ControllerGUI implements Observer {
                         imgView.setFitWidth(56);
                         resCombGrid.add(imgView, x, i);
                     }
+                }
             }
         }
     }
 
+    /**
+     * restores buttons and message
+     */
     private void resetDefault() {
         setEnabled(true);
         messageLbl.setText("");
     }
 
+    /**
+     * sets buttons to enabled or disabled
+     * @param bool to chose the state of buttons
+     */
     private void setEnabled(boolean bool) {
-        for(Button b : btnList)
+        for (Button b : btnList)
             b.setDisable(!bool);
     }
 
+    /**
+     * removes all observers from the game
+     */
     private void removeObserved() {
-        ui.getLocalGame().getLocalMarket().removeObservers();
-        ui.getLocalGame().getError().removeObserver();
+        ui.getLocalGame().removeAllObservers();
     }
 }

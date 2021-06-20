@@ -6,7 +6,6 @@ import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.cli.states.printers.MarketPrinter;
 import it.polimi.ingsw.client.exceptions.InvalidMarketIndexException;
-import it.polimi.ingsw.client.localmodel.LocalGame;
 import it.polimi.ingsw.client.localmodel.LocalMarket;
 import it.polimi.ingsw.messages.requests.actions.UseMarketMessage;
 
@@ -15,13 +14,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 
+/**
+ * CLI state to show and interact with the market
+ */
 public class MarketView extends GameView {
     private final LocalMarket localMarket;
 
-    public MarketView(CLI cli, LocalGame<?> localGame, LocalMarket localMarket) {
+    public MarketView(CLI cli, LocalMarket localMarket) {
         this.ui = cli;
         this.localMarket = localMarket;
-        this.localGame = localGame;
+        this.localGame = cli.getLocalGame();
         waiting = false;
         localMarket.overrideObserver(this);
         localGame.getError().addObserver(this);
@@ -56,6 +58,13 @@ public class MarketView extends GameView {
         }
     }
 
+    /**
+     * handling of "push marble" command
+     *
+     * @param ansList string of commands, parsed to a list.
+     *                The second parameter in this list indicates which one of the marbles must be pushed,
+     *                can be a character from A to C or a number from 1 to 4
+     */
     private void push(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
             try {
@@ -70,6 +79,12 @@ public class MarketView extends GameView {
         }
     }
 
+    /**
+     * handling of "flush resource combination" command
+     *
+     * @param ansList string of commands, parsed to a list.
+     *                The second parameter in this list indicates which one of the combinations must be flushed
+     */
     private void flush(ArrayList<String> ansList) {
         if (ansList.size() == 2) {
             String ans1 = ansList.get(1);
@@ -82,7 +97,7 @@ public class MarketView extends GameView {
                 }
                 if (number > 0 && number < localMarket.getResCombinations().size() + 1) {
                     removeObserved();
-                    ui.setState(new FlushMarketCombinationView(ui, localGame, new TreeMap<>(localMarket.getResCombinations().get(number - 1))));
+                    ui.setState(new FlushMarketCombinationView(ui, new TreeMap<>(localMarket.getResCombinations().get(number - 1))));
                 } else {
                     writeErrText();
                 }

@@ -1,11 +1,13 @@
 package it.polimi.ingsw.client.cli.states.printers;
 
 import it.polimi.ingsw.client.cli.CLIutils;
-import it.polimi.ingsw.client.localmodel.LocalPlayer;
 import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 
 import java.util.ArrayList;
 
+/**
+ * Printer class for the development card slot, for the board
+ */
 public class DevelopSlotPrinter {
     public static ArrayList<String> toStringBlock(ArrayList<LocalDevelopCard> slot) {
         ArrayList<String> out = new ArrayList<>();

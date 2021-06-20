@@ -17,6 +17,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.TreeMap;
 
+/**
+ * Helper class to switch views in GUI
+ */
 public class BuildGUI {
     private static final Logger logger = LogManager.getLogger(BuildGUI.class);
 

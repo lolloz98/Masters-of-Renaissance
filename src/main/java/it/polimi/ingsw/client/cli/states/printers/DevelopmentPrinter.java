@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Printer class for a development (just a string, for example "2 } 1")
+ */
 public class DevelopmentPrinter {
 
     public static String toStringBlock(LocalProduction localProduction) {

@@ -23,13 +23,41 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class FlushResControllerGUI extends ControllerGUI implements Observer {
+    /**
+     * main grid of the page, showing all the resources and the menus to pick where to put them
+     */
     public GridPane choseResGrid;
+
+    /**
+     * menu containing the options for the resource placement
+     */
     private ArrayList<ComboBox<String>> comboBoxList;
+
+    /**
+     * Copy of the resComb tree, used to keep track of what is already been printed on screen
+     */
     private TreeMap<Resource, Integer> resToFlush;
+
+    /**
+     * TreeMap containing the resources gained from the market.
+     */
     private TreeMap<Resource, Integer> resComb;
+
+    /**
+     * keeps the resources in order in which they are showed on screen
+     */
     private ArrayList<Resource> resList;
+
+    /**
+     * keeps the number of FAITH resources
+     */
     private int faithNumber;
+
+    /**
+     * TreeMap containing the resources the player decided to keep, with the corresponding depots to be put in
+     */
     private TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToKeep;
+
     public Label messageLbl;
     private Button backBtn;
     private Button confirmBtn;
@@ -67,6 +95,9 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
         setLocalVariables(stage, root, ui);
     }
 
+    /**
+     * default setup method, gets called when this view gets accessed
+     */
     public void initState() {
         depotCmp.setImages(ui.getLocalGame().getMainPlayer().getLocalBoard().getResInNormalDepot());
         choseResGrid.getChildren().clear();
@@ -145,12 +176,19 @@ public class FlushResControllerGUI extends ControllerGUI implements Observer {
         choseResGrid.add(backBtn, 0, i);
     }
 
+    /**
+     * removes all observers from the game
+     */
     private void removeObserved() {
         ui.getLocalGame().getLocalMarket().removeObservers();
         ui.getLocalGame().getError().removeObserver();
         ui.getLocalGame().getMainPlayer().getLocalBoard().removeObservers();
     }
 
+    /**
+     * sets state of the buttons
+     * @param bool state of the buttons
+     */
     private void setEnabled(boolean bool) {
         confirmBtn.setDisable(!bool);
         backBtn.setDisable(!bool);

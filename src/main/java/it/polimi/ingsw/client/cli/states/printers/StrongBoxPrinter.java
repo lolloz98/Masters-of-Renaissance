@@ -6,6 +6,9 @@ import it.polimi.ingsw.enums.Resource;
 
 import java.util.ArrayList;
 
+/**
+ * Printer class for the strong box, to be put on the board
+ */
 public class StrongBoxPrinter {
 
     public static ArrayList<String> toStringBlock(LocalPlayer localPlayer) {

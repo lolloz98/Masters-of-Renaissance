@@ -183,8 +183,6 @@ public class ProductionTest {
         } catch (InvalidResourcesByPlayerException e) {
             fail();
         }
-
-        // todo: more testing. and test also when done board.gainRes first
     }
 
     @Test

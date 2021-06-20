@@ -7,11 +7,14 @@ import it.polimi.ingsw.client.localmodel.LocalGame;
 
 import java.util.ArrayList;
 
+/**
+ * CLI state to show a brief history of the last actions of all the players
+ */
 public class HistoryView extends GameView {
 
-    public HistoryView(CLI cli, LocalGame<?> localGame){
+    public HistoryView(CLI cli){
         this.ui = cli;
-        this.localGame = localGame;
+        this.localGame = cli.getLocalGame();
         waiting = false;
         localGame.getError().addObserver(this);
         localGame.getLocalTurn().overrideObserver(this);

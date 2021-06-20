@@ -14,6 +14,9 @@ import it.polimi.ingsw.server.model.game.Turn;
 
 import java.util.ArrayList;
 
+/**
+ * Useful class to automatically create answers
+ */
 public final class AnswerFactory {
     public static GameStatusAnswer createGameStatusAnswer(int gameId, int playerId, int playerIdReceiver, Game<?> game) throws UnexpectedControllerException {
         return new GameStatusAnswer(gameId,

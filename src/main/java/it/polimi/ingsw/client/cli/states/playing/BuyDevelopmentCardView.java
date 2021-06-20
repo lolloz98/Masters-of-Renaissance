@@ -3,8 +3,7 @@ package it.polimi.ingsw.client.cli.states.playing;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.MapUtils;
-import it.polimi.ingsw.client.cli.states.View;
-import it.polimi.ingsw.client.localmodel.LocalGame;
+import it.polimi.ingsw.client.cli.states.ConversationalView;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.Resource;
 import it.polimi.ingsw.enums.WarehouseType;
@@ -13,16 +12,15 @@ import it.polimi.ingsw.messages.requests.actions.BuyDevelopCardMessage;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class BuyDevelopmentCardView extends View<CLI> {
-    private final LocalGame<?> localGame;
+public class BuyDevelopmentCardView extends ConversationalView {
     private final TreeMap<Resource, Integer> cost;
     private final Color color;
     private final int level;
     private final int slotNumber;
     private final TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToPay;
 
-    public BuyDevelopmentCardView(CLI cli, LocalGame<?> localGame, Color color, int level, int slotNumber, TreeMap<Resource, Integer> cost) {
-        this.localGame = localGame;
+    public BuyDevelopmentCardView(CLI cli, Color color, int level, int slotNumber, TreeMap<Resource, Integer> cost) {
+        this.localGame = cli.getLocalGame();
         localGame.overrideObserver(this);
         this.cost = new TreeMap<>(cost);
         this.ui = cli;
@@ -66,7 +64,7 @@ public class BuyDevelopmentCardView extends View<CLI> {
                 case "1":
                     // switch view, send message
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer(), true));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer(), true));
                     try {
                         ui.getGameHandler().dealWithMessage(new BuyDevelopCardMessage(
                                 localGame.getGameId(),
@@ -83,7 +81,7 @@ public class BuyDevelopmentCardView extends View<CLI> {
                 case "2":
                     // only switch view
                     localGame.removeAllObservers();
-                    ui.setState(new BoardView(ui, localGame, localGame.getMainPlayer()));
+                    ui.setState(new BoardView(ui, localGame.getMainPlayer()));
                     break;
                 default:
                     System.out.println("Invalid choice, try again:");

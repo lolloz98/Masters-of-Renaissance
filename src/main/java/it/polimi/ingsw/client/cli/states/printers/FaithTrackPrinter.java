@@ -8,6 +8,9 @@ import it.polimi.ingsw.client.localmodel.LocalSingle;
 
 import java.util.ArrayList;
 
+/**
+ * Printer class for the faith track, to be put on the board
+ */
 public class FaithTrackPrinter {
 
     public static ArrayList<String> toStringBlock(LocalGame localGame, LocalPlayer localPlayer) {

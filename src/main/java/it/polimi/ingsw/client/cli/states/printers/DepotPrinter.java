@@ -7,6 +7,9 @@ import it.polimi.ingsw.enums.Resource;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * Printer class for the normal depot of the board
+ */
 public class DepotPrinter {
 
     public static ArrayList<String> toStringBlock(LocalPlayer localPlayer) {

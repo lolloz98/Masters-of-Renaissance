@@ -85,7 +85,7 @@ public class ManipulateGameUiTestHelper {
                 int lev = 1;
                 while (!player.getBoard().getDevelopCardSlots().get(whichSlot).isEmpty()) {
 
-                    // todo check this if condition
+                    // check this if condition
                     if(player.getBoard().getDevelopCardSlots().get(whichSlot).lastCard().getLevel() == 1){
                         lev = 2;
                         break;

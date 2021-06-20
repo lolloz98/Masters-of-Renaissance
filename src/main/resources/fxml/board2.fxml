@@ -63,8 +63,8 @@
     <Button fx:id="developBtn" layoutX="487.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Show Develop" />
     <Button fx:id="flushBtn" layoutX="646.0" layoutY="228.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Flush Productions" />
     <Label fx:id="historyLbl" layoutX="40.0" layoutY="613.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#1e45bd" />
-    <Label fx:id="messageLbl" layoutX="40.0" layoutY="646.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#ff0808" />
-    <Label fx:id="currentPlayerLbl" layoutX="40.0" layoutY="596.0" prefHeight="33.0" prefWidth="955.0" textFill="#53e54e" />
+    <Label fx:id="messageLbl" layoutX="40.0" layoutY="646.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#921a26" />
+    <Label fx:id="currentPlayerLbl" layoutX="40.0" layoutY="596.0" prefHeight="33.0" prefWidth="955.0" textFill="#2b7628"/>
 
     <ChoiceBox fx:id="chooseBoard" layoutX="882.0" layoutY="6.0" prefWidth="150.0" />
 </Pane>

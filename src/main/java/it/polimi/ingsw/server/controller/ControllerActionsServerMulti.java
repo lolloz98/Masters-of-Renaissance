@@ -41,7 +41,6 @@ public class ControllerActionsServerMulti extends ControllerActionsServer<MultiP
             if (i.getBoard().getInitialRes() != 0) return State.PREPARATION;
         }
 
-        // todo: check that the condition for gameOver is right
         if (game.isGameOver()) return State.OVER;
         return State.PLAY;
     }

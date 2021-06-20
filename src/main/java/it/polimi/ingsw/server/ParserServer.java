@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Parses Message to MessageController
+ */
 public final class ParserServer {
     private static final Logger logger = LogManager.getLogger(ParserServer.class);
 

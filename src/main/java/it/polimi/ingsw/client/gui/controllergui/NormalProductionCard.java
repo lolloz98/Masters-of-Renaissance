@@ -7,6 +7,9 @@ import it.polimi.ingsw.enums.Resource;
 
 import java.util.TreeMap;
 
+/**
+ * Extra card to emulate the behavior of the base production. Useful for not adding extra logic elsewhere.
+ */
 public class NormalProductionCard extends LocalDevelopCard {
     static NormalProductionCard INSTANCE;
 
