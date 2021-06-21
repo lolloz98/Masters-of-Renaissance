@@ -1,0 +1,5 @@
+In the performMarketAction(onRow,whichRow) the player indicates where the marble will be pushed, selecting by a boolean and integer which row or column will be modified.
+
+The player will choose the resources to keep and where to store them. So, it will be created a TreeMap<WarehouseType,TreeMap<Resource,Integer>>, called resources_to_keep, to send to the server.
+
+In each case if the TreeMap chosen is not valid, the client will come back to the choice of the resources to keep by the player.
