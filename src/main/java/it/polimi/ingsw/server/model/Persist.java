@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.PersistenceDirectoryLocator;
 import it.polimi.ingsw.server.controller.exception.UnexpectedControllerException;
 import it.polimi.ingsw.server.model.exception.NoSuchGameException;
 import it.polimi.ingsw.server.model.game.Game;
@@ -17,11 +18,13 @@ import java.nio.file.Paths;
 public final class Persist {
     private static final Logger logger = LogManager.getLogger(Persist.class);
 
-    private final String PATH = "tmp/game";
+    private final String PATH;
     private final String EXTENSION = ".tmp";
     private static Persist INSTANCE = null;
 
-    private Persist() {}
+    private Persist() {
+        PATH = PersistenceDirectoryLocator.getDir() + "/game";
+    }
 
     public static Persist getInstance() {
         if (INSTANCE == null) return INSTANCE = new Persist();

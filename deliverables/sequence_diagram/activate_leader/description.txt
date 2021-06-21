@@ -1,4 +1,0 @@
-The client picks a leader to activate. 
-If the value is not valid or if the leader is already activated, the model is unchanged. 
-If the value is valid the requirements are checked, 
-and if they are met the leader gets activated and the view gets updated.
