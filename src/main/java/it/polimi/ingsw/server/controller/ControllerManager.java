@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.AnswerListener;
+import it.polimi.ingsw.server.PersistenceDirectoryLocator;
 import it.polimi.ingsw.server.controller.exception.*;
 import it.polimi.ingsw.server.model.Persist;
 import it.polimi.ingsw.server.model.exception.*;
@@ -39,8 +40,14 @@ public class ControllerManager {
         controllerMap = new TreeMap<>();
         toBeRejoinedIds = new TreeSet<>();
         // load from files
-        final File folder = new File("tmp");
-        if(!folder.exists()) folder.mkdir();
+        final File folder = new File(PersistenceDirectoryLocator.getDir());
+        if(!folder.exists()) {
+            if (folder.mkdirs()){
+                logger.debug("folder created at: " + PersistenceDirectoryLocator.getDir());
+            }else{
+                logger.error("folder not created");
+            }
+        }
 
         List<File> files = List.of(Objects.requireNonNull(folder.listFiles()));
         List<String> fileNames = files.stream().filter(File::isFile).map(File::getName).collect(Collectors.toList());
