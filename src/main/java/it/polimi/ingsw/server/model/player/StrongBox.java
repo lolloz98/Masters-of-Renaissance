@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.TreeMap;
 
 /**
- * class that models the lockbox of the player
+ * class that models the lock-box of the player.
  */
 public class StrongBox implements Serializable {
     private static final long serialVersionUID = 1032L;
@@ -18,7 +18,7 @@ public class StrongBox implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof StrongBox){
+        if (obj instanceof StrongBox) {
             return resources.equals(((StrongBox) obj).resources);
         }
         return false;
@@ -33,11 +33,11 @@ public class StrongBox implements Serializable {
     }
 
     /**
-     * Add resGained to the strongBox
+     * Add resGained to the strongBox.
      *
-     * @param resGained gained resources, to add to the strongBox
-     * @throws InvalidArgumentException         if there is any negative integer in resGained
-     * @throws ResourceNotDiscountableException if there is any resource notDiscountable in resGained
+     * @param resGained gained resources to add to the strongBox.
+     * @throws InvalidArgumentException         if there is any negative integer in resGained.
+     * @throws ResourceNotDiscountableException if there is any resource notDiscountable in resGained.
      */
     public void addResources(TreeMap<Resource, Integer> resGained) throws ResourceNotDiscountableException, InvalidArgumentException {
         for (Resource r : resGained.keySet()) {
@@ -54,16 +54,17 @@ public class StrongBox implements Serializable {
     }
 
     /**
-     * Subtract resources in resToSpend from the strongBox
+     * Subtract resources in resToSpend from the strongBox.
      *
-     * @param resToSpend resources to subtract from the strongBox
-     * @throws NotEnoughResourcesException if there are not enough resources in the strongBox
-     * @throws InvalidArgumentException    if there is a negative Integer in resToSpend
+     * @param resToSpend resources to subtract from the strongBox.
+     * @throws NotEnoughResourcesException if there are not enough resources in the strongBox.
+     * @throws InvalidArgumentException    if there is a negative Integer in resToSpend.
      */
     public void spendResources(TreeMap<Resource, Integer> resToSpend) throws ResourceNotDiscountableException, NotEnoughResourcesException, InvalidArgumentException {
         for (Resource r : resToSpend.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
-            if (resToSpend.get(r) < 0) throw new InvalidArgumentException("Cannot spend a negative amount of resources");
+            if (resToSpend.get(r) < 0)
+                throw new InvalidArgumentException("Cannot spend a negative amount of resources");
         }
         if (!hasResources(resToSpend)) throw new NotEnoughResourcesException();
         for (Resource r : resToSpend.keySet()) {
@@ -74,13 +75,14 @@ public class StrongBox implements Serializable {
     }
 
     /**
-     * @param resToSpend check if the strongBox has this amount of resources
-     * @return true, if there are at least resToSpend resources in the strongBox, false otherwise
+     * @param resToSpend check if the strongBox has this amount of resources.
+     * @return true, if there are at least resToSpend resources in the strongBox, false otherwise.
      */
     protected boolean hasResources(TreeMap<Resource, Integer> resToSpend) throws ResourceNotDiscountableException, InvalidArgumentException {
         for (Resource r : resToSpend.keySet()) {
             if (!Resource.isDiscountable(r)) throw new ResourceNotDiscountableException();
-            if (resToSpend.get(r) < 0) throw new InvalidArgumentException("Cannot spend a negative amount of resources");
+            if (resToSpend.get(r) < 0)
+                throw new InvalidArgumentException("Cannot spend a negative amount of resources");
         }
         for (Resource r : resToSpend.keySet()) {
             if (!resources.containsKey(r) || resources.get(r) < resToSpend.get(r))

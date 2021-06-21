@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * class that models the faith path of each player (including Lorenzo)
+ * class that models the faith path of each player (including Lorenzo).
  */
 
 public class FaithTrack implements VictoryPointCalculator {
@@ -28,7 +28,7 @@ public class FaithTrack implements VictoryPointCalculator {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof FaithTrack){
+        if (obj instanceof FaithTrack) {
             FaithTrack t = (FaithTrack) obj;
             return Arrays.equals(figures, t.figures) && position == t.position;
         }
@@ -48,11 +48,11 @@ public class FaithTrack implements VictoryPointCalculator {
     }
 
     /**
-     * @return a deep copy of VaticanFigure[]
+     * @return a deep copy of VaticanFigure[].
      */
     public VaticanFigure[] getFigures() {
         VaticanFigure[] vaticanFigureCopy = new VaticanFigure[3];
-        for(int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             vaticanFigureCopy[i] = new VaticanFigure(figures[i].getLevel());
             try {
                 // we are just doing a copy: no need for checking for exceptions
@@ -93,26 +93,26 @@ public class FaithTrack implements VictoryPointCalculator {
     }
 
     /**
-     * method that moves the player through the path and handle the vaticanfigures activation
+     * method that moves the player through the path and handle the vatican figures activation.
      *
-     * @param steps number of steps to move the player on the track
-     * @throws EndAlreadyReachedException if the end is already reached
-     * @throws InvalidStepsException if the steps are negative, or zero
+     * @param steps number of steps to move the player on the track.
+     * @throws EndAlreadyReachedException if the end is already reached.
+     * @throws InvalidStepsException      if the steps are negative, or zero.
      */
     public void move(int steps, Game<?> game) throws EndAlreadyReachedException, InvalidStepsException {
         if (isEndReached()) throw new EndAlreadyReachedException();
         advance(steps);
-        ArrayList<Integer> checkpointnumber = whichCheckpointIsReached(steps);
-        if (!checkpointnumber.isEmpty()) {
-            for (Integer integer : checkpointnumber) {
-                if (amiTheFirst(integer)) {
+        ArrayList<Integer> checkpointNumber = whichCheckpointIsReached(steps);
+        if (!checkpointNumber.isEmpty()) {
+            for (Integer integer : checkpointNumber) {
+                if (amITheFirst(integer)) {
                     try {
                         if (game instanceof MultiPlayer)
                             checkpointHandling((MultiPlayer) game, integer);
                         else
                             checkpointHandling((SinglePlayer) game, integer);
-                    }catch (FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
-                       logger.error("Even after check, exception generated: " + e);
+                    } catch (FigureAlreadyDiscardedException | FigureAlreadyActivatedException e) {
+                        logger.error("Even after check, exception generated: " + e);
                     }
                 }
             }
@@ -121,9 +121,9 @@ public class FaithTrack implements VictoryPointCalculator {
     }
 
     /**
-     * method that activate the VaticanFigures of the player that has the rights (in a single player game)
+     * method that activates the VaticanFigures of any player that has the rights (in a single player game).
      */
-    private void checkpointHandling( SinglePlayer game, int checkpointnumber) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+    private void checkpointHandling(SinglePlayer game, int checkpointnumber) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         if (game.getLorenzo().getFaithTrack().hasRights(checkpointnumber))
             game.getLorenzo().getFaithTrack().activateVatican(checkpointnumber);
         else
@@ -136,9 +136,9 @@ public class FaithTrack implements VictoryPointCalculator {
 
 
     /**
-     * method that activate the VaticanFigures of the player that has the rights (in a multi player game)
+     * method that activates the VaticanFigures of any player that has the rights (in a multi player game).
      */
-    private void checkpointHandling( MultiPlayer game, int checkpointnumber) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+    private void checkpointHandling(MultiPlayer game, int checkpointnumber) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
         for (Player p :
                 game.getPlayers()) {
             if (p.getBoard().getFaithtrack().hasRights(checkpointnumber))
@@ -150,10 +150,10 @@ public class FaithTrack implements VictoryPointCalculator {
 
 
     /**
-     * method that advance the piece of n-steps
+     * method that advance the piece of n-steps.
      *
-     * @param n number of steps forward
-     * @throws InvalidStepsException if n is negative
+     * @param n number of steps forward.
+     * @throws InvalidStepsException if n is negative.
      */
     private void advance(int n) throws InvalidStepsException {
         if (n <= 0) throw new InvalidStepsException();
@@ -169,9 +169,9 @@ public class FaithTrack implements VictoryPointCalculator {
 
 
     /**
-     * method that checks if the player has reached the checkpoint
+     * method that checks if the player has reached the checkpoint.
      *
-     * @return -1 if no checkpoint is reached, or returns the number of the checkpoint reached
+     * @return -1 if no checkpoint is reached or returns the number of the checkpoint reached.
      */
     private ArrayList<Integer> whichCheckpointIsReached(int steps) {
         int oldposition = position - steps;
@@ -187,12 +187,12 @@ public class FaithTrack implements VictoryPointCalculator {
     }
 
     /**
-     * method that checks if the player has the rights to activate the vaticanfigure
+     * method that checks if the player has the rights to activate the vatican figure.
      *
-     * @param checkpointnumber is the number of the checkpoint which i'm analyzing
+     * @param checkpointNumber is the number of the checkpoint which i'm analyzing.
      */
-    private boolean hasRights(int checkpointnumber) {
-        switch (checkpointnumber) {
+    private boolean hasRights(int checkpointNumber) {
+        switch (checkpointNumber) {
             case 1: {
                 if (this.position >= 5)
                     return true;
@@ -215,26 +215,26 @@ public class FaithTrack implements VictoryPointCalculator {
 
 
     /**
-     * method that checks if the current player is the first that has reached the checkpoint
+     * method that checks if the owner of this FaithTrack is the first that has reached the checkpoint.
      *
-     * @param whichcheckpoint is the number of the checkpoint to control
+     * @param whichcheckpoint is the number of the checkpoint to control.
      */
-    private boolean amiTheFirst(int whichcheckpoint) {
+    private boolean amITheFirst(int whichcheckpoint) {
         return figures[whichcheckpoint - 1].isInactive();
     }
 
     /**
-     * method that activates the vatican figure
+     * method that activates the vatican figure.
      */
-    private void activateVatican(int whichvf) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
-        this.figures[whichvf - 1].activate();
+    private void activateVatican(int whichVf) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+        this.figures[whichVf - 1].activate();
     }
 
     /**
-     * method that discards the vatican figure
+     * method that discards the vatican figure.
      */
-    private void discardVatican(int whichvf) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
-        this.figures[whichvf - 1].discard();
+    private void discardVatican(int whichVf) throws FigureAlreadyDiscardedException, FigureAlreadyActivatedException {
+        this.figures[whichVf - 1].discard();
     }
 
 }

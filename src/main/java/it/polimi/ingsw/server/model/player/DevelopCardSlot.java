@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 /**
- * class that models the three production slots of each player
+ * class that models the production slots of each player.
  */
 public class DevelopCardSlot implements Serializable {
     private static final long serialVersionUID = 1029L;
@@ -19,7 +19,7 @@ public class DevelopCardSlot implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof DevelopCardSlot){
+        if (obj instanceof DevelopCardSlot) {
             DevelopCardSlot t = (DevelopCardSlot) obj;
             return cards.equals(t.cards);
         }
@@ -30,18 +30,23 @@ public class DevelopCardSlot implements Serializable {
         this.cards = new ArrayList<>();
     }
 
-    public DevelopCard lastCard(){return cards.get(cards.size()-1);}
+    /**
+     * @return the active(last) card on this slot.
+     */
+    public DevelopCard lastCard() {
+        return cards.get(cards.size() - 1);
+    }
 
     public ArrayList<DevelopCard> getCards() {
         return new ArrayList<>(cards);
     }
 
     /**
-     * Add card to this
+     * Adds a card to this slot.
      *
-     * @param card card to be added
-     * @throws InvalidDevelopCardToSlotException if the level of the card to be added is not right
-     * @throws FullDevelopSlotException          if the slot has reached the maximum capacity
+     * @param card card to be added.
+     * @throws InvalidDevelopCardToSlotException if the level of the card to be added is not valid.
+     * @throws FullDevelopSlotException          if the slot has reached the maximum capacity.
      */
     public void addDevelopCard(DevelopCard card) throws InvalidDevelopCardToSlotException, FullDevelopSlotException {
         int howmanycards = cards.size();
@@ -70,13 +75,13 @@ public class DevelopCardSlot implements Serializable {
     }
 
     /**
-     * Apply the production of the develop card on top of this slot
+     * Apply the production of the last card.
      *
-     * @param resToGive resource to give to apply the production
-     * @param resToGain resource to gain after the application of the production
-     * @param board     board of the player who is applying the production
-     * @throws InvalidResourcesByPlayerException    if resToGive or resToGain contains invalid resources
-     * @throws InvalidProductionSlotChosenException if this does not contain any develop card
+     * @param resToGive resource to give to apply the production.
+     * @param resToGain resource to gain after the application of the production.
+     * @param board     board of the player who is applying the production.
+     * @throws InvalidResourcesByPlayerException    if resToGive or resToGain contains invalid resources.
+     * @throws InvalidProductionSlotChosenException if this slot does not contain any develop card.
      */
     public void applyProduction(TreeMap<WarehouseType, TreeMap<Resource, Integer>> resToGive, TreeMap<Resource, Integer> resToGain, Board board) throws InvalidResourcesByPlayerException, InvalidProductionSlotChosenException, ProductionAlreadyActivatedException, ResourceNotDiscountableException, NotEnoughResourcesException, InvalidArgumentException, InvalidResourceQuantityToDepotException {
         if (isEmpty()) throw new InvalidProductionSlotChosenException();

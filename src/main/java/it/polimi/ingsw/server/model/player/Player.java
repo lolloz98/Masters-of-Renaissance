@@ -13,7 +13,7 @@ public class Player implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Player){
+        if (obj instanceof Player) {
             Player tmp = (Player) obj;
             return name.equals(tmp.name) && playerId == tmp.playerId && board.equals(tmp.board);
         }

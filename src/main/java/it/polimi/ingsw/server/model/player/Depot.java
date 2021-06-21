@@ -15,15 +15,18 @@ public class Depot implements Serializable {
 
     private Resource resource;
     private final int maxToStore;
+    /**
+     * how many resources in this depot
+     */
     private int stored;
     /**
-     * true only if the depot is not a leader depot
+     * attribute useful to know which type of depot is this(normal or leader). true only if this depot is not a leader depot.
      */
     private final boolean modifiable;
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Depot){
+        if (obj instanceof Depot) {
             Depot t = (Depot) obj;
             return resource == t.resource && maxToStore == t.maxToStore && stored == t.stored && modifiable == t.modifiable;
         }
@@ -31,10 +34,10 @@ public class Depot implements Serializable {
     }
 
     /**
-     * normal depot constructor
+     * normal depot constructor.
      */
     public Depot(int maxToStore, boolean modifiable) throws InvalidArgumentException {
-        if(maxToStore<=0) throw new InvalidArgumentException("Max to store for depot cannot be less than 0");
+        if (maxToStore <= 0) throw new InvalidArgumentException("Max to store for depot cannot be less than 0");
         this.maxToStore = maxToStore;
         resource = Resource.NOTHING;
         stored = 0;
@@ -42,10 +45,10 @@ public class Depot implements Serializable {
     }
 
     /**
-     * normal depot constructor, always modifiable
+     * normal depot constructor, always modifiable.
      */
     public Depot(int maxToStore) throws InvalidArgumentException {
-        if(maxToStore<=0) throw new InvalidArgumentException("Max to store for depot cannot be less than 0");
+        if (maxToStore <= 0) throw new InvalidArgumentException("Max to store for depot cannot be less than 0");
         this.maxToStore = maxToStore;
         resource = Resource.NOTHING;
         stored = 0;
@@ -53,11 +56,12 @@ public class Depot implements Serializable {
     }
 
     /**
-     * leader depot constructor
+     * leader depot constructor.
      */
     public Depot(Resource r) throws InvalidArgumentException {
         this.maxToStore = 2;
-        if(!Resource.isDiscountable(r)) throw new InvalidArgumentException("Invalid type of resource to be contained in depot");
+        if (!Resource.isDiscountable(r))
+            throw new InvalidArgumentException("Invalid type of resource to be contained in depot");
         resource = r;
         stored = 0;
         this.modifiable = false;
@@ -69,7 +73,7 @@ public class Depot implements Serializable {
     }
 
     /**
-     * @return resources contained in this depot
+     * @return resources contained in this depot.
      */
     public TreeMap<Resource, Integer> getStoredResources() {
         return (isEmpty() ? new TreeMap<>() : new TreeMap<>() {{
@@ -93,6 +97,12 @@ public class Depot implements Serializable {
         return modifiable;
     }
 
+    /**
+     * method that removes howMany resources from this depot.
+     *
+     * @param howMany
+     * @throws InvalidResourceQuantityToDepotException
+     */
     public void spendResources(int howMany) throws InvalidResourceQuantityToDepotException {
         if (howMany <= 0 || !enoughResources(howMany)) throw new InvalidResourceQuantityToDepotException(maxToStore);
         if (stored == howMany) clear();
@@ -105,15 +115,15 @@ public class Depot implements Serializable {
     }
 
     /**
-     * method that add n resources to the depot
+     * method that add n resources to this depot.
      */
     public void addResource(Resource r, int howMany) throws InvalidTypeOfResourceToDepotException, DifferentResourceForDepotException, InvalidResourceQuantityToDepotException {
-        if(howMany == 0) return;
+        if (howMany == 0) return;
         if (howMany <= 0 || tooManyResources(howMany)) throw new InvalidResourceQuantityToDepotException(maxToStore);
         if (!isResourceAppendable(r)) throw new DifferentResourceForDepotException(r);
         if (!Resource.isDiscountable(r)) throw new InvalidTypeOfResourceToDepotException(r);
         if (stored != 0)
-            stored+=howMany;
+            stored += howMany;
         else {
             resource = r;
             stored = howMany;
@@ -121,7 +131,7 @@ public class Depot implements Serializable {
     }
 
     /**
-     * method that checks if the depot is overfull
+     * method that checks if, adding howMany resources, this depot will became overfull.
      */
     private boolean tooManyResources(int howMany) {
         return stored + howMany > maxToStore;
@@ -132,7 +142,7 @@ public class Depot implements Serializable {
     }
 
     /**
-     * method that controls if the resource r can be added at the depot
+     * method that controls if the resource r can be added at the depot.
      */
     private boolean isResourceAppendable(Resource r) {
         if (modifiable)
@@ -141,6 +151,11 @@ public class Depot implements Serializable {
             return r.equals(resource);
     }
 
+    /**
+     * method that clears the depot.
+     *
+     * @return how many resources was stored in this depot.
+     */
     public int clear() {
         int result = stored;
         if (modifiable) resource = Resource.NOTHING;
@@ -153,6 +168,6 @@ public class Depot implements Serializable {
     }
 
     public boolean enoughResources(int n) {
-        return stored >= n ;
+        return stored >= n;
     }
 }
