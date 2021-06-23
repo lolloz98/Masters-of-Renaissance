@@ -13,5 +13,5 @@
     <TextField fx:id="serverIp" layoutX="133.0" layoutY="292.0" prefHeight="26.0" prefWidth="331.0" promptText="Input the server IP" AnchorPane.leftAnchor="133.0" AnchorPane.rightAnchor="135.79999999999995" AnchorPane.topAnchor="292.0" />
     <TextField fx:id="portNumber" layoutX="133.0" layoutY="384.0" prefHeight="26.0" prefWidth="331.0" promptText="Input here the port number" AnchorPane.leftAnchor="133.0" AnchorPane.rightAnchor="135.79999999999995" AnchorPane.topAnchor="384.0" />
     <Button fx:id="connectBtn" layoutX="257.0" layoutY="485.0" mnemonicParsing="false" text="Connect" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="258.20000000000005" AnchorPane.topAnchor="485.0" />
-   <Label fx:id="errorMsg" alignment="CENTER" contentDisplay="CENTER" layoutX="168.0" layoutY="283.0" prefHeight="18.0" prefWidth="263.0" text="Error" textFill="#f00808" visible="false" AnchorPane.leftAnchor="168.0" AnchorPane.rightAnchor="168.8" AnchorPane.topAnchor="283.0" />
+   <Label fx:id="errorMsg" alignment="CENTER" contentDisplay="CENTER" layoutX="168.0" layoutY="430.0" prefHeight="26.0" prefWidth="698.0" text="Error" textFill="#f00808" visible="false" />
 </AnchorPane>
