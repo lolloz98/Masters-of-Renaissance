@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
 import it.polimi.ingsw.client.answerhandler.exception.HandlerException;
+import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.messages.ParserException;
 import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
@@ -16,7 +17,7 @@ import java.net.Socket;
 /**
  * GameHandler for remote games (both single player and multi player)
  * class to handle communication to server.
- * It notifies its observer if the connection is closed
+ * It notifies its observer if the connection is closed.
  */
 public class ServerListener extends GameHandler{
     private static final Logger logger = LogManager.getLogger(ServerListener.class);
@@ -25,6 +26,7 @@ public class ServerListener extends GameHandler{
     private ObjectOutputStream output;
     private final String address;
     private final int port;
+    private Observer isListeningForAnswers = null;
 
     public String getAddress() {
         return address;
@@ -52,6 +54,20 @@ public class ServerListener extends GameHandler{
         server = new Socket(address, port);
         output = new ObjectOutputStream(server.getOutputStream());
         iStream = new ObjectInputStream(server.getInputStream());
+        isListeningForAnswers = null;
+        logger.info("Connected to " + server.getInetAddress());
+    }
+
+    /**
+     * Used if we need to send a message (then receive an answer) right after the connection (thus we have no time for the run method to start)
+     */
+    public ServerListener(String address, int port, Observer isListeningForAnswers) throws IOException {
+        this.address = address;
+        this.port = port;
+        server = new Socket(address, port);
+        output = new ObjectOutputStream(server.getOutputStream());
+        iStream = new ObjectInputStream(server.getInputStream());
+        this.isListeningForAnswers = isListeningForAnswers;
         logger.info("Connected to " + server.getInetAddress());
     }
 
@@ -65,6 +81,11 @@ public class ServerListener extends GameHandler{
 
     private void handleServerConnection() throws IOException {
         try {
+            logger.info("client listening for answers");
+            if(isListeningForAnswers != null){
+                isListeningForAnswers.notifyUpdate();
+                isListeningForAnswers = null;
+            }
             while (true) {
                 Answer answer = (Answer) iStream.readObject();
                 logger.debug("class of message: " + answer.getClass());
