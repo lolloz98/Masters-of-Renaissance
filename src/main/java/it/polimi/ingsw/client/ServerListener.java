@@ -37,14 +37,6 @@ public class ServerListener extends GameHandler{
     @Override
     public void run() {
         try {
-            iStream = new ObjectInputStream(server.getInputStream());
-        } catch (IOException e) {
-            logger.error("Can't open the connection to " + server.getInetAddress());
-            closeConnection();
-            return;
-        }
-        logger.info("Connected to " + server.getInetAddress());
-        try {
             handleServerConnection();
         } catch (IOException e) {
             logger.warn("server " + server.getInetAddress() + " connection dropped");
@@ -59,6 +51,8 @@ public class ServerListener extends GameHandler{
         this.port = port;
         server = new Socket(address, port);
         output = new ObjectOutputStream(server.getOutputStream());
+        iStream = new ObjectInputStream(server.getInputStream());
+        logger.info("Connected to " + server.getInetAddress());
     }
 
     public void closeConnection() {

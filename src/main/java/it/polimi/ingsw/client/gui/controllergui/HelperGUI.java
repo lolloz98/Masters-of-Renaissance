@@ -18,6 +18,9 @@ public final class HelperGUI {
         handleGameDestruction(stage, ui, "The game that you were playing has been destroyed");
     }
 
+    /**
+     * after cleaning the data in ui, it takes you back to the start scene
+     */
     public static void handleGameDestruction(Stage stage, GUI ui, String msg){
         ui.resetWhoIAmSeeingId();
 
@@ -27,8 +30,9 @@ public final class HelperGUI {
         }
         else logger.error("the gameHandler was null");
 
-        if(ui.getLocalGame() == null) return;
-        ui.getLocalGame().removeAllObservers();
+        if(ui.getLocalGame() != null) {
+            ui.getLocalGame().removeAllObservers();
+        }
         BuildGUI.getInstance().toStartScene(stage, ui, msg);
     }
 }
