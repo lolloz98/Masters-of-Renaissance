@@ -39,7 +39,7 @@ public class Depot implements Serializable {
     public Depot(int maxToStore, boolean modifiable) throws InvalidArgumentException {
         if (maxToStore <= 0) throw new InvalidArgumentException("Max to store for depot cannot be less than 0");
         this.maxToStore = maxToStore;
-        resource = Resource.NOTHING;
+        resource = null;
         stored = 0;
         this.modifiable = modifiable;
     }
@@ -50,7 +50,7 @@ public class Depot implements Serializable {
     public Depot(int maxToStore) throws InvalidArgumentException {
         if (maxToStore <= 0) throw new InvalidArgumentException("Max to store for depot cannot be less than 0");
         this.maxToStore = maxToStore;
-        resource = Resource.NOTHING;
+        resource = null;
         stored = 0;
         this.modifiable = true;
     }
@@ -158,7 +158,7 @@ public class Depot implements Serializable {
      */
     public int clear() {
         int result = stored;
-        if (modifiable) resource = Resource.NOTHING;
+        if (modifiable) resource = null;
         stored = 0;
         return result;
     }

@@ -24,7 +24,7 @@ public class DepotTest {
     @Test
     public void testNormalDepot(){
         assertEquals(2,normalDepot.getMaxToStore());
-        assertEquals(Resource.NOTHING, normalDepot.getTypeOfResource());
+        assertEquals(null, normalDepot.getTypeOfResource());
         assertTrue(normalDepot.isEmpty());
     }
 
