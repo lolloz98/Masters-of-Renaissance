@@ -9,6 +9,7 @@ import it.polimi.ingsw.messages.requests.*;
 import it.polimi.ingsw.messages.requests.actions.*;
 import it.polimi.ingsw.messages.requests.leader.ActivateLeaderMessage;
 import it.polimi.ingsw.server.AnswerListener;
+import it.polimi.ingsw.server.PersistenceDirectoryLocator;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.exception.NoSuchControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
@@ -222,7 +223,7 @@ public final class MessageControllerTestHelper {
     }
 
     public static void cleanTmp() {
-        final File folder = new File("tmp");
+        final File folder = new File(PersistenceDirectoryLocator.getDir());
         if (!folder.exists()) return;
         List<File> files = List.of(Objects.requireNonNull(folder.listFiles()));
         List<String> fileNames = files.stream().filter(File::isFile).map(File::getName).collect(Collectors.toList());
