@@ -107,7 +107,7 @@ public abstract class ControllerActionsServer<T extends Game<? extends Turn>> ex
      * Do a discardLeader or removeLeader action.
      * @param parsedMessage request
      */
-    public void doDiscardOrRemoveLeader(ClientMessageController parsedMessage) throws ControllerException {
+    public synchronized void doDiscardOrRemoveLeader(ClientMessageController parsedMessage) throws ControllerException {
         Answer answer = parsedMessage.doAction(this);
         Answer answer2;
 
