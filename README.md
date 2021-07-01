@@ -50,6 +50,8 @@ Please check to run the server on an available port, otherwise it will not start
 
 The first time you run the server (if run on Windows), the folders for this path will be created: `C:\Users\<user_name>\AppData\Roaming\Local\MastersOfRenaissance_CarpanetoDeSantisInnocenti\tmp`.
 
+Run only one server at a time on a device (otherwise there will be problems with persistence -> it always uses one specific folder to retrieve/save/delete data).
+
 The implementation should be able to handle linux and macOS operating system as well, but it was **tested only on Windows machine**.
 
 ## Tested configurations
