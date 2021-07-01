@@ -19,7 +19,7 @@ import java.net.Socket;
  * class to handle communication to server.
  * It notifies its observer if the connection is closed.
  */
-public class ServerListener extends GameHandler{
+public class ServerListener extends GameHandler {
     private static final Logger logger = LogManager.getLogger(ServerListener.class);
     private final Socket server;
     private ObjectInputStream iStream;
@@ -82,7 +82,7 @@ public class ServerListener extends GameHandler{
     private void handleServerConnection() throws IOException {
         try {
             logger.info("client listening for answers");
-            if(isListeningForAnswers != null){
+            if (isListeningForAnswers != null) {
                 isListeningForAnswers.notifyUpdate();
                 isListeningForAnswers = null;
             }
@@ -100,10 +100,10 @@ public class ServerListener extends GameHandler{
     private synchronized void handleAnswer(Answer answer) {
         try {
             Object parsedAnswer = ParserClient.parseAnswer(answer);
-            if (parsedAnswer instanceof AnswerHandler){
-                ((AnswerHandler)parsedAnswer).handleAnswerSync(this.localGame);
+            if (parsedAnswer instanceof AnswerHandler) {
+                ((AnswerHandler) parsedAnswer).handleAnswerSync(this.localGame);
             } else throw new HandlerException("Error occurred during the handling of the answer");
-    } catch (HandlerException | ParserException e) {
+        } catch (HandlerException | ParserException e) {
             logger.error("something went wrong, name of exception: " + e.getClass().getSimpleName() + "\n associated message: " + e.getMessage());
         }
     }
@@ -112,7 +112,7 @@ public class ServerListener extends GameHandler{
         output.writeObject(message);
     }
 
-    public Socket getServer(){
+    public Socket getServer() {
         return server;
     }
 }
