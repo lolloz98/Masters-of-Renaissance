@@ -43,7 +43,7 @@ public class LocalSingleGameHandler extends GameHandler {
         }).start();
     }
 
-    private Answer handleRequest(ClientMessage message){
+    private synchronized Answer handleRequest(ClientMessage message){
         Object parsedMessage = null;
         try {
             parsedMessage = ParserServer.parseRequest(message);
@@ -73,7 +73,7 @@ public class LocalSingleGameHandler extends GameHandler {
         return new ErrorAnswer(0, 0, "Something went wrong, please try again the action.");
     }
 
-    public void handleAnswer(Answer answer){
+    private synchronized void handleAnswer(Answer answer){
         Object parsedAnswer = null;
         try {
              parsedAnswer = ParserClient.parseAnswer(answer);
