@@ -502,7 +502,7 @@ public class Board implements VictoryPointCalculator {
     }
 
     /**
-     * @param whichDepot number of depot to get.
+     * @param whichDepot number of depot to get (in [0, 2]).
      * @return the resources in the specified depot.
      * @throws InvalidArgumentException if whichDepot is lower than 0 or greater than 2.
      */

@@ -356,7 +356,7 @@ public class BoardTest2 {
     }
 
     @Test
-    public void testGainResources2() throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, NotEnoughResourcesException {
+    public void testGainResourcesAfterAPayment() throws ModelException {
         TreeMap<Resource, Integer> initial = new TreeMap<>() {{
             put(Resource.GOLD, 2);
             put(Resource.ROCK, 3);
@@ -390,5 +390,93 @@ public class BoardTest2 {
         singlePlayer.getPlayer().getBoard().gainResources(
                 initial, initialToKeep, singlePlayer
         );
+
+        assertEquals(1, (int)singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.ROCK));
+        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.GOLD));
+        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.SHIELD));
+    }
+
+    @Test
+    public void testGainResourcesAfterAPayment2() throws ModelException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.GOLD, 2);
+            put(Resource.ROCK, 2);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 2);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().payResources(toPay);
+
+        initial = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.ROCK, 1);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.SHIELD, 2);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        assertEquals(1, (int)singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.GOLD));
+        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.ROCK));
+        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.SHIELD));
+    }
+
+    @Test
+    public void testGainResourcesAfterAPayment3() throws ModelException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.GOLD, 3);
+            put(Resource.ROCK, 1);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 3);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().payResources(toPay);
+
+        initial = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.ROCK, 1);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.SHIELD, 2);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        assertEquals(1, (int)singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.GOLD));
+        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.ROCK));
+        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.SHIELD));
     }
 }
