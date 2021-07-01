@@ -354,4 +354,41 @@ public class BoardTest2 {
         }};
         assertFalse(singlePlayer.getPlayer().getBoard().enoughResInNormalDepots(resToGive));
     }
+
+    @Test
+    public void testGainResources2() throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, ResourceNotDiscountableException, NotEnoughResourcesException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.GOLD, 2);
+            put(Resource.ROCK, 3);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 2);
+                put(Resource.ROCK, 3);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.ROCK, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().payResources(toPay);
+
+        initial = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+            put(Resource.ROCK, 1);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+    }
 }
