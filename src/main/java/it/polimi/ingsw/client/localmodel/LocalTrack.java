@@ -3,6 +3,8 @@ package it.polimi.ingsw.client.localmodel;
 import java.io.Serializable;
 
 public class LocalTrack extends Observable implements Serializable {
+    private static final long serialVersionUID = 19L;
+
     private final LocalFigureState[] figuresState;
     private int position;
 

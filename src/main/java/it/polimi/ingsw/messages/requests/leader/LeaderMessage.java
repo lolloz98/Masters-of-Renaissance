@@ -6,7 +6,7 @@ import it.polimi.ingsw.messages.requests.ClientMessage;
  * Request that involves a leaderCard
  */
 public abstract class LeaderMessage extends ClientMessage {
-    private static final long serialVersionUID = 103L;
+    private static final long serialVersionUID = 54L;
 
     private final int leaderId;
 

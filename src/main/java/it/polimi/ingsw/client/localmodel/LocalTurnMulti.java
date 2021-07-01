@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class LocalTurnMulti extends LocalTurn implements Serializable  {
+    private static final long serialVersionUID = 21L;
+
     private LocalPlayer currentPlayer;
 
     public LocalTurnMulti(){

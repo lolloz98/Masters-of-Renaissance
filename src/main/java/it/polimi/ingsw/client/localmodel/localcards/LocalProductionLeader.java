@@ -6,6 +6,8 @@ import it.polimi.ingsw.enums.Resource;
 import java.util.TreeMap;
 
 public class LocalProductionLeader extends LocalLeaderCard{
+    private static final long serialVersionUID = 8L;
+
     private final LocalProduction production;
     private final Color colorRequirement;
     private final Integer levelReq;

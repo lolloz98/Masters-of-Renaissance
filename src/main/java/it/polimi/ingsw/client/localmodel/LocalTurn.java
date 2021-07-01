@@ -6,6 +6,8 @@ import java.io.Serializable;
  * notify localGame observer for an update of this class
  */
 public abstract class LocalTurn extends Observable implements Serializable {
+    private static final long serialVersionUID = 20L;
+
     protected boolean mainActionOccurred;
     protected boolean productionsActivated;
     protected boolean marketActivated;

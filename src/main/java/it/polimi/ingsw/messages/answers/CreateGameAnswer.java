@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.answers;
 
 public class CreateGameAnswer extends Answer {
-    private static final long serialVersionUID = 51L;
+    private static final long serialVersionUID = 43L;
     /**
      * name of the player which is creating the game
      */

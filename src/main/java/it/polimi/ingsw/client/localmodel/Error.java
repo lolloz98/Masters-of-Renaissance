@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.cli.Observer;
 import java.io.Serializable;
 
 public class Error implements Serializable {
+    private static final long serialVersionUID = 9L;
+
     private String errorMessage;
     private Observer observer;
 

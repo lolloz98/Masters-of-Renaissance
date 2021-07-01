@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 
 public class EndGameAnswer extends Answer {
+    private static final long serialVersionUID = 26L;
+
     /**
      * list of winners: if null it means that Lorenzo is the winner
      */

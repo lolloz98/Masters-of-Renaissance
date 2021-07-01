@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class ApplyProductionAnswer extends Answer {
+    private static final long serialVersionUID = 33L;
+
     private final TreeMap<Resource, Integer> resToGain;
     /**
      * all kind of warehouse could be modified after a production application

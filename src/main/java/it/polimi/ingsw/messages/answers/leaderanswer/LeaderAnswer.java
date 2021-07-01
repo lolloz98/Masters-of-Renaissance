@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import it.polimi.ingsw.messages.answers.Answer;
 
 public class LeaderAnswer extends Answer {
+    private static final long serialVersionUID = 32L;
+
     /**
      * leader card to update
      */

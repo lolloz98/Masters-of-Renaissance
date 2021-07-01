@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalDevelopCard;
 import java.io.Serializable;
 
 public class LocalDevelopmentGrid extends Observable implements Serializable {
+    private static final long serialVersionUID = 12L;
+
     private LocalDevelopCard[][] topDevelopCards;
     private int[][] developCardsNumber;
 

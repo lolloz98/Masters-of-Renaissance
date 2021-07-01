@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class FlushMarketResAnswer extends Answer {
+    private static final long serialVersionUID = 37L;
 
     private final ArrayList<LocalTrack> localTracks;
     private final TreeMap<Resource, Integer> resInNormalDeposit;

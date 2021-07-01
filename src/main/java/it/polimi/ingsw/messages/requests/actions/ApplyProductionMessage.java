@@ -10,7 +10,7 @@ import java.util.TreeMap;
  * Request of application of a production
  */
 public class ApplyProductionMessage extends ClientMessage {
-    private static final long serialVersionUID = 109L;
+    private static final long serialVersionUID = 47L;
 
     /**
      * 0 -> normal production

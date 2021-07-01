@@ -6,7 +6,7 @@ import it.polimi.ingsw.messages.requests.ClientMessage;
  * Request to use the market (push the marbles on the market)
  */
 public class UseMarketMessage extends ClientMessage {
-    private static final long serialVersionUID = 107L;
+    private static final long serialVersionUID = 51L;
 
     /**
      * true if I want to push the marbles on a row, otherwise I want to push them on a column

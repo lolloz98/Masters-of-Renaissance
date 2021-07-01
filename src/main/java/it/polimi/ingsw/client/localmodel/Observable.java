@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.cli.Observer;
 import java.io.Serializable;
 
 public class Observable implements Serializable  {
+    private static final long serialVersionUID = 23L;
+
     private Observer obs = null;
 
     /**

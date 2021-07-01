@@ -10,7 +10,7 @@ import java.util.TreeMap;
  * Request to flush the gained market resources on the board
  */
 public class FlushMarketResMessage extends ClientMessage {
-    private static final long serialVersionUID = 108L;
+    private static final long serialVersionUID = 49L;
 
     /**
      * Resources to gain after a push on a market

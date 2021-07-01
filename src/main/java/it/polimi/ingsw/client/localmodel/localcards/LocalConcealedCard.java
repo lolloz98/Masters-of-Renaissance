@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
 public class LocalConcealedCard extends LocalCard {
+    private static final long serialVersionUID = 3L;
+
     /**
      * Tell if the concealed leader card is discarded/removed or not.
      */

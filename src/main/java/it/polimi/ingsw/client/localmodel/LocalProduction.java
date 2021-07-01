@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.TreeMap;
 
 public class LocalProduction implements Serializable {
+    private static final long serialVersionUID = 17L;
+
     private TreeMap<Resource, Integer> resToGive;
     private TreeMap<Resource, Integer> resToGain;
     private TreeMap<Resource, Integer> resToFlush;

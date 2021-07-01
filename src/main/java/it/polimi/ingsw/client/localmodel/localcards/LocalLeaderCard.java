@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.localmodel.localcards;
 
 public class LocalLeaderCard extends LocalCard{
+    private static final long serialVersionUID = 6L;
+
     protected final int victoryPoints;
     private boolean isActive;
     private boolean isDiscarded;

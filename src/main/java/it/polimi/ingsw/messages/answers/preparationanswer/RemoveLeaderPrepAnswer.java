@@ -7,6 +7,8 @@ import it.polimi.ingsw.messages.answers.Answer;
 import java.util.ArrayList;
 
 public class RemoveLeaderPrepAnswer extends Answer {
+    private static final long serialVersionUID = 41L;
+
     private final ArrayList<Integer> removedLeaderIds;
     private final LocalGameState state;
 

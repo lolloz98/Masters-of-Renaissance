@@ -6,6 +6,8 @@ import java.io.File;
 import java.util.Objects;
 
 public class LocalCard extends Observable {
+    private static final long serialVersionUID = 1L;
+
     protected final int id;
     protected Image image;
 

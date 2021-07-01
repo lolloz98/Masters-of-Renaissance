@@ -11,7 +11,7 @@ import java.util.TreeMap;
  * Request for buying a develop card
  */
 public class BuyDevelopCardMessage extends ClientMessage {
-    private static final long serialVersionUID = 111L;
+    private static final long serialVersionUID = 48L;
     public final int level;
     public final Color color;
     /**

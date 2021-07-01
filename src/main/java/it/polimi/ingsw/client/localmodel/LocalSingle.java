@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class LocalSingle extends LocalGame<LocalTurnSingle> implements Serializable {
+    private static final long serialVersionUID = 18L;
+
     private LocalPlayer mainPlayer;
     /**
      * to notify the board for an update of lorenzo track, it doesn't own an observer

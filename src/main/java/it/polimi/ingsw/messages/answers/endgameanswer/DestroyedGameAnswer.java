@@ -6,6 +6,8 @@ import it.polimi.ingsw.messages.answers.Answer;
  * if something unexpected happens, and the game has to be destroyed this is the message the players will receive
  */
 public class DestroyedGameAnswer extends Answer {
+    private static final long serialVersionUID = 25L;
+
     private final String message;
 
     /**

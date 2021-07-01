@@ -4,6 +4,8 @@ import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.messages.answers.Answer;
 
 public class FinishTurnMultiAnswer extends Answer {
+    private static final long serialVersionUID = 35L;
+
     /**
      * the leaders of the next player could change the state of the development grid
      */

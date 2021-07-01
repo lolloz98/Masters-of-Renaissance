@@ -4,6 +4,8 @@ import it.polimi.ingsw.client.localmodel.LocalDevelopmentGrid;
 import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 
 public class ActivateDiscountLeaderAnswer extends LeaderAnswer {
+    private static final long serialVersionUID = 28L;
+
     /**
      * contains the cost of the top cards to update
      */

@@ -5,6 +5,8 @@ import it.polimi.ingsw.messages.answers.Answer;
 import it.polimi.ingsw.enums.Resource;
 
 public class ChooseOneResPrepAnswer extends Answer {
+    private static final long serialVersionUID = 40L;
+
     private final Resource res;
     private final LocalGameState state;
 

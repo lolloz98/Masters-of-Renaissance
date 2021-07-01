@@ -7,6 +7,8 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalLorenzoCard;
 import it.polimi.ingsw.messages.answers.Answer;
 
 public class FinishTurnSingleAnswer extends Answer {
+    private static final long serialVersionUID = 36L;
+
     private final LocalDevelopmentGrid localGrid;
     /**
      * all useful information about what Lorenzo did

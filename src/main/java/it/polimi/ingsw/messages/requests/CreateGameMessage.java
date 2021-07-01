@@ -4,7 +4,7 @@ package it.polimi.ingsw.messages.requests;
  * Request to create a game
  */
 public class CreateGameMessage extends ClientMessage {
-    private static final long serialVersionUID = 101L;
+    private static final long serialVersionUID = 58L;
 
     private final int playersNumber;
     private final String userName;

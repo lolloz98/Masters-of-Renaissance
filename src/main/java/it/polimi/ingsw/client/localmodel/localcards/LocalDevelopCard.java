@@ -6,6 +6,8 @@ import it.polimi.ingsw.enums.Resource;
 import java.util.TreeMap;
 
 public class LocalDevelopCard extends LocalCard{
+    private static final long serialVersionUID = 4L;
+
     private TreeMap<Resource, Integer> cost;
     private boolean isDiscounted;
     private final int level;

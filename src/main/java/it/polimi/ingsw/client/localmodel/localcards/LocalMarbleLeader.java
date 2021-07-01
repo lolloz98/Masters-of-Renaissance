@@ -5,6 +5,8 @@ import it.polimi.ingsw.enums.Resource;
 import java.util.TreeMap;
 
 public class LocalMarbleLeader extends LocalLeaderCard{
+    private static final long serialVersionUID = 7L;
+
     private final Resource marbleResource;
     private final TreeMap<Color,Integer> prodRequirement;
 

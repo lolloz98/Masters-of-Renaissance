@@ -6,6 +6,8 @@ import it.polimi.ingsw.enums.Resource;
 import java.util.TreeMap;
 
 public class LocalDiscountLeader extends LocalLeaderCard{
+    private static final long serialVersionUID = 5L;
+
     private final Resource discountedRes;
     private final TreeMap<Color,Integer> prodRequirement;
     private final int quantityToDiscount;

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class FlushProductionResAnswer extends Answer {
+    private static final long serialVersionUID = 38L;
+
     /**
      * total of the resources flushed by the productions activated, to add to the strongbox
      */

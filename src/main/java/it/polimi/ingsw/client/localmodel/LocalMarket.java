@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class LocalMarket extends Observable implements Serializable {
+    private static final long serialVersionUID = 14L;
+
     private Resource[][] marbleMatrix;
     private Resource freeMarble;
     private ArrayList<TreeMap<Resource, Integer>> resCombinations;

@@ -3,6 +3,8 @@ package it.polimi.ingsw.client.localmodel.localcards;
 import it.polimi.ingsw.enums.Resource;
 
 public class LocalDepotLeader extends LocalLeaderCard{
+    private static final long serialVersionUID = 1L;
+
     private final Resource resType;
     private final Resource resRequirement;
     private int numberOfRes;

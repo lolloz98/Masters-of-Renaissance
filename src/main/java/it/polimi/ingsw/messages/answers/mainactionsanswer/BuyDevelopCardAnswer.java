@@ -6,6 +6,8 @@ import it.polimi.ingsw.messages.answers.Answer;
 
 
 public class BuyDevelopCardAnswer extends Answer {
+    private static final long serialVersionUID = 34L;
+
     private final LocalBoard localBoard;
     private final LocalDevelopmentGrid localGrid;
     private final int whichSlot;

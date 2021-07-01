@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class UseMarketAnswer extends Answer {
+    private static final long serialVersionUID = 39L;
+
     /**
      * combination of resources that a player could choose to flush.
      */

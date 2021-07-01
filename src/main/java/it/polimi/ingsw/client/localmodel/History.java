@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class History extends Observable implements Serializable {
+    private static final long serialVersionUID = 10L;
+
     private ArrayList<String> history;
 
     public ArrayList<String> getHistory() {

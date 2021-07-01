@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class LocalGame<T extends LocalTurn> extends Observable implements Serializable {
+    private static final long serialVersionUID = 13L;
+
     private static final Logger logger = LogManager.getLogger(LocalGame.class);
 
     protected LocalDevelopmentGrid localDevelopmentGrid;

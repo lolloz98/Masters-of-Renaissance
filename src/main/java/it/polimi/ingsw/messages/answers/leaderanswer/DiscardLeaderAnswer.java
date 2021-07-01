@@ -7,6 +7,8 @@ import it.polimi.ingsw.client.localmodel.localcards.LocalLeaderCard;
 import java.util.ArrayList;
 
 public class DiscardLeaderAnswer extends LeaderAnswer {
+    private static final long serialVersionUID = 31L;
+
     /**
      * each track could be modified after a discard of a leader
      */

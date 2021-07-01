@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class LocalMulti extends LocalGame<LocalTurnMulti> implements Serializable {
+    private static final long serialVersionUID = 15L;
+
     /**
      * id of the player playing on the specific device
      */

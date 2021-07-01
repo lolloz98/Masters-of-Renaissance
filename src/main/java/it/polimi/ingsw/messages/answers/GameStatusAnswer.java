@@ -7,7 +7,7 @@ import it.polimi.ingsw.client.localmodel.LocalTurnMulti;
  * this answer sends the player the entire game
  */
 public class GameStatusAnswer extends Answer{
-    private static final long serialVersionUID = 40L;
+    private static final long serialVersionUID = 45L;
 
     /**
      * player who will receive this specific answer

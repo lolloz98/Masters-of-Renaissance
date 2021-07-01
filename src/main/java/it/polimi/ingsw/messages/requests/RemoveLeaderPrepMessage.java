@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * choose the leader card to remove
  */
 public class RemoveLeaderPrepMessage extends ClientMessage{
+    private static final long serialVersionUID = 63L;
 
-    private static final long serialVersionUID = 115L;
     private final ArrayList<Integer> leadersIdToRemove;
 
         public RemoveLeaderPrepMessage(int gameId, int playerId, ArrayList<Integer> leadersIdToRemove) {
