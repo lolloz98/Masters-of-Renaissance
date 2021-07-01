@@ -6,7 +6,7 @@ import it.polimi.ingsw.enums.WarehouseType;
 import java.util.TreeMap;
 
 /**
- * helper class to handle treemaps in flush resources view
+ * helper class to handle TreeMaps in flush resources view
  */
 public class MapUtils {
 
@@ -35,9 +35,9 @@ public class MapUtils {
     /**
      * adds a resource to a treemap with information about the warehouse
      *
-     * @param resMap the map to wich the resource must be added
+     * @param resMap the map to which the resource must be added
      * @param resource the resource to add
-     * @param warehouseType the warehouse to wich the resource must be added
+     * @param warehouseType the warehouse to which the resource must be added
      */
     public static void addToResMapWarehouse(TreeMap<WarehouseType, TreeMap<Resource, Integer>> resMap, Resource resource, WarehouseType warehouseType) {
         if (!resMap.containsKey(warehouseType)) {
