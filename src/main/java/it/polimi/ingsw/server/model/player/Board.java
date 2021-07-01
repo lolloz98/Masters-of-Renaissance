@@ -1104,9 +1104,13 @@ public class Board implements VictoryPointCalculator {
     public void payResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) throws NotEnoughResourcesException, ResourceNotDiscountableException, InvalidArgumentException, InvalidResourceQuantityToDepotException {
         if (!enoughResourcesToPay(toPay)) throw new NotEnoughResourcesException();
         payResourcesNoCheck(toPay);
+        // restore the normal order of the depots:
+        // get all resources from the depots
         TreeMap<Resource, Integer> resToRefresh = getResInNormalDepots();
+        // remove all the resources
         removeResFromNormalDepot(resToRefresh);
         try {
+            // add them again
             storeInNormalDepotsNoChecks(resToRefresh, depots);
         } catch (InvalidTypeOfResourceToDepotException | DifferentResourceForDepotException e) {
             logger.error("Something went wrong rearranging the resources after the payment, " + e.getMessage());
