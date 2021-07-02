@@ -211,7 +211,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             case DESTROYED:
                 HelperGUI.handleGameDestruction(stage, ui, "A player disconnected. The game has been destroyed");
             default:
-                logger.error("Invalid state: " + ui.getLocalGame().getState());
+                logger.warn("Invalid state: " + ui.getLocalGame().getState());
                 break;
         }
     }
