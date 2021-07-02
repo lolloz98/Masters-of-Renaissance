@@ -6,6 +6,7 @@ import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.cli.ClosingConnectionListenerCLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
+import it.polimi.ingsw.client.gui.ClosingConnectionListenerGUI;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.RejoinMessage;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +28,7 @@ public class RejoinView extends View<CLI> {
         CLIutils.clearScreen();
         System.out.println("Connection with server dropped!");
         System.out.println(" ");
+        waiting = false;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class RejoinView extends View<CLI> {
     public void notifyError() {
         System.out.println(ui.getLocalGame().getError().getErrorMessage());
         waiting = false;
+        // todo if i recieve error i must print that the game is destroyed
     }
 
     @Override
@@ -82,39 +85,35 @@ public class RejoinView extends View<CLI> {
      * send the rejoin message to the server
      */
     private void rejoin() {
+        waiting = true;
         ServerListener old = (ServerListener) ui.getGameHandler();
-        try {
-            ui.setGameHandler(new ServerListener(
-                            old.getAddress(),
-                            old.getPort(),
-                            new Observer() {
-                                @Override
-                                public void notifyUpdate() {
-                                    try {
-                                        ui.getGameHandler().dealWithMessage(new RejoinMessage(ui.getLocalGame().getGameId(), ui.getLocalGame().getMainPlayer().getId()));
-                                    } catch (IOException e) {
-                                        connectionFailed(e);
-                                    }
-                                }
+        new Thread(() -> {
+            try {
+                ui.setGameHandler(new ServerListener(old.getAddress(), old.getPort(), new Observer() {
+                    @Override
+                    public void notifyUpdate() {
+                        try {
+                            ui.getGameHandler().dealWithMessage(new RejoinMessage(ui.getLocalGame().getGameId(), ui.getLocalGame().getMainPlayer().getId()));
+                        } catch (IOException e) {
+                            connectionFailed(e);
+                        }
+                    }
 
-                                @Override
-                                public void notifyError() {
-                                }
-                            }
-                    ),
-                    new ClosingConnectionListenerCLI(ui));
-            ui.getGameHandler().setLocalGame(ui.getLocalGame());
-            waiting = true;
-        } catch (ConnectException e) {
-            System.out.println("The server is still offline.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    @Override
+                    public void notifyError() {
+                    }
+                }), new ClosingConnectionListenerCLI(ui));
+                ui.getGameHandler().setLocalGame(ui.getLocalGame());
+            } catch (IOException e) {
+                connectionFailed(e);
+            }
+        }).start();
     }
 
     private void connectionFailed(IOException e) {
         logger.error("error while connecting to the server: " + e);
         System.out.println("The server is still offline.");
+        waiting = false;
     }
 
 }
