@@ -35,6 +35,11 @@ public class ControllerManager {
      * treeSet containing the id of the game to which someone could rejoin
      */
     private final TreeSet<Integer> toBeRejoinedIds;
+    /**
+     * games in which all players have not yet joined and the game is still not
+     * created
+     */
+    private final TreeSet<Integer> joinGamesIds = new TreeSet<>();
 
     private ControllerManager() {
         controllerMap = new TreeMap<>();
@@ -217,6 +222,7 @@ public class ControllerManager {
         if (playersNumber == 1) createNewSinglePlayer(id, answerListener, player);
         else {
             createNewControllerActionsMulti(id, answerListener, playersNumber, player);
+            joinGamesIds.add(id);
         }
         return new PairId<>(id, playerId);
     }
@@ -233,6 +239,7 @@ public class ControllerManager {
     private synchronized int addPlayerToGame(int id, String userName) throws GameAlreadyStartedControllerException, NoSuchReservedIdControllerException, UnexpectedControllerException {
         if(!controllerMap.containsKey(id)) throw new NoSuchReservedIdControllerException();
         if (controllerMap.get(id).getGame() != null) throw new GameAlreadyStartedControllerException();
+        if(!joinGamesIds.contains(id)) throw new NoSuchReservedIdControllerException();
 
         // if I am here the game is surely multiplayer (otherwise the game cannot be null)
         ControllerActionsServerMulti controllerActionsMulti = (ControllerActionsServerMulti) controllerMap.get(id);
@@ -258,6 +265,7 @@ public class ControllerManager {
             Collections.shuffle(players);
             try {
                 controllerActionsMulti.setGame(new MultiPlayer(players));
+                joinGamesIds.remove(id);
             } catch (ModelException e) {
                 logger.error("something went wrong with the creation of a multiPlayer");
                 throw new UnexpectedControllerException("something went wrong with the creation of a multiPlayer");
