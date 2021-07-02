@@ -79,6 +79,8 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
     public void setNotMainPlayerBoard() {
         setBaseBoard();
         setVisibleButtonsActions(false);
+        marketBtn.setVisible(false);
+        developBtn.setVisible(false);
         if(ui.getLocalGame().getState() == LocalGameState.OVER){
             gameOver();
         }
