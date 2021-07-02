@@ -121,7 +121,6 @@ public class RejoinView extends View<CLI> {
     }
 
     private void connectionFailed(IOException e) {
-        logger.error("error while connecting to the server: " + e);
         System.out.println("The server is still offline.");
         waiting = false;
     }
