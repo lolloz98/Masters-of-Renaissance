@@ -859,7 +859,7 @@ public class Board implements VictoryPointCalculator {
         for (Depot d : depotArrayList) {
             if (!depotToSwitchFrom.equals(d)) {
                 if ((d.getMaxToStore() >= depotToSwitchFrom.getStored() + howMany) && (d.getStored() <= depotToSwitchFrom.getMaxToStore()))
-                    return d;
+                {   return d;   }
             }
         }
         return null;
@@ -927,40 +927,36 @@ public class Board implements VictoryPointCalculator {
     private void storeInNormalDepotsNoChecks(TreeMap<Resource, Integer> toGain, ArrayList<Depot> depotArrayList) throws InvalidArgumentException, InvalidTypeOfResourceToDepotException, InvalidResourceQuantityToDepotException, DifferentResourceForDepotException {
 
         toGain.remove(Resource.FAITH);
-        Set<Resource> resInToGain = new TreeSet<>(toGain.keySet());
-        for (Resource r : resInToGain) {
-            for (Depot d : depotArrayList) {
+        // remember: if you cannot store some resources, these must stay in toGain!
 
-                if ((d.isEmpty() && (d.getFreeSpace() >= toGain.get(r)) && otherDepotsNotContains(r, depotArrayList)) ||
-                        (d.contains(r) && (d.getFreeSpace() >= toGain.get(r)))) {
-                    d.addResource(r, toGain.get(r));
-                    toGain.remove(r);
-                    break;
+        // remove resource from depot and add them to toGain:
+        for(Depot d: depotArrayList){
+            Resource r = d.getTypeOfResource();
+            if(r!= null) {
+                toGain.put(r, toGain.getOrDefault(r, 0) + d.getStored());
+                d.spendResources(d.getStored());
+            }else{
+                if(d.getStored() != 0) logger.error("stored resources even though type of resources is null");
+            }
+        }
 
-                } else {
+        // now we have to put toGain in depot
+        for(int index = 1; index <= depotArrayList.size(); index++){
+            // size of a depot at most = to number of depot
+            int j = index;
+            boolean depotFilled = false;
 
-                    if (d.contains(r) && d.getFreeSpace() < toGain.get(r)) {
-                        Depot toSwitch = lookForADepotToSwitch(d, depotArrayList, toGain.get(r));
-
-                        if (toSwitch != null) {
-                            logger.debug("toSwitch max res: " + toSwitch.getMaxToStore());
-                            logger.debug("oldDepot max res: " + d.getMaxToStore());
-                            logger.debug("switching depots, depot to switch info: type of res " + toSwitch.getTypeOfResource() + " stored: " + toSwitch.getStored());
-                            Depot tmp = new Depot(toSwitch.getMaxToStore(), true) {{
-                                addResource(toSwitch.getTypeOfResource(), toSwitch.getStored());
-                            }};
-                            toSwitch.clear();
-                            logger.debug("switching depots, depot to switch info: type of res " + d.getTypeOfResource() + " stored: " + d.getStored());
-                            toSwitch.addResource(d.getTypeOfResource(), d.getStored() + toGain.get(r));
-                            d.clear();
-                            logger.debug("tmp depot info: type of res " + tmp.getTypeOfResource() + " stored: " + tmp.getStored());
-                            d.addResource(tmp.getTypeOfResource(), tmp.getStored());
-                            toGain.remove(r);
-                            break;
-
-                        }
+            while(j != 0 && !depotFilled){
+                TreeSet<Resource> listRes = new TreeSet<>(toGain.keySet());
+                for(Resource r: listRes){
+                    if(toGain.get(r) == j){
+                        depotFilled = true;
+                        depotArrayList.get(index - 1).addResource(r, j);
+                        toGain.remove(r);
+                        break;
                     }
                 }
+                j--;
             }
         }
     }
@@ -1104,17 +1100,17 @@ public class Board implements VictoryPointCalculator {
     public void payResources(TreeMap<WarehouseType, TreeMap<Resource, Integer>> toPay) throws NotEnoughResourcesException, ResourceNotDiscountableException, InvalidArgumentException, InvalidResourceQuantityToDepotException {
         if (!enoughResourcesToPay(toPay)) throw new NotEnoughResourcesException();
         payResourcesNoCheck(toPay);
-        // restore the normal order of the depots:
-        // get all resources from the depots
-        TreeMap<Resource, Integer> resToRefresh = getResInNormalDepots();
-        // remove all the resources
-        removeResFromNormalDepot(resToRefresh);
-        try {
-            // add them again
-            storeInNormalDepotsNoChecks(resToRefresh, depots);
-        } catch (InvalidTypeOfResourceToDepotException | DifferentResourceForDepotException e) {
-            logger.error("Something went wrong rearranging the resources after the payment, " + e.getMessage());
-        }
+//        // restore the normal order of the depots:
+//        // get all resources from the depots
+//        TreeMap<Resource, Integer> resToRefresh = getResInNormalDepots();
+//        // remove all the resources
+//        removeResFromNormalDepot(resToRefresh);
+//        try {
+//            // add them again
+//            storeInNormalDepotsNoChecks(resToRefresh, depots);
+//        } catch (InvalidTypeOfResourceToDepotException | DifferentResourceForDepotException e) {
+//            logger.error("Something went wrong rearranging the resources after the payment, " + e.getMessage());
+//        }
     }
 
     /**
