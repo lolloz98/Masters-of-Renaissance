@@ -26,6 +26,6 @@
               <Font size="100.0" />
             </font>
         </Label>
-      <Button fx:id="backBtn" layoutX="812.0" layoutY="472.0" mnemonicParsing="false" prefHeight="96.0" prefWidth="160.0" text="Back" />
     </AnchorPane>
+    <Button fx:id="backBtn" layoutX="794.0" layoutY="489.0" mnemonicParsing="false" prefHeight="96.0" prefWidth="160.0" text="Back" />
 </Pane>

@@ -41,7 +41,7 @@ public class WinnersGUI extends ControllerGUI {
                 singlePlayerLbl.setTextFill(Color.RED);
             }
         }
-
+        backBtn.setVisible(true);
         backBtn.setOnMouseClicked(mouseEvent -> {
             BuildGUI.getInstance().toBoard(stage, ui);
         });

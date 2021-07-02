@@ -1,6 +1,10 @@
 package it.polimi.ingsw.server.model.utility;
 
-public class PairId<T, U> {
+import java.io.Serializable;
+
+public class PairId<T, U> implements Serializable {
+    private static final long serialVersionUID = 2000L;
+
     private final T t;
     private final U u;
 

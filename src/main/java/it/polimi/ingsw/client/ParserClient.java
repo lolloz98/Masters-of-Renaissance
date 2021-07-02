@@ -15,6 +15,7 @@ public class ParserClient {
     public static Object parseAnswer(Answer answer) throws ParserException {
         String packageName = "it.polimi.ingsw.client.answerhandler";
         String suffix = "Handler";
+        logger.debug("about to parse message");
         return Parser.parse(answer, packageName, suffix);
     }
 }
