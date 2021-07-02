@@ -55,7 +55,7 @@ public class RejoinGUI extends ControllerGUI implements Observer {
     }
 
     private void connectionFailed(IOException e){
-        logger.error("error while connecting to the server: " + e);
+        logger.warn("error while connecting to the server: " + e);
         Platform.runLater(() -> {
             rejoinBtn.setDisable(false);
             messageLbl.setText("Error while connecting to the server!");

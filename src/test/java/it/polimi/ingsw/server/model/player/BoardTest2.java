@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class BoardTest2 {
     SinglePlayer singlePlayer;
 
     @Before
-    public void setUp() throws ModelException  {
+    public void setUp() throws ModelException {
         CollectionsHelper.setTest();
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
@@ -134,7 +135,7 @@ public class BoardTest2 {
         }};
         singlePlayer.getPlayer().getBoard().gainResources(resGained, toKeep, singlePlayer);
         // lorenzo track should be at pos 2 because i discarded 2 shields
-        assertEquals(2,singlePlayer.getLorenzo().getFaithTrack().getPosition());
+        assertEquals(2, singlePlayer.getLorenzo().getFaithTrack().getPosition());
     }
 
     // trying to push resources of the wrong type to leader
@@ -315,7 +316,7 @@ public class BoardTest2 {
         singlePlayer.getPlayer().getBoard().getLeaderCards().get(0).removeEffect(singlePlayer);
     }
 
-    @Test (expected = ResourceNotDiscountableException.class)
+    @Test(expected = ResourceNotDiscountableException.class)
     public void testEnoughResInNormalDepot() throws ModelException {
         TreeMap<Resource, Integer> resGained = new TreeMap<>() {{
             put(Resource.GOLD, 2);
@@ -391,9 +392,9 @@ public class BoardTest2 {
                 initial, initialToKeep, singlePlayer
         );
 
-        assertEquals(1, (int)singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.ROCK));
-        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.GOLD));
-        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.SHIELD));
+        assertEquals(1, (int) singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.ROCK));
+        assertEquals(2, (int) singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.GOLD));
+        assertEquals(2, (int) singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.SHIELD));
     }
 
     @Test
@@ -433,9 +434,9 @@ public class BoardTest2 {
                 initial, initialToKeep, singlePlayer
         );
 
-        assertEquals(1, (int)singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.GOLD));
-        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.ROCK));
-        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.SHIELD));
+        assertEquals(1, (int) singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.GOLD));
+        assertEquals(2, (int) singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.ROCK));
+        assertEquals(2, (int) singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.SHIELD));
     }
 
     @Test
@@ -475,8 +476,215 @@ public class BoardTest2 {
                 initial, initialToKeep, singlePlayer
         );
 
-        assertEquals(1, (int)singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.GOLD));
-        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.ROCK));
-        assertEquals(2, (int)singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.SHIELD));
+        assertEquals(1, (int) singlePlayer.getPlayer().getBoard().getResInDepot(0).get(Resource.GOLD));
+        assertEquals(2, (int) singlePlayer.getPlayer().getBoard().getResInDepot(2).get(Resource.ROCK));
+        assertEquals(2, (int) singlePlayer.getPlayer().getBoard().getResInDepot(1).get(Resource.SHIELD));
     }
+
+    @Test
+    public void testGainResources4() throws ModelException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.ROCK, 1);
+            put(Resource.SHIELD, 2);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.ROCK, 1);
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        initial = new TreeMap<>() {{
+            put(Resource.ROCK, 2);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.ROCK, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+    }
+
+    @Test
+    public void testGainResources5() throws ModelException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.ROCK, 1);
+            put(Resource.SHIELD, 2);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.ROCK, 1);
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        initial = new TreeMap<>() {{
+            put(Resource.GOLD, 2);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+    }
+
+    @Test
+    public void testGainResources6() throws ModelException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.SHIELD, 1);
+            put(Resource.SERVANT, 2);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SHIELD, 1);
+                put(Resource.SERVANT, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        initial = new TreeMap<>() {{
+            put(Resource.SHIELD, 2);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+    }
+
+    @Test
+    public void testGainResources7() throws ModelException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.SHIELD, 2);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        initial = new TreeMap<>() {{
+            put(Resource.GOLD, 2);
+            put(Resource.SHIELD, 1);
+            put(Resource.ROCK, 1);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 2);
+                put(Resource.SHIELD, 1);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        try {
+            singlePlayer.getPlayer().getBoard().gainResources(
+                    initial, initialToKeep, singlePlayer
+            );
+            fail();
+        } catch (InvalidResourcesToKeepByPlayerException ignore) {
+        }
+    }
+
+    @Test
+    public void testGainResources8() throws ModelException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.SHIELD, 2);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SHIELD, 2);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        initial = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.SERVANT, 1);
+            put(Resource.ROCK, 1);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SERVANT, 1);
+                put(Resource.ROCK, 1);
+            }});
+        }};
+        try {
+            singlePlayer.getPlayer().getBoard().gainResources(
+                    initial, initialToKeep, singlePlayer
+            );
+            fail();
+        } catch (InvalidResourcesToKeepByPlayerException ignore) {
+        }
+    }
+
+    @Test
+    public void testGainResources9() throws ModelException {
+        TreeMap<Resource, Integer> initial = new TreeMap<>() {{
+            put(Resource.SERVANT, 1);
+            put(Resource.GOLD, 1);
+        }};
+        TreeMap<WarehouseType, TreeMap<Resource, Integer>> initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.SERVANT, 1);
+                put(Resource.GOLD, 1);
+            }});
+        }};
+        singlePlayer.getPlayer().getBoard().gainResources(
+                initial, initialToKeep, singlePlayer
+        );
+
+        initial = new TreeMap<>() {{
+            put(Resource.GOLD, 1);
+            put(Resource.SERVANT, 1);
+            put(Resource.ROCK, 1);
+            put(Resource.SHIELD, 1);
+        }};
+        initialToKeep = new TreeMap<>() {{
+            put(WarehouseType.NORMAL, new TreeMap<>() {{
+                put(Resource.GOLD, 1);
+                put(Resource.SERVANT, 1);
+                put(Resource.ROCK, 1);
+                put(Resource.SHIELD, 1);
+            }});
+        }};
+        try {
+            singlePlayer.getPlayer().getBoard().gainResources(
+                    initial, initialToKeep, singlePlayer
+            );
+            fail();
+        } catch (InvalidResourcesToKeepByPlayerException ignore) {
+        }
+    }
+
 }
