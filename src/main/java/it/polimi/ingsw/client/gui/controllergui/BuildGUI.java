@@ -250,7 +250,7 @@ public class BuildGUI {
     public void toDevelopGrid(Stage stage, GUI ui) {
         Platform.runLater(() -> {
             synchronized(ui.getLocalGame()) {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/DevelopGrid/develop_grid.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/developgrid/develop_grid.fxml"));
                 try {
                     Parent root = fxmlLoader.load();
                     DevelopGridControllerGUI controller = fxmlLoader.getController();
@@ -302,7 +302,7 @@ public class BuildGUI {
     public void toBuyDevelop(Stage stage, GUI ui, LocalDevelopCard toBuy) {
         Platform.runLater(() -> {
             synchronized(ui.getLocalGame()) {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/DevelopGrid/buy_card_scene.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/developgrid/buy_card_scene.fxml"));
                 try {
                     Parent root = fxmlLoader.load();
                     BuyCardSceneControllerGUI controller = fxmlLoader.getController();

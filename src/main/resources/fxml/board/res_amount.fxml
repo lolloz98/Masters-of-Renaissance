@@ -10,7 +10,7 @@
     <ImageView fx:id="img" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
         <Image url="@../../png/res/no_res.png" />
     </ImageView>
-    <Label fx:id="label" alignment="CENTER" text="No resources" textFill="#d21720" HBox.hgrow="NEVER">
+    <Label fx:id="label" alignment="CENTER" text="No resources" textFill="#921a26" HBox.hgrow="NEVER">
       <HBox.margin>
          <Insets left="20.0" right="10.0" />
       </HBox.margin>
