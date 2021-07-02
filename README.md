@@ -21,6 +21,8 @@ If shell is opened in the folder containing cli.jar:
 java -jar ./cli.jar
 ```
 
+CLI is correctly visualized only if the windows in which it is displayed is at least `120x30` characters.
+
 ### Client - GUI
 Execute from shell (tested option: cmd) with command: `java -jar <path_to_gui.jar>`.
 
