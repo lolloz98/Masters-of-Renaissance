@@ -104,6 +104,7 @@ public class ServerListener extends GameHandler {
     private synchronized void handleAnswer(Answer answer) {
         try {
             Object parsedAnswer = ParserClient.parseAnswer(answer);
+            logger.debug("Parsed message");
             if (parsedAnswer instanceof AnswerHandler) {
                 ((AnswerHandler) parsedAnswer).handleAnswerSync(this.localGame);
             } else throw new HandlerException("Error occurred during the handling of the answer");
