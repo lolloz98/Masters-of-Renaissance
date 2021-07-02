@@ -40,13 +40,16 @@ public class JoinGameGUI extends ControllerGUI implements Observer {
         }
     }
 
-    @Override
-    public void notifyError() {
-        logger.debug("error notification");
+    private void onError(){
         Platform.runLater(() -> {
             joinGameBtn.setDisable(false);
             errorLbl.setVisible(true);
         });
+    }
+    @Override
+    public void notifyError() {
+        logger.debug("error notification");
+        onError();
     }
 
     @Override
@@ -69,12 +72,12 @@ public class JoinGameGUI extends ControllerGUI implements Observer {
                         ui.getGameHandler().dealWithMessage(joinGameMessage);
                     } catch (IOException e) {
                         logger.debug("something wrong happened while dealing with a message: " + e);
-                        Platform.runLater(() -> {joinGameBtn.setDisable(false);});
+                        onError();
                     }
                 }).start();
             }catch (IllegalArgumentException e){
                 logger.debug("something went wrong: " + e);
-                Platform.runLater(() -> joinGameBtn.setDisable(false));
+                onError();
             }
         });
     }
