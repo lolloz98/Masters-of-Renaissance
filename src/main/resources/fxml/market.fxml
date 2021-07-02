@@ -41,5 +41,5 @@
     <GridPane fx:id="resCombGrid" layoutX="518.0" layoutY="327.0" prefHeight="273.0" prefWidth="451.0" AnchorPane.leftAnchor="518.0" AnchorPane.rightAnchor="66.0" AnchorPane.topAnchor="327.0">
     </GridPane>
     <Label layoutX="841.0" layoutY="61.0" text="Your depot:" />
-    <Label fx:id="messageLbl" layoutX="40.0" layoutY="638.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#e80e0e" />
+    <Label fx:id="messageLbl" layoutX="40.0" layoutY="638.0" prefHeight="33.0" prefWidth="955.0" text="No message found" textFill="#921a26" />
 </AnchorPane>
