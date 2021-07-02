@@ -33,10 +33,10 @@ public class WinnerView extends GameView {
                     System.out.print(l.getName()+ " ");
                 }
             }
-            System.out.print(" ");
-            System.out.print("Leader board: ");
+            System.out.println(" ");
+            System.out.println("Leader board: ");
             for(PairId<LocalPlayer, Integer> pair : localMulti.getLocalLeaderBoard()){
-                System.out.print(pair.getSecond() + " " + pair.getFirst());
+                System.out.println(pair.getSecond() + " " + pair.getFirst().getName());
             }
         } else {
             LocalSingle localSingle = (LocalSingle) localGame;
