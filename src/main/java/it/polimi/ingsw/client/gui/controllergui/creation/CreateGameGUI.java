@@ -11,6 +11,7 @@ import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,7 @@ public class CreateGameGUI extends ControllerGUI implements Observer {
     public TextField nickname;
     public TextField playerNumbers;
     public Button createGameBtn;
+    public Label errorLbl;
 
     @Override
     public void setUp(Stage stage, Parent root, GUI ui) {
@@ -42,12 +44,12 @@ public class CreateGameGUI extends ControllerGUI implements Observer {
                         ui.getGameHandler().dealWithMessage(createGameMessage);
                     } catch (IOException e) {
                         logger.debug("something wrong happened while dealing with a message: " + e);
-                        Platform.runLater(() -> createGameBtn.setDisable(false));
+                        onError();
                     }
                 }).start();
             }catch (IllegalArgumentException | InvalidNumberOfPlayersException e){
                 logger.debug("something went wrong: " + e);
-                Platform.runLater(() -> {createGameBtn.setDisable(false);});
+                onError();
             }
         });
     }
@@ -62,10 +64,18 @@ public class CreateGameGUI extends ControllerGUI implements Observer {
         }
     }
 
+    private void onError(){
+        Platform.runLater(() -> {
+            createGameBtn.setDisable(false);
+            errorLbl.setVisible(true);
+            errorLbl.setText("An error occurred, please try again.");
+        });
+    }
+
     @Override
     public void notifyError() {
         logger.debug("error notification");
-        Platform.runLater(() -> {createGameBtn.setDisable(false);});
+        onError();
     }
 }
 
