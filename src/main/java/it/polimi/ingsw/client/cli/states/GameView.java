@@ -236,7 +236,7 @@ public abstract class GameView extends View<CLI> {
                 System.out.print("Playing order:");
                 ArrayList<LocalPlayer> localPlayers = localMulti.getLocalPlayers();
                 for (int i = 0; i < localPlayers.size(); i++) {
-                    System.out.print(" " + (i + 1) + "," + localPlayers.get(i).getName());
+                    System.out.print(" " + (i + 1) + "," + localPlayers.get(i).getName() + " (id: " + localPlayers.get(i).getId() + ") ");
                 }
                 System.out.print("\n");
                 if (localMulti.getState() == LocalGameState.PREP_LEADERS) {
@@ -260,7 +260,7 @@ public abstract class GameView extends View<CLI> {
                         } else
                             System.out.println("Pick two free resources: type pr followed by two numbers, 1 for Shield, 2 for Gold, 3 for Servant, 4 for Rock");
                 } else {
-                    System.out.println("Currently playing: " + localMulti.getLocalTurn().getCurrentPlayer().getName());
+                    System.out.println("Currently playing: " + localMulti.getLocalTurn().getCurrentPlayer().getName() + " (id: " + localMulti.getLocalTurn().getCurrentPlayer().getId() + ") ");
                 }
             } else {
                 if (localGame.getState() == LocalGameState.PREP_LEADERS) {

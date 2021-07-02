@@ -1,10 +1,8 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.answerhandler.AnswerHandler;
-import it.polimi.ingsw.client.localmodel.LocalSingle;
 import it.polimi.ingsw.messages.ParserException;
 import it.polimi.ingsw.messages.answers.Answer;
-import it.polimi.ingsw.messages.answers.CreateGameAnswer;
 import it.polimi.ingsw.messages.answers.ErrorAnswer;
 import it.polimi.ingsw.messages.answers.GameStatusAnswer;
 import it.polimi.ingsw.messages.requests.ClientMessage;
@@ -12,10 +10,8 @@ import it.polimi.ingsw.messages.requests.CreateGameMessage;
 import it.polimi.ingsw.server.ParserServer;
 import it.polimi.ingsw.server.controller.exception.ControllerException;
 import it.polimi.ingsw.server.controller.messagesctr.ClientMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.GameStatusMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.CreateGameMessageController;
 import it.polimi.ingsw.server.controller.messagesctr.creation.PreGameCreationMessageController;
-import it.polimi.ingsw.server.controller.messagesctr.playing.ConcealedLeaderMessageInterface;
 import it.polimi.ingsw.server.model.ConverterToLocalModel;
 import it.polimi.ingsw.server.model.exception.EmptyDeckException;
 import it.polimi.ingsw.server.model.exception.InvalidArgumentException;
@@ -25,8 +21,6 @@ import it.polimi.ingsw.server.model.game.SinglePlayer;
 import it.polimi.ingsw.server.model.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
 
 /**
  * GameHandler for local single player games.

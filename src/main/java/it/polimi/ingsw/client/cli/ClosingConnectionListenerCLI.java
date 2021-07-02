@@ -6,10 +6,10 @@ import it.polimi.ingsw.client.cli.states.RejoinView;
  * observer class for serverListener
  * gets updated if the server drops the connection
  */
-public class ServerObserver implements Observer{
+public class ClosingConnectionListenerCLI implements Observer{
     private final CLI cli;
 
-    public ServerObserver(CLI cli){
+    public ClosingConnectionListenerCLI(CLI cli){
         this.cli = cli;
     }
 

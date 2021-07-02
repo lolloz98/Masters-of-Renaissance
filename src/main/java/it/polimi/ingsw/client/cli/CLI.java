@@ -82,7 +82,7 @@ public class CLI extends UI {
                             int portNumber = Integer.parseInt(portString);
                             setServerListener(ip, portNumber);
                             // set observer in case connection closes
-                            gameHandler.overrideObserver(new ServerObserver(this));
+                            gameHandler.overrideObserver(new ClosingConnectionListenerCLI(this));
                             valid = true;
                             // choice for join or create game
                             joinOrCreate();

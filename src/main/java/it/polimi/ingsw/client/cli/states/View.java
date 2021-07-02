@@ -26,9 +26,12 @@ public abstract class View<T extends UI> implements Observer {
      * Handles the quit command
      */
     public void quit() {
-        if (ui.getGameHandler() instanceof ServerListener)
-            ((ServerListener) ui.getGameHandler()).closeConnection();
-        ui.getGameHandler().removeObservers();
+        if (ui.getGameHandler() != null) {
+            if (ui.getGameHandler() instanceof ServerListener)
+                ((ServerListener) ui.getGameHandler()).closeConnection();
+            ui.getGameHandler().removeObservers();
+        }
+        if (ui.getLocalGame() != null) ui.getLocalGame().removeAllObservers();
         ui.setQuit(true);
     }
 }

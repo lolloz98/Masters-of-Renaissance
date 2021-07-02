@@ -26,6 +26,10 @@ public class ServerListener extends GameHandler {
     private ObjectOutputStream output;
     private final String address;
     private final int port;
+
+    /**
+     * Notify the observer when and if the connection to the server is established (then reset to null)
+     */
     private Observer isListeningForAnswers = null;
 
     public String getAddress() {

@@ -13,6 +13,9 @@ import it.polimi.ingsw.client.localmodel.LocalGameState;
 public abstract class ConversationalView extends View<CLI> {
     protected LocalGame<?> localGame;
 
+    /**
+     * the only update that can change the view in this case is if the game gets destroyed
+     */
     @Override
     public void notifyUpdate() {
         if (localGame.getState() == LocalGameState.DESTROYED){

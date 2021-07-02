@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.ServerListener;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.Observer;
-import it.polimi.ingsw.client.cli.ServerObserver;
+import it.polimi.ingsw.client.cli.ClosingConnectionListenerCLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.RejoinMessage;
@@ -102,7 +102,7 @@ public class RejoinView extends View<CLI> {
                                 }
                             }
                     ),
-                    new ServerObserver(ui));
+                    new ClosingConnectionListenerCLI(ui));
             ui.getGameHandler().setLocalGame(ui.getLocalGame());
             waiting = true;
         } catch (ConnectException e) {
