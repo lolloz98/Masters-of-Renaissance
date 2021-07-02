@@ -7,14 +7,12 @@ import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.cli.ClosingConnectionListenerCLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
 import it.polimi.ingsw.client.cli.states.playing.DestroyedView;
-import it.polimi.ingsw.client.gui.ClosingConnectionListenerGUI;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.RejoinMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.net.ConnectException;
 
 /**
  * CLI state for when the connection with the server drops
