@@ -38,9 +38,13 @@ public class LocalSingleGameHandler extends GameHandler {
     @Override
     public void dealWithMessage(ClientMessage message) {
         new Thread(() -> {
-            Answer answer = handleRequest(message);
-            handleAnswer(answer);
+            handleRequestAndAnswer(message);
         }).start();
+    }
+
+    private synchronized void handleRequestAndAnswer(ClientMessage message){
+        Answer answer = handleRequest(message);
+        handleAnswer(answer);
     }
 
     private synchronized Answer handleRequest(ClientMessage message){
