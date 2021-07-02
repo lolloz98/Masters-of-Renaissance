@@ -33,7 +33,6 @@ public class DestroyedView extends GameView {
         if(fromGameView)
             System.out.println("You can still move around with 'sd', 'sb', 'sm'. ");
         System.out.println("Type 'quit' exit the game");
-
     }
 
     @Override

@@ -6,6 +6,7 @@ import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.Observer;
 import it.polimi.ingsw.client.cli.ClosingConnectionListenerCLI;
 import it.polimi.ingsw.client.cli.states.playing.BoardView;
+import it.polimi.ingsw.client.cli.states.playing.DestroyedView;
 import it.polimi.ingsw.client.gui.ClosingConnectionListenerGUI;
 import it.polimi.ingsw.client.localmodel.LocalGameState;
 import it.polimi.ingsw.messages.requests.RejoinMessage;
@@ -36,19 +37,21 @@ public class RejoinView extends View<CLI> {
         ui.getLocalGame().removeAllObservers();
         if (ui.getLocalGame() == null || ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS || ui.getLocalGame().getState() == LocalGameState.OVER) {
             quit();
+        } else if (ui.getLocalGame().getState() == LocalGameState.WAIT_FOR_REJOIN) {
+            System.out.println("Waiting for the other players to rejoin the game.");
         } else {
             ui.getLocalGame().removeObservers();
             ui.getLocalGame().getError().removeObserver();
             ui.setState(new BoardView(ui, ui.getLocalGame().getMainPlayer()));
             ui.getState().draw();
         }
+
     }
 
     @Override
     public void notifyError() {
-        System.out.println(ui.getLocalGame().getError().getErrorMessage());
-        waiting = false;
-        // todo if i recieve error i must print that the game is destroyed
+        ui.setState(new DestroyedView(ui));
+        ui.getState().draw();
     }
 
     @Override
@@ -64,6 +67,15 @@ public class RejoinView extends View<CLI> {
                     break;
                 default:
                     System.out.println("Invalid command, type 'rejoin' to retry to connect to the server or 'quit' to exit");
+            }
+        } else {
+            String ans = s.toUpperCase();
+            switch (ans) {
+                case "QUIT":
+                    quit();
+                    break;
+                default:
+                    System.out.println("Invalid command, type 'quit' to exit");
             }
         }
     }
