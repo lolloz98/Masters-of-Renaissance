@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.cli.CLIutils;
 import it.polimi.ingsw.client.cli.states.GameView;
 import it.polimi.ingsw.client.localmodel.LocalGame;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * CLI state that informs the player that the game has been destroyed
  */
@@ -37,5 +40,14 @@ public class DestroyedView extends GameView {
 
     @Override
     public void removeObserved() {
+    }
+
+    @Override
+    public void handleCommand(String s) {
+        if(fromGameView) {
+            String ans = s.toUpperCase();
+            ArrayList<String> ansList = new ArrayList<>(Arrays.asList(ans.split("\\s+")));
+            handleCommand(ansList);
+        }
     }
 }

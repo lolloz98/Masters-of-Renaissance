@@ -164,10 +164,14 @@ public abstract class GameView extends View<CLI> {
      * Sends the "next turn" message to the server
      */
     private void next() {
-        try {
-            ui.getGameHandler().dealWithMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(localGame.getState()==LocalGameState.WAIT_FOR_REJOIN){
+            message = "You cannot pass the turn, there are still players who haven't rejoined the game!";
+        } else {
+            try {
+                ui.getGameHandler().dealWithMessage(new FinishTurnMessage(localGame.getGameId(), localGame.getMainPlayer().getId()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
