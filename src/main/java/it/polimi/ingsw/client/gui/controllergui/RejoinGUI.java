@@ -69,6 +69,10 @@ public class RejoinGUI extends ControllerGUI implements Observer {
         BuildGUI.getInstance().toBoard(stage, ui);
     }
 
+    /**
+     * We receive a notification of an error, only if we connect to the server but we cannot rejoin (for any reason)
+     * the game.
+     */
     @Override
     public void notifyError() {
         HelperGUI.handleGameDestruction(stage, ui);

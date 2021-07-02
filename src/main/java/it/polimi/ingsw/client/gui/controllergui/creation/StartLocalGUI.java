@@ -8,6 +8,7 @@ import it.polimi.ingsw.client.gui.GUI;
 import it.polimi.ingsw.client.gui.controllergui.BuildGUI;
 import it.polimi.ingsw.client.gui.controllergui.ControllerGUI;
 import it.polimi.ingsw.messages.requests.CreateGameMessage;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -32,15 +33,18 @@ public class StartLocalGUI extends ControllerGUI implements Observer {
         ui.getLocalGame().overrideObserver(this);
         createGameBtn.setOnMouseClicked(mouseEvent -> {
             try {
+                Platform.runLater(() -> createGameBtn.setDisable(true));
                 CreateGameMessage createGameMessage = InputHelper.getCreateGameMessage("1", nickname.getText());
                 new Thread(() -> {
                     try {
                         ui.getGameHandler().dealWithMessage(createGameMessage);
                     } catch (IOException e) {
+                        Platform.runLater(() -> createGameBtn.setDisable(false));
                         logger.error("something wrong happened while dealing with a message: " + e);
                     }
                 }).start();
             }catch (IllegalArgumentException | InvalidNumberOfPlayersException e){
+                Platform.runLater(() -> createGameBtn.setDisable(false));
                 logger.warn("Something wrong happened while creating the message: " + e);
             }
         });
@@ -53,6 +57,7 @@ public class StartLocalGUI extends ControllerGUI implements Observer {
 
     @Override
     public void notifyError() {
+        Platform.runLater(() -> createGameBtn.setDisable(false));
         logger.debug("error notification");
     }
 }

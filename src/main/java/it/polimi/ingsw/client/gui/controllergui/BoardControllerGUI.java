@@ -128,7 +128,7 @@ public class BoardControllerGUI extends ControllerGUI implements Observer {
             if(p.getId() == ui.getLocalGame().getMainPlayer().getId()){
                 currentPlayerStr = "It's your turn";
             }else{
-                currentPlayerStr = "It's " + p.getName() + "'s turn";
+                currentPlayerStr = "It's " + p.getName() + "'s (id: " + p.getId() + ") turn";
             }
         }else{
             currentPlayerStr = "It's your turn";
