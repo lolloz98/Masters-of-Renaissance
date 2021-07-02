@@ -101,7 +101,7 @@ class ClientHandlerUiTestHelper extends ClientHandler {
                 ControllerActionsServerMulti ca = (ControllerActionsServerMulti) controllerManager.getControllerFromMap(clientMessage.getGameId());
 
                 // TO TRY DIFFERENT CONFIGURATION OF THE GAME CHANGE THIS METHOD
-                ManipulateGameUiTestHelper.setStateOfGame12(answerListener.getGameId(), ca.getGame());
+                ManipulateGameUiTestHelper.setStateOfGame11(answerListener.getGameId(), ca.getGame());
 
                 ca.sendGameStatusToAll(clientMessage.getGameId(), clientMessage.getPlayerId());
             }

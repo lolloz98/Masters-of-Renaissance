@@ -34,21 +34,21 @@ public class RejoinView extends View<CLI> {
 
     @Override
     public void notifyUpdate() {
-        ui.getLocalGame().removeAllObservers();
         if (ui.getLocalGame() == null || ui.getLocalGame().getState() == LocalGameState.WAITING_PLAYERS || ui.getLocalGame().getState() == LocalGameState.OVER) {
             quit();
+        } else if (ui.getLocalGame().getState() == LocalGameState.WAIT_FOR_REJOIN) {
+            System.out.println("Waiting for the other players to rejoin the game.");
         } else {
-            ui.getLocalGame().removeObservers();
+            ui.getLocalGame().removeAllObservers();
             ui.getLocalGame().getError().removeObserver();
             ui.setState(new BoardView(ui, ui.getLocalGame().getMainPlayer()));
             ui.getState().draw();
         }
-
     }
 
     @Override
     public void notifyError() {
-        ui.setState(new DestroyedView(ui, ui.getLocalGame(), false));
+        ui.setState(new DestroyedView(ui));
         ui.getState().draw();
     }
 
@@ -121,6 +121,7 @@ public class RejoinView extends View<CLI> {
     }
 
     private void connectionFailed(IOException e) {
+        logger.error("error while connecting to the server: " + e);
         System.out.println("The server is still offline.");
         waiting = false;
     }

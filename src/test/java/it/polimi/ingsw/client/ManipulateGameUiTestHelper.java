@@ -500,7 +500,7 @@ public class ManipulateGameUiTestHelper {
 
 
     /**
-     * sets track of player 0 to 23rd spot
+     * a lot of resources
      */
     public static void setStateOfGame12(int gameId, MultiPlayer game) throws InvalidTypeOfResourceToDepotException, InvalidArgumentException, ControllerException, InvalidResourceQuantityToDepotException, InvalidResourcesToKeepByPlayerException, DifferentResourceForDepotException, InvalidStepsException, EndAlreadyReachedException, ResourceNotDiscountableException, EmptyDeckException {
         try {
