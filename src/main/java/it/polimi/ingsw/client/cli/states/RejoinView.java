@@ -48,7 +48,7 @@ public class RejoinView extends View<CLI> {
 
     @Override
     public void notifyError() {
-        ui.setState(new DestroyedView(ui));
+        ui.setState(new DestroyedView(ui, ui.getLocalGame(), false));
         ui.getState().draw();
     }
 
