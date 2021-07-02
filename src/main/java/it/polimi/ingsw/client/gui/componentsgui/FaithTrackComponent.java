@@ -188,7 +188,7 @@ public class FaithTrackComponent extends AnchorPane {
     public void setFigureStates(LocalFigureState[] figuresState) {
         setVatican(figuresState[0], vatican1, ImageCache.VATICAN_ACTIVE_1);
         setVatican(figuresState[1], vatican2, ImageCache.VATICAN_ACTIVE_2);
-        setVatican(figuresState[2], vatican1, ImageCache.VATICAN_ACTIVE_3);
+        setVatican(figuresState[2], vatican3, ImageCache.VATICAN_ACTIVE_3);
     }
 
     private void setVatican(LocalFigureState figureState, ImageView vatican, Image img){
