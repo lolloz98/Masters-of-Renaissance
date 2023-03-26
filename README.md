@@ -23,13 +23,15 @@ java -jar ./cli.jar
 
 CLI is correctly visualized only if the windows in which it is displayed is at least `120x30` characters.
 
-### Client - GUI
-Execute from shell (tested option: cmd) with command: `java -jar <path_to_gui.jar>`.
+### ~~Client - GUI~~
 
-If shell is opened in the folder containing gui.jar:
-```
-java -jar gui.jar
-```
+~~Execute from shell (tested option: cmd) with command: `java -jar <path_to_gui.jar>`.~~
+
+~~If shell is opened in the folder containing gui.jar:~~
+
+~~`java -jar gui.jar`~~
+
+**Due to copyright we cannot pack in this repository the provided graphics (thus also the jar). So we have stripped the graphics from the repository and the gui is no longer working.** The implementation is still there however, the resources are missing. Maybe in the future we will add new graphics.
 
 ### Server
 Execute from shell (tested option: cmd) with command: `java -jar <path_to_server.jar>`.
@@ -60,5 +62,5 @@ The implementation should be able to handle linux and macOS operating system as 
 |jar|(shell) java version|
 ---|---
 |cli|(bash) 14.0.2|
-|gui|(cmd) 13.0.2, (cmd) 16.0.1|
+|~gui~|~~(cmd) 13.0.2, (cmd) 16.0.1~~|
 |server|(cmd) 13.0.2, (cmd) 16.0.1|
